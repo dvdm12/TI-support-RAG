@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="2100" viewBox="0 0 1500 2100">
+  <defs>
+    <linearGradient id="lane1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#eef6ff"/><stop offset="1" stop-color="#f8fbff"/></linearGradient>
+    <linearGradient id="lane2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#effaf0"/><stop offset="1" stop-color="#f9fffa"/></linearGradient>
+    <linearGradient id="lane3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f5efff"/><stop offset="1" stop-color="#fbf8ff"/></linearGradient>
+    <linearGradient id="lane4" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff8e6"/><stop offset="1" stop-color="#fffdf6"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.14"/></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#222"/></marker>
+    <marker id="arrowData" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker>
+    <style>
+      .title{font:700 34px Arial, sans-serif; fill:#111}
+      .subtitle{font:400 20px Arial, sans-serif; fill:#444}
+      .laneTitle{font:700 22px Arial, sans-serif; fill:#111}
+      .txt{font:600 18px Arial, sans-serif; fill:#161616}
+      .small{font:400 16px Arial, sans-serif; fill:#333}
+      .tiny{font:400 14px Arial, sans-serif; fill:#444}
+      .label{font:700 15px Arial, sans-serif; fill:#222}
+    </style>
+  </defs>
+
+  <rect width="1500" height="2100" fill="#ffffff"/>
+  <text x="750" y="55" text-anchor="middle" class="title">Diagrama de Actividades — Flujo de Trabajo</text>
+  <text x="750" y="88" text-anchor="middle" class="subtitle">Evaluación, validación y trazabilidad de prompts para Mesa de Ayuda TI (RAG + LLM)</text>
+
+  <!-- Swimlanes -->
+  <rect x="30" y="120" width="330" height="1900" rx="12" fill="url(#lane1)" stroke="#5798da" stroke-width="2"/>
+  <rect x="370" y="120" width="430" height="1900" rx="12" fill="url(#lane2)" stroke="#6ab57a" stroke-width="2"/>
+  <rect x="810" y="120" width="360" height="1900" rx="12" fill="url(#lane3)" stroke="#9b6ad5" stroke-width="2"/>
+  <rect x="1180" y="120" width="290" height="1900" rx="12" fill="url(#lane4)" stroke="#d6a83d" stroke-width="2"/>
+
+  <rect x="30" y="120" width="330" height="58" rx="12" fill="#dceeff" stroke="#5798da"/>
+  <rect x="370" y="120" width="430" height="58" rx="12" fill="#dff5e2" stroke="#6ab57a"/>
+  <rect x="810" y="120" width="360" height="58" rx="12" fill="#eadcff" stroke="#9b6ad5"/>
+  <rect x="1180" y="120" width="290" height="58" rx="12" fill="#fff1c7" stroke="#d6a83d"/>
+  <text x="195" y="156" text-anchor="middle" class="laneTitle">Investigador / Usuario</text>
+  <text x="585" y="156" text-anchor="middle" class="laneTitle">Entorno (Notebook)</text>
+  <text x="990" y="156" text-anchor="middle" class="laneTitle">Modelo (Groq)</text>
+  <text x="1325" y="156" text-anchor="middle" class="laneTitle">Persistencia</text>
+
+  <!-- Start -->
+  <circle cx="195" cy="225" r="18" fill="#111"/>
+  <text x="225" y="232" class="txt">Inicio</text>
+  <path d="M195 243 L195 300" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Activity 1 -->
+  <rect x="75" y="300" width="240" height="90" rx="16" fill="#cfe6ff" stroke="#3d86c6" stroke-width="2" filter="url(#shadow)"/>
+  <text x="195" y="333" text-anchor="middle" class="txt">Seleccionar versión</text>
+  <text x="195" y="356" text-anchor="middle" class="txt">de prompt</text>
+  <text x="195" y="379" text-anchor="middle" class="small">system_v0 / v1 / v2...</text>
+  <path d="M315 345 L435 345" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Load prompt -->
+  <rect x="435" y="295" width="300" height="95" rx="16" fill="#d8f2db" stroke="#53a563" stroke-width="2" filter="url(#shadow)"/>
+  <text x="585" y="330" text-anchor="middle" class="txt">Cargar prompt</text>
+  <text x="585" y="355" text-anchor="middle" class="txt">desde prompts/</text>
+  <text x="585" y="378" text-anchor="middle" class="small">system_vX.md</text>
+
+  <!-- Data store prompt -->
+  <path d="M1225 235 C1225 215 1425 215 1425 235 L1425 315 C1425 335 1225 335 1225 315 Z" fill="#f5d98b" stroke="#b98e29" stroke-width="2"/>
+  <ellipse cx="1325" cy="235" rx="100" ry="20" fill="#ffeab1" stroke="#b98e29" stroke-width="2"/>
+  <text x="1325" y="260" text-anchor="middle" class="txt">prompts/</text>
+  <text x="1325" y="282" text-anchor="middle" class="small">system_vX.md</text>
+  <path d="M1225 275 L735 340" stroke="#666" stroke-width="2" stroke-dasharray="8 7" fill="none" marker-end="url(#arrowData)"/>
+  <text x="1030" y="275" class="label">Leer prompt</text>
+
+  <path d="M585 390 L585 445" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="430" y="445" width="310" height="105" rx="16" fill="#d8f2db" stroke="#53a563" stroke-width="2" filter="url(#shadow)"/>
+  <text x="585" y="478" text-anchor="middle" class="txt">Cargar casos de prueba</text>
+  <text x="585" y="503" text-anchor="middle" class="small">normal · ambiguo · incompleto</text>
+  <text x="585" y="526" text-anchor="middle" class="small">malicioso · fuera de alcance</text>
+
+  <!-- loop container-ish -->
+  <path d="M585 550 L585 600" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="410" y="600" width="350" height="105" rx="16" fill="#d8f2db" stroke="#53a563" stroke-width="2" filter="url(#shadow)"/>
+  <text x="585" y="633" text-anchor="middle" class="txt">Para cada caso</text>
+  <text x="585" y="658" text-anchor="middle" class="small">Construir solicitud:</text>
+  <text x="585" y="683" text-anchor="middle" class="small">system prompt + texto del usuario</text>
+
+  <!-- send to model -->
+  <path d="M760 650 L850 650" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="850" y="595" width="280" height="110" rx="16" fill="#eadcff" stroke="#8652bf" stroke-width="2" filter="url(#shadow)"/>
+  <text x="990" y="628" text-anchor="middle" class="txt">Enviar solicitud</text>
+  <text x="990" y="653" text-anchor="middle" class="small">Groq · gpt-oss-20b</text>
+  <text x="990" y="677" text-anchor="middle" class="small">response_format: JSON</text>
+
+  <path d="M990 705 L990 760" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="850" y="760" width="280" height="85" rx="16" fill="#eadcff" stroke="#8652bf" stroke-width="2" filter="url(#shadow)"/>
+  <text x="990" y="795" text-anchor="middle" class="txt">Recibir respuesta</text>
+  <text x="990" y="819" text-anchor="middle" class="small">raw_output</text>
+
+  <!-- decision technical -->
+  <path d="M990 845 L990 900" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <polygon points="990,900 1070,950 990,1000 910,950" fill="#e7d4ff" stroke="#8652bf" stroke-width="2" filter="url(#shadow)"/>
+  <text x="990" y="946" text-anchor="middle" class="small">¿Generación</text>
+  <text x="990" y="965" text-anchor="middle" class="small">válida?</text>
+
+  <!-- technical error -->
+  <path d="M910 950 L850 950 L850 1050" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="875" y="940" text-anchor="middle" class="label">No</text>
+  <rect x="720" y="1050" width="260" height="95" rx="16" fill="#f4d6d6" stroke="#b55a5a" stroke-width="2" filter="url(#shadow)"/>
+  <text x="850" y="1080" text-anchor="middle" class="txt">ERROR_TECNICO</text>
+  <text x="850" y="1105" text-anchor="middle" class="small">json_validate_failed, timeout,</text>
+  <text x="850" y="1126" text-anchor="middle" class="small">excepción de API, etc.</text>
+
+  <!-- parse -->
+  <path d="M1070 950 L1140 950 L1140 1050" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="1102" y="940" text-anchor="middle" class="label">Sí</text>
+  <rect x="1010" y="1050" width="260" height="95" rx="16" fill="#eadcff" stroke="#8652bf" stroke-width="2" filter="url(#shadow)"/>
+  <text x="1140" y="1080" text-anchor="middle" class="txt">Parsear JSON</text>
+  <text x="1140" y="1105" text-anchor="middle" class="small">y validar con</text>
+  <text x="1140" y="1126" text-anchor="middle" class="small">Pydantic / contrato</text>
+
+  <!-- schema decision -->
+  <path d="M1140 1145 L1140 1200" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <polygon points="1140,1200 1215,1248 1140,1296 1065,1248" fill="#e7d4ff" stroke="#8652bf" stroke-width="2" filter="url(#shadow)"/>
+  <text x="1140" y="1244" text-anchor="middle" class="small">¿Cumple</text>
+  <text x="1140" y="1264" text-anchor="middle" class="small">esquema?</text>
+
+  <!-- format error -->
+  <path d="M1065 1248 L930 1248 L930 1345" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="1010" y="1237" text-anchor="middle" class="label">No</text>
+  <rect x="790" y="1345" width="280" height="95" rx="16" fill="#f4d6d6" stroke="#b55a5a" stroke-width="2" filter="url(#shadow)"/>
+  <text x="930" y="1377" text-anchor="middle" class="txt">ERROR_FORMATO</text>
+  <text x="930" y="1402" text-anchor="middle" class="small">campos faltantes, extra,</text>
+  <text x="930" y="1423" text-anchor="middle" class="small">tipo o catálogo inválido</text>
+
+  <!-- valid result -->
+  <path d="M1215 1248 L1320 1248 L1320 1345" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="1260" y="1237" text-anchor="middle" class="label">Sí</text>
+  <rect x="1200" y="1345" width="260" height="95" rx="16" fill="#dff5e2" stroke="#53a563" stroke-width="2" filter="url(#shadow)"/>
+  <text x="1330" y="1377" text-anchor="middle" class="txt">OK_VALIDADO</text>
+  <text x="1330" y="1402" text-anchor="middle" class="small">Conservar salida</text>
+  <text x="1330" y="1423" text-anchor="middle" class="small">validada del caso</text>
+
+  <!-- convergence -->
+  <path d="M850 1145 L850 1500 L585 1500" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M930 1440 L930 1500 L585 1500" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M1330 1440 L1330 1500 L585 1500" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="430" y="1460" width="310" height="80" rx="16" fill="#d8f2db" stroke="#53a563" stroke-width="2" filter="url(#shadow)"/>
+  <text x="585" y="1492" text-anchor="middle" class="txt">Agregar resultado del caso</text>
+  <text x="585" y="1517" text-anchor="middle" class="small">a la lista de resultados</text>
+
+  <!-- next case decision -->
+  <path d="M585 1540 L585 1600" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <polygon points="585,1600 665,1650 585,1700 505,1650" fill="#e7d4ff" stroke="#8652bf" stroke-width="2" filter="url(#shadow)"/>
+  <text x="585" y="1645" text-anchor="middle" class="small">¿Quedan</text>
+  <text x="585" y="1665" text-anchor="middle" class="small">casos?</text>
+
+  <path d="M505 1650 L400 1650 L400 652 L410 652" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="462" y="1638" text-anchor="middle" class="label">Sí</text>
+  <path d="M665 1650 L665 1750" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="690" y="1710" class="label">No</text>
+
+  <!-- execution object -->
+  <rect x="435" y="1750" width="300" height="105" rx="16" fill="#d8f2db" stroke="#53a563" stroke-width="2" filter="url(#shadow)"/>
+  <text x="585" y="1783" text-anchor="middle" class="txt">Crear objeto de ejecución</text>
+  <text x="585" y="1808" text-anchor="middle" class="small">prompt_version · model · timestamp</text>
+  <text x="585" y="1830" text-anchor="middle" class="small">total_cases · results</text>
+
+  <!-- persist flow -->
+  <path d="M735 1802 L1205 1802" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="1205" y="1755" width="235" height="90" rx="16" fill="#fff0bd" stroke="#c99d2e" stroke-width="2" filter="url(#shadow)"/>
+  <text x="1322" y="1788" text-anchor="middle" class="txt">Leer historial existente</text>
+  <text x="1322" y="1813" text-anchor="middle" class="small">results.json</text>
+
+  <path d="M1322 1845 L1322 1900" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="1205" y="1900" width="235" height="90" rx="16" fill="#fff0bd" stroke="#c99d2e" stroke-width="2" filter="url(#shadow)"/>
+  <text x="1322" y="1933" text-anchor="middle" class="txt">Agregar ejecución actual</text>
+  <text x="1322" y="1958" text-anchor="middle" class="small">sin alterar versiones previas</text>
+
+  <path d="M1322 1990 L1322 2025" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <!-- results data store -->
+  <path d="M1225 2025 C1225 2005 1425 2005 1425 2025 L1425 2080 C1425 2100 1225 2100 1225 2080 Z" fill="#f5d98b" stroke="#b98e29" stroke-width="2"/>
+  <ellipse cx="1325" cy="2025" rx="100" ry="20" fill="#ffeab1" stroke="#b98e29" stroke-width="2"/>
+  <text x="1325" y="2052" text-anchor="middle" class="txt">results.json</text>
+  <path d="M1205 1945 L1170 1945 L1170 2055 L1225 2055" stroke="#555" stroke-width="2" stroke-dasharray="8 7" fill="none"/>
+
+  <!-- Review metrics -->
+  <path d="M1205 1802 L1120 1802 L1120 1880 L735 1880" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="430" y="1880" width="305" height="85" rx="16" fill="#cfe6ff" stroke="#3d86c6" stroke-width="2" filter="url(#shadow)"/>
+  <text x="582" y="1913" text-anchor="middle" class="txt">Revisar resultados</text>
+  <text x="582" y="1938" text-anchor="middle" class="small">validación · errores · latencia · tokens</text>
+
+  <!-- End -->
+  <path d="M582 1965 L582 2010" stroke="#222" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <circle cx="582" cy="2042" r="17" fill="#fff" stroke="#111" stroke-width="4"/>
+  <circle cx="582" cy="2042" r="8" fill="#111"/>
+  <text x="615" y="2049" class="txt">Fin</text>
+
+  <!-- Legend -->
+  <rect x="65" y="1720" width="280" height="255" rx="14" fill="#fff" stroke="#bbb" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="85" y="1752" class="laneTitle" style="font-size:20px">Leyenda</text>
+  <circle cx="92" cy="1790" r="10" fill="#111"/><text x="118" y="1796" class="small">Inicio</text>
+  <circle cx="92" cy="1828" r="10" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="92" cy="1828" r="5" fill="#111"/><text x="118" y="1834" class="small">Fin</text>
+  <rect x="80" y="1850" width="80" height="34" rx="8" fill="#d8f2db" stroke="#53a563"/><text x="175" y="1872" class="small">Actividad</text>
+  <polygon points="120,1898 145,1914 120,1930 95,1914" fill="#e7d4ff" stroke="#8652bf"/><text x="175" y="1920" class="small">Decisión</text>
+  <path d="M80 1950 L160 1950" stroke="#222" stroke-width="2.5" marker-end="url(#arrow)"/><text x="175" y="1956" class="small">Flujo principal</text>
+  <path d="M80 1975 L160 1975" stroke="#555" stroke-width="2" stroke-dasharray="8 7" marker-end="url(#arrowData)"/><text x="175" y="1981" class="small">Flujo de datos</text>
+</svg>
