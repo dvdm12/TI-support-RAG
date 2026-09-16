@@ -50,7 +50,7 @@ def extract_text_from_image(file_path: str | Path) -> dict[str, Any]:
     if not valid:
         raise ValueError(error)
 
-    path = Path(file_path)
+    path = Path(file_path).expanduser()
 
     try:
         image = Image.open(path)
