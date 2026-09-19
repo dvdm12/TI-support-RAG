@@ -1,67 +1,76 @@
-from tkinter import Tk, filedialog
+from pathlib import Path
+import tkinter as tk
+from tkinter import filedialog, messagebox
 
-from src.multimodal import prepare_multimodal_input
+from src.ocr import OCRFactory, OCRExtractor
 
 
-def select_image() -> str | None:
-    root = Tk()
+SUPPORTED_FILE_TYPES = [
+    (
+        "Imágenes",
+        "*.png *.jpg *.jpeg *.webp *.bmp *.tif *.tiff",
+    ),
+    ("Todos los archivos", "*.*"),
+]
+
+
+def select_image() -> Path | None:
+    """Permite al usuario seleccionar una imagen desde la interfaz gráfica."""
+    root = tk.Tk()
     root.withdraw()
 
-    file_path = filedialog.askopenfilename(
-        title="Seleccionar imagen",
-        filetypes=[
-            ("Imágenes", "*.jpg *.jpeg *.png *.webp"),
-        ],
+    image_path = filedialog.askopenfilename(
+        title="Selecciona una captura para analizar",
+        filetypes=SUPPORTED_FILE_TYPES,
     )
 
     root.destroy()
 
-    return file_path or None
+    if not image_path:
+        return None
+
+    return Path(image_path)
 
 
-user_text = input("Ingrese la solicitud: ").strip()
+def main() -> None:
+    image = select_image()
 
-attach = input(
-    "¿Desea adjuntar una imagen? [s/N]: "
-).strip().lower()
-
-file_path = None
-
-if attach == "s":
-    file_path = select_image()
-
-    if not file_path:
+    if image is None:
         print("No se seleccionó ninguna imagen.")
-        raise SystemExit(0)
+        return
 
-try:
-    result = prepare_multimodal_input(
-        user_text=user_text,
-        file_path=file_path,
-    )
+    if not image.exists():
+        messagebox.showerror(
+            "Error",
+            f"La imagen seleccionada no existe:\n{image}",
+        )
+        return
 
-    print("\n=== RESULTADO ===")
+    print(f"Imagen seleccionada: {image}")
+    print()
 
-    print("\nTexto del usuario:")
-    print(result["text"])
+    for engine in OCRFactory.supported_engines():
+        print(f"=== {engine} ===")
 
-    if result["has_attachment"]:
-        print("\nArchivo adjunto:")
-        print(result["attachment"]["filename"])
+        try:
+            strategy = OCRFactory.create(engine)
+            extractor = OCRExtractor(strategy)
+            result = extractor.extract(image)
 
-        print("\nTexto extraído por OCR:")
-        print(result["extracted_text"])
+        except Exception as exc:
+            print("Estado: ERROR")
+            print(f"Detalle: {exc}")
+            print()
+            continue
 
-        print("\nConfianza OCR:")
-        print(result["extraction"]["ocr_confidence"])
+        print(f"Motor      : {result.engine}")
+        print(f"Palabras   : {result.word_count}")
+        print(f"Confianza  : {result.ocr_confidence:.2f}")
+        print(f"Con texto  : {result.has_text}")
+        print("Texto:")
+        print(result.text)
+        print()
 
-        print("\nExtracción válida:")
-        print(result["extraction_valid"])
 
-        print("\nErrores de extracción:")
-        print(result["extraction_errors"])
-    else:
-        print("\nSin imagen adjunta.")
-
-except (ValueError, RuntimeError) as error:
-    print(f"\nERROR: {error}")
+if __name__ == "__main__":
+    main()
