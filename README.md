@@ -21,6 +21,8 @@ Prototipo académico de una Mesa de Ayuda TI con IA generativa, validación estr
 | Evidencia | `docs/model_results_report.pdf` |
 | Bitácora | `docs/bitacora_parcial.md` |
 
+> **Entorno:** la ejecución local utiliza `venv` + `requirements.txt`; no depende de Conda.
+
 ## Flujo de trabajo
 
 ![Diagrama de actividades — TI-support-RAG](assets/flujo_trabajo.png)
@@ -33,84 +35,129 @@ Prototipo académico de una Mesa de Ayuda TI con IA generativa, validación estr
 
 **Ruta:** `assets/diagrama_componentes_ti_support.jpeg`
 
-## Ejecución en Google Colab
+## Ejecución local
 
-| Paso | Qué hacer |
-|---|---|
-| 1 | Abrir `notebooks/ti_support.ipynb` en Google Colab. |
-| 2 | Clonar el repositorio y entrar a `/content/TI-support-RAG`. |
-| 3 | Instalar dependencias con `!pip install -r requirements.txt`. |
-| 4 | En **Colab → Secrets**, crear el secreto `GROQ_API_KEY` con una clave propia de Groq. |
-| 5 | Cargar el secreto en el entorno. |
-| 6 | Ejecutar las celdas del notebook en orden. |
-| 7 | Para una nueva solicitud, ir a **14. Defensa manual (opcional)**. |
-| 8 | Cambiar `ENABLE_MANUAL_DEFENSE = False` a `True`. |
-| 9 | Ejecutar esa celda. |
-| 10 | Escribir la solicitud cuando aparezca `Solicitud:`. |
+El proyecto está preparado para ejecutarse localmente en un entorno Python independiente. **No se requiere Conda ni reproducir el entorno de desarrollo utilizado durante la construcción del proyecto.**
 
-### 1. Abrir el notebook
+### Requisitos
 
-Archivo:
+- Git.
+- Python 3.12 o superior.
+- Una clave propia de Groq para realizar nuevas consultas.
+- Un editor o entorno que permita ejecutar notebooks `.ipynb` localmente, como VS Code o Jupyter.
 
-```text
-notebooks/ti_support.ipynb
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/dvdm12/TI-support-RAG.git
+cd TI-support-RAG
 ```
 
-En Colab se puede abrir el notebook después de clonar el repositorio o cargarlo directamente desde la carpeta del proyecto.
+### 2. Crear el entorno virtual
 
-### 2. Preparar el proyecto
+Linux / macOS:
 
-Ejecutar en una celda:
-
-```python
-!git clone https://github.com/dvdm12/TI-support-RAG.git
-%cd /content/TI-support-RAG
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-La carpeta de trabajo debe ser la raíz del proyecto, donde están `src/`, `prompts/`, `schemas/`, `cases/` y `docs/`.
+Windows:
 
-### 3. Instalar dependencias
-
-```python
-!pip install -r requirements.txt
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
-### 4. Configurar la clave de Groq
+El entorno `.venv` es independiente de Conda y evita heredar las configuraciones del entorno de desarrollo original.
 
-Al clonar el proyecto, **lo único que debe aportar el revisor es su propia clave de Groq**.
+### 3. Instalar las dependencias
 
-Para una ejecución local, crear en la raíz del proyecto un archivo `.env`:
+Con `.venv` activo:
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+El `requirements.txt` contiene las dependencias del proyecto y no utiliza rutas locales del entorno Conda.
+
+### 4. Configurar la credencial de Groq
+
+Crear `.env` en la raíz del proyecto:
 
 ```text
 GROQ_API_KEY=tu_clave_de_groq
 ```
 
-El archivo `.env` es local y no debe subirse al repositorio.
+`src/config.py` carga esta variable al iniciar el proyecto.
 
-En Google Colab también puede usarse **Colab → Secrets** con el nombre:
+**No subir `.env` al repositorio.** La clave debe ser propia del usuario o del revisor. No se requiere ninguna otra credencial del proyecto.
+
+### 5. Preparar el notebook
+
+El punto de entrada experimental es:
 
 ```text
-GROQ_API_KEY
+notebooks/ti_support.ipynb
 ```
 
-y cargarlo así:
+El proyecto incluye `ipykernel` en `requirements.txt` para permitir la ejecución del notebook desde un entorno virtual.
 
-```python
-import os
-from google.colab import userdata
+En VS Code:
 
-os.environ["GROQ_API_KEY"] = userdata.get("GROQ_API_KEY")
+1. Abrir la carpeta `TI-support-RAG`.
+2. Abrir `notebooks/ti_support.ipynb`.
+3. Seleccionar como intérprete/kernel el Python de `.venv`.
+4. Ejecutar las celdas en orden.
+
+También se puede registrar el kernel manualmente:
+
+```bash
+python -m ipykernel install --user --name ti-support
 ```
 
-Usar siempre una **clave propia del revisor**. No copiar la clave privada del equipo.
+### 6. OCR local
 
-### 5. Ejecutar el notebook
+El proyecto incluye `pytesseract` y EasyOCR. `pytesseract` es la interfaz Python; el ejecutable de Tesseract pertenece al sistema operativo.
 
-Ejecutar las celdas en orden.
+En Ubuntu/Debian, cuando Tesseract no esté instalado:
 
-El notebook prepara la configuración, carga los casos, ejecuta las consultas contra Groq, valida las respuestas con Pydantic y registra resultados y métricas.
+```bash
+sudo apt update
+sudo apt install tesseract-ocr tesseract-ocr-spa tesseract-ocr-eng
+```
 
-### 6. Ingresar una solicitud nueva
+Comprobar:
+
+```bash
+tesseract --version
+```
+
+#### Windows
+
+Si Tesseract no está instalado, utiliza un instalador de Windows disponible para Tesseract. La documentación de Tesseract indica utilizar los instaladores de **UB Mannheim** para Windows. Durante la instalación, incluye los datos de idioma que necesite el proyecto, especialmente **Spanish** (`spa`) y **English** (`eng`). También puede ser necesario agregar la carpeta de instalación de Tesseract al `PATH` de Windows para poder invocarlo desde cualquier terminal.
+
+Una ubicación habitual es:
+
+```text
+C:\Program Files\Tesseract-OCR
+```
+
+Después de instalarlo, abrir una nueva terminal y comprobar:
+
+```powershell
+tesseract --version
+```
+
+Si `tesseract` no es reconocido como comando, agregar la carpeta de instalación al `PATH` de Windows y volver a abrir la terminal.
+
+La documentación oficial de Tesseract mantiene las instrucciones de instalación y enlaza los instaladores para Windows:
+https://github.com/tesseract-ocr/tessdoc/blob/main/Installation.md
+
+La estrategia EasyOCR no requiere el ejecutable Tesseract.
+
+### 7. Ejecutar una solicitud nueva
 
 La entrada manual está en:
 
@@ -118,30 +165,24 @@ La entrada manual está en:
 14. Defensa manual (opcional)
 ```
 
-La celda contiene:
+Por defecto:
 
 ```python
 ENABLE_MANUAL_DEFENSE = False
 ```
 
-Cambiar a:
+Para habilitar una nueva ejecución:
 
 ```python
 ENABLE_MANUAL_DEFENSE = True
 ```
 
-y ejecutar la celda.
-
-El notebook solicitará:
+Después de ejecutar la celda, el notebook solicita:
 
 ```text
 Número de ejecuciones de defensa:
 Solicitud:
 ```
-
-Escribir la solicitud directamente después de `Solicitud:`.
-
-También puede seleccionarse una imagen opcional para ejecutar el flujo multimodal.
 
 Las ejecuciones manuales se identifican como:
 
@@ -152,9 +193,13 @@ DEF-003
 ...
 ```
 
-y se incorporan a la evidencia generada.
+Para la evidencia multimodal del proyecto se utiliza:
 
-### 7. Revisar el resultado
+```text
+docs/multimodal/multimodal_demo.png
+```
+
+### 8. Revisar los resultados
 
 | Evidencia | Ubicación |
 |---|---|
@@ -164,7 +209,7 @@ y se incorporan a la evidencia generada.
 | Casos reproducibles | `cases/test_cases.json` |
 | Imagen multimodal | `docs/multimodal/multimodal_demo.png` |
 
-> **Credencial:** para ejecutar nuevas consultas solo se necesita una `GROQ_API_KEY` válida. No se requiere ninguna otra credencial del proyecto.
+> **Requisito de credencial:** para ejecutar nuevas consultas solo se necesita una `GROQ_API_KEY` válida.
 
 ## ¿Dónde ingreso una solicitud?
 
@@ -202,7 +247,7 @@ y se incorporan a la evidencia generada.
 | Contrato | `schemas/request_v1.py` | `SolicitudTI` |
 | Casos | `cases/test_cases.json` | Casos de prueba |
 | Prompts | `prompts/system_v0.md` … `system_v4.md` | Versionado |
-| Evaluación | `evaluation.py` | Evaluación funcional |
+| Evaluación | `src/evaluation.py` | Evaluación funcional |
 | Resultados | `docs/results.json` | Registro estructurado |
 | PDF | `docs/model_results_report.pdf` | Evidencia consolidada |
 | Imagen | `docs/multimodal/multimodal_demo.png` | Evidencia multimodal |
@@ -274,14 +319,15 @@ Los mocks de `src/mocks.py` sirven para probar comportamiento controlado del pro
 5. Consultar `docs/results.json` y `docs/model_results_report.pdf`.
 6. Revisar `docs/bitacora_parcial.md`.
 
-### Ejecutar una nueva consulta
+### Ejecutar una nueva consulta localmente
 
 | Requisito | Valor |
 |---|---|
-| Entorno | Google Colab |
+| Entorno | `.venv` |
 | Dependencias | `requirements.txt` |
 | Credencial | `GROQ_API_KEY` propia del revisor |
 | Notebook | `notebooks/ti_support.ipynb` |
+| Kernel | `ti-support` |
 | Entrada | Celda 14 · Defensa manual |
 | Activación | `ENABLE_MANUAL_DEFENSE = True` |
 
