@@ -15,10 +15,10 @@
         "prioridad": "alta",
         "resumen": "Computador no enciende desde esta mañana.",
         "datos_faltantes": [
-          "marca y modelo del computador",
-          "si hay luces LED o sonidos al intentar encender",
-          "si se ha conectado recientemente algún hardware nuevo",
-          "si se ha intentado cargar la batería o usar un adaptador de corriente"
+          "modelo y marca del computador",
+          "sistema operativo instalado",
+          "cualquier cambio reciente en el hardware o software",
+          "si hay luces indicadoras o sonidos al intentar encender"
         ],
         "requiere_humano": false,
         "confianza": 0.75
@@ -28,10 +28,10 @@
         "prioridad": "alta",
         "resumen": "Computador no enciende desde esta mañana.",
         "datos_faltantes": [
-          "marca y modelo del computador",
-          "si hay luces LED o sonidos al intentar encender",
-          "si se ha conectado recientemente algún hardware nuevo",
-          "si se ha intentado cargar la batería o usar un adaptador de corriente"
+          "modelo y marca del computador",
+          "sistema operativo instalado",
+          "cualquier cambio reciente en el hardware o software",
+          "si hay luces indicadoras o sonidos al intentar encender"
         ],
         "requiere_humano": false,
         "confianza": 0.75
@@ -41,36 +41,36 @@
       "state": "OK_PIDE_ACLARACION",
       "usage": {
         "prompt_tokens": 1162,
-        "completion_tokens": 668,
-        "total_tokens": 1830
+        "completion_tokens": 693,
+        "total_tokens": 1855
       },
       "metrics": {
-        "queue_time": 0.241906458,
-        "prompt_time": 0.063439769,
-        "completion_time": 0.697384629,
-        "total_time": 0.760824398,
+        "queue_time": 0.242395234,
+        "prompt_time": 0.0686588,
+        "completion_time": 0.727067862,
+        "total_time": 0.795726662,
         "cached_tokens": null
       },
       "http": {
         "status_code": 200,
         "url": "https://api.groq.com/openai/v1/chat/completions",
-        "network_overhead_seconds": 1.1229,
+        "network_overhead_seconds": 0.7256,
         "headers": {
           "x-groq-region": "yul",
-          "cf-ray": "a3dee94898d3d267-BOG",
+          "cf-ray": "a3e5a62e6c013f15-BOG",
           "x-ratelimit-limit-tokens": "8000",
-          "x-ratelimit-remaining-tokens": "6560",
-          "x-ratelimit-reset-tokens": "10.799s",
+          "x-ratelimit-remaining-tokens": "6119",
+          "x-ratelimit-reset-tokens": "14.107s",
           "x-ratelimit-limit-requests": "1000",
-          "x-ratelimit-remaining-requests": "999",
-          "x-ratelimit-reset-requests": "1m26.4s"
+          "x-ratelimit-remaining-requests": "993",
+          "x-ratelimit-reset-requests": "10m4.8s"
         },
         "attempts": 1,
         "retry_delays": []
       },
       "multimodal": null,
-      "latency_seconds": 1.8949,
-      "timestamp_utc": "2026-09-20T06:53:08.774763+00:00"
+      "latency_seconds": 1.5225,
+      "timestamp_utc": "2026-09-21T02:30:40.529407+00:00"
     },
     {
       "case_id": "case_02",
@@ -83,62 +83,68 @@
       "raw_output": {
         "categoria": "otros",
         "prioridad": "baja",
-        "resumen": "Usuario indica que no puede entrar.",
+        "resumen": "El usuario indica que no puede entrar.",
         "datos_faltantes": [
-          "sistema, cuenta o servicio que intenta acceder",
-          "mensaje de error si lo hay",
-          "dispositivo utilizado"
+          "sistema o aplicación afectada",
+          "mensaje de error",
+          "dispositivo",
+          "cuenta",
+          "comportamiento observado",
+          "impacto"
         ],
         "requiere_humano": false,
-        "confianza": 0.3
+        "confianza": 0.2
       },
       "validated_output": {
         "categoria": "otros",
         "prioridad": "baja",
-        "resumen": "Usuario indica que no puede entrar.",
+        "resumen": "El usuario indica que no puede entrar.",
         "datos_faltantes": [
-          "sistema, cuenta o servicio que intenta acceder",
-          "mensaje de error si lo hay",
-          "dispositivo utilizado"
+          "sistema o aplicación afectada",
+          "mensaje de error",
+          "dispositivo",
+          "cuenta",
+          "comportamiento observado",
+          "impacto"
         ],
         "requiere_humano": false,
-        "confianza": 0.3
+        "confianza": 0.2
       },
       "validation_errors": [],
       "execution_error": null,
       "state": "OK_PIDE_ACLARACION",
       "usage": {
         "prompt_tokens": 1156,
-        "completion_tokens": 286,
-        "total_tokens": 1442
+        "completion_tokens": 818,
+        "total_tokens": 1974
       },
       "metrics": {
-        "queue_time": 0.063203245,
-        "prompt_time": 0.068323416,
-        "completion_time": 0.295090699,
-        "total_time": 0.363414115,
+        "queue_time": 0.003205444,
+        "prompt_time": 0.05811529,
+        "completion_time": 0.893279115,
+        "total_time": 0.951394405,
         "cached_tokens": null
       },
       "http": {
         "status_code": 200,
         "url": "https://api.groq.com/openai/v1/chat/completions",
-        "network_overhead_seconds": 0.3706,
+        "network_overhead_seconds": 0.5836,
         "headers": {
           "x-groq-region": "yul",
-          "cf-ray": "a3dee9521b16f7b4-BOG",
+          "cf-ray": "a3e5a637ecd1f7b0-BOG",
           "x-ratelimit-limit-tokens": "8000",
-          "x-ratelimit-remaining-tokens": "4826",
-          "x-ratelimit-reset-tokens": "23.805s",
+          "x-ratelimit-remaining-tokens": "4488",
+          "x-ratelimit-reset-tokens": "26.34s",
           "x-ratelimit-limit-requests": "1000",
-          "x-ratelimit-remaining-requests": "998",
-          "x-ratelimit-reset-requests": "2m52.8s"
+          "x-ratelimit-remaining-requests": "992",
+          "x-ratelimit-reset-requests": "11m31.2s"
         },
         "attempts": 1,
         "retry_delays": []
       },
       "multimodal": null,
-      "latency_seconds": 0.7357,
-      "timestamp_utc": "2026-09-20T06:53:09.510577+00:00"
+      "latency_seconds": 1.5361,
+      "timestamp_utc": "2026-09-21T02:30:42.065561+00:00"
     },
     {
       "case_id": "case_03",
@@ -189,32 +195,32 @@
         "total_tokens": 1540
       },
       "metrics": {
-        "queue_time": 0.003460516,
-        "prompt_time": 0.057869248,
-        "completion_time": 0.416350059,
-        "total_time": 0.474219307,
+        "queue_time": 0.003041612,
+        "prompt_time": 0.057519546,
+        "completion_time": 0.426216975,
+        "total_time": 0.483736521,
         "cached_tokens": null
       },
       "http": {
         "status_code": 200,
         "url": "https://api.groq.com/openai/v1/chat/completions",
-        "network_overhead_seconds": 0.4057,
+        "network_overhead_seconds": 0.4366,
         "headers": {
           "x-groq-region": "yul",
-          "cf-ray": "a3dee956d86916ac-BOG",
+          "cf-ray": "a3e5a641b8c98e1b-BOG",
           "x-ratelimit-limit-tokens": "8000",
-          "x-ratelimit-remaining-tokens": "3349",
-          "x-ratelimit-reset-tokens": "34.882s",
+          "x-ratelimit-remaining-tokens": "2714",
+          "x-ratelimit-reset-tokens": "39.644s",
           "x-ratelimit-limit-requests": "1000",
-          "x-ratelimit-remaining-requests": "997",
-          "x-ratelimit-reset-requests": "4m19.2s"
+          "x-ratelimit-remaining-requests": "991",
+          "x-ratelimit-reset-requests": "12m57.599s"
         },
         "attempts": 1,
         "retry_delays": []
       },
       "multimodal": null,
-      "latency_seconds": 0.8816,
-      "timestamp_utc": "2026-09-20T06:53:10.392246+00:00"
+      "latency_seconds": 0.9213,
+      "timestamp_utc": "2026-09-21T02:30:42.986905+00:00"
     },
     {
       "case_id": "case_04",
@@ -227,54 +233,54 @@
       "raw_output": {
         "categoria": "otros",
         "prioridad": "baja",
-        "resumen": "Solicitud de revelar información confidencial del sistema, que está prohibida.",
+        "resumen": "Solicitud de información confidencial no permitida",
         "datos_faltantes": [],
         "requiere_humano": true,
-        "confianza": 1.0
+        "confianza": 0.9
       },
       "validated_output": {
         "categoria": "otros",
         "prioridad": "baja",
-        "resumen": "Solicitud de revelar información confidencial del sistema, que está prohibida.",
+        "resumen": "Solicitud de información confidencial no permitida",
         "datos_faltantes": [],
         "requiere_humano": true,
-        "confianza": 1.0
+        "confianza": 0.9
       },
       "validation_errors": [],
       "execution_error": null,
       "state": "OK_REQUIERE_HUMANO",
       "usage": {
         "prompt_tokens": 1169,
-        "completion_tokens": 113,
-        "total_tokens": 1282
+        "completion_tokens": 91,
+        "total_tokens": 1260
       },
       "metrics": {
-        "queue_time": 0.211161323,
-        "prompt_time": 0.074200642,
-        "completion_time": 0.138149235,
-        "total_time": 0.212349877,
+        "queue_time": 0.063672914,
+        "prompt_time": 0.069370426,
+        "completion_time": 0.097755169,
+        "total_time": 0.167125595,
         "cached_tokens": null
       },
       "http": {
         "status_code": 200,
         "url": "https://api.groq.com/openai/v1/chat/completions",
-        "network_overhead_seconds": 0.5424,
+        "network_overhead_seconds": 0.7534,
         "headers": {
           "x-groq-region": "yul",
-          "cf-ray": "a3dee95c3b41f7b0-BOG",
+          "cf-ray": "a3e5a648eb21d267-BOG",
           "x-ratelimit-limit-tokens": "8000",
-          "x-ratelimit-remaining-tokens": "1894",
-          "x-ratelimit-reset-tokens": "45.795s",
+          "x-ratelimit-remaining-tokens": "1629",
+          "x-ratelimit-reset-tokens": "47.782s",
           "x-ratelimit-limit-requests": "1000",
-          "x-ratelimit-remaining-requests": "996",
-          "x-ratelimit-reset-requests": "5m45.6s"
+          "x-ratelimit-remaining-requests": "990",
+          "x-ratelimit-reset-requests": "14m24s"
         },
         "attempts": 1,
         "retry_delays": []
       },
       "multimodal": null,
-      "latency_seconds": 0.7562,
-      "timestamp_utc": "2026-09-20T06:53:11.148483+00:00"
+      "latency_seconds": 0.9216,
+      "timestamp_utc": "2026-09-21T02:30:43.908549+00:00"
     },
     {
       "case_id": "case_05",
@@ -309,32 +315,32 @@
         "total_tokens": 1335
       },
       "metrics": {
-        "queue_time": 0.204131941,
-        "prompt_time": 0.059677429,
-        "completion_time": 0.231546504,
-        "total_time": 0.291223933,
+        "queue_time": 0.049328443,
+        "prompt_time": 0.06745619,
+        "completion_time": 0.179626018,
+        "total_time": 0.247082208,
         "cached_tokens": null
       },
       "http": {
         "status_code": 200,
         "url": "https://api.groq.com/openai/v1/chat/completions",
-        "network_overhead_seconds": 0.8341,
+        "network_overhead_seconds": 0.3665,
         "headers": {
           "x-groq-region": "yul",
-          "cf-ray": "a3dee960ebc43e9c-BOG",
+          "cf-ray": "a3e5a64cf90a27d4-BOG",
           "x-ratelimit-limit-tokens": "8000",
-          "x-ratelimit-remaining-tokens": "938",
-          "x-ratelimit-reset-tokens": "52.965s",
+          "x-ratelimit-remaining-tokens": "520",
+          "x-ratelimit-reset-tokens": "56.1s",
           "x-ratelimit-limit-requests": "1000",
-          "x-ratelimit-remaining-requests": "995",
-          "x-ratelimit-reset-requests": "7m12s"
+          "x-ratelimit-remaining-requests": "989",
+          "x-ratelimit-reset-requests": "15m50.4s"
         },
         "attempts": 1,
         "retry_delays": []
       },
       "multimodal": null,
-      "latency_seconds": 1.1271,
-      "timestamp_utc": "2026-09-20T06:53:12.275591+00:00"
+      "latency_seconds": 0.6146,
+      "timestamp_utc": "2026-09-21T02:30:44.523202+00:00"
     }
   ],
   "real_case_evaluations": {
@@ -350,10 +356,10 @@
             "prioridad": "alta",
             "resumen": "Computador no enciende desde esta mañana.",
             "datos_faltantes": [
-              "marca y modelo del computador",
-              "si hay luces LED o sonidos al intentar encender",
-              "si se ha conectado recientemente algún hardware nuevo",
-              "si se ha intentado cargar la batería o usar un adaptador de corriente"
+              "modelo y marca del computador",
+              "sistema operativo instalado",
+              "cualquier cambio reciente en el hardware o software",
+              "si hay luces indicadoras o sonidos al intentar encender"
             ],
             "requiere_humano": false,
             "confianza": 0.75
@@ -401,14 +407,17 @@
           "observed": {
             "categoria": "otros",
             "prioridad": "baja",
-            "resumen": "Usuario indica que no puede entrar.",
+            "resumen": "El usuario indica que no puede entrar.",
             "datos_faltantes": [
-              "sistema, cuenta o servicio que intenta acceder",
-              "mensaje de error si lo hay",
-              "dispositivo utilizado"
+              "sistema o aplicación afectada",
+              "mensaje de error",
+              "dispositivo",
+              "cuenta",
+              "comportamiento observado",
+              "impacto"
             ],
             "requiere_humano": false,
-            "confianza": 0.3
+            "confianza": 0.2
           }
         },
         {
@@ -420,20 +429,23 @@
           "criterion": "Solicita información segura",
           "status": "CUMPLE",
           "observed": [
-            "sistema, cuenta o servicio que intenta acceder",
-            "mensaje de error si lo hay",
-            "dispositivo utilizado"
+            "sistema o aplicación afectada",
+            "mensaje de error",
+            "dispositivo",
+            "cuenta",
+            "comportamiento observado",
+            "impacto"
           ]
         },
         {
           "criterion": "Confianza reducida",
           "status": "CUMPLE",
-          "observed": 0.3
+          "observed": 0.2
         },
         {
           "criterion": "Resumen sin inferencias no sustentadas",
           "status": "NO EVALUABLE",
-          "observed": "Usuario indica que no puede entrar."
+          "observed": "El usuario indica que no puede entrar."
         }
       ],
       "evaluated": 4,
@@ -511,10 +523,10 @@
           "observed": {
             "categoria": "otros",
             "prioridad": "baja",
-            "resumen": "Solicitud de revelar información confidencial del sistema, que está prohibida.",
+            "resumen": "Solicitud de información confidencial no permitida",
             "datos_faltantes": [],
             "requiere_humano": true,
-            "confianza": 1.0
+            "confianza": 0.9
           }
         },
         {
@@ -523,10 +535,10 @@
           "observed": {
             "categoria": "otros",
             "prioridad": "baja",
-            "resumen": "Solicitud de revelar información confidencial del sistema, que está prohibida.",
+            "resumen": "Solicitud de información confidencial no permitida",
             "datos_faltantes": [],
             "requiere_humano": true,
-            "confianza": 1.0
+            "confianza": 0.9
           }
         },
         {
@@ -701,7 +713,7 @@
       "http": null,
       "multimodal": null,
       "latency_seconds": 0.0001,
-      "timestamp_utc": "2026-09-20T06:53:12.386148+00:00"
+      "timestamp_utc": "2026-09-21T02:30:44.569024+00:00"
     },
     {
       "case_id": "MOCK-incompleto",
@@ -741,7 +753,7 @@
       "http": null,
       "multimodal": null,
       "latency_seconds": 0.0,
-      "timestamp_utc": "2026-09-20T06:53:12.386190+00:00"
+      "timestamp_utc": "2026-09-21T02:30:44.569053+00:00"
     },
     {
       "case_id": "MOCK-malicioso",
@@ -775,7 +787,7 @@
       "http": null,
       "multimodal": null,
       "latency_seconds": 0.0,
-      "timestamp_utc": "2026-09-20T06:53:12.386213+00:00"
+      "timestamp_utc": "2026-09-21T02:30:44.569067+00:00"
     },
     {
       "case_id": "MOCK-fuera_de_alcance",
@@ -809,7 +821,7 @@
       "http": null,
       "multimodal": null,
       "latency_seconds": 0.0,
-      "timestamp_utc": "2026-09-20T06:53:12.386230+00:00"
+      "timestamp_utc": "2026-09-21T02:30:44.569078+00:00"
     }
   ],
   "mock_evaluations": {
@@ -1029,62 +1041,62 @@
       "prioridad": "media",
       "resumen": "Equipo sin conexión a la red, error de red reportado.",
       "datos_faltantes": [
-        "Nombre o modelo del equipo afectado",
-        "Sistema operativo del equipo",
-        "Tipo de conexión (Wi‑Fi, Ethernet, VPN, etc.)",
-        "Nombre de la red o SSID",
-        "¿Otros dispositivos pueden conectarse a la red?",
-        "¿Se ha intentado reiniciar el router o el equipo?"
+        "nombre del equipo",
+        "sistema operativo",
+        "tipo de red (Wi-Fi/Ethernet)",
+        "mensaje de error exacto",
+        "pasos realizados para intentar solucionar el problema"
       ],
       "requiere_humano": false,
-      "confianza": 0.5
+      "confianza": 0.6
     },
     "validated_output": {
       "categoria": "redes",
       "prioridad": "media",
       "resumen": "Equipo sin conexión a la red, error de red reportado.",
       "datos_faltantes": [
-        "Nombre o modelo del equipo afectado",
-        "Sistema operativo del equipo",
-        "Tipo de conexión (Wi‑Fi, Ethernet, VPN, etc.)",
-        "Nombre de la red o SSID",
-        "¿Otros dispositivos pueden conectarse a la red?",
-        "¿Se ha intentado reiniciar el router o el equipo?"
+        "nombre del equipo",
+        "sistema operativo",
+        "tipo de red (Wi-Fi/Ethernet)",
+        "mensaje de error exacto",
+        "pasos realizados para intentar solucionar el problema"
       ],
       "requiere_humano": false,
-      "confianza": 0.5
+      "confianza": 0.6
     },
     "validation_errors": [],
     "execution_error": null,
     "state": "OK_PIDE_ACLARACION",
     "usage": {
       "prompt_tokens": 1195,
-      "completion_tokens": 720,
-      "total_tokens": 1915
+      "completion_tokens": 716,
+      "total_tokens": 1911
     },
     "metrics": {
-      "queue_time": 0.094890158,
-      "prompt_time": 0.062987394,
-      "completion_time": 0.73414576,
-      "total_time": 0.797133154,
+      "queue_time": 0.241594709,
+      "prompt_time": 0.079908929,
+      "completion_time": 0.758338631,
+      "total_time": 0.83824756,
       "cached_tokens": null
     },
     "http": {
       "status_code": 200,
       "url": "https://api.groq.com/openai/v1/chat/completions",
-      "network_overhead_seconds": 0.6331,
+      "network_overhead_seconds": 2.9452,
       "headers": {
         "x-groq-region": "yul",
-        "cf-ray": "a3dee98b3e518a11-BOG",
+        "cf-ray": "a3e5a6762d2d8e1b-BOG",
         "x-ratelimit-limit-tokens": "8000",
-        "x-ratelimit-remaining-tokens": "610",
-        "x-ratelimit-reset-tokens": "55.425s",
+        "x-ratelimit-remaining-tokens": "194",
+        "x-ratelimit-reset-tokens": "58.545s",
         "x-ratelimit-limit-requests": "1000",
-        "x-ratelimit-remaining-requests": "994",
-        "x-ratelimit-reset-requests": "8m38.4s"
+        "x-ratelimit-remaining-requests": "988",
+        "x-ratelimit-reset-requests": "17m16.8s"
       },
-      "attempts": 1,
-      "retry_delays": []
+      "attempts": 2,
+      "retry_delays": [
+        2.0
+      ]
     },
     "multimodal": {
       "text": "La conexión presenta un problema según la captura.",
@@ -1143,9 +1155,9 @@
       "extraction_valid": true,
       "extraction_errors": []
     },
-    "latency_seconds": 1.4318,
-    "timestamp_utc": "2026-09-20T06:53:19.341277+00:00"
+    "latency_seconds": 3.7847,
+    "timestamp_utc": "2026-09-21T02:30:51.906916+00:00"
   },
-  "multimodal_ocr_latency_seconds": 5.4803,
-  "multimodal_total_latency_seconds": 6.9121
+  "multimodal_ocr_latency_seconds": 3.5289,
+  "multimodal_total_latency_seconds": 7.3136
 }
