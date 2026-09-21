@@ -1039,13 +1039,13 @@
     "raw_output": {
       "categoria": "redes",
       "prioridad": "media",
-      "resumen": "Equipo sin conexión a la red, error de red reportado.",
+      "resumen": "Equipo sin conexión a la red, error de red",
       "datos_faltantes": [
         "nombre del equipo",
         "sistema operativo",
-        "tipo de red (Wi-Fi/Ethernet)",
-        "mensaje de error exacto",
-        "pasos realizados para intentar solucionar el problema"
+        "tipo de conexión (Wi-Fi/Ethernet)",
+        "si otros dispositivos pueden conectarse a la red",
+        "mensaje de error exacto o código"
       ],
       "requiere_humano": false,
       "confianza": 0.6
@@ -1053,13 +1053,13 @@
     "validated_output": {
       "categoria": "redes",
       "prioridad": "media",
-      "resumen": "Equipo sin conexión a la red, error de red reportado.",
+      "resumen": "Equipo sin conexión a la red, error de red",
       "datos_faltantes": [
         "nombre del equipo",
         "sistema operativo",
-        "tipo de red (Wi-Fi/Ethernet)",
-        "mensaje de error exacto",
-        "pasos realizados para intentar solucionar el problema"
+        "tipo de conexión (Wi-Fi/Ethernet)",
+        "si otros dispositivos pueden conectarse a la red",
+        "mensaje de error exacto o código"
       ],
       "requiere_humano": false,
       "confianza": 0.6
@@ -1069,34 +1069,32 @@
     "state": "OK_PIDE_ACLARACION",
     "usage": {
       "prompt_tokens": 1195,
-      "completion_tokens": 716,
-      "total_tokens": 1911
+      "completion_tokens": 571,
+      "total_tokens": 1766
     },
     "metrics": {
-      "queue_time": 0.241594709,
-      "prompt_time": 0.079908929,
-      "completion_time": 0.758338631,
-      "total_time": 0.83824756,
+      "queue_time": 0.258448761,
+      "prompt_time": 0.069903247,
+      "completion_time": 0.591413466,
+      "total_time": 0.661316713,
       "cached_tokens": null
     },
     "http": {
       "status_code": 200,
       "url": "https://api.groq.com/openai/v1/chat/completions",
-      "network_overhead_seconds": 2.9452,
+      "network_overhead_seconds": 0.5298,
       "headers": {
-        "x-groq-region": "yul",
-        "cf-ray": "a3e5a6762d2d8e1b-BOG",
+        "x-groq-region": "msp",
+        "cf-ray": "a3e6656affe2d267-BOG",
         "x-ratelimit-limit-tokens": "8000",
-        "x-ratelimit-remaining-tokens": "194",
-        "x-ratelimit-reset-tokens": "58.545s",
+        "x-ratelimit-remaining-tokens": "6523",
+        "x-ratelimit-reset-tokens": "11.077s",
         "x-ratelimit-limit-requests": "1000",
-        "x-ratelimit-remaining-requests": "988",
-        "x-ratelimit-reset-requests": "17m16.8s"
+        "x-ratelimit-remaining-requests": "998",
+        "x-ratelimit-reset-requests": "2m52.8s"
       },
-      "attempts": 2,
-      "retry_delays": [
-        2.0
-      ]
+      "attempts": 1,
+      "retry_delays": []
     },
     "multimodal": {
       "text": "La conexión presenta un problema según la captura.",
@@ -1155,9 +1153,9 @@
       "extraction_valid": true,
       "extraction_errors": []
     },
-    "latency_seconds": 3.7847,
-    "timestamp_utc": "2026-09-21T02:30:51.906916+00:00"
+    "latency_seconds": 1.1929,
+    "timestamp_utc": "2026-09-21T04:41:13.381991+00:00"
   },
-  "multimodal_ocr_latency_seconds": 3.5289,
-  "multimodal_total_latency_seconds": 7.3136
+  "multimodal_ocr_latency_seconds": 5.3159,
+  "multimodal_total_latency_seconds": 6.5088
 }
