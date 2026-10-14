@@ -1,0 +1,80 @@
+{
+  "timestamp_utc": "2026-10-14T20:31:43.604789+00:00",
+  "notebook": "notebooks/clase_08_rag_supabase_groq.ipynb",
+  "kernel": "ti-support-rag",
+  "practice": "teacher ten-step workflow using project client components",
+  "executed_code_cells": 10,
+  "kernel_execution_passed": true,
+  "current_cell": "cl08-practica-20",
+  "results_directory": "docs/rag_runs/clase08/20261014T203144285329Z",
+  "supabase_rows_verified": 70,
+  "upsert_performed": true,
+  "persistence_new_client": true,
+  "accepted_generation": 6,
+  "attempted_generation": 6,
+  "generation_results": [
+    {
+      "status": "ACCEPTED",
+      "state": "parcial",
+      "failure_stage": null,
+      "http_status": 200,
+      "input_tokens": 724,
+      "latency_generation_seconds": 1.2926,
+      "latency_total_seconds": 1.5185,
+      "expected": null
+    },
+    {
+      "status": "ACCEPTED",
+      "state": "parcial",
+      "failure_stage": null,
+      "http_status": 200,
+      "input_tokens": 734,
+      "latency_generation_seconds": 0.7187,
+      "latency_total_seconds": 0.9006,
+      "expected": "respondida, sin afirmar suspensión"
+    },
+    {
+      "status": "ACCEPTED",
+      "state": "respondida",
+      "failure_stage": null,
+      "http_status": 200,
+      "input_tokens": 722,
+      "latency_generation_seconds": 0.5996,
+      "latency_total_seconds": 0.8324,
+      "expected": "aclaracion"
+    },
+    {
+      "status": "ACCEPTED",
+      "state": "evidencia_insuficiente",
+      "failure_stage": null,
+      "http_status": 200,
+      "input_tokens": 717,
+      "latency_generation_seconds": 0.8179,
+      "latency_total_seconds": 1.0205,
+      "expected": "evidencia_insuficiente"
+    },
+    {
+      "status": "ACCEPTED",
+      "state": "evidencia_insuficiente",
+      "failure_stage": null,
+      "http_status": 200,
+      "input_tokens": 736,
+      "latency_generation_seconds": 0.8571,
+      "latency_total_seconds": 1.0267,
+      "expected": "parcial o evidencia_insuficiente, sin inventar un estado"
+    },
+    {
+      "status": "ACCEPTED",
+      "state": "respondida",
+      "failure_stage": null,
+      "http_status": 200,
+      "input_tokens": 726,
+      "latency_generation_seconds": 0.7835,
+      "latency_total_seconds": 0.9434,
+      "expected": "respondida, sin afirmar suspensión"
+    }
+  ],
+  "elapsed_seconds": 16.68,
+  "extra_tests_enabled": true,
+  "source_notebook_defaults_preserved": true
+}

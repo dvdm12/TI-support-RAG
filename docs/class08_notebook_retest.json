@@ -1,0 +1,49 @@
+{
+  "timestamp_utc": "2026-10-14T20:09:30.696358+00:00",
+  "notebook": "notebooks/clase_08_rag_supabase_groq.ipynb",
+  "kernel": "ti-support-rag",
+  "groq_executed": false,
+  "database_writes": false,
+  "runs": [
+    {
+      "mode": "default",
+      "passed": true,
+      "executed_code_cells": 13
+    },
+    {
+      "mode": "supabase_retrieval_persistence_api",
+      "passed": true,
+      "executed_code_cells": 13,
+      "cpu_threads": 2,
+      "current_cell": "cl08-26",
+      "supabase_persistence_checked": true,
+      "api_checked": true,
+      "rows_verified": 70,
+      "rpc_verified": true,
+      "local_and_remote_index_match": true,
+      "elapsed_seconds": 22.65
+    }
+  ],
+  "passed": true,
+  "notebook_saved_outputs": "default run only; remote flags changed only in temporary kernel execution",
+  "not_executed": [
+    "Groq generation",
+    "five real class08 cases",
+    "ten-case remote regression",
+    "database upsert",
+    "OCR",
+    "chunking comparison"
+  ],
+  "previous_attempts": [
+    {
+      "mode": "supabase_retrieval_persistence_api",
+      "passed": false,
+      "executed_code_cells": 3,
+      "error_type": "Empty"
+    }
+  ],
+  "retry_timestamp_utc": "2026-10-14T20:18:59.634249+00:00",
+  "initial_attempt_elapsed_seconds": 73.98,
+  "model_cache": "persistent Hugging Face cache; missing weights downloaded",
+  "backend_server": "Local Django server restarted before API checks"
+}

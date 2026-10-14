@@ -1,0 +1,40 @@
+{
+  "timestamp_utc": "2026-10-14T20:04:48.042550+00:00",
+  "groq_executed": false,
+  "database_writes": false,
+  "checks": {
+    "supabase": {
+      "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+      "rows_verified": 70,
+      "authenticated": true,
+      "persistence_new_client": true,
+      "rpc_verified": true,
+      "probe": "embedding_of_first_stored_chunk",
+      "owner_isolation": "PENDIENTE: requiere un segundo usuario de Auth.",
+      "upsert_performed": false,
+      "status": "passed"
+    },
+    "health": {
+      "http_status": 200,
+      "passed": true
+    },
+    "categories": {
+      "http_status": 200,
+      "passed": true
+    },
+    "backend_search": {
+      "http_status": 200,
+      "passed": true,
+      "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+      "passages": 3,
+      "sections": [
+        "ACS-03 | Error 403 o recurso no autorizado",
+        "ACS-03 | Error 403 o recurso no autorizado",
+        "ACS-05 | Comprobación y cierre"
+      ]
+    }
+  },
+  "elapsed_seconds": 25.15,
+  "supabase_to_backend": "Responses to authenticated table/RPC requests; no autonomous webhook tested or configured.",
+  "passed": true
+}

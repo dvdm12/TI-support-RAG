@@ -95,7 +95,7 @@ class TestBuildPayload(unittest.TestCase):
 
         self.assertEqual(
             payload["max_completion_tokens"],
-            1500,
+            800,
         )
 
     def test_payload_tiene_messages(self):

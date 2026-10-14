@@ -252,8 +252,12 @@ class PDFReport:
         if value is None:
             return ""
         if isinstance(value, (dict, list, tuple)):
-            return json.dumps(value, ensure_ascii=False, indent=2)
-        return str(value)
+            text = json.dumps(value, ensure_ascii=False, indent=2)
+        else:
+            text = str(value)
+        # Standard PDF fonts lack several Unicode hyphen glyphs. This changes
+        # presentation only; original JSON evidence retains its exact text.
+        return text.translate(dict.fromkeys(range(0x2010, 0x2016), '-'))
 
     @classmethod
     def _paragraph(cls, value: Any, style: ParagraphStyle) -> Paragraph:

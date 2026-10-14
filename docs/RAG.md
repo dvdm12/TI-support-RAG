@@ -144,9 +144,35 @@ en recuperación; no se recorta sin avisar.
 `RespuestaRAG` distingue `respondida`, `parcial`, `aclaracion` y
 `evidencia_insuficiente`. Se verifica forma estricta, coherencia, citas existentes
 y coincidencia entre menciones y lista. El resultado expone
-`semantic_support_review=PENDIENTE`: la existencia de una cita no demuestra que
-respalde la afirmación. No hay umbral universal de similitud ni confianza RAG
+`semantic_support_review=MODEL_SUPPORTED` o `MODEL_REJECTED` en ejecución real.
+Una segunda llamada al mismo modelo revisa respuesta y limitación contra los
+pasajes, sin conocimientos externos. Es una protección falible, no una prueba
+de fidelidad. Si detecta un defecto, se permite una única regeneración y nueva
+revisión; ambas salidas y revisiones quedan en la traza. Si sigue rechazando,
+se ofrece un límite documental explícito, sin aceptar las instrucciones dudosas.
+En mock se conserva `PENDIENTE`. No hay umbral universal de similitud ni confianza RAG
 inventada. La confianza de clasificación sigue siendo la propuesta del modelo.
+
+La recuperación combina diez candidatos de coseno con diez de BM25 mediante
+fusión de rangos (constante 60) y preferencia suave de categoría (0,025); conserva
+Top-3 y puntajes de coseno reales. La búsqueda léxica recorre únicamente las filas
+del usuario, corpus, modelo y revisión correspondientes, paginadas bajo RLS.
+Este recorrido está pensado para el corpus académico pequeño; un corpus grande
+necesitará búsqueda textual en PostgreSQL para evitar descargar sus pasajes.
+
+`system_v6` distingue administración de cuentas y acceso a recursos. Las reglas
+locales de `src/rag/policy.py` registran correcciones de categoría para operaciones
+explícitas de cuenta y error 403, y escalan síntomas físicos afirmativos o una
+instalación sin privilegios. Conservan la salida original del clasificador,
+consideran negaciones/condiciones y no elevan su confianza.
+
+El cliente Groq conserva un presupuesto estimado por proceso/modelo a partir de
+los encabezados de cuota y su tiempo de recuperación. Espera antes de otra
+solicitud cuando hace falta; es una estimación conservadora de tokens, no la
+contabilidad de uso. Las llamadas documentales admiten dos reintentos HTTP 429,
+una espera máxima de 120 segundos, dividida en pausas de hasta 60 segundos, y 120 segundos de esperas por
+reintentos. Otros procesos pueden consumir la cuota compartida y aún causar
+errores; no hay reintentos ilimitados.
 
 Las decisiones existentes de intervención humana y aclaración conservan
 precedencia. Si la clasificación permite continuar, el estado documental añade
@@ -184,3 +210,55 @@ Referencias de implementación: [Sentence Transformers](https://www.sbert.net/do
 [Supabase Auth](https://supabase.com/docs/reference/python/auth-signinwithpassword),
 [upsert](https://supabase.com/docs/reference/python/upsert) y
 [Groq Structured Outputs](https://console.groq.com/docs/structured-outputs).
+
+## Regresión real de escenarios
+
+Con `.venv` activado y las credenciales locales configuradas:
+
+```bash
+source .venv/bin/activate
+python -m scripts.validate_rag_scenarios --output docs/rag_runs/regression
+```
+
+`cases/rag_regression.json` contiene preguntas y expectativas de categoría,
+sección, escalamiento y estado documental. El programa usa Supabase y Groq
+reales, conserva cada traza y termina con error si algún control falla. No
+introduce pausas artificiales: la espera de cuota pertenece al cliente del
+producto. El verificador por modelo no sustituye la revisión humana de fuentes
+ni la comprobación pendiente del aislamiento entre dos usuarios reales.
+
+La revisión considera una negativa a revelar secretos como una decisión del
+asistente, sin exigir un manual que la ordene. Un control local adicional evita
+recomendar cambios de contraseña cuando el usuario dice que no abrió el enlace
+sospechoso y no reporta exposición; si reporta exposición por otro canal, esa
+ruta sigue siendo pertinente. No utiliza identificadores de casos o secciones.
+Una revisión JSON inconsistente admite una única repetición y conserva sus
+salidas. El cliente también permite un único reintento del HTTP 400 reconocido
+como `json_validate_failed`; no reintenta otros errores 400 ni expone el cuerpo
+de error del proveedor.
+
+## Presupuesto de entrada de 1000 tokens
+
+Cada llamada usa un máximo local de 1000 tokens: mensajes, esquema JSON y una
+reserva conservadora de 96 tokens para el formato interno del proveedor. Se
+cuenta con `tiktoken` y `o200k_harmony`, apropiado para GPT-OSS. El primer uso
+descarga el vocabulario; queda en `.cache/tiktoken/`, fuera de Git. El presupuesto
+se comprueba antes de cargar secretos/enviar la petición, y se rechaza una salida
+si Groq informa más de 1000 `prompt_tokens`. La reserva no pretende conocer el
+formato oculto exacto del proveedor; se registra la diferencia frente al uso real.
+
+`system_v6` y `rag_v4` contienen instrucciones compactas. El contexto conserva
+pasajes completos y omite aquellos que no caben. La procedencia completa queda
+en el catálogo y la traza, aunque el modelo recibe solo etiqueta y texto. Se
+reservan 150 tokens para una eventual corrección; si no cabe, no se envía. El
+límite anterior de 6000 caracteres sigue siendo un segundo techo, no equivale
+a 1000 tokens. Las respuestas tienen máximo 90 palabras y la limitación 25.
+
+Se usa `reasoning_effort=low` en GPT-OSS y máximo de salida 800 tokens; la entrada
+y la salida son presupuestos diferentes. Los 8000 indicados por los encabezados
+de Groq corresponden a TPM (tokens por minuto), no a tokens por consulta, según
+[la documentación de límites](https://console.groq.com/docs/rate-limits).
+La cuota se comparte a nivel de organización. El presupuesto local de entrada
+no elimina los límites acumulados ni asegura que diez casos puedan ejecutarse
+seguidos. El informe actual distingue pruebas locales, resultados remotos y
+casos bloqueados por HTTP 429, sin presentar esos bloqueos como aprobados.

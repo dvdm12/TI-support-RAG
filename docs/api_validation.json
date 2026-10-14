@@ -1,0 +1,26 @@
+{
+  "timestamp_utc": "2026-10-14T19:12:21.659729+00:00",
+  "django_version": "5.2.18",
+  "system_check": "passed",
+  "api_unit_tests": 20,
+  "existing_unit_tests": 201,
+  "http_checks": {
+    "health": 200,
+    "categories": 200,
+    "unauthorized_query": 401,
+    "invalid_query": 400,
+    "real_supabase_search": 200
+  },
+  "real_search": {
+    "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+    "count": 3,
+    "sections": [
+      "SEG-03 | Credenciales posiblemente expuestas",
+      "SEG-02 | Mensaje o enlace sospechoso",
+      "SEG-02 | Mensaje o enlace sospechoso"
+    ]
+  },
+  "groq_generation_executed": false,
+  "authentication_scope": "shared_server_supabase_user",
+  "note": "HTTP local y recuperación real comprobados; generación y errores de proveedor cubiertos por pruebas con servicios simulados."
+}

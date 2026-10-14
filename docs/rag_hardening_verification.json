@@ -1,0 +1,94 @@
+{
+  "timestamp_utc": "2026-10-14T18:57:17.783120+00:00",
+  "status": "improvements_implemented_remote_validation_partial",
+  "input_token_limit": 1000,
+  "tokenizer": "o200k_harmony",
+  "tokenizer_version": "0.14.0",
+  "framing_reserve_tokens": 96,
+  "completion_token_limit": 800,
+  "reasoning_effort": "low",
+  "local_tests": {
+    "count": 201,
+    "passed": true
+  },
+  "observed_input_tokens": [
+    {
+      "stage": "classification",
+      "reported_input_tokens": 531,
+      "budget": {
+        "content_tokens": 306,
+        "schema_tokens": 159,
+        "framing_reserve": 96,
+        "total_tokens": 561,
+        "limit": 1000,
+        "tokenizer": "o200k_harmony",
+        "provider_framing": "conservative_reserve"
+      }
+    },
+    {
+      "stage": "generation",
+      "reported_input_tokens": 770,
+      "budget": {
+        "content_tokens": 494,
+        "schema_tokens": 207,
+        "framing_reserve": 96,
+        "total_tokens": 797,
+        "limit": 1000,
+        "tokenizer": "o200k_harmony",
+        "provider_framing": "conservative_reserve"
+      }
+    },
+    {
+      "stage": "support_review",
+      "reported_input_tokens": 703,
+      "budget": {
+        "content_tokens": 561,
+        "schema_tokens": 73,
+        "framing_reserve": 96,
+        "total_tokens": 730,
+        "limit": 1000,
+        "tokenizer": "o200k_harmony",
+        "provider_framing": "conservative_reserve"
+      }
+    }
+  ],
+  "latest_full_batch_before_input_limit": {
+    "passed": 3,
+    "planned": 10,
+    "blocked_by_429": 7,
+    "directory": "docs/rag_runs/hardened_release_20261014"
+  },
+  "latest_input_limited_case": {
+    "case_id": "E05",
+    "state": "ERROR_TECNICO",
+    "failure_stage": "generation",
+    "execution_error": "generation: RuntimeError HTTP 429: espera requerida de 238.00 s fuera del presupuesto de reintentos.",
+    "generation_input_budget": {
+      "content_tokens": 424,
+      "schema_tokens": 207,
+      "framing_reserve": 96,
+      "total_tokens": 727,
+      "limit": 1000,
+      "tokenizer": "o200k_harmony",
+      "provider_framing": "conservative_reserve"
+    },
+    "applicability_omitted": [
+      {
+        "chunk_id": "TI-SEG-33986fa241103c5e58715a58",
+        "reason": "password_route_not_requested_or_exposed"
+      }
+    ],
+    "directory": "docs/rag_runs/input1000_filtered_20261014"
+  },
+  "pending": [
+    "Complete 10-scenario remote suite when provider quota permits",
+    "Isolation between two distinct real Supabase Auth users",
+    "Full notebook execution"
+  ],
+  "sources": {
+    "prompts/system_v6.md": "201128fa9b8d908bad7901e483d21222ec6ff6ec0701b9c43bd9160fbf879d46",
+    "prompts/rag_v4.md": "d90d129ac294807fb52355307a4b850a066efe8d1fd0b7a50d90597e75957cbe",
+    "src/token_budget.py": "934dd34811b79eae9f79aeabef57ee5717faf4f691b88cf29d29186d41891221",
+    "src/rag/support.py": "58114a4b4679005a3311c048cda507cafdfdc82124306d98baf54043d9e7dc40"
+  }
+}

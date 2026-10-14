@@ -11,3 +11,6 @@ pypdf>=5,<7
 numpy>=1.26,<3
 sentence-transformers>=3,<7
 supabase>=2,<3
+tiktoken>=0.12,<1
+Django>=5.2,<5.3
+drf-spectacular-sidecar==2026.10.1

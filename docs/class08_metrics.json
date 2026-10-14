@@ -1,0 +1,207 @@
+{
+  "timestamp_utc": "2026-10-14T20:31:43.604789+00:00",
+  "scope": "Observed class08 teaching-material criteria; not a formal grading rubric",
+  "source_material": [
+    "parcial2/Clase_08_RevealJS/index.html:445",
+    "parcial2/Clase_08_RevealJS/index.html:469",
+    "parcial2/Clase_08_Demo_Colab_RAG_Supabase_Groq.ipynb:sections9-10"
+  ],
+  "overall": "PARTIAL_COMPLIANCE",
+  "kernel_execution_passed": true,
+  "cases": [
+    {
+      "case": "Consulta inicial 403",
+      "query": "Me aparece un error 403 en el portal de documentos. ¿Mi cuenta está suspendida?",
+      "status": "ACCEPTED",
+      "expected_states": [
+        "respondida"
+      ],
+      "observed_state": "parcial",
+      "state_matches_expectation": false,
+      "citations_valid": true,
+      "documentary_behavior_review": "parcial",
+      "review_note": "La negación de suspensión por 403 está respaldada por ACS-03. Añade consejos de otros síntomas presentes en el contexto, sin que el usuario los haya reportado.",
+      "reviewer": "implementation agent, not human or independent semantic judge",
+      "source_sections": [
+        "ACS-03 | Error 403 o recurso no autorizado",
+        "ACS-02 | Credenciales rechazadas",
+        "CTA-05 | Desactivación y cierre"
+      ],
+      "prompt_tokens": 724,
+      "completion_tokens": 195,
+      "total_tokens": 919,
+      "generation_seconds": 1.2926,
+      "query_client_seconds": 1.5185,
+      "response_words": 84,
+      "limitation_words": 25
+    },
+    {
+      "case": "Paráfrasis",
+      "query": "El portal muestra acceso prohibido 403. ¿Eso significa que suspendieron mi usuario?",
+      "status": "ACCEPTED",
+      "expected_states": [
+        "respondida"
+      ],
+      "observed_state": "parcial",
+      "state_matches_expectation": false,
+      "citations_valid": true,
+      "documentary_behavior_review": "cumple",
+      "review_note": "Conserva la regla de ACS-03 y no afirma suspensión; el estado parcial difiere de respondida esperado.",
+      "reviewer": "implementation agent, not human or independent semantic judge",
+      "source_sections": [
+        "ACS-03 | Error 403 o recurso no autorizado",
+        "ACS-05 | Comprobación y cierre"
+      ],
+      "prompt_tokens": 734,
+      "completion_tokens": 130,
+      "total_tokens": 864,
+      "generation_seconds": 0.7187,
+      "query_client_seconds": 0.9006,
+      "response_words": 45,
+      "limitation_words": 22
+    },
+    {
+      "case": "Ambigua",
+      "query": "¿Cómo lo hago?",
+      "status": "ACCEPTED",
+      "expected_states": [
+        "aclaracion"
+      ],
+      "observed_state": "respondida",
+      "state_matches_expectation": false,
+      "citations_valid": true,
+      "documentary_behavior_review": "no_cumple",
+      "review_note": "No pide al usuario aclarar qué quiere hacer; propone acceso y recuperación de contraseña sin solicitud concreta. Las citas existen, pero no justifican elegir ese procedimiento para esta pregunta.",
+      "reviewer": "implementation agent, not human or independent semantic judge",
+      "source_sections": [
+        "ACS-04 | Servicio no identificado o verificación adicional",
+        "CTA-01 | Alcance y clasificación",
+        "CTA-03 | Recuperación de contraseña"
+      ],
+      "prompt_tokens": 722,
+      "completion_tokens": 197,
+      "total_tokens": 919,
+      "generation_seconds": 0.5996,
+      "query_client_seconds": 0.8324,
+      "response_words": 83,
+      "limitation_words": 24
+    },
+    {
+      "case": "Fuera de cobertura",
+      "query": "¿Cuáles son los requisitos para solicitar una beca?",
+      "status": "ACCEPTED",
+      "expected_states": [
+        "evidencia_insuficiente"
+      ],
+      "observed_state": "evidencia_insuficiente",
+      "state_matches_expectation": true,
+      "citations_valid": true,
+      "documentary_behavior_review": "cumple",
+      "review_note": "Reconoce falta de requisitos de beca en los pasajes, sin inventarlos.",
+      "reviewer": "implementation agent, not human or independent semantic judge",
+      "source_sections": [],
+      "prompt_tokens": 717,
+      "completion_tokens": 99,
+      "total_tokens": 816,
+      "generation_seconds": 0.8179,
+      "query_client_seconds": 1.0205,
+      "response_words": 13,
+      "limitation_words": 22
+    },
+    {
+      "case": "Dato dinámico",
+      "query": "¿Cuál es el estado actual de mi ticket TI-123?",
+      "status": "ACCEPTED",
+      "expected_states": [
+        "evidencia_insuficiente",
+        "parcial"
+      ],
+      "observed_state": "evidencia_insuficiente",
+      "state_matches_expectation": true,
+      "citations_valid": true,
+      "documentary_behavior_review": "cumple",
+      "review_note": "No inventa el estado actual de TI-123 y reconoce que necesita datos del sistema de tickets.",
+      "reviewer": "implementation agent, not human or independent semantic judge",
+      "source_sections": [],
+      "prompt_tokens": 736,
+      "completion_tokens": 155,
+      "total_tokens": 891,
+      "generation_seconds": 0.8571,
+      "query_client_seconds": 1.0267,
+      "response_words": 11,
+      "limitation_words": 35
+    },
+    {
+      "case": "Error 403",
+      "query": "Me aparece un error 403, ¿mi cuenta está suspendida?",
+      "status": "ACCEPTED",
+      "expected_states": [
+        "respondida"
+      ],
+      "observed_state": "respondida",
+      "state_matches_expectation": true,
+      "citations_valid": true,
+      "documentary_behavior_review": "cumple_con_observacion",
+      "review_note": "Niega que 403 pruebe suspensión con ACS-03. Añade desactivación y sospecha de ataque documentadas pero no solicitadas.",
+      "reviewer": "implementation agent, not human or independent semantic judge",
+      "source_sections": [
+        "ACS-03 | Error 403 o recurso no autorizado",
+        "CTA-05 | Desactivación y cierre",
+        "SEG-01 | Alcance y clasificación"
+      ],
+      "prompt_tokens": 726,
+      "completion_tokens": 199,
+      "total_tokens": 925,
+      "generation_seconds": 0.7835,
+      "query_client_seconds": 0.9434,
+      "response_words": 88,
+      "limitation_words": 25
+    }
+  ],
+  "metrics": {
+    "planned_queries": 6,
+    "executed_queries": 6,
+    "accepted_contracts": 6,
+    "additional_cases_state_matches": 3,
+    "additional_cases_total": 5,
+    "input_tokens_min": 717,
+    "input_tokens_max": 736,
+    "input_tokens_mean": 726.5,
+    "input_limit": 1000,
+    "all_inputs_within_limit": true,
+    "total_reported_tokens": 5334,
+    "generation_seconds_min": 0.5996,
+    "generation_seconds_max": 1.2926,
+    "generation_seconds_mean": 0.8449,
+    "whole_notebook_seconds": 16.68,
+    "supabase_rows_verified": 70,
+    "persistence_new_client": true,
+    "source_sections_hash_checked": 35,
+    "credential_values_found_in_exports": [],
+    "within_project_prompt_word_lengths": 5
+  },
+  "criteria": {
+    "functional_remote_rag": "passed",
+    "repeatable_existing_index_and_metadata": "passed",
+    "same_user_remote_persistence": "passed",
+    "versioned_prompt_and_json_contract": "passed",
+    "respondible_and_paraphrase_rule_recovered": "passed_with_state_variation",
+    "ambiguous_query_requests_clarification": "failed",
+    "outside_corpus_recognizes_limit": "passed",
+    "dynamic_data_not_invented": "passed",
+    "references_exist_and_match_text": "passed",
+    "tokens_reported_distinct_from_estimates": "passed",
+    "stage_timings": "partial: generation and client total recorded; embedding/RPC/context/validation not separated",
+    "chunking_choice_justification": "pending: comparison exists; chosen sections strategy still requires documented semantic justification",
+    "reviewed_success_and_concrete_limit": "agent review recorded; human sign-off pending"
+  },
+  "observations": [
+    "No numerical accuracy or latency acceptance threshold was specified in the reviewed class08 material.",
+    "Contract acceptance does not mean semantic suitability; ambiguous query demonstrated this.",
+    "Only six cases; these are not statistical quality or throughput metrics.",
+    "The first query reused candidates retrieved earlier; its client total does not include that separate retrieval.",
+    "Prompt requests 90 response words and 25 limitation words; counts below are additional project checks, not teacher grading thresholds.",
+    "Same-user clients do not certify RLS isolation across distinct users."
+  ],
+  "results_directory": "docs/rag_runs/clase08/20261014T203144285329Z"
+}

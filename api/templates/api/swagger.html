@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TI Support RAG — Swagger</title>
+  <link rel="stylesheet" href="{% url 'swagger-asset' 'swagger-ui.css' %}">
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="{% url 'swagger-asset' 'swagger-ui-bundle.js' %}"></script>
+  <script src="{% url 'swagger-asset' 'swagger-ui-standalone-preset.js' %}"></script>
+  <script>
+    window.ui = SwaggerUIBundle({
+      url: "{{ schema_url|escapejs }}",
+      dom_id: "#swagger-ui",
+      presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+      layout: "StandaloneLayout",
+      validatorUrl: null,
+      persistAuthorization: false,
+      supportedSubmitMethods: ["get", "post"]
+    });
+  </script>
+</body>
+</html>

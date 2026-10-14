@@ -126,3 +126,35 @@ Falta ampliar la revisión semántica, justificar una estrategia con más pregun
 comprobar el notebook completo y medir tiempos en el entorno de entrega. La
 comparación pequeña y una respuesta real aceptada no son métricas generales de
 calidad ni de resistencia a inyección. No se publicó ni se hizo push.
+
+## Mejoras y presupuesto de entrada posteriores
+
+Se añadieron búsqueda híbrida BM25/coseno y preferencia suave por categoría;
+reglas auditables de cuentas/acceso y escalamiento físico/privilegios; revisión
+de respaldo por otra llamada al mismo modelo, una corrección máxima y salida
+prudente tras rechazo; filtro y control local de pertinencia para enlace no
+abierto sin exposición; espera de cuota y reintentos limitados; y parada de la
+suite cuando una cuota bloqueada impide continuar.
+
+Se aplica el límite solicitado de **1000 tokens de entrada por llamada**,
+contando mensajes, esquema y reserva de formato mediante `o200k_harmony`.
+`system_v6`/`rag_v4` son compactos; los pasajes se incluyen completos o se omiten,
+sin perder procedencia en la traza. Se usa salida máxima 800 y razonamiento bajo.
+El límite Groq de 8000 es TPM, no un límite por consulta. Se verificó contra los
+encabezados y [la documentación oficial](https://console.groq.com/docs/rate-limits).
+
+La suite local tiene **201 pruebas, todas correctas**. En una comprobación real,
+Groq informó entradas de **531, 770 y 703 tokens** para clasificación, generación
+y revisión. La respuesta inicial fue rechazada por una ruta de contraseña no
+pertinente; no se atribuye a ese caso una respuesta final aceptada. Tras filtrar
+los pasajes, el presupuesto calculado del generador fue 727 tokens, pero Groq
+respondió HTTP 429 con espera requerida de 238 segundos, superior a los 120
+permitidos. La última tanda de diez anterior al límite nuevo completó tres casos
+y bloqueó siete por cuota. **No se declara una validación remota completa de los
+diez escenarios con la configuración final.**
+
+Las ejecuciones intermedias y fallos permanecen en `docs/rag_runs/`; el resumen
+sin secretos está en `docs/rag_hardening_verification.json`. Sigue pendiente el
+aislamiento entre dos usuarios Auth reales y el notebook completo. La revisión
+por el mismo modelo puede tener fallos correlacionados; los controles locales
+no equivalen a una garantía semántica para toda consulta futura.

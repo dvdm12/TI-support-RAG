@@ -1,0 +1,35 @@
+{
+  "timestamp_utc": "2026-10-14T20:28:12.013081+00:00",
+  "notebook": "notebooks/clase_08_rag_supabase_groq.ipynb",
+  "kernel": "ti-support-rag",
+  "practice": "teacher ten-step workflow using project client components",
+  "executed_code_cells": 10,
+  "kernel_execution_passed": true,
+  "current_cell": "cl08-practica-20",
+  "results_directory": "docs/rag_runs/clase08/20261014T202812739447Z",
+  "supabase_rows_verified": 70,
+  "upsert_performed": true,
+  "persistence_new_client": true,
+  "accepted_generation": 1,
+  "attempted_generation": 1,
+  "generation_results": [
+    {
+      "status": "ACCEPTED",
+      "state": "parcial",
+      "failure_stage": null,
+      "http_status": 200,
+      "input_tokens": 724
+    }
+  ],
+  "elapsed_seconds": 12.55,
+  "local_tests": 209,
+  "documentary_review": {
+    "reviewer": "agente de implementación; no revisión humana",
+    "claim": "Un 403 no confirma suspensión; soporte revisa recurso, sesión y permisos.",
+    "citation": "F1",
+    "section": "ACS-03 | Error 403 o recurso no autorizado",
+    "observation": "La respuesta reproduce la regla del pasaje citado sin agregar pasos.",
+    "limitation": "El corpus no proporciona el estado real de la cuenta; no se consultó un sistema operativo de cuentas.",
+    "extra_cases": "Las cinco pruebas adicionales permanecen desactivadas como en el ejemplo."
+  }
+}

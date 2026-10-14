@@ -1,0 +1,29 @@
+{
+  "timestamp_utc": "2026-10-14T19:51:10.220285+00:00",
+  "notebook": "notebooks/clase_08_rag_supabase_groq.ipynb",
+  "adapted_from": "parcial2/Clase_08_Demo_Colab_RAG_Supabase_Groq.ipynb",
+  "cells": 27,
+  "python_cells": 13,
+  "validation_method": "Full sequential execution of all Python cells in the real Jupyter kernel ti-support-rag (.venv)",
+  "default_execution": {
+    "passed": true,
+    "network_requests_blocked": false,
+    "stored_outputs": "actual_jupyter_kernel_default_local_inspection",
+    "remote_operations_enabled": false
+  },
+  "additional_execution": {
+    "passed": true,
+    "cached_real_embeddings": true,
+    "local_retrieval": true,
+    "generation": "mock",
+    "pdf_generated": true,
+    "supabase": false,
+    "groq": false
+  },
+  "pending": [
+    "Live Supabase/Groq notebook execution and remote ten-case suite when quota permits",
+    "Manual review of generated claims against sources",
+    "Optional OCR, comparison and HTTP sections not executed in this validation"
+  ],
+  "kernel": "ti-support-rag"
+}

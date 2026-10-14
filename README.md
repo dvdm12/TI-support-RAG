@@ -342,3 +342,32 @@ Los mocks de `src/mocks.py` sirven para probar comportamiento controlado del pro
 | Activación | `ENABLE_MANUAL_DEFENSE = True` |
 
 > La evidencia ya generada puede revisarse sin una nueva llamada a Groq. La API key solo es necesaria para ejecutar nuevas consultas.
+
+## API Django
+
+El proyecto expone una API local para estado, categorías, búsqueda y consulta
+RAG. Desde la raíz, activa `.venv` y ejecuta `python manage.py runserver`.
+Las consultas usan el token Bearer configurado en `.env` como `DJANGO_API_TOKEN`.
+Endpoints, ejemplos, contratos y validaciones: [docs/API.md](docs/API.md).
+Swagger UI: http://127.0.0.1:8000/api/v1/docs/ · OpenAPI: `/api/v1/openapi.json`.
+
+## Clase 08: notebook RAG
+
+[Notebook adaptado de la clase 08](notebooks/clase_08_rag_supabase_groq.ipynb):
+corpus, índice, Supabase, recuperación, contratos, generación, pruebas,
+persistencia y evidencia. Sigue los diez pasos principales del profesor como
+código cliente de nuestros componentes (`src/class08_client.py`). Usa el kernel
+Python de `.venv`. Ejecutar todo conecta, carga el índice mediante upsert y
+realiza una consulta Groq; solo las cinco pruebas adicionales están desactivadas.
+Los resultados se guardan por sesión en `docs/rag_runs/clase08/`, sin sobrescribir
+ejecuciones previas ni exportar credenciales. El notebook anterior con opciones
+de demostración fue sustituido por este recorrido de práctica.
+
+Para registrar el kernel del notebook desde el entorno activado:
+
+```bash
+source .venv/bin/activate
+python -m ipykernel install --user --name ti-support-rag --display-name "Python (.venv TI-support-RAG)"
+```
+
+Selecciona `Python (.venv TI-support-RAG)` en el notebook y reinicia el kernel.

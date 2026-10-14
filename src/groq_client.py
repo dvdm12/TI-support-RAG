@@ -1,14 +1,71 @@
 import re
 import time
+import threading
 from typing import Any
 
 import requests
 
 from src.config import API_URL, MODEL, get_secret
+from src.token_budget import enforce_input_budget, InputBudgetError, INPUT_TOKEN_LIMIT
 
 
 HTTP_TIMEOUT = (10, 60)
 DEFAULT_RETRY_DELAY = 15
+_RATE_LOCK = threading.Lock()
+_TOKEN_BUDGETS = {}
+
+
+class ProviderFailure(RuntimeError):
+    """Locally constructed, sanitized diagnostics; never external error bodies."""
+    pass
+
+
+def bounded_sleep(duration):
+    if duration > 120:
+        raise RuntimeError('La espera del proveedor excede 120 segundos.')
+    while duration > 0:
+        portion = min(duration,60)
+        time.sleep(portion)
+        duration -= portion
+
+
+def safe_provider_code(error_body):
+    error = error_body.get('error') if isinstance(error_body,dict) else None
+    code = error.get('code') if isinstance(error,dict) else None
+    return code if isinstance(code,str) and code in {'json_validate_failed','rate_limit_exceeded','invalid_request_error'} else 'unknown'
+
+
+def parse_reset_seconds(value):
+    """Parse provider durations such as 1m2.5s, not an assumed fixed window."""
+    parts = re.findall(r'(\d+(?:\.\d+)?)(ms|s|m|h)', str(value))
+    if not parts or ''.join(number + unit for number, unit in parts) != str(value):
+        return None
+    return sum(float(number) * {'ms':.001,'s':1,'m':60,'h':3600}[unit] for number, unit in parts)
+
+
+def wait_for_token_budget(model, reservation):
+    budget = _TOKEN_BUDGETS.get(model)
+    if not budget:
+        return 0.0
+    remaining, observed, refill = budget
+    available = remaining + max(0, time.monotonic() - observed) * refill
+    delay = max(0, (reservation - available) / refill) if refill > 0 else 0
+    if delay > 120:
+        raise RuntimeError('El presupuesto del proveedor requiere esperar más de 120 segundos.')
+    if delay:
+        bounded_sleep(delay)
+    return delay
+
+
+def observe_token_budget(model, headers):
+    try:
+        remaining = float(headers['x-ratelimit-remaining-tokens'])
+        limit = float(headers['x-ratelimit-limit-tokens'])
+        reset = parse_reset_seconds(headers['x-ratelimit-reset-tokens'])
+        if reset and 0 <= remaining < limit:
+            _TOKEN_BUDGETS[model] = (remaining, time.monotonic(), (limit - remaining) / reset)
+    except (KeyError, ValueError, TypeError):
+        pass
 
 
 RESPONSE_SCHEMA = {
@@ -74,10 +131,10 @@ def build_headers() -> dict[str, str]:
 def build_payload(system_prompt: str, user_text: str, *, model: str = MODEL,
                   response_format: dict | None = None) -> dict[str, Any]:
     """Construye el payload utilizado por la API de Groq."""
-    return {
+    payload = {
         "model": model,
         "temperature": 0,
-        "max_completion_tokens": 1500,
+        "max_completion_tokens": 800,
         "messages": [
             {"role": "system", "content": system_prompt},
             {
@@ -91,6 +148,9 @@ def build_payload(system_prompt: str, user_text: str, *, model: str = MODEL,
         ],
         "response_format": response_format or RESPONSE_SCHEMA,
     }
+    if model in {'openai/gpt-oss-20b','openai/gpt-oss-120b'}:
+        payload['reasoning_effort'] = 'low'
+    return payload
 
 
 def safe_headers(response: requests.Response) -> dict[str, str | None]:
@@ -202,11 +262,14 @@ def send_request(
     payload: dict[str, Any],
 ) -> requests.Response:
     """Realiza una petición HTTP a Groq."""
-    return http.post(
-        API_URL,
-        json=payload,
-        timeout=HTTP_TIMEOUT,
-    )
+    # Serialize request reservations within this process. RLS and secrets are
+    # unaffected. Other processes may consume quota: bounded 429 retry remains.
+    reservation = enforce_input_budget(payload)['total_tokens'] + payload.get('max_completion_tokens',800)
+    with _RATE_LOCK:
+        wait_for_token_budget(payload['model'], reservation)
+        response = http.post(API_URL, json=payload, timeout=HTTP_TIMEOUT)
+        observe_token_budget(payload['model'], response.headers)
+        return response
 
 
 def call_groq(
@@ -220,6 +283,7 @@ def call_groq(
     """Ejecuta una llamada a Groq y devuelve salida y métricas."""
     payload = build_payload(system_prompt, user_text, model=model,
                             response_format=response_format)
+    budget = enforce_input_budget(payload)
 
     http = requests.Session()
     http.headers.update(build_headers())
@@ -240,11 +304,13 @@ def call_groq(
 
                 if attempts > max_retries:
                     elapsed = time.perf_counter() - start_time
-                    raise RuntimeError(
+                    raise ProviderFailure(
                         f"HTTP 429 después de {attempts} intentos."
                     )
 
                 retry_delay = get_retry_delay(response, error_body)
+                if retry_delay > 120 or sum(retry_delays) + retry_delay > 120:
+                    raise ProviderFailure(f'HTTP 429: espera requerida de {retry_delay:.2f} s fuera del presupuesto de reintentos.')
                 retry_delays.append(retry_delay)
 
                 print(
@@ -252,14 +318,20 @@ def call_groq(
                     f"Reintentando en {retry_delay:.2f} segundos "
                     f"(intento {attempts}/{max_retries + 1})..."
                 )
-                time.sleep(retry_delay)
+                bounded_sleep(retry_delay)
                 continue
 
             if not response.ok:
                 error_body = parse_error_body(response)
+                code = safe_provider_code(error_body)
+                # Groq can reject the model's structured output with HTTP 400.
+                # Retry that specific generation failure once, never malformed
+                # requests, permissions, authentication or arbitrary 400 bodies.
+                if response.status_code == 400 and code == 'json_validate_failed' and attempts == 1 and max_retries > 0:
+                    continue
                 elapsed = time.perf_counter() - start_time
-                raise RuntimeError(
-                    f"HTTP {response.status_code}: fallo del proveedor."
+                raise ProviderFailure(
+                    f"HTTP {response.status_code}: fallo del proveedor ({code})."
                 )
 
             elapsed = time.perf_counter() - start_time
@@ -268,6 +340,8 @@ def call_groq(
             if choice.get("finish_reason") != "stop" or choice["message"].get("refusal"):
                 raise RuntimeError("Groq no devolvió una respuesta completa aceptable.")
             usage = extract_usage(data)
+            if usage['prompt_tokens'] is not None and usage['prompt_tokens'] > INPUT_TOKEN_LIMIT:
+                raise InputBudgetError('El proveedor informó más de 1000 tokens de entrada; salida no aceptada.')
             metrics = extract_metrics(data)
 
             return {
@@ -278,6 +352,7 @@ def call_groq(
                 "usage": usage,
                 "metrics": metrics,
                 "http": {
+                    "input_budget":budget,
                     "status_code": response.status_code,
                     "url": API_URL,
                     "network_overhead_seconds": calculate_network_overhead(

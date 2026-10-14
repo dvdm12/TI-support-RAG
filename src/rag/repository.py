@@ -64,6 +64,31 @@ class SupabaseRepository:
         except Exception:
             raise RepositoryError('Fallo de recuperación en Supabase.') from None
 
+    def lexical_search(self, corpus_id, query, config, k=10):
+        """Fetch only this user's compatible passages; RLS still applies.
+
+        Intended for the small teaching corpus. Paginate rather than trusting
+        the server's row limit; never use the local index as a remote fallback.
+        """
+        from .lexical import rank
+        validate_corpus_id(corpus_id)
+        candidates, start = [], 0
+        try:
+            while True:
+                rows = (self.client.table('clase08_fragmentos')
+                        .select('chunk_id,content,metadata')
+                        .eq('owner_id', self.owner_id).eq('corpus_id', corpus_id)
+                        .eq('configuracion->>modelo', config.modelo)
+                        .eq('configuracion->>revision', config.revision)
+                        .order('chunk_id').range(start, start + 499).execute().data)
+                candidates.extend(Candidate(**row, similitud=0) for row in rows)
+                if len(rows) < 500:
+                    break
+                start += 500
+        except Exception:
+            raise RepositoryError('Fallo de recuperación léxica en Supabase.') from None
+        return rank(query, candidates, k)
+
 
 def validate_corpus_id(corpus_id):
     if not isinstance(corpus_id, str) or not 1 <= len(corpus_id.strip()) <= 100:
@@ -100,3 +125,11 @@ class LocalRepository:
         if not matches:
             raise RepositoryError('La construcción no está cargada o es incompatible.')
         return sorted(matches, key=lambda r: (-r.similitud, r.chunk_id))[:k]
+
+    def lexical_search(self, corpus_id, query, config, k=10):
+        from .lexical import rank
+        candidates = [Candidate(chunk_id=c.chunk_id, content=c.text,
+                                metadata=c.model_dump(exclude={'chunk_id', 'text'}), similitud=0)
+                      for (corpus, _), (c, _, cfg) in self.rows.items()
+                      if corpus == corpus_id and cfg == config]
+        return rank(query, candidates, k)

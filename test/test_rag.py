@@ -202,9 +202,10 @@ class TestPipeline(unittest.TestCase):
         self.assertIn('Error 403',result['user_content_sent'])
     def test_provider_model_schema(self):
         generator=Mock(return_value={'raw_output':json.dumps(self.fixture),'model':'served-model'})
-        result=run_rag_case(self.case,self.retriever,classifier=self.classifier,generator=generator,model='requested-model')
+        verifier=Mock(return_value={'raw_output':json.dumps({'supported':True,'issues':[]})})
+        result=run_rag_case(self.case,self.retriever,classifier=self.classifier,generator=generator,verifier=verifier,model='requested-model')
         self.assertEqual(generator.call_args.kwargs['model'],'requested-model')
-        self.assertEqual(generator.call_args.kwargs['max_retries'],0)
+        self.assertEqual(generator.call_args.kwargs['max_retries'],2)
         self.assertEqual(generator.call_args.kwargs['response_format']['json_schema']['name'],'respuesta_rag')
         self.assertEqual(result['model'],'served-model')
     def test_mock_without_credential_loading(self):
