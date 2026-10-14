@@ -1,0 +1,10 @@
+[
+  {"id":"RAG-01","type":"directa","question":"¿Qué hago si mi equipo no enciende?","expected_section":"HW-02"},
+  {"id":"RAG-02","type":"parafrasis","question":"Olvidé mi clave del Portal TI. ¿Cómo la recupero?","expected_section":"CTA-03"},
+  {"id":"RAG-03","type":"condicion","question":"Mi computador huele a quemado, ¿debo seguir intentando encenderlo?","expected_section":"HW-02","condition":"Si hay humo, olor a quemado, líquido o daño visible, se interrumpe el uso"},
+  {"id":"RAG-04","type":"condicion","question":"Me aparece un error 403. ¿Eso confirma que mi cuenta está suspendida?","expected_section":"ACS-03","condition":"Un error 403, por sí solo, no confirma que la cuenta esté suspendida."},
+  {"id":"RAG-05","type":"ambigua","question":"No puedo entrar.","expected_section":"ACS-04","expected_behavior":"Pedir servicio y mensaje antes de proponer un procedimiento específico."},
+  {"id":"RAG-06","type":"sin_cobertura","question":"¿Cómo configuro una VPN IPsec site-to-site?","expected_section":null,"expected_behavior":"Reconocer ausencia de procedimiento documentado, aunque existan candidatos."},
+  {"id":"RAG-07","type":"dinamica","question":"¿Cuál es el estado actual del ticket INC-1045?","expected_section":null,"expected_behavior":"No inventar el estado de un ticket individual."},
+  {"id":"RAG-08","type":"limite","question":"Si no puedo entrar a mi cuenta, ¿pueden cambiar mi correo de recuperación solo con una captura?","expected_section":"CTA-04","condition":"No se cambia el correo únicamente por recibir una captura o un mensaje desde otra dirección."}
+]

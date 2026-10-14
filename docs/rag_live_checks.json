@@ -1,0 +1,469 @@
+{
+  "supabase_checked": false,
+  "retrieval": "local exact with real sentence-transformers embeddings",
+  "runs": [
+    {
+      "run": "mock.json",
+      "input": "No puedo entrar",
+      "source": "mock",
+      "state": "OK_PIDE_ACLARACION",
+      "classification": {
+        "categoria": "otros",
+        "prioridad": "baja",
+        "resumen": "La solicitud no identifica el sistema o recurso al que no puede acceder.",
+        "datos_faltantes": [
+          "Sistema o servicio afectado",
+          "Mensaje de error, si existe"
+        ],
+        "requiere_humano": false,
+        "confianza": 0.3
+      },
+      "classification_state": "OK_PIDE_ACLARACION",
+      "documentary_output": {
+        "estado": "evidencia_insuficiente",
+        "respuesta": "Respuesta simulada para verificar el flujo.",
+        "citas": [],
+        "limitacion": "Este mock no evalúa comprensión ni respaldo semántico."
+      },
+      "raw_output": {
+        "estado": "evidencia_insuficiente",
+        "respuesta": "Respuesta simulada para verificar el flujo.",
+        "citas": [],
+        "limitacion": "Este mock no evalúa comprensión ni respaldo semántico."
+      },
+      "validation_errors": [],
+      "model": "mock",
+      "model_requested": "openai/gpt-oss-20b",
+      "prompt_version": "rag_v1",
+      "latency_seconds": 0.1422,
+      "timestamp_utc": "2026-10-14T06:49:14.607992+00:00",
+      "usage": null,
+      "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+      "representation": {
+        "modelo": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+        "dimension": 384,
+        "normalizados": true,
+        "similitud": "coseno",
+        "max_seq_length": 128,
+        "estrategia": "sections",
+        "chunk_chars": 420,
+        "overlap_chars": 0,
+        "max_tokens": 80,
+        "preparation_version": "pdf-sections-v1"
+      },
+      "catalog": {
+        "F1": {
+          "chunk_id": "TI-ACS-3785abc4611dc25dc7ad1ebb",
+          "content": "Ingreso a sistemas y recursos / ACS-04 | Servicio no identificado o verificación adicional\nSi el usuario dice únicamente \"no puedo entrar\", se pregunta a qué servicio intenta acceder y qué mensaje recibe antes de indicar un procedimiento específico. Si no puede aportar una imagen, una descripción precisa también es útil.",
+          "metadata": {
+            "document_id": "TI-ACS",
+            "source": "acceso/manual_acceso.pdf",
+            "title": "Ingreso a sistemas y recursos",
+            "section": "ACS-04 | Servicio no identificado o verificación adicional",
+            "category": "acceso",
+            "version": "2.0",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748",
+            "pages": [
+              2
+            ],
+            "simulated": true,
+            "tokens": 67
+          },
+          "similitud": 0.25830477476119995
+        },
+        "F2": {
+          "chunk_id": "TI-CTA-49f334091afa0329fa544e08",
+          "content": "Administración de cuentas / CTA-03 | Recuperación de contraseña\nSoporte no solicita la contraseña anterior ni pide compartir códigos o enlaces. Si la cuenta está bloqueada, se revisa primero el bloqueo. Cambiar la contraseña no demuestra que la cuenta haya quedado habilitada.",
+          "metadata": {
+            "document_id": "TI-CTA",
+            "source": "cuentas/manual_cuentas.pdf",
+            "title": "Administración de cuentas",
+            "section": "CTA-03 | Recuperación de contraseña",
+            "category": "cuentas",
+            "version": "2.0",
+            "source_hash": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+            "pages": [
+              1
+            ],
+            "simulated": true,
+            "tokens": 62
+          },
+          "similitud": 0.22218364477157593
+        },
+        "F3": {
+          "chunk_id": "TI-CTA-7690b4079b347af77dcfc4fb",
+          "content": "Administración de cuentas / CTA-01 | Alcance y clasificación\nLa dificultad para entrar sin una operación administrativa definida se revisa con acceso. Una sospecha de suplantación o exposición de credenciales se revisa con seguridad. Un bloqueo puede relacionarse con cuentas y acceso.",
+          "metadata": {
+            "document_id": "TI-CTA",
+            "source": "cuentas/manual_cuentas.pdf",
+            "title": "Administración de cuentas",
+            "section": "CTA-01 | Alcance y clasificación",
+            "category": "cuentas",
+            "version": "2.0",
+            "source_hash": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+            "pages": [
+              1
+            ],
+            "simulated": true,
+            "tokens": 64
+          },
+          "similitud": 0.2099144160747528
+        }
+      },
+      "semantic_support_review": "PENDIENTE",
+      "manual_review": "No se aceptó una respuesta documental real; mock o fallo de citas."
+    },
+    {
+      "run": "groq_local.json",
+      "input": "Me aparece un error 403 en el Portal TI. ¿Eso confirma que mi cuenta está suspendida?",
+      "source": "groq",
+      "state": "ERROR_FORMATO",
+      "classification": {
+        "categoria": "acceso",
+        "prioridad": "media",
+        "resumen": "Error 403 al acceder al Portal TI, el usuario pregunta si esto confirma que su cuenta está suspendida.",
+        "datos_faltantes": [
+          "nombre de usuario o ID de cuenta"
+        ],
+        "requiere_humano": true,
+        "confianza": 0.7
+      },
+      "classification_state": "OK_REQUIERE_HUMANO",
+      "documentary_output": null,
+      "raw_output": {
+        "estado": "respondida",
+        "respuesta": "Un error 403 (recurso no autorizado) por sí solo no confirma que tu cuenta esté suspendida. El soporte revisará el recurso solicitado, la sesión y los permisos mediante el sistema autorizado para determinar la causa exacta. Si necesitas confirmar el estado de tu cuenta, lo recomendable es contactar al soporte o revisar el panel de tu cuenta en el Portal TI.",
+        "citas": [
+          "F1"
+        ],
+        "limitacion": "No se puede determinar la causa exacta del error 403 sin más información sobre la sesión, los permisos y el recurso solicitado. Además, sin el nombre de usuario o ID de cuenta, no se puede verificar el estado de la cuenta."
+      },
+      "validation_errors": [
+        "Las citas no coinciden con el catálogo y la respuesta."
+      ],
+      "model": "openai/gpt-oss-20b",
+      "model_requested": "openai/gpt-oss-20b",
+      "prompt_version": "rag_v1",
+      "latency_seconds": 3.0102,
+      "timestamp_utc": "2026-10-14T06:49:18.296919+00:00",
+      "usage": {
+        "prompt_tokens": 1272,
+        "completion_tokens": 357,
+        "total_tokens": 1629
+      },
+      "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+      "representation": {
+        "modelo": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+        "dimension": 384,
+        "normalizados": true,
+        "similitud": "coseno",
+        "max_seq_length": 128,
+        "estrategia": "sections",
+        "chunk_chars": 420,
+        "overlap_chars": 0,
+        "max_tokens": 80,
+        "preparation_version": "pdf-sections-v1"
+      },
+      "catalog": {
+        "F1": {
+          "chunk_id": "TI-ACS-77182b9c9fd41fa7c2bc36a8",
+          "content": "Ingreso a sistemas y recursos / ACS-03 | Error 403 o recurso no autorizado\nUn error 403, por sí solo, no confirma que la cuenta esté suspendida. Soporte revisa el recurso solicitado, la sesión y los permisos mediante el sistema autorizado.",
+          "metadata": {
+            "document_id": "TI-ACS",
+            "source": "acceso/manual_acceso.pdf",
+            "title": "Ingreso a sistemas y recursos",
+            "section": "ACS-03 | Error 403 o recurso no autorizado",
+            "category": "acceso",
+            "version": "2.0",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748",
+            "pages": [
+              1
+            ],
+            "simulated": true,
+            "tokens": 60
+          },
+          "similitud": 0.7131317257881165
+        },
+        "F2": {
+          "chunk_id": "TI-CTA-ca2db1d57c8f53f73a0c9e8c",
+          "content": "Administración de cuentas / CTA-03 | Recuperación de contraseña\nEn el Portal TI simulado, el usuario utiliza \"Olvidé mi contraseña\" y sigue la verificación enviada al correo registrado. Se completa la verificación de identidad antes de autorizar el cambio.",
+          "metadata": {
+            "document_id": "TI-CTA",
+            "source": "cuentas/manual_cuentas.pdf",
+            "title": "Administración de cuentas",
+            "section": "CTA-03 | Recuperación de contraseña",
+            "category": "cuentas",
+            "version": "2.0",
+            "source_hash": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+            "pages": [
+              1
+            ],
+            "simulated": true,
+            "tokens": 57
+          },
+          "similitud": 0.4497256278991699
+        },
+        "F3": {
+          "chunk_id": "TI-CTA-ab84da7ed1e8cf4bd68ab3c5",
+          "content": "Administración de cuentas / CTA-05 | Desactivación y cierre\nDesactivar una cuenta requiere una solicitud y autorización verificadas. Soporte registra el resultado tras consultar el sistema; no confirma una desactivación solo porque el usuario dejó de poder entrar.",
+          "metadata": {
+            "document_id": "TI-CTA",
+            "source": "cuentas/manual_cuentas.pdf",
+            "title": "Administración de cuentas",
+            "section": "CTA-05 | Desactivación y cierre",
+            "category": "cuentas",
+            "version": "2.0",
+            "source_hash": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+            "pages": [
+              2
+            ],
+            "simulated": true,
+            "tokens": 56
+          },
+          "similitud": 0.4280458688735962
+        }
+      },
+      "semantic_support_review": "PENDIENTE",
+      "manual_review": "No se aceptó una respuesta documental real; mock o fallo de citas."
+    },
+    {
+      "run": "groq_local_v2.json",
+      "input": "Me aparece un error 403 en el Portal TI. ¿Eso confirma que mi cuenta está suspendida?",
+      "source": "groq",
+      "state": "ERROR_FORMATO",
+      "classification": {
+        "categoria": "acceso",
+        "prioridad": "media",
+        "resumen": "Error 403 en el Portal TI, el usuario pregunta si su cuenta está suspendida",
+        "datos_faltantes": [
+          "nombre de usuario o ID de cuenta"
+        ],
+        "requiere_humano": false,
+        "confianza": 0.8
+      },
+      "classification_state": "OK_PIDE_ACLARACION",
+      "documentary_output": null,
+      "raw_output": {
+        "estado": "respondida",
+        "respuesta": "Un error 403, por sí solo, no confirma que la cuenta esté suspendida. El soporte revisa el recurso solicitado, la sesión y los permisos mediante el sistema autorizado antes de determinar la causa del error.",
+        "citas": [
+          "F1"
+        ],
+        "limitacion": "No se puede determinar la suspensión solo con el error 403; se requiere revisión adicional de la sesión y permisos."
+      },
+      "validation_errors": [
+        "Las citas no coinciden con el catálogo y la respuesta."
+      ],
+      "model": "openai/gpt-oss-20b",
+      "model_requested": "openai/gpt-oss-20b",
+      "prompt_version": "rag_v2",
+      "latency_seconds": 2.5532,
+      "timestamp_utc": "2026-10-14T06:50:33.712303+00:00",
+      "usage": {
+        "prompt_tokens": 1426,
+        "completion_tokens": 329,
+        "total_tokens": 1755
+      },
+      "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+      "representation": {
+        "modelo": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+        "dimension": 384,
+        "normalizados": true,
+        "similitud": "coseno",
+        "max_seq_length": 128,
+        "estrategia": "sections",
+        "chunk_chars": 420,
+        "overlap_chars": 0,
+        "max_tokens": 80,
+        "preparation_version": "pdf-sections-v1"
+      },
+      "catalog": {
+        "F1": {
+          "chunk_id": "TI-ACS-77182b9c9fd41fa7c2bc36a8",
+          "content": "Ingreso a sistemas y recursos / ACS-03 | Error 403 o recurso no autorizado\nUn error 403, por sí solo, no confirma que la cuenta esté suspendida. Soporte revisa el recurso solicitado, la sesión y los permisos mediante el sistema autorizado.",
+          "metadata": {
+            "document_id": "TI-ACS",
+            "source": "acceso/manual_acceso.pdf",
+            "title": "Ingreso a sistemas y recursos",
+            "section": "ACS-03 | Error 403 o recurso no autorizado",
+            "category": "acceso",
+            "version": "2.0",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748",
+            "pages": [
+              1
+            ],
+            "simulated": true,
+            "tokens": 60
+          },
+          "similitud": 0.7131317257881165
+        },
+        "F2": {
+          "chunk_id": "TI-CTA-ca2db1d57c8f53f73a0c9e8c",
+          "content": "Administración de cuentas / CTA-03 | Recuperación de contraseña\nEn el Portal TI simulado, el usuario utiliza \"Olvidé mi contraseña\" y sigue la verificación enviada al correo registrado. Se completa la verificación de identidad antes de autorizar el cambio.",
+          "metadata": {
+            "document_id": "TI-CTA",
+            "source": "cuentas/manual_cuentas.pdf",
+            "title": "Administración de cuentas",
+            "section": "CTA-03 | Recuperación de contraseña",
+            "category": "cuentas",
+            "version": "2.0",
+            "source_hash": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+            "pages": [
+              1
+            ],
+            "simulated": true,
+            "tokens": 57
+          },
+          "similitud": 0.4497256278991699
+        },
+        "F3": {
+          "chunk_id": "TI-CTA-ab84da7ed1e8cf4bd68ab3c5",
+          "content": "Administración de cuentas / CTA-05 | Desactivación y cierre\nDesactivar una cuenta requiere una solicitud y autorización verificadas. Soporte registra el resultado tras consultar el sistema; no confirma una desactivación solo porque el usuario dejó de poder entrar.",
+          "metadata": {
+            "document_id": "TI-CTA",
+            "source": "cuentas/manual_cuentas.pdf",
+            "title": "Administración de cuentas",
+            "section": "CTA-05 | Desactivación y cierre",
+            "category": "cuentas",
+            "version": "2.0",
+            "source_hash": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+            "pages": [
+              2
+            ],
+            "simulated": true,
+            "tokens": 56
+          },
+          "similitud": 0.4280458688735962
+        }
+      },
+      "semantic_support_review": "PENDIENTE",
+      "manual_review": "No se aceptó una respuesta documental real; mock o fallo de citas."
+    },
+    {
+      "run": "groq_hardware_v2.json",
+      "input": "¿Qué debo hacer si mi equipo presenta humo u olor a quemado?",
+      "source": "groq",
+      "state": "OK_PIDE_ACLARACION",
+      "classification": {
+        "categoria": "hardware",
+        "prioridad": "alta",
+        "resumen": "Equipo emite humo u olor a quemado",
+        "datos_faltantes": [
+          "tipo de equipo (PC, laptop, servidor, etc.)",
+          "ubicación del equipo",
+          "si el equipo sigue encendido o apagado",
+          "si se ha intentado apagar el equipo",
+          "si hay algún daño visible"
+        ],
+        "requiere_humano": false,
+        "confianza": 0.9
+      },
+      "classification_state": "OK_PIDE_ACLARACION",
+      "documentary_output": {
+        "estado": "respondida",
+        "respuesta": "Si su equipo presenta humo, olor a quemado, líquido o daño visible, debe interrumpir su uso inmediatamente, no abrir el equipo, no insistir en encenderlo y no realizar comprobaciones ordinarias bajo esas condiciones. Solicite atención técnica especializada. [F1]",
+        "citas": [
+          "F1"
+        ],
+        "limitacion": "La información disponible no indica pasos adicionales más allá de interrumpir el uso y solicitar soporte técnico; no se recomienda abrir el equipo ni intentar encenderlo bajo estas circunstancias."
+      },
+      "raw_output": {
+        "estado": "respondida",
+        "respuesta": "Si su equipo presenta humo, olor a quemado, líquido o daño visible, debe interrumpir su uso inmediatamente, no abrir el equipo, no insistir en encenderlo y no realizar comprobaciones ordinarias bajo esas condiciones. Solicite atención técnica especializada. [F1]",
+        "citas": [
+          "F1"
+        ],
+        "limitacion": "La información disponible no indica pasos adicionales más allá de interrumpir el uso y solicitar soporte técnico; no se recomienda abrir el equipo ni intentar encenderlo bajo estas circunstancias."
+      },
+      "validation_errors": [],
+      "model": "openai/gpt-oss-20b",
+      "model_requested": "openai/gpt-oss-20b",
+      "prompt_version": "rag_v2",
+      "latency_seconds": 2.2688,
+      "timestamp_utc": "2026-10-14T06:52:00.322402+00:00",
+      "usage": {
+        "prompt_tokens": 1510,
+        "completion_tokens": 330,
+        "total_tokens": 1840
+      },
+      "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+      "representation": {
+        "modelo": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+        "dimension": 384,
+        "normalizados": true,
+        "similitud": "coseno",
+        "max_seq_length": 128,
+        "estrategia": "sections",
+        "chunk_chars": 420,
+        "overlap_chars": 0,
+        "max_tokens": 80,
+        "preparation_version": "pdf-sections-v1"
+      },
+      "catalog": {
+        "F1": {
+          "chunk_id": "TI-HW-ce16890de11f36836a7564b8",
+          "content": "Equipos y componentes físicos / HW-02 | Equipo que no enciende\nSi hay humo, olor a quemado, líquido o daño visible, se interrumpe el uso y se solicita atención técnica. No se abre el equipo, no se insiste en encenderlo y no se realizan comprobaciones ordinarias bajo esas condiciones.",
+          "metadata": {
+            "document_id": "TI-HW",
+            "source": "hardware/manual_hardware.pdf",
+            "title": "Equipos y componentes físicos",
+            "section": "HW-02 | Equipo que no enciende",
+            "category": "hardware",
+            "version": "2.0",
+            "source_hash": "3e0732dee121e133143f5fb517f7eb314e50b88a230cd4ceeffeea6428b536a6",
+            "pages": [
+              1
+            ],
+            "simulated": true,
+            "tokens": 75
+          },
+          "similitud": 0.4892703890800476
+        },
+        "F2": {
+          "chunk_id": "TI-SEG-78cbddff2092fa258c5618c8",
+          "content": "Incidentes y riesgos de seguridad / SEG-05 | Seguimiento y límites\nEste manual no determina si un equipo específico está infectado ni promete que una acción aislada elimine el riesgo. Las fuentes recuperadas aportan procedimientos, mientras que el estado real requiere revisión autorizada.",
+          "metadata": {
+            "document_id": "TI-SEG",
+            "source": "seguridad/manual_seguridad.pdf",
+            "title": "Incidentes y riesgos de seguridad",
+            "section": "SEG-05 | Seguimiento y límites",
+            "category": "seguridad",
+            "version": "2.0",
+            "source_hash": "d5d117f4a30e3d339dc5f434dada1107ee81018eca90e3e711f506188efcb655",
+            "pages": [
+              2
+            ],
+            "simulated": true,
+            "tokens": 63
+          },
+          "similitud": 0.2452651709318161
+        },
+        "F3": {
+          "chunk_id": "TI-HW-a2440b8626707e7d02819256",
+          "content": "Equipos y componentes físicos / HW-04 | Intervención y escalamiento\nSi una comprobación exige herramientas, fuerza, apertura del equipo o acceso a componentes internos, el usuario se detiene. Soporte deriva la intervención a personal autorizado con identificación del equipo y síntoma.",
+          "metadata": {
+            "document_id": "TI-HW",
+            "source": "hardware/manual_hardware.pdf",
+            "title": "Equipos y componentes físicos",
+            "section": "HW-04 | Intervención y escalamiento",
+            "category": "hardware",
+            "version": "2.0",
+            "source_hash": "3e0732dee121e133143f5fb517f7eb314e50b88a230cd4ceeffeea6428b536a6",
+            "pages": [
+              2
+            ],
+            "simulated": true,
+            "tokens": 61
+          },
+          "similitud": 0.21855595707893372
+        }
+      },
+      "semantic_support_review": "PENDIENTE",
+      "manual_review": "La afirmación conserva la condición y prohibiciones del segundo párrafo de HW-02, incluido en F1. Revisión de este caso, sin garantía general."
+    }
+  ]
+}

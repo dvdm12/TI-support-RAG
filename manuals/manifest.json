@@ -1,0 +1,98 @@
+{
+  "source_archive": "TI-support-RAG_Manuales_PDF.zip",
+  "source_archive_sha256": "4b14db772cdca9836fa8a37cac70cf385d80041b2f2f5f31f41546a230fed0f4",
+  "classification_basis": "Contenido completo y categoría explícita en el encabezado de cada PDF.",
+  "documents": [
+    {
+      "document_id": "TI-HW",
+      "category": "hardware",
+      "title": "Equipos y componentes físicos",
+      "version": "2.0",
+      "document_date": "2026-10-14",
+      "simulated": true,
+      "organization": "AulaTI",
+      "path": "hardware/manual_hardware.pdf",
+      "archive_entry": "manual_hardware.pdf",
+      "sha256": "3e0732dee121e133143f5fb517f7eb314e50b88a230cd4ceeffeea6428b536a6",
+      "pages": 2
+    },
+    {
+      "document_id": "TI-SW",
+      "category": "software",
+      "title": "Aplicaciones e instalación",
+      "version": "2.0",
+      "document_date": "2026-10-14",
+      "simulated": true,
+      "organization": "AulaTI",
+      "path": "software/manual_software.pdf",
+      "archive_entry": "manual_software.pdf",
+      "sha256": "6f4f6ed341f847c5f0b4a94ee556421e55181c31c7a4b314a701b171727d376d",
+      "pages": 2
+    },
+    {
+      "document_id": "TI-RED",
+      "category": "redes",
+      "title": "Conectividad y comunicaciones",
+      "version": "2.0",
+      "document_date": "2026-10-14",
+      "simulated": true,
+      "organization": "AulaTI",
+      "path": "redes/manual_redes.pdf",
+      "archive_entry": "manual_redes.pdf",
+      "sha256": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c",
+      "pages": 2
+    },
+    {
+      "document_id": "TI-CTA",
+      "category": "cuentas",
+      "title": "Administración de cuentas",
+      "version": "2.0",
+      "document_date": "2026-10-14",
+      "simulated": true,
+      "organization": "AulaTI",
+      "path": "cuentas/manual_cuentas.pdf",
+      "archive_entry": "manual_cuentas.pdf",
+      "sha256": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+      "pages": 2
+    },
+    {
+      "document_id": "TI-SEG",
+      "category": "seguridad",
+      "title": "Incidentes y riesgos de seguridad",
+      "version": "2.0",
+      "document_date": "2026-10-14",
+      "simulated": true,
+      "organization": "AulaTI",
+      "path": "seguridad/manual_seguridad.pdf",
+      "archive_entry": "manual_seguridad.pdf",
+      "sha256": "d5d117f4a30e3d339dc5f434dada1107ee81018eca90e3e711f506188efcb655",
+      "pages": 2
+    },
+    {
+      "document_id": "TI-ACS",
+      "category": "acceso",
+      "title": "Ingreso a sistemas y recursos",
+      "version": "2.0",
+      "document_date": "2026-10-14",
+      "simulated": true,
+      "organization": "AulaTI",
+      "path": "acceso/manual_acceso.pdf",
+      "archive_entry": "manual_acceso.pdf",
+      "sha256": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748",
+      "pages": 2
+    },
+    {
+      "document_id": "TI-OTR",
+      "category": "otros",
+      "title": "Aclaración y derivación de solicitudes",
+      "version": "2.0",
+      "document_date": "2026-10-14",
+      "simulated": true,
+      "organization": "AulaTI",
+      "path": "otros/manual_otros.pdf",
+      "archive_entry": "manual_otros.pdf",
+      "sha256": "a0c34dcccd984178ba08fde319b62c3fb88459ab60351b8380cafbfd089845e4",
+      "pages": 2
+    }
+  ]
+}

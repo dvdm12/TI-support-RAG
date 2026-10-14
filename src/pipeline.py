@@ -47,7 +47,7 @@ def execute_case(
 ) -> dict[str, Any]:
     """Execute one case through Groq or the explicit mock provider."""
     if mode == "groq":
-        response = call_groq(system_prompt, user_content)
+        response = call_groq(system_prompt, user_content, model=model)
         content = response["raw_output"]
         if not content:
             raise RuntimeError("Groq devolvió una salida vacía.")
@@ -58,7 +58,7 @@ def execute_case(
             "metrics": response["metrics"],
             "http": response["http"],
             "source": "groq",
-            "model": model,
+            "model": response.get("model", model),
         }
 
     if mode == "mock":

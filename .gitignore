@@ -1,2 +1,8 @@
 .env
 .vscode/
+.venv*/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+data/indexes/
+docs/rag_runs/

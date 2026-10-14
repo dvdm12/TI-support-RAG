@@ -6,6 +6,17 @@ import requests
 from src import groq_client
 
 
+_credentials = patch("src.groq_client.get_secret", return_value="test-key")
+
+
+def setUpModule():
+    _credentials.start()
+
+
+def tearDownModule():
+    _credentials.stop()
+
+
 class TestBuildHeaders(unittest.TestCase):
 
     def test_headers_contienen_autorizacion(self):
@@ -14,7 +25,7 @@ class TestBuildHeaders(unittest.TestCase):
         self.assertIn("Authorization", headers)
         self.assertEqual(
             headers["Authorization"],
-            f"Bearer {groq_client.GROQ_API_KEY}",
+            f"Bearer {"test-key"}",
         )
 
     def test_headers_contienen_content_type(self):
@@ -988,7 +999,7 @@ class TestCallGroq(unittest.TestCase):
         )
 
         self.assertIn(
-            "Connection refused",
+            "ConnectionError",
             str(context.exception),
         )
 
@@ -1094,7 +1105,7 @@ class TestCallGroq(unittest.TestCase):
         for value in diagnostic_headers.values():
             if value is not None:
                 self.assertNotIn(
-                    groq_client.GROQ_API_KEY,
+                    "test-key",
                     str(value),
                 )
 

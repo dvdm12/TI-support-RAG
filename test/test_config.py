@@ -363,10 +363,10 @@ class TestConfigPaths(unittest.TestCase):
             "test_cases.json",
         )
 
-    def test_test_path_esta_en_directorio_test(self):
+    def test_test_path_esta_en_directorio_cases(self):
         self.assertEqual(
             config.TEST_PATH.parent.name,
-            "test",
+            "cases",
         )
 
     def test_results_path_apunta_a_results_json(self):
@@ -392,8 +392,8 @@ class TestEnvironment(unittest.TestCase):
 
     def test_groq_api_key_es_string_o_none(self):
         self.assertTrue(
-            isinstance(config.GROQ_API_KEY, str)
-            or config.GROQ_API_KEY is None
+            isinstance(os.getenv("GROQ_API_KEY"), str)
+            or os.getenv("GROQ_API_KEY") is None
         )
 
     def test_api_key_cargada_si_existe_en_entorno(self):
@@ -561,7 +561,7 @@ class TestConfigConsistency(unittest.TestCase):
         self.assertEqual(
             config.TEST_PATH,
             config.PROJECT_ROOT
-            / "test"
+            / "cases"
             / "test_cases.json",
         )
 

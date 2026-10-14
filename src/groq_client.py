@@ -4,7 +4,7 @@ from typing import Any
 
 import requests
 
-from src.config import API_URL, GROQ_API_KEY, MODEL
+from src.config import API_URL, MODEL, get_secret
 
 
 HTTP_TIMEOUT = (10, 60)
@@ -64,17 +64,18 @@ RESPONSE_SCHEMA = {
 def build_headers() -> dict[str, str]:
     """Construye los headers de autenticación y configuración para Groq."""
     return {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Authorization": f"Bearer {get_secret('GROQ_API_KEY')}",
         "Content-Type": "application/json",
         "Accept": "application/json",
         "Groq-Beta": "inference-metrics",
     }
 
 
-def build_payload(system_prompt: str, user_text: str) -> dict[str, Any]:
+def build_payload(system_prompt: str, user_text: str, *, model: str = MODEL,
+                  response_format: dict | None = None) -> dict[str, Any]:
     """Construye el payload utilizado por la API de Groq."""
     return {
-        "model": MODEL,
+        "model": model,
         "temperature": 0,
         "max_completion_tokens": 1500,
         "messages": [
@@ -88,7 +89,7 @@ def build_payload(system_prompt: str, user_text: str) -> dict[str, Any]:
                 ),
             },
         ],
-        "response_format": RESPONSE_SCHEMA,
+        "response_format": response_format or RESPONSE_SCHEMA,
     }
 
 
@@ -212,9 +213,13 @@ def call_groq(
     system_prompt: str,
     user_text: str,
     max_retries: int = 3,
+    *,
+    model: str = MODEL,
+    response_format: dict | None = None,
 ) -> dict[str, Any]:
     """Ejecuta una llamada a Groq y devuelve salida y métricas."""
-    payload = build_payload(system_prompt, user_text)
+    payload = build_payload(system_prompt, user_text, model=model,
+                            response_format=response_format)
 
     http = requests.Session()
     http.headers.update(build_headers())
@@ -236,7 +241,7 @@ def call_groq(
                 if attempts > max_retries:
                     elapsed = time.perf_counter() - start_time
                     raise RuntimeError(
-                        f"HTTP 429 después de {attempts} intentos: {error_body}"
+                        f"HTTP 429 después de {attempts} intentos."
                     )
 
                 retry_delay = get_retry_delay(response, error_body)
@@ -254,17 +259,20 @@ def call_groq(
                 error_body = parse_error_body(response)
                 elapsed = time.perf_counter() - start_time
                 raise RuntimeError(
-                    f"HTTP {response.status_code}: {error_body}"
+                    f"HTTP {response.status_code}: fallo del proveedor."
                 )
 
             elapsed = time.perf_counter() - start_time
             data = response.json()
             choice = data["choices"][0]
+            if choice.get("finish_reason") != "stop" or choice["message"].get("refusal"):
+                raise RuntimeError("Groq no devolvió una respuesta completa aceptable.")
             usage = extract_usage(data)
             metrics = extract_metrics(data)
 
             return {
                 "raw_output": choice["message"].get("content"),
+                "model": data.get("model", model),
                 "finish_reason": choice.get("finish_reason"),
                 "latency_seconds": round(elapsed, 4),
                 "usage": usage,
@@ -285,7 +293,7 @@ def call_groq(
         except requests.RequestException as error:
             elapsed = time.perf_counter() - start_time
             raise RuntimeError(
-                f"Error HTTP después de {elapsed:.4f} s: {error}"
+                f"Error HTTP después de {elapsed:.4f} s: {type(error).__name__}"
             ) from error
 
     raise RuntimeError("La llamada a Groq terminó sin una respuesta válida.")

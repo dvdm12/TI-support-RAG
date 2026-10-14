@@ -1,0 +1,105 @@
+{
+  "project_reference": "fmsoacmvsmfrnbmnvizo",
+  "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+  "migration_applied": true,
+  "rls_enabled": true,
+  "policy_count": 3,
+  "security_invoker": true,
+  "authenticated_select_insert_update": true,
+  "authenticated_delete": false,
+  "anonymous_select": false,
+  "anonymous_rpc": false,
+  "upload_repeated": true,
+  "verification": {
+    "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+    "rows_verified": 70,
+    "authenticated": true,
+    "persistence_new_client": true,
+    "rpc_verified": true,
+    "probe": "embedding_of_first_stored_chunk",
+    "owner_isolation": "PENDIENTE: requiere un segundo usuario de Auth.",
+    "upsert_performed": false
+  },
+  "pipeline_state": "OK_PIDE_ACLARACION",
+  "classification_state": "OK_PIDE_ACLARACION",
+  "documentary_output": {
+    "estado": "respondida",
+    "respuesta": "Si su equipo presenta humo, olor a quemado, líquido o daño visible, debe interrumpir su uso inmediatamente y solicitar atención técnica. No abra el equipo, no intente encenderlo y no realice comprobaciones ordinarias bajo esas condiciones. Si la comprobación requería herramientas, fuerza, apertura del equipo o acceso a componentes internos, el usuario debe detenerse y derivar la intervención a personal autorizado, proporcionando la identificación del equipo y el síntoma observado. [F1] [F3]",
+    "citas": [
+      "F1",
+      "F3"
+    ],
+    "limitacion": "No se pueden proporcionar contactos específicos ni procedimientos adicionales sin la documentación correspondiente."
+  },
+  "catalog": {
+    "F1": {
+      "chunk_id": "TI-HW-ce16890de11f36836a7564b8",
+      "content": "Equipos y componentes físicos / HW-02 | Equipo que no enciende\nSi hay humo, olor a quemado, líquido o daño visible, se interrumpe el uso y se solicita atención técnica. No se abre el equipo, no se insiste en encenderlo y no se realizan comprobaciones ordinarias bajo esas condiciones.",
+      "metadata": {
+        "pages": [
+          1
+        ],
+        "title": "Equipos y componentes físicos",
+        "source": "hardware/manual_hardware.pdf",
+        "tokens": 75,
+        "section": "HW-02 | Equipo que no enciende",
+        "version": "2.0",
+        "category": "hardware",
+        "simulated": true,
+        "document_id": "TI-HW",
+        "source_hash": "3e0732dee121e133143f5fb517f7eb314e50b88a230cd4ceeffeea6428b536a6"
+      },
+      "similitud": 0.489270345335875
+    },
+    "F2": {
+      "chunk_id": "TI-SEG-78cbddff2092fa258c5618c8",
+      "content": "Incidentes y riesgos de seguridad / SEG-05 | Seguimiento y límites\nEste manual no determina si un equipo específico está infectado ni promete que una acción aislada elimine el riesgo. Las fuentes recuperadas aportan procedimientos, mientras que el estado real requiere revisión autorizada.",
+      "metadata": {
+        "pages": [
+          2
+        ],
+        "title": "Incidentes y riesgos de seguridad",
+        "source": "seguridad/manual_seguridad.pdf",
+        "tokens": 63,
+        "section": "SEG-05 | Seguimiento y límites",
+        "version": "2.0",
+        "category": "seguridad",
+        "simulated": true,
+        "document_id": "TI-SEG",
+        "source_hash": "d5d117f4a30e3d339dc5f434dada1107ee81018eca90e3e711f506188efcb655"
+      },
+      "similitud": 0.24526510373548
+    },
+    "F3": {
+      "chunk_id": "TI-HW-a2440b8626707e7d02819256",
+      "content": "Equipos y componentes físicos / HW-04 | Intervención y escalamiento\nSi una comprobación exige herramientas, fuerza, apertura del equipo o acceso a componentes internos, el usuario se detiene. Soporte deriva la intervención a personal autorizado con identificación del equipo y síntoma.",
+      "metadata": {
+        "pages": [
+          2
+        ],
+        "title": "Equipos y componentes físicos",
+        "source": "hardware/manual_hardware.pdf",
+        "tokens": 61,
+        "section": "HW-04 | Intervención y escalamiento",
+        "version": "2.0",
+        "category": "hardware",
+        "simulated": true,
+        "document_id": "TI-HW",
+        "source_hash": "3e0732dee121e133143f5fb517f7eb314e50b88a230cd4ceeffeea6428b536a6"
+      },
+      "similitud": 0.218555946817036
+    }
+  },
+  "citations_valid": true,
+  "semantic_support_review": "PENDIENTE; las citas existentes no garantizan respaldo semántico.",
+  "python_version": "3.12.3",
+  "environment": ".venv",
+  "package_versions": {
+    "supabase": "2.32.0",
+    "sentence-transformers": "6.1.0",
+    "transformers": "5.19.0",
+    "pydantic": "2.14.1",
+    "numpy": "2.5.2",
+    "torch": "2.14.1+cpu"
+  }
+}

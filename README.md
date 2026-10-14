@@ -4,6 +4,16 @@ Prototipo académico de una Mesa de Ayuda TI con IA generativa, validación estr
 
 > **Principio:** el modelo propone; el programa comprueba; el sistema decide.
 
+## Avance del segundo corte: RAG documental
+
+La rama de trabajo incorpora ingestión de siete manuales simulados, comparación
+de fragmentación, embeddings de 384 componentes, recuperación local/Supabase,
+respuesta documental separada de la clasificación y validación de citas.
+La configuración, comandos y límites están en [docs/RAG.md](docs/RAG.md).
+Las comprobaciones ejecutadas están en [docs/rag_validation.md](docs/rag_validation.md).
+La tabla siguiente describe la base del primer corte; la sección RAG del notebook
+es opcional y se mantiene desactivada hasta configurar índice y servicios.
+
 ## Estado del proyecto
 
 | Elemento | Estado actual |
@@ -90,9 +100,9 @@ Crear `.env` en la raíz del proyecto:
 GROQ_API_KEY=tu_clave_de_groq
 ```
 
-`src/config.py` carga esta variable al iniciar el proyecto.
+El cliente carga esta variable mediante `src/config.py` cuando realiza una consulta a Groq; las importaciones y los mocks no requieren credenciales.
 
-**No subir `.env` al repositorio.** La clave debe ser propia del usuario o del revisor. No se requiere ninguna otra credencial del proyecto.
+**No subir `.env` al repositorio.** La clave debe ser propia del usuario o del revisor. El flujo del primer corte solo requiere Groq; el RAG remoto añade las credenciales de Supabase indicadas en `docs/RAG.md`.
 
 ### 5. Preparar el notebook
 
@@ -296,7 +306,7 @@ Los mocks de `src/mocks.py` sirven para probar comportamiento controlado del pro
 
 > Sus tiempos no deben utilizarse como rendimiento real del modelo.
 
-## Alcance
+## Alcance del primer corte (base histórica)
 
 | Incluido en este corte | Para siguientes cortes |
 |---|---|

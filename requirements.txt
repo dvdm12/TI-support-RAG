@@ -7,3 +7,7 @@ requests
 reportlab
 pandas
 ipykernel
+pypdf>=5,<7
+numpy>=1.26,<3
+sentence-transformers>=3,<7
+supabase>=2,<3

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from functools import partial
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -62,8 +63,9 @@ class ReportCase:
 class NumberedCanvas(Canvas):
     """Canvas de dos pasadas para numerar páginas como X de Y."""
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, header_label: str = "EVIDENCIA TÉCNICA · PARCIAL 1", **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
+        self.header_label = header_label
         self._saved_pages: list[dict[str, Any]] = []
 
     def showPage(self) -> None:
@@ -96,7 +98,7 @@ class NumberedCanvas(Canvas):
         self.setFont("Helvetica-Bold", 8.5)
         self.drawString(12 * mm, top_y, "TI-support-RAG")
 
-        header_label = "EVIDENCIA TÉCNICA · PARCIAL 1"
+        header_label = self.header_label
         self.setFillColor(MUTED)
         self.setFont("Helvetica-Bold", 7.5)
         header_width = stringWidth(header_label, "Helvetica-Bold", 7.5)
@@ -439,7 +441,7 @@ class PDFReport:
             [
                 [
                     Paragraph("TI-support-RAG", styles["label"]),
-                    Paragraph("PARCIAL 1", styles["label"]),
+                    Paragraph("RAG DOCUMENTAL · PARCIAL 2" if any(c.result.get("rag") for c in self._cases) else "PARCIAL 1", styles["label"]),
                 ],
                 [
                     Paragraph(self.title, styles["title"]),
@@ -675,6 +677,17 @@ class PDFReport:
             )
 
         execution_error = result.get("execution_error")
+        if result.get("rag"):
+            story.extend([
+                Paragraph("Respuesta documental RAG", styles["section"]),
+                self._paragraph(result.get("documentary_output") or "Sin respuesta documental aceptada.", styles["code"]),
+                Paragraph("Fuentes y revisión de respaldo", styles["section"]),
+                self._paragraph({"catalog": result["rag"].get("catalog"),
+                                 "citations_valid": result["rag"].get("citations_valid"),
+                                 "semantic_support_review": result["rag"].get("semantic_support_review"),
+                                 "omitted": result["rag"].get("omitted"),
+                                 "timings": result["rag"].get("timings")}, styles["code"]),
+            ])
         if execution_error:
             story.extend(
                 [
@@ -853,7 +866,8 @@ class PDFReport:
             if index < len(self._cases) - 1:
                 story.append(PageBreak())
 
-        document.build(story, canvasmaker=NumberedCanvas)
+        header_label = "EVIDENCIA RAG · PARCIAL 2" if any(c.result.get("rag") for c in self._cases) else "EVIDENCIA TÉCNICA · PARCIAL 1"
+        document.build(story, canvasmaker=partial(NumberedCanvas, header_label=header_label))
         return self.output_path
 
 

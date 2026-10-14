@@ -56,11 +56,10 @@ PROMPT_VERSION, PROMPT_PATH = find_latest_prompt(PROMPTS_DIR)
 TEST_PATH = PROJECT_ROOT / "cases" / "test_cases.json"
 RESULTS_PATH = PROJECT_ROOT / "docs" / "results.json"
 
-load_dotenv(PROJECT_ROOT / ".env")
-
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
-if not GROQ_API_KEY:
-    raise RuntimeError(
-        "No se encontró GROQ_API_KEY en el archivo .env."
-    )
+def get_secret(name: str) -> str:
+    """Load credentials only when an integration is actually used."""
+    load_dotenv(PROJECT_ROOT / ".env")
+    value = os.getenv(name)
+    if not value:
+        raise RuntimeError(f"Configura {name} para utilizar esta integración.")
+    return value
