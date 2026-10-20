@@ -75,7 +75,8 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
         result['rag']['timings'].update(timings)
         result['rag']['candidates'] = [c.model_dump() for c in candidates]
         if mode == 'groq':
-            candidates, result['rag']['applicability_omitted'] = applicable_candidates(user_input,candidates)
+            candidates, result['rag']['applicability_omitted'] = applicable_candidates(
+                user_input,candidates,physical_risk='physical_risk_requires_human' in overrides)
         stage = 'context'
         begin = time.perf_counter()
         prompt = RAGConfig().prompt.read_text()
@@ -95,7 +96,14 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
         result['user_content_sent'] = context['user_content']
         stage = 'generation'
         begin = time.perf_counter()
-        if not context['catalog']:
+        local_clarification = mode == 'groq' and 'vague_incident_requires_clarification' in overrides
+        if local_clarification:
+            raw = {'estado':'aclaracion',
+                   'respuesta':' '.join(result['classification']['datos_faltantes']),
+                   'citas':[], 'limitacion':'Falta conocer el comportamiento observado antes de proponer una solución.'}
+            result['rag']['generation_source'] = 'local_clarification_policy'
+            result['rag']['semantic_support_review'] = 'LOCAL_CLARIFICATION'
+        elif not context['catalog']:
             raw = {'estado': 'evidencia_insuficiente', 'respuesta': 'No se pudo incluir evidencia en el contexto.',
                    'citas': [], 'limitacion': 'El presupuesto excluyó los pasajes recuperados.'}
             result['rag']['generation_source'] = 'local_context_limit'
@@ -125,7 +133,7 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
         documentary = validate_response(raw, context['catalog'])
         result['rag']['citations_valid'] = True
         result['rag']['timings']['validation_seconds'] = time.perf_counter() - begin
-        if mode == 'groq' and context['catalog']:
+        if mode == 'groq' and context['catalog'] and not local_clarification:
             stage = 'support_review'
             begin = time.perf_counter()
             review, diagnostics = review_support(user_input, documentary, context['catalog'], verifier, model)

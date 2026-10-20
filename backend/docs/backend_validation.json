@@ -1,0 +1,458 @@
+{
+  "timestamp_utc": "2026-10-20T22:46:04.540641+00:00",
+  "branch": "codex/backend-infra-ricoh-local",
+  "base_commit": "057380f",
+  "scope": "Academic backend clarification and full live regression; Ricoh remains outside active index.",
+  "unit_tests": {
+    "passed": 234
+  },
+  "django_api_tests": {
+    "passed": 24,
+    "system_check": "no issues"
+  },
+  "live_regression": {
+    "status": {
+      "status": "passed",
+      "planned": 13,
+      "executed": 13,
+      "pending_case_ids": []
+    },
+    "passed": 13,
+    "total": 13,
+    "review_counts": {
+      "MODEL_SUPPORTED": 8,
+      "MODEL_REJECTED": 2,
+      "LOCAL_CLARIFICATION": 3
+    },
+    "safe_fallback_cases": [
+      "E07",
+      "E09"
+    ],
+    "note": "Safe fallback is accepted only for expected abstention cases, never for required grounded procedures. Rejected model text remains rejected.",
+    "trace_directory": "docs/rag_runs/clarification_20261020_final",
+    "cases": [
+      {
+        "id": "E01",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_REQUIERE_HUMANO",
+        "documentary_state": "respondida",
+        "category": "hardware",
+        "latency_seconds": 2.7957,
+        "failure_stage": null,
+        "support_review": "MODEL_SUPPORTED",
+        "safe_fallback": false
+      },
+      {
+        "id": "E02",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_REQUIERE_HUMANO",
+        "documentary_state": "respondida",
+        "category": "software",
+        "latency_seconds": 2.0992,
+        "failure_stage": null,
+        "support_review": "MODEL_SUPPORTED",
+        "safe_fallback": false
+      },
+      {
+        "id": "E03",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_VALIDADO",
+        "documentary_state": "respondida",
+        "category": "redes",
+        "latency_seconds": 1.8958,
+        "failure_stage": null,
+        "support_review": "MODEL_SUPPORTED",
+        "safe_fallback": false
+      },
+      {
+        "id": "E04",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_REQUIERE_HUMANO",
+        "documentary_state": "respondida",
+        "category": "cuentas",
+        "latency_seconds": 2.153,
+        "failure_stage": null,
+        "support_review": "MODEL_SUPPORTED",
+        "safe_fallback": false
+      },
+      {
+        "id": "E05",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_VALIDADO",
+        "documentary_state": "respondida",
+        "category": "seguridad",
+        "latency_seconds": 4.8505,
+        "failure_stage": null,
+        "support_review": "MODEL_SUPPORTED",
+        "safe_fallback": false
+      },
+      {
+        "id": "E06",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_REQUIERE_HUMANO",
+        "documentary_state": "respondida",
+        "category": "acceso",
+        "latency_seconds": 8.6764,
+        "failure_stage": null,
+        "support_review": "MODEL_SUPPORTED",
+        "safe_fallback": false
+      },
+      {
+        "id": "E07",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_REQUIERE_HUMANO",
+        "documentary_state": "evidencia_insuficiente",
+        "category": "otros",
+        "latency_seconds": 21.4864,
+        "failure_stage": null,
+        "support_review": "MODEL_REJECTED",
+        "safe_fallback": true
+      },
+      {
+        "id": "E08",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_PIDE_ACLARACION",
+        "documentary_state": "aclaracion",
+        "category": "otros",
+        "latency_seconds": 2.0527,
+        "failure_stage": null,
+        "support_review": "LOCAL_CLARIFICATION",
+        "safe_fallback": false
+      },
+      {
+        "id": "E09",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_REQUIERE_HUMANO",
+        "documentary_state": "evidencia_insuficiente",
+        "category": "redes",
+        "latency_seconds": 30.2019,
+        "failure_stage": null,
+        "support_review": "MODEL_REJECTED",
+        "safe_fallback": true
+      },
+      {
+        "id": "E10",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_EVIDENCIA_INSUFICIENTE",
+        "documentary_state": "evidencia_insuficiente",
+        "category": "otros",
+        "latency_seconds": 21.4496,
+        "failure_stage": null,
+        "support_review": "MODEL_SUPPORTED",
+        "safe_fallback": false
+      },
+      {
+        "id": "E11",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_PIDE_ACLARACION",
+        "documentary_state": "aclaracion",
+        "category": "hardware",
+        "latency_seconds": 9.9654,
+        "failure_stage": null,
+        "support_review": "LOCAL_CLARIFICATION",
+        "safe_fallback": false
+      },
+      {
+        "id": "E12",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_VALIDADO",
+        "documentary_state": "respondida",
+        "category": "hardware",
+        "latency_seconds": 7.8289,
+        "failure_stage": null,
+        "support_review": "MODEL_SUPPORTED",
+        "safe_fallback": false
+      },
+      {
+        "id": "E13",
+        "passed": true,
+        "checks": {
+          "no_technical_or_format_error": true,
+          "category": true,
+          "documentary_state": true,
+          "references": true,
+          "support_gate": true,
+          "human_escalation": true,
+          "clarification_data": true,
+          "final_state": true,
+          "faithful_summary": true,
+          "expected_section": true
+        },
+        "state": "OK_PIDE_ACLARACION",
+        "documentary_state": "aclaracion",
+        "category": "software",
+        "latency_seconds": 3.1032,
+        "failure_stage": null,
+        "support_review": "LOCAL_CLARIFICATION",
+        "safe_fallback": false
+      }
+    ],
+    "max_observed_input_budget": 920
+  },
+  "http_smoke": [
+    {
+      "kind": "ambiguo",
+      "question": "Tengo problemas al enviar impresiones en la Ricoh MP 4002.",
+      "http_status": 200,
+      "elapsed_seconds": 16.687,
+      "checks": {
+        "http_200": true,
+        "clarification": true,
+        "missing_data": true,
+        "faithful_summary": true,
+        "documentary_clarification": true
+      },
+      "response": {
+        "request_id": "e2c1e472-245d-47d7-b1df-97172a36ffbf",
+        "estado": "OK_PIDE_ACLARACION",
+        "clasificacion": {
+          "categoria": "hardware",
+          "prioridad": "media",
+          "resumen": "Solicitud: Tengo problemas al enviar impresiones en la Ricoh MP 4002.",
+          "datos_faltantes": [
+            "¿Qué ocurre exactamente al intentarlo?",
+            "¿Aparece algún mensaje de error? Si aparece, ¿cuál es su texto?"
+          ],
+          "requiere_humano": false,
+          "confianza": 0.95
+        },
+        "respuesta_documental": {
+          "estado": "aclaracion",
+          "respuesta": "¿Qué ocurre exactamente al intentarlo? ¿Aparece algún mensaje de error? Si aparece, ¿cuál es su texto?",
+          "citas": [],
+          "limitacion": "Falta conocer el comportamiento observado antes de proponer una solución."
+        },
+        "fuentes": [],
+        "latencia_segundos": 1.5844
+      }
+    },
+    {
+      "kind": "general",
+      "question": "¿Qué comprobaciones iniciales recomienda el manual para una impresora?",
+      "http_status": 200,
+      "elapsed_seconds": 5.628,
+      "checks": {
+        "http_200": true,
+        "answered": true,
+        "no_unnecessary_questions": true,
+        "sources": true
+      },
+      "response": {
+        "request_id": "53bac81c-0c5b-408e-990d-d3f0a9f8eaeb",
+        "estado": "OK_VALIDADO",
+        "clasificacion": {
+          "categoria": "hardware",
+          "prioridad": "media",
+          "resumen": "Consulta sobre las comprobaciones iniciales recomendadas por el manual de una impresora.",
+          "datos_faltantes": [],
+          "requiere_humano": false,
+          "confianza": 0.95
+        },
+        "respuesta_documental": {
+          "estado": "respondida",
+          "respuesta": "El manual recomienda, como comprobaciones iniciales, verificar que la impresora esté conectada correctamente y que no haya mensajes de papel, consumibles o atasco [F1]. Además, se sugiere identificar el dispositivo y revisar su conexión accesible si la impresora no responde [F2].",
+          "citas": [
+            "F1",
+            "F2"
+          ],
+          "limitacion": ""
+        },
+        "fuentes": [
+          {
+            "id": "F1",
+            "chunk_id": "TI-HW-03fd0e93e290f701599a8df1",
+            "document_id": "TI-HW",
+            "title": "Equipos y componentes físicos",
+            "category": "hardware",
+            "section": "HW-03 | Periféricos e impresoras",
+            "source": "hardware/manual_hardware.pdf",
+            "version": "2.0",
+            "pages": [
+              1
+            ]
+          },
+          {
+            "id": "F2",
+            "chunk_id": "TI-HW-8cb1c8d60c007dcc0f5658d9",
+            "document_id": "TI-HW",
+            "title": "Equipos y componentes físicos",
+            "category": "hardware",
+            "section": "HW-03 | Periféricos e impresoras",
+            "source": "hardware/manual_hardware.pdf",
+            "version": "2.0",
+            "pages": [
+              1
+            ]
+          }
+        ],
+        "latencia_segundos": 5.13
+      }
+    }
+  ],
+  "deployment": {
+    "container": "infra-backend-1",
+    "image_id": "sha256:9130bb2b931300144628ac4e36b488bd7302e5db5f7f1e53b99eee80cf35cc8c",
+    "health": "healthy"
+  },
+  "source_sha256": {
+    "prompts/system_v7.md": "7df23ef15d9830d3221a188f04e6c6c88b851afe94344df73540b2dbfe53aa18",
+    "prompts/rag_v5.md": "b8a5ba8a0eee6477e46d667e7741094702690c8a35d4c2883bd30a2b61c64c0b",
+    "src/rag/policy.py": "72f8813ba103ba5bcce1a493d972da7b94376f75a2ccb2c921fbcd9d9a1b050f",
+    "src/rag/pipeline.py": "39bd83268669229f9c80a997a57ad481b4bf94a64eee97362a6964c5905b7701",
+    "src/rag/context.py": "b7f3041ab2e81f264c2532ef60f0d4bf3db27ee719c62b78b06e33d5a3551752",
+    "src/rag/applicability.py": "640896ba6a058c15aea283bd20ccbd9cbf73c5fb7b9ec617fac79256f69862d6",
+    "src/rag/support.py": "03bb8f6151e9b09f502a4c00694aea6b9e69320cc18c5c358e393c6558e028e2",
+    "src/rag/config.py": "c371ac2569adce62751d1f247952b04fd09adf311c9ae21b529d61fb6921e4d4",
+    "cases/rag_regression.json": "a77f8aba3fe7a0b8e4872cbfd8465038950327190bd3a0223117fadb1d039a6f",
+    "scripts/validate_rag_scenarios.py": "072074f53bc68c0370c9cb809b881157135f94bbc257294b58f16a025f98d956"
+  },
+  "limitations": [
+    "Small regression suite, not a guarantee for every query.",
+    "Language rules recognize conservative patterns rather than all ambiguous phrasing.",
+    "Semantic support review remains fallible; two abstention cases used the fixed safe fallback."
+  ]
+}

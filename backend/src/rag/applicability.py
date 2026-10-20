@@ -23,14 +23,18 @@ def password_route_relevant(question):
     return exposure or bool(explicit_request)
 
 
-def applicable_candidates(question, candidates):
-    if password_route_relevant(question):
-        return candidates, []
+def applicable_candidates(question, candidates, *, physical_risk=False):
     included, omitted = [], []
     for candidate in candidates:
         section = normalized(candidate.metadata.get('section',''))
-        if re.search(r'credencial.*expuest|recuper.*contrasena|contrasena.*recuper', section):
-            omitted.append({'chunk_id':candidate.chunk_id,'reason':'password_route_not_requested_or_exposed'})
+        content = normalized(candidate.content)
+        reason = None
+        if not password_route_relevant(question) and re.search(r'credencial.*expuest|recuper.*contrasena|contrasena.*recuper', section):
+            reason = 'password_route_not_requested_or_exposed'
+        if physical_risk and re.search(r'conexion de alimentacion|estado externo del cable|adaptador', content) and not re.search(r'humo|olor a quemado|interrumpe el uso', content):
+            reason = 'ordinary_power_checks_not_applicable_during_physical_risk'
+        if reason:
+            omitted.append({'chunk_id':candidate.chunk_id,'reason':reason})
         else:
             included.append(candidate)
     return included, omitted

@@ -12,17 +12,40 @@ No contiene secretos. No releer ni ejecutar integraciones históricas por defect
 
 ### Solicitud más reciente y punto de continuidad
 
-El usuario autorizó fragmentar la extracción del manual Ricoh y evaluar la
-recuperación local en español. **Esta etapa local está realizada**, con embeddings
-reales y un índice independiente. Resultado diagnóstico: evidencia esperada en
-Top-3 para 11 de 12 preguntas con estrategia híbrida más mensajes literales;
-RIC-06 (envío de impresión retenida) sigue fallando. No se alteró esa expectativa.
-No hubo carga Supabase, llamadas Groq, cambios del índice activo ni despliegue.
-Antes de integrar esta representación con la API hay que resolver la distinción
-Hold/Stored, seleccionar contexto completo dentro de 1000 tokens y adaptar
-persistencia/recuperación de unidades completas. El usuario no ha solicitado
-esa integración. Posteriormente pidió mantener el alcance simple y subir todos
-los cambios a una rama nueva: `codex/backend-infra-ricoh-local`.
+El usuario pidió resolver el tratamiento de preguntas ambiguas y completar la
+regresión del backend. **Realizado y desplegado** el 20-10-2026:
+
+- `system_v7` y `rag_v5`; contexto compacto conserva `datos_faltantes`.
+- Política local pide comportamiento y mensaje ante incidentes vagos, incluso
+  con marca/modelo. Conserva el texto original en el resumen y genera aclaraciones
+  locales auditables (`LOCAL_CLARIFICATION`), sin diagnóstico documental.
+- Instalación sin privilegios deriva a software/soporte independientemente de
+  la categoría inicial. Riesgo físico excluye comprobaciones ordinarias de energía.
+- 234 unitarias, 24 API y comprobación Django correctas.
+- Regresión real Supabase/Groq: **13/13** según criterios de entrega. Ocho
+  `MODEL_SUPPORTED`, tres `LOCAL_CLARIFICATION`, dos abstenciones seguras
+  (`MODEL_REJECTED` reemplazado, E07/E09). No afirmar 13 respuestas aprobadas por
+  el modelo: las salidas rechazadas siguen rechazadas. Los casos que exigen un
+  procedimiento respaldado no aprueban por abstención.
+- HTTP real del contenedor: consulta Ricoh ambigua 200/`OK_PIDE_ACLARACION`,
+  datos faltantes explícitos y sin «no imprime»; consulta general de impresora
+  200/`OK_VALIDADO`, con fuentes y sin preguntas innecesarias.
+- Evidencia versionable: `backend/docs/backend_validation.json` y
+  `backend/docs/BACKEND_VALIDATION.md`. Trazas en `backend/docs/rag_runs/`
+  ignoradas. Comando desde backend: `../.venv/bin/python -m
+  scripts.validate_rag_scenarios --output docs/rag_runs/validation` (cuota real).
+- Imagen activa: `sha256:9130bb2b931300144628ac4e36b488bd7302e5db5f7f1e53b99eee80cf35cc8c`.
+
+La rama `codex/backend-infra-ricoh-local` se publicó previamente en `057380f`.
+El usuario autorizó actualizar `.agents`, crear el commit con estas correcciones
+y publicar inmediatamente en esa misma rama. Esta actualización de continuidad
+forma parte del commit de entrega `fix: clarify ambiguous requests and validate backend regression`.
+Consultar `git log -1` y `git status -sb` para su identificador y sincronización.
+No requiere repetir llamadas a Groq ni desplegar: la imagen corregida ya está activa.
+Mantener simple el alcance: el manual Ricoh permanece fuera de la API, cuyo
+índice académico conserva 70 fragmentos. No continuar la integración de Ricoh
+ni la prueba de aislamiento entre usuarios. Sus limitaciones locales anteriores
+(impresión Hold/Stored y presupuesto de contexto) siguen pendientes.
 
 ### Estructura y cambios locales
 
@@ -51,8 +74,8 @@ rutas concretas se actualizaron al prefijo `backend/`. Conservarlas.
 ### Backend desplegado y autenticación
 
 Contenedor **`infra-backend-1`**, saludable en la comprobación del 20-10-2026.
-Imagen `ti-support-rag-backend:local`; imagen desplegada
-`sha256:45686a96c23f1327562b7839305a19dba582099b2f77114146b211df742e54cf`.
+Imagen `ti-support-rag-backend:local`; imagen desplegada actual
+`sha256:9130bb2b931300144628ac4e36b488bd7302e5db5f7f1e53b99eee80cf35cc8c`.
 El ID del primer build que figura en el historial y `docker_validation.json`
 corresponde a la validación anterior; Compose reconstruyó después con caché.
 Imagen de unos 1,28 GB sin comprimir: PyTorch CPU es el mayor componente.
@@ -98,7 +121,8 @@ Trazas locales ignoradas por Git:
 `backend/docs/rag_runs/http_query_ricoh_mp4002_20261020.json`.
 Observación de calidad pendiente: en la segunda, `datos_faltantes: []` pese a
 reconocer que faltan síntomas/configuración/errores; también resume «problemas al
-enviar impresiones» como «no imprime». No afirmar que esto se corrigió.
+enviar impresiones» como «no imprime». Corregido posteriormente para incidentes vagos: ver la sección de continuidad
+y `backend/docs/backend_validation.json`; esta traza antigua se conserva sin editar.
 No volver a llamar Groq solo para leer esas respuestas guardadas.
 
 ### Manual Ricoh: identidad verificada y registro listo

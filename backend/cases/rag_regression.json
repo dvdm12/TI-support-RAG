@@ -80,7 +80,9 @@
     "expected_section": "OTR-02",
     "expected_documentary_states": [
       "aclaracion"
-    ]
+    ],
+    "expected_missing_data": true,
+    "expected_state": "OK_PIDE_ACLARACION"
   },
   {
     "id": "E09",
@@ -102,6 +104,51 @@
     "expected_documentary_states": [
       "evidencia_insuficiente",
       "parcial"
+    ]
+  },
+  {
+    "id": "E11",
+    "tipo": "ambiguo_impresion",
+    "input": "Tengo problemas al enviar impresiones en la Ricoh MP 4002.",
+    "expected_category": "hardware",
+    "expected_section": "HW-03",
+    "expected_documentary_states": [
+      "aclaracion"
+    ],
+    "expected_missing_data": true,
+    "expected_state": "OK_PIDE_ACLARACION",
+    "summary_excludes": [
+      "no imprime",
+      "no puede imprimir",
+      "no funciona"
+    ]
+  },
+  {
+    "id": "E12",
+    "tipo": "pregunta_general",
+    "input": "¿Qué comprobaciones iniciales recomienda el manual para una impresora?",
+    "expected_category": "hardware",
+    "expected_section": "HW-03",
+    "expected_documentary_states": [
+      "respondida"
+    ],
+    "expected_missing_data": false
+  },
+  {
+    "id": "E13",
+    "tipo": "ambiguo_software",
+    "input": "Tengo problemas con la aplicación de inventario.",
+    "expected_category": "software",
+    "expected_section": null,
+    "expected_documentary_states": [
+      "aclaracion"
+    ],
+    "expected_missing_data": true,
+    "expected_state": "OK_PIDE_ACLARACION",
+    "summary_excludes": [
+      "no abre",
+      "no inicia",
+      "no funciona"
     ]
   }
 ]

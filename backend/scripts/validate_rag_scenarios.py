@@ -9,6 +9,27 @@ from src.rag.retrieval import Retriever
 from src.rag.pipeline import run_rag_case
 
 
+def support_gate_passes(case, result):
+    """An abstention test accepts a rejected answer only when safely replaced.
+
+    Rejection is never accepted for cases that require a grounded procedure.
+    Raw rejected output remains in the trace and is not the delivered answer.
+    """
+    rag=result['rag']; documentary=result.get('documentary_output') or {}
+    if rag['semantic_support_review']=='MODEL_SUPPORTED':
+        return True
+    if rag['semantic_support_review']=='LOCAL_CLARIFICATION':
+        return (case.get('expected_missing_data') is True
+                and documentary.get('estado')=='aclaracion'
+                and documentary.get('citas')==[]
+                and documentary.get('respuesta')==' '.join((result.get('classification') or {}).get('datos_faltantes',[])))
+    return (rag.get('safe_fallback') is True
+            and 'evidencia_insuficiente' in case['expected_documentary_states']
+            and documentary.get('estado')=='evidencia_insuficiente'
+            and documentary.get('citas')==[]
+            and documentary.get('respuesta')=='No puedo ofrecer un procedimiento verificado con los pasajes recuperados.')
+
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--cases',type=Path,default=Path('cases/rag_regression.json'))
@@ -30,12 +51,17 @@ def main():
                 'category':case['expected_category'] is None or classification.get('categoria')==case['expected_category'],
                 'documentary_state':documentary.get('estado') in case['expected_documentary_states'],
                 'references':result['rag']['citations_valid'],
-                'model_support_review':result['rag']['semantic_support_review']=='MODEL_SUPPORTED',
+                'support_gate':support_gate_passes(case,result),
                 'human_escalation':'expected_human' not in case or classification.get('requiere_humano')==case['expected_human'],
+                'clarification_data':'expected_missing_data' not in case or bool(classification.get('datos_faltantes')) == case['expected_missing_data'],
+                'final_state':'expected_state' not in case or result['state']==case['expected_state'],
+                'faithful_summary':not any(term.casefold() in classification.get('resumen','').casefold() for term in case.get('summary_excludes',[])),
                 'expected_section':not case['expected_section'] or any(c['metadata']['section'].startswith(case['expected_section']+' ') for c in result['rag']['candidates'])}
         item={'id':case['id'],'passed':all(checks.values()),'checks':checks,'state':result['state'],
               'documentary_state':documentary.get('estado'),'category':classification.get('categoria'),
-              'latency_seconds':result['latency_seconds'],'failure_stage':result['failure_stage']}
+              'latency_seconds':result['latency_seconds'],'failure_stage':result['failure_stage'],
+              'support_review':result['rag']['semantic_support_review'],
+              'safe_fallback':result['rag'].get('safe_fallback',False)}
         summary.append(item)
         (args.output/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2))
         print(json.dumps(item,ensure_ascii=False),flush=True)
@@ -46,6 +72,10 @@ def main():
                 'executed':len(summary),'pending_case_ids':pending},indent=2))
             print('Cuota bloqueada: no se envían los casos pendientes.',flush=True)
             break
+    if len(summary)==len(cases):
+        (args.output/'run_status.json').write_text(json.dumps({
+            'status':'passed' if all(item['passed'] for item in summary) else 'failed',
+            'planned':len(cases),'executed':len(summary),'pending_case_ids':[]},indent=2))
     if len(summary)!=len(cases) or not all(item['passed'] for item in summary):raise SystemExit(1)
 
 

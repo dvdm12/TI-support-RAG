@@ -5,7 +5,7 @@ import json
 def build_context(question, candidates, *, classification=None, max_chars=6000, request_fits=None):
     if max_chars < 1:
         raise ValueError('Presupuesto de contexto inválido.')
-    compact_classification = {'categoria':classification['categoria']} if request_fits and classification else classification
+    compact_classification = {key: classification[key] for key in ('categoria', 'datos_faltantes')} if request_fits and classification else classification
     payload = {'pregunta': question, 'clasificacion': compact_classification,
                'corpus_simulado': True, 'evidencia': []}
     catalog, omitted, seen = {}, [], set()
