@@ -1,0 +1,88 @@
+{
+  "timestamp_utc": "2026-10-14T23:22:17.849290+00:00",
+  "source": "notebooks/clase_08_rag_supabase_groq.ipynb",
+  "source_sha256": "58b75def87d9c11ed288251c6e28d747bdcc51ba94e49725ae093e1a7e767485",
+  "scope": "Offline validation with real cached embeddings/local retrieval and mock generation",
+  "source_cells": 27,
+  "planned_code_cells": 13,
+  "executed_code_cells": 13,
+  "cell_results": [
+    {
+      "index": 2,
+      "passed": true,
+      "elapsed_seconds": 0.276
+    },
+    {
+      "index": 4,
+      "passed": true,
+      "elapsed_seconds": 0.222
+    },
+    {
+      "index": 6,
+      "passed": true,
+      "elapsed_seconds": 0.253
+    },
+    {
+      "index": 8,
+      "passed": true,
+      "elapsed_seconds": 11.997
+    },
+    {
+      "index": 10,
+      "passed": true,
+      "elapsed_seconds": 0.007
+    },
+    {
+      "index": 12,
+      "passed": true,
+      "elapsed_seconds": 0.045
+    },
+    {
+      "index": 14,
+      "passed": true,
+      "elapsed_seconds": 0.341
+    },
+    {
+      "index": 16,
+      "passed": true,
+      "elapsed_seconds": 0.048
+    },
+    {
+      "index": 18,
+      "passed": true,
+      "elapsed_seconds": 0.011
+    },
+    {
+      "index": 20,
+      "passed": true,
+      "elapsed_seconds": 0.007
+    },
+    {
+      "index": 22,
+      "passed": true,
+      "elapsed_seconds": 0.006
+    },
+    {
+      "index": 24,
+      "passed": true,
+      "elapsed_seconds": 0.006
+    },
+    {
+      "index": 26,
+      "passed": true,
+      "elapsed_seconds": 0.009
+    }
+  ],
+  "network_requests_blocked": true,
+  "remote_cases_executed": false,
+  "remote_cases_pending_explicit_approval": true,
+  "output_directory": "docs/rag_runs/notebook_checks/20261014T232217832691Z",
+  "passed": true,
+  "original_unchanged": true,
+  "elapsed_seconds": 14.244,
+  "mock_rag": {
+    "source": "mock",
+    "state": "OK_PIDE_ACLARACION",
+    "citations_valid": true
+  }
+}

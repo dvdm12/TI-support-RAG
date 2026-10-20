@@ -1,4 +1,7 @@
 .env
+.env.*
+!.env.example
+.aws/
 .vscode/
 .venv*/
 __pycache__/
@@ -7,3 +10,6 @@ __pycache__/
 data/indexes/
 docs/rag_runs/
 .cache/tiktoken/
+docs/drive_classes_07_08_upload.json
+docs/drive_upload_verification.json
+scripts/organize_drive_classes.py

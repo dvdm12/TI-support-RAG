@@ -1,16 +1,42 @@
-Pillow
-pytesseract
-easyocr
-pydantic
-python-dotenv
-requests
-reportlab
-pandas
-ipykernel
-pypdf>=5,<7
-numpy>=1.26,<3
-sentence-transformers>=3,<7
-supabase>=2,<3
-tiktoken>=0.12,<1
-Django>=5.2,<5.3
+# Versions verified in the project's .venv (Python 3.12).
+# Activate .venv before installing: source .venv/bin/activate
+
+# Configuration, validated contracts and HTTP client (including Groq).
+python-dotenv==1.2.4
+pydantic==2.14.1
+requests==2.34.2
+
+# Images and OCR. Tesseract and its language data are OS dependencies.
+Pillow==12.3.0
+pytesseract==0.3.13
+easyocr==1.7.2
+
+# Shared inference runtime for EasyOCR and Sentence Transformers.
+# CPU-only wheels can be installed from https://download.pytorch.org/whl/cpu
+# before installing this file. These pins also accept the matching +cpu wheels.
+torch==2.14.1
+torchvision==0.29.1
+
+# Documentary ingestion, embeddings, token budgets and Supabase.
+pypdf==6.20.1
+numpy==2.5.2
+sentence-transformers==6.1.0
+huggingface-hub==1.33.0
+supabase==2.32.0
+tiktoken==0.14.0
+
+# Result analysis and PDF reports.
+pandas==3.0.6
+reportlab==5.0.1
+
+# Django API and locally bundled Swagger UI assets.
+Django==5.2.18
 drf-spectacular-sidecar==2026.10.1
+
+# Notebook kernel, display helpers and kernel execution.
+ipykernel==7.4.0
+ipython==9.17.1
+jupyter-client==8.10.0
+
+# External executables, installed separately when needed: Tesseract and rclone.
+# Remaining transitive Python dependencies are resolved by pip.
