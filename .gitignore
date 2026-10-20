@@ -7,9 +7,10 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
-data/indexes/
-docs/rag_runs/
-.cache/tiktoken/
-docs/drive_classes_07_08_upload.json
-docs/drive_upload_verification.json
-scripts/organize_drive_classes.py
+backend/data/indexes/
+backend/data/extracted/
+backend/docs/rag_runs/
+backend/.cache/tiktoken/
+backend/docs/drive_classes_07_08_upload.json
+backend/docs/drive_upload_verification.json
+backend/scripts/organize_drive_classes.py

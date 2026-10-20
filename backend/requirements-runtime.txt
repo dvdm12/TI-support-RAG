@@ -1,0 +1,16 @@
+# API runtime only. Notebook, ingestion, report and EasyOCR dependencies stay
+# in requirements.txt. Install the CPU build of torch separately (Dockerfile).
+python-dotenv==1.2.4
+pydantic==2.14.1
+requests==2.34.2
+Pillow==12.3.0
+pytesseract==0.3.13
+numpy==2.5.2
+sentence-transformers==6.1.0
+transformers==5.19.0
+huggingface-hub==1.33.0
+supabase==2.32.0
+tiktoken==0.14.0
+Django==5.2.18
+drf-spectacular-sidecar==2026.10.1
+gunicorn==26.2.0

@@ -8,7 +8,7 @@ Fecha: 2026-10-14.
 
 ## Esquema aplicado
 
-Se ejecutó `supabase/migrations/20261014_documentary_rag.sql` mediante el SQL
+Se ejecutó `../infra/supabase/migrations/20261014_documentary_rag.sql` mediante el SQL
 Editor del proyecto, con autorización del usuario para los cambios de permisos.
 La comprobación previa mostró que no existían la extensión vector ni la tabla.
 
@@ -64,7 +64,7 @@ torchvision se instalaron para CPU desde el índice oficial de PyTorch; las dem�
 dependencias proceden de `requirements.txt`. La activación se realiza con:
 
 ```bash
-source .venv/bin/activate
+source ../.venv/bin/activate
 ```
 
 Queda pendiente comprobar aislamiento con un segundo usuario real de Supabase

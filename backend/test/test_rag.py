@@ -221,7 +221,7 @@ class TestPipeline(unittest.TestCase):
 
 class TestSQL(unittest.TestCase):
     def test_security_contract(self):
-        sql=Path('supabase/migrations/20261014_documentary_rag.sql').read_text().lower()
+        sql=(Path(__file__).resolve().parents[2] / 'infra/supabase/migrations/20261014_documentary_rag.sql').read_text().lower()
         for term in ('enable row level security','security invoker',"set search_path = ''",'vector(384)','primary key (owner_id, corpus_id, chunk_id)',"configuracion ->> 'modelo'","configuracion ->> 'revision'",'coalesce(match_count, 3)'):self.assertIn(term,sql)
         self.assertNotIn('security definer',sql)
         self.assertNotIn('grant delete',sql)

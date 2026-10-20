@@ -6,8 +6,8 @@ objective = "Generar un único diagrama de actividades PlantUML del notebook TI-
 
 [reference]
 project = "TI-support-RAG"
-notebook = "notebooks/clase_08_rag_supabase_groq.ipynb"
-local_path = "/home/dvdm12/Documents/Obsidian Vault/TI-support-RAG/notebooks/clase_08_rag_supabase_groq.ipynb"
+notebook = "backend/notebooks/clase_08_rag_supabase_groq.ipynb"
+local_path = "/home/dvdm12/Documents/Obsidian Vault/TI-support-RAG/backend/notebooks/clase_08_rag_supabase_groq.ipynb"
 version_description = "Versión guardada de 27 celdas, 13 de código, con opciones y anexos de OCR/API. No confundir con la versión simplificada anterior de diez celdas de código."
 inspected_date = "2026-10-14"
 sha256_at_inspection = "da7d958e02714e6b886f9e0ae8e6d91698cb76a26c8ff761f08d6086476fc28e"
@@ -66,7 +66,7 @@ name = "1. Preparación"
 actions = [
   "Encontrar PROJECT_ROOT a partir del directorio actual y sus padres",
   "Cambiar a la raíz y añadirla a sys.path",
-  "Verificar que sys.prefix corresponde a .venv",
+  "Verificar que sys.prefix corresponde a ../.venv",
   "Definir opciones, pregunta, rutas y acumuladores de resultados"
 ]
 errors = "Si no existe la raíz o el kernel es incorrecto, RuntimeError y detener Run All. No dibujar un cambio automático de kernel."

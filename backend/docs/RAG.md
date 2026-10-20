@@ -13,7 +13,7 @@ del prompt versionado de clasificación.
 Desde la raíz del repositorio, activar el entorno antes de instalar o ejecutar:
 
 ```bash
-source .venv/bin/activate
+source ../.venv/bin/activate
 python -m pip install -r requirements.txt
 python -m unittest discover -s test
 ```
@@ -61,7 +61,7 @@ en Git por defecto; se pueden reconstruir con la configuración y las fuentes.
 
 ## Supabase
 
-Ejecutar `supabase/migrations/20261014_documentary_rag.sql` en el SQL Editor de
+Ejecutar `../infra/supabase/migrations/20261014_documentary_rag.sql` en el SQL Editor de
 un proyecto de práctica. La migración utiliza la tabla `public.clase08_fragmentos`,
 `extensions.vector(384)`, clave primaria `(owner_id, corpus_id, chunk_id)` y RPC
 `public.clase08_buscar_fragmentos`. Usa búsqueda exacta, sin HNSW o IVFFlat.
@@ -216,7 +216,7 @@ Referencias de implementación: [Sentence Transformers](https://www.sbert.net/do
 Con `.venv` activado y las credenciales locales configuradas:
 
 ```bash
-source .venv/bin/activate
+source ../.venv/bin/activate
 python -m scripts.validate_rag_scenarios --output docs/rag_runs/regression
 ```
 

@@ -1,0 +1,29 @@
+services:
+  backend:
+    image: ti-support-rag-backend:local
+    build:
+      context: ../backend
+    env_file:
+      - ../backend/.env
+    environment:
+      DJANGO_DEBUG: "false"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - type: bind
+        source: ../backend/data/indexes/sections
+        target: /app/data/indexes/sections
+        read_only: true
+        bind:
+          create_host_path: false
+      - model-cache:/home/app/.cache/huggingface
+      - tokenizer-cache:/home/app/.cache/tiktoken
+    init: true
+    restart: unless-stopped
+
+volumes:
+  model-cache:
+    name: ti-support-rag-model-cache
+  tokenizer-cache:
+    name: ti-support-rag-tokenizer-cache

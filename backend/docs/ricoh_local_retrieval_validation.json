@@ -1,0 +1,3320 @@
+{
+  "timestamp_utc": "2026-10-20T21:18:41.934139+00:00",
+  "scope": "Local retrieval over real English source using Spanish queries; no answer generation.",
+  "source_text_comparison": "PDF whitespace normalized; expected sections and messages unchanged.",
+  "source_extraction_sha256": "ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44",
+  "index": {
+    "format": "external-parent-child-v1",
+    "document_id": "RICOH-MP4002-USER-GUIDE-EN",
+    "source_sha256": "3e5a0a2702efdc320633c1409159a0d28d533c1f98239b9f9ddb6dd8b7b8c1d5",
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "dimension": 384,
+    "normalized": true,
+    "max_seq_length": 128,
+    "units": 498,
+    "fragments": 779,
+    "excluded_tables": [
+      {
+        "block_id": "B00621",
+        "pdf_page": 65,
+        "reason": [
+          "empty_text_cells_may_contain_graphics_or_continuation"
+        ]
+      },
+      {
+        "block_id": "B00622",
+        "pdf_page": 66,
+        "reason": [
+          "empty_text_cells_may_contain_graphics_or_continuation"
+        ]
+      },
+      {
+        "block_id": "B00737",
+        "pdf_page": 75,
+        "reason": [
+          "complex_or_merged_header_or_cell",
+          "empty_text_cells_may_contain_graphics_or_continuation"
+        ]
+      },
+      {
+        "block_id": "B00738",
+        "pdf_page": 76,
+        "reason": [
+          "complex_or_merged_header_or_cell",
+          "empty_text_cells_may_contain_graphics_or_continuation"
+        ]
+      },
+      {
+        "block_id": "B00758",
+        "pdf_page": 78,
+        "reason": [
+          "complex_or_merged_header_or_cell",
+          "empty_text_cells_may_contain_graphics_or_continuation"
+        ]
+      },
+      {
+        "block_id": "B01511",
+        "pdf_page": 146,
+        "reason": [
+          "empty_text_cells_may_contain_graphics_or_continuation"
+        ]
+      }
+    ],
+    "units_sha256": "cb50e672d58ae8f448661b4df7c289e94f2fd99d95def89d4fe88de05c5cac46",
+    "fragments_sha256": "cbe23e1f3050796ec41d586a6cd41cae82a1d924a3677787dc4e41adc48388d1",
+    "vectors_sha256": "5ca5e46e763e1e048abbef0eddcaf529b619f061879d65f4571cf8fe167dca2b",
+    "supabase_uploaded": false,
+    "active_index": false,
+    "index_id": "ricoh-local-85995a0e67f7d4017a02"
+  },
+  "build_seconds": 0.403,
+  "fragmentation_checks": {
+    "all_source_units_preserved": true,
+    "all_unit_bodies_fully_covered": true,
+    "each_table_row_retained_as_one_full_evidence_unit": true,
+    "ancestor_context_preserved": true,
+    "no_silent_truncation": true,
+    "real_vectors_normalized_and_samples_recomputed": true,
+    "graphical_tables_excluded": 6
+  },
+  "max_fragment_tokens": 128,
+  "units_longer_than_embedding_window": 115,
+  "strategies": {
+    "semantic": {
+      "cases": 12,
+      "hit_at_1": 0.5833333333333334,
+      "hit_at_3": 0.8333333333333334,
+      "mrr_at_3": 0.6805555555555555,
+      "failed_case_ids": [
+        "RIC-06",
+        "RIC-09"
+      ],
+      "results": [
+        {
+          "id": "RIC-01",
+          "question": "¿Qué permisos necesito para instalar el controlador de impresión de red mediante instalación rápida?",
+          "expected_section": "Quick Install",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-42963ec328ced8792f64a8c6",
+              "kind": "section_text",
+              "section": "Quick Install",
+              "references": [
+                [
+                  95,
+                  93
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6945163607597351,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 423,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-3787490afebcce237c33d0c5",
+              "kind": "section_text",
+              "section": "Displaying the Printer Driver Properties",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  96,
+                  94
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5536432266235352,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 157,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d6ec2a77f26706faec9edccf",
+              "kind": "section_text",
+              "section": "I Want to Operate the Machine More Effectively",
+              "references": [
+                [
+                  11,
+                  9
+                ],
+                [
+                  14,
+                  12
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5510880947113037,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 249,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-02",
+          "question": "¿Cómo abro las propiedades del controlador desde Dispositivos e impresoras para cambiar la configuración?",
+          "expected_section": "Displaying the Printer Driver Properties",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-3787490afebcce237c33d0c5",
+              "kind": "section_text",
+              "section": "Displaying the Printer Driver Properties",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  96,
+                  94
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.693439245223999,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 157,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d6ec2a77f26706faec9edccf",
+              "kind": "section_text",
+              "section": "I Want to Operate the Machine More Effectively",
+              "references": [
+                [
+                  11,
+                  9
+                ],
+                [
+                  14,
+                  12
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6644715070724487,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 249,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-7a8d465481f17b077e2a5cff",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  188,
+                  186
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Paper size and type are\nmismatched. Select another\ntray from the following and\npress [Continue]. To cancel\njob, press [Job Reset].\nPaper size and type can\nalso be changed in User\nTools.\"",
+              "cosine": 0.5775732398033142,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 279,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-03",
+          "question": "¿Cómo imprimo un documento normalmente usando el controlador PCL 6 y selecciono la bandeja y el tipo de papel?",
+          "expected_section": "When Using the PCL 6 Printer Driver",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-309b9819e5d732f8ff3beee9",
+              "kind": "section_text",
+              "section": "When Using the PCL 6 Printer Driver",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  97,
+                  95
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7470334768295288,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 347,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-54abd3740fa86561f620f03e",
+              "kind": "section_text",
+              "section": "Setting the paper size using the control panel",
+              "references": [
+                [
+                  129,
+                  127
+                ],
+                [
+                  131,
+                  129
+                ],
+                [
+                  132,
+                  130
+                ],
+                [
+                  133,
+                  131
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6369326114654541,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 795,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-8ddd01ce1742f74f2683c174",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Load following paper in n.\nTo cancel job, press [Job\nReset].\"\n(A figure is placed at n.)",
+              "cosine": 0.6212319135665894,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 201,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-04",
+          "question": "¿Cómo envío un trabajo de impresión bloqueada con contraseña para recogerlo después?",
+          "expected_section": "Sending a Locked Print File",
+          "first_relevant_rank": 3,
+          "top3": [
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6644436120986938,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d54bda947c7d37f0c4c9d49d",
+              "kind": "section_text",
+              "section": "Printing a Locked Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ],
+                [
+                  99,
+                  97
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6575416922569275,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 216,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-5fdd541f2ce797d47fb0f263",
+              "kind": "section_text",
+              "section": "Sending a Locked Print File",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6504220366477966,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 188,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-05",
+          "question": "¿Cómo libero una impresión bloqueada introduciendo mi contraseña en el panel de la impresora?",
+          "expected_section": "Printing a Locked Print File Using the Control Panel",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-d54bda947c7d37f0c4c9d49d",
+              "kind": "section_text",
+              "section": "Printing a Locked Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ],
+                [
+                  99,
+                  97
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6775702238082886,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 216,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-5fdd541f2ce797d47fb0f263",
+              "kind": "section_text",
+              "section": "Sending a Locked Print File",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6688897609710693,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 188,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6422795057296753,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-06",
+          "question": "¿Cómo envío un documento como impresión retenida para imprimirlo más tarde?",
+          "expected_section": "Sending a Hold Print File",
+          "first_relevant_rank": null,
+          "top3": [
+            {
+              "unit_id": "U-ea12c1299d4bd5d55d93758e",
+              "kind": "section_text",
+              "section": "Printing Stored Documents",
+              "references": [
+                [
+                  121,
+                  119
+                ],
+                [
+                  123,
+                  121
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7371283769607544,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 314,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6745113134384155,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-4d95c8b3959ac94130e29215",
+              "kind": "section_text",
+              "section": "Printing the Journal Manually",
+              "references": [
+                [
+                  81,
+                  79
+                ],
+                [
+                  94,
+                  92
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6528195738792419,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 223,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-07",
+          "question": "¿Cómo imprimo desde el panel un archivo almacenado que se conserve después de imprimirlo?",
+          "expected_section": "Printing a Stored Print File Using the Control Panel",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7614812850952148,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-58267cb75028e39cb8fea8dd",
+              "kind": "section_text",
+              "section": "Sending Stored Documents",
+              "references": [
+                [
+                  81,
+                  79
+                ],
+                [
+                  91,
+                  89
+                ],
+                [
+                  92,
+                  90
+                ],
+                [
+                  93,
+                  91
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6915087699890137,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 849,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-ea12c1299d4bd5d55d93758e",
+              "kind": "section_text",
+              "section": "Printing Stored Documents",
+              "references": [
+                [
+                  121,
+                  119
+                ],
+                [
+                  123,
+                  121
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6898506283760071,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 314,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-08",
+          "question": "La impresora muestra \"Job Suspended...\". ¿Qué significa y cómo puedo reanudar el trabajo?",
+          "expected_section": "Status messages",
+          "expected_row_contains": "Job Suspended...",
+          "first_relevant_rank": 2,
+          "top3": [
+            {
+              "unit_id": "U-a2fa622ba92214f74882c842",
+              "kind": "table_row",
+              "section": "Status messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ]
+              ],
+              "row_message": "\"Suspending print jobs...\"",
+              "cosine": 0.6932927370071411,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 86,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-08e95c414144130351c559f3",
+              "kind": "table_row",
+              "section": "Status messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ]
+              ],
+              "row_message": "\"Job Suspended...\"",
+              "cosine": 0.6720046997070312,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 120,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-8ddd01ce1742f74f2683c174",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Load following paper in n.\nTo cancel job, press [Job\nReset].\"\n(A figure is placed at n.)",
+              "cosine": 0.6601029634475708,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 201,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-09",
+          "question": "El panel muestra \"Offline\". ¿Qué indica ese estado de la impresora?",
+          "expected_section": "Status messages",
+          "expected_row_contains": "\"Offline\"",
+          "first_relevant_rank": null,
+          "top3": [
+            {
+              "unit_id": "U-7a8d465481f17b077e2a5cff",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  188,
+                  186
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Paper size and type are\nmismatched. Select another\ntray from the following and\npress [Continue]. To cancel\njob, press [Job Reset].\nPaper size and type can\nalso be changed in User\nTools.\"",
+              "cosine": 0.6252409815788269,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 279,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-8ddd01ce1742f74f2683c174",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Load following paper in n.\nTo cancel job, press [Job\nReset].\"\n(A figure is placed at n.)",
+              "cosine": 0.6193479299545288,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 201,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-f09ee2dedcfddb4c3b8f8a0b",
+              "kind": "section_text",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5987368226051331,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 86,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-10",
+          "question": "Aparece \"Hardware Problem: Ethernet\" en la pantalla. ¿Qué causa y solución documenta el manual?",
+          "expected_section": "Messages displayed on the control panel when using the printer function",
+          "expected_row_contains": "Hardware Problem: Ethernet",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-20efdecd34bbac29442fa0c5",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nEthernet\"",
+              "cosine": 0.7068274617195129,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 137,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-88cc15b9a438b70c113a302f",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nWireless Card\"\n(A \"wireless LAN board\" or\n\"Bluetooth interface unit\" is\nreferred to as a \"wireless\ncard\".)",
+              "cosine": 0.5761592388153076,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 204,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-fdfd8c015d7139acc0311bc4",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nWireless Card\"\n(A \"wireless LAN board\" or\n\"Bluetooth interface unit\" is\nreferred to as a \"wireless\ncard\".)",
+              "cosine": 0.5703949928283691,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 192,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-11",
+          "question": "El trabajo falla con \"Insufficient Memory\". ¿Qué recomienda el manual para este error de impresión?",
+          "expected_section": "Other messages",
+          "expected_row_contains": "Insufficient Memory",
+          "first_relevant_rank": 3,
+          "top3": [
+            {
+              "unit_id": "U-e656d549905ec660f59a5cb4",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  194,
+                  192
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Exceeded max. number of\npages to print for\ntemporary / stored jobs.\"",
+              "cosine": 0.6709244251251221,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 237,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-ff58d89aa4ca3118945c773f",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  194,
+                  192
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Exceeded max. number of\npages. (Auto)\"",
+              "cosine": 0.6671883463859558,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 228,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-8b896f28fadb368f0d628547",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  196,
+                  194
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Insufficient Memory\"",
+              "cosine": 0.658432126045227,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 274,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-12",
+          "question": "El registro de impresión indica \"I/O buffer overflow.\". ¿Cuál es la causa y qué indica el manual?",
+          "expected_section": "Other messages",
+          "expected_row_contains": "I/O buffer overflow.",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-4e0dfe7e7112ccc99056c78f",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  195,
+                  193
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"I/O buffer overflow.\"",
+              "cosine": 0.6927438378334045,
+              "relevant": true,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 265,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-561571492441659f99996b50",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  197,
+                  195
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Staple has been\ncancelled.\"",
+              "cosine": 0.6148574948310852,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 217,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-e656d549905ec660f59a5cb4",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  194,
+                  192
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Exceeded max. number of\npages to print for\ntemporary / stored jobs.\"",
+              "cosine": 0.5941972732543945,
+              "relevant": false,
+              "match_basis": "semantic",
+              "retrieved_evidence_tokens": 237,
+              "requires_visual_reference": false
+            }
+          ]
+        }
+      ]
+    },
+    "hybrid": {
+      "cases": 12,
+      "hit_at_1": 0.6666666666666666,
+      "hit_at_3": 0.8333333333333334,
+      "mrr_at_3": 0.7361111111111112,
+      "failed_case_ids": [
+        "RIC-06",
+        "RIC-09"
+      ],
+      "results": [
+        {
+          "id": "RIC-01",
+          "question": "¿Qué permisos necesito para instalar el controlador de impresión de red mediante instalación rápida?",
+          "expected_section": "Quick Install",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-42963ec328ced8792f64a8c6",
+              "kind": "section_text",
+              "section": "Quick Install",
+              "references": [
+                [
+                  95,
+                  93
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6945163607597351,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 423,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-3787490afebcce237c33d0c5",
+              "kind": "section_text",
+              "section": "Displaying the Printer Driver Properties",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  96,
+                  94
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5536432266235352,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 157,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d6ec2a77f26706faec9edccf",
+              "kind": "section_text",
+              "section": "I Want to Operate the Machine More Effectively",
+              "references": [
+                [
+                  11,
+                  9
+                ],
+                [
+                  14,
+                  12
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5510880947113037,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 249,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-02",
+          "question": "¿Cómo abro las propiedades del controlador desde Dispositivos e impresoras para cambiar la configuración?",
+          "expected_section": "Displaying the Printer Driver Properties",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-3787490afebcce237c33d0c5",
+              "kind": "section_text",
+              "section": "Displaying the Printer Driver Properties",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  96,
+                  94
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.693439245223999,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 157,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d6ec2a77f26706faec9edccf",
+              "kind": "section_text",
+              "section": "I Want to Operate the Machine More Effectively",
+              "references": [
+                [
+                  11,
+                  9
+                ],
+                [
+                  14,
+                  12
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6644715070724487,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 249,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-7a8d465481f17b077e2a5cff",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  188,
+                  186
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Paper size and type are\nmismatched. Select another\ntray from the following and\npress [Continue]. To cancel\njob, press [Job Reset].\nPaper size and type can\nalso be changed in User\nTools.\"",
+              "cosine": 0.5775732398033142,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 279,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-03",
+          "question": "¿Cómo imprimo un documento normalmente usando el controlador PCL 6 y selecciono la bandeja y el tipo de papel?",
+          "expected_section": "When Using the PCL 6 Printer Driver",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-309b9819e5d732f8ff3beee9",
+              "kind": "section_text",
+              "section": "When Using the PCL 6 Printer Driver",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  97,
+                  95
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7470334768295288,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 347,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-8b896f28fadb368f0d628547",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  196,
+                  194
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Insufficient Memory\"",
+              "cosine": 0.4551967680454254,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 274,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-54abd3740fa86561f620f03e",
+              "kind": "section_text",
+              "section": "Setting the paper size using the control panel",
+              "references": [
+                [
+                  129,
+                  127
+                ],
+                [
+                  131,
+                  129
+                ],
+                [
+                  132,
+                  130
+                ],
+                [
+                  133,
+                  131
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6369326114654541,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 795,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-04",
+          "question": "¿Cómo envío un trabajo de impresión bloqueada con contraseña para recogerlo después?",
+          "expected_section": "Sending a Locked Print File",
+          "first_relevant_rank": 3,
+          "top3": [
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6644436120986938,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d54bda947c7d37f0c4c9d49d",
+              "kind": "section_text",
+              "section": "Printing a Locked Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ],
+                [
+                  99,
+                  97
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6575416922569275,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 216,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-5fdd541f2ce797d47fb0f263",
+              "kind": "section_text",
+              "section": "Sending a Locked Print File",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6504220366477966,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 188,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-05",
+          "question": "¿Cómo libero una impresión bloqueada introduciendo mi contraseña en el panel de la impresora?",
+          "expected_section": "Printing a Locked Print File Using the Control Panel",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-d54bda947c7d37f0c4c9d49d",
+              "kind": "section_text",
+              "section": "Printing a Locked Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ],
+                [
+                  99,
+                  97
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6775702238082886,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 216,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6422795057296753,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-fd4875b7610ed16f27e5042c",
+              "kind": "section_text",
+              "section": "Printing a Hold Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  100,
+                  98
+                ],
+                [
+                  101,
+                  99
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5804153680801392,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 198,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-06",
+          "question": "¿Cómo envío un documento como impresión retenida para imprimirlo más tarde?",
+          "expected_section": "Sending a Hold Print File",
+          "first_relevant_rank": null,
+          "top3": [
+            {
+              "unit_id": "U-ea12c1299d4bd5d55d93758e",
+              "kind": "section_text",
+              "section": "Printing Stored Documents",
+              "references": [
+                [
+                  121,
+                  119
+                ],
+                [
+                  123,
+                  121
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7371283769607544,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 314,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6745113134384155,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-4d95c8b3959ac94130e29215",
+              "kind": "section_text",
+              "section": "Printing the Journal Manually",
+              "references": [
+                [
+                  81,
+                  79
+                ],
+                [
+                  94,
+                  92
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6528195738792419,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 223,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-07",
+          "question": "¿Cómo imprimo desde el panel un archivo almacenado que se conserve después de imprimirlo?",
+          "expected_section": "Printing a Stored Print File Using the Control Panel",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7614812850952148,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-fd4875b7610ed16f27e5042c",
+              "kind": "section_text",
+              "section": "Printing a Hold Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  100,
+                  98
+                ],
+                [
+                  101,
+                  99
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6893417835235596,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 198,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d54bda947c7d37f0c4c9d49d",
+              "kind": "section_text",
+              "section": "Printing a Locked Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ],
+                [
+                  99,
+                  97
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6720675826072693,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 216,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-08",
+          "question": "La impresora muestra \"Job Suspended...\". ¿Qué significa y cómo puedo reanudar el trabajo?",
+          "expected_section": "Status messages",
+          "expected_row_contains": "Job Suspended...",
+          "first_relevant_rank": 2,
+          "top3": [
+            {
+              "unit_id": "U-a2fa622ba92214f74882c842",
+              "kind": "table_row",
+              "section": "Status messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ]
+              ],
+              "row_message": "\"Suspending print jobs...\"",
+              "cosine": 0.6932927370071411,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 86,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-08e95c414144130351c559f3",
+              "kind": "table_row",
+              "section": "Status messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ]
+              ],
+              "row_message": "\"Job Suspended...\"",
+              "cosine": 0.6720046997070312,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 120,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-1a9ebd7a1e44d28ea59e8c19",
+              "kind": "table_row",
+              "section": "Messages Displayed When Using the Facsimile Function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  169,
+                  167
+                ],
+                [
+                  177,
+                  175
+                ],
+                [
+                  184,
+                  182
+                ]
+              ],
+              "row_message": "\"Original(s) is being\nscanned for a different\nfunction.\"",
+              "cosine": 0.6154749393463135,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 486,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-09",
+          "question": "El panel muestra \"Offline\". ¿Qué indica ese estado de la impresora?",
+          "expected_section": "Status messages",
+          "expected_row_contains": "\"Offline\"",
+          "first_relevant_rank": null,
+          "top3": [
+            {
+              "unit_id": "U-88cc15b9a438b70c113a302f",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nWireless Card\"\n(A \"wireless LAN board\" or\n\"Bluetooth interface unit\" is\nreferred to as a \"wireless\ncard\".)",
+              "cosine": 0.5457288026809692,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 204,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-75c92be8d21088e509bf6b8c",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Cannot connect with the\nwireless card. Turn the main\npower switch off, then\ncheck the card.\"",
+              "cosine": 0.5457288026809692,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 203,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-8ddd01ce1742f74f2683c174",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Load following paper in n.\nTo cancel job, press [Job\nReset].\"\n(A figure is placed at n.)",
+              "cosine": 0.6193479299545288,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 201,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-10",
+          "question": "Aparece \"Hardware Problem: Ethernet\" en la pantalla. ¿Qué causa y solución documenta el manual?",
+          "expected_section": "Messages displayed on the control panel when using the printer function",
+          "expected_row_contains": "Hardware Problem: Ethernet",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-20efdecd34bbac29442fa0c5",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nEthernet\"",
+              "cosine": 0.7068274617195129,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 137,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-88cc15b9a438b70c113a302f",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nWireless Card\"\n(A \"wireless LAN board\" or\n\"Bluetooth interface unit\" is\nreferred to as a \"wireless\ncard\".)",
+              "cosine": 0.5761592388153076,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 204,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-4e18e19953d660788afe5147",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem: HDD\"",
+              "cosine": 0.48351430892944336,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 137,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-11",
+          "question": "El trabajo falla con \"Insufficient Memory\". ¿Qué recomienda el manual para este error de impresión?",
+          "expected_section": "Other messages",
+          "expected_row_contains": "Insufficient Memory",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-8b896f28fadb368f0d628547",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  196,
+                  194
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Insufficient Memory\"",
+              "cosine": 0.658432126045227,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 274,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-b447b414880d18d7243b323c",
+              "kind": "table_row",
+              "section": "Messages Displayed When Using the Scanner Function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  199,
+                  197
+                ],
+                [
+                  205,
+                  203
+                ]
+              ],
+              "row_message": "\"Memory is full. Press [Write]\nto write the current scanned\ndata to the memory storage\ndevice, or press [Cancel] to\ndelete.\"",
+              "cosine": 0.6296516060829163,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 140,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-ac13783ba13922928ab0ef71",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"99: Error\"",
+              "cosine": 0.6334809064865112,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 249,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-12",
+          "question": "El registro de impresión indica \"I/O buffer overflow.\". ¿Cuál es la causa y qué indica el manual?",
+          "expected_section": "Other messages",
+          "expected_row_contains": "I/O buffer overflow.",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-4e0dfe7e7112ccc99056c78f",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  195,
+                  193
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"I/O buffer overflow.\"",
+              "cosine": 0.6927438378334045,
+              "relevant": true,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 265,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-561571492441659f99996b50",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  197,
+                  195
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Staple has been\ncancelled.\"",
+              "cosine": 0.6148574948310852,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 217,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-c05b7afc00578701cd9fe1b3",
+              "kind": "table_row",
+              "section": "Messages Displayed When Using the Scanner Function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  199,
+                  197
+                ],
+                [
+                  206,
+                  204
+                ]
+              ],
+              "row_message": "\"Output buffer is full.\nSending the data has been\ncancelled. Please try again\nlater.\"",
+              "cosine": 0.4523240029811859,
+              "relevant": false,
+              "match_basis": "hybrid",
+              "retrieved_evidence_tokens": 116,
+              "requires_visual_reference": false
+            }
+          ]
+        }
+      ]
+    },
+    "hybrid_literal": {
+      "cases": 12,
+      "hit_at_1": 0.8333333333333334,
+      "hit_at_3": 0.9166666666666666,
+      "mrr_at_3": 0.8611111111111112,
+      "failed_case_ids": [
+        "RIC-06"
+      ],
+      "results": [
+        {
+          "id": "RIC-01",
+          "question": "¿Qué permisos necesito para instalar el controlador de impresión de red mediante instalación rápida?",
+          "expected_section": "Quick Install",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-42963ec328ced8792f64a8c6",
+              "kind": "section_text",
+              "section": "Quick Install",
+              "references": [
+                [
+                  95,
+                  93
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6945163607597351,
+              "relevant": true,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 423,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-3787490afebcce237c33d0c5",
+              "kind": "section_text",
+              "section": "Displaying the Printer Driver Properties",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  96,
+                  94
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5536432266235352,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 157,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d6ec2a77f26706faec9edccf",
+              "kind": "section_text",
+              "section": "I Want to Operate the Machine More Effectively",
+              "references": [
+                [
+                  11,
+                  9
+                ],
+                [
+                  14,
+                  12
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5510880947113037,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 249,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-02",
+          "question": "¿Cómo abro las propiedades del controlador desde Dispositivos e impresoras para cambiar la configuración?",
+          "expected_section": "Displaying the Printer Driver Properties",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-3787490afebcce237c33d0c5",
+              "kind": "section_text",
+              "section": "Displaying the Printer Driver Properties",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  96,
+                  94
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.693439245223999,
+              "relevant": true,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 157,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d6ec2a77f26706faec9edccf",
+              "kind": "section_text",
+              "section": "I Want to Operate the Machine More Effectively",
+              "references": [
+                [
+                  11,
+                  9
+                ],
+                [
+                  14,
+                  12
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6644715070724487,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 249,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-7a8d465481f17b077e2a5cff",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  188,
+                  186
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Paper size and type are\nmismatched. Select another\ntray from the following and\npress [Continue]. To cancel\njob, press [Job Reset].\nPaper size and type can\nalso be changed in User\nTools.\"",
+              "cosine": 0.5775732398033142,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 279,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-03",
+          "question": "¿Cómo imprimo un documento normalmente usando el controlador PCL 6 y selecciono la bandeja y el tipo de papel?",
+          "expected_section": "When Using the PCL 6 Printer Driver",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-309b9819e5d732f8ff3beee9",
+              "kind": "section_text",
+              "section": "When Using the PCL 6 Printer Driver",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  97,
+                  95
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7470334768295288,
+              "relevant": true,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 347,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-8b896f28fadb368f0d628547",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  196,
+                  194
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Insufficient Memory\"",
+              "cosine": 0.4551967680454254,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 274,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-54abd3740fa86561f620f03e",
+              "kind": "section_text",
+              "section": "Setting the paper size using the control panel",
+              "references": [
+                [
+                  129,
+                  127
+                ],
+                [
+                  131,
+                  129
+                ],
+                [
+                  132,
+                  130
+                ],
+                [
+                  133,
+                  131
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6369326114654541,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 795,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-04",
+          "question": "¿Cómo envío un trabajo de impresión bloqueada con contraseña para recogerlo después?",
+          "expected_section": "Sending a Locked Print File",
+          "first_relevant_rank": 3,
+          "top3": [
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6644436120986938,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d54bda947c7d37f0c4c9d49d",
+              "kind": "section_text",
+              "section": "Printing a Locked Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ],
+                [
+                  99,
+                  97
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6575416922569275,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 216,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-5fdd541f2ce797d47fb0f263",
+              "kind": "section_text",
+              "section": "Sending a Locked Print File",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6504220366477966,
+              "relevant": true,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 188,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-05",
+          "question": "¿Cómo libero una impresión bloqueada introduciendo mi contraseña en el panel de la impresora?",
+          "expected_section": "Printing a Locked Print File Using the Control Panel",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-d54bda947c7d37f0c4c9d49d",
+              "kind": "section_text",
+              "section": "Printing a Locked Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ],
+                [
+                  99,
+                  97
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6775702238082886,
+              "relevant": true,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 216,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6422795057296753,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-fd4875b7610ed16f27e5042c",
+              "kind": "section_text",
+              "section": "Printing a Hold Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  100,
+                  98
+                ],
+                [
+                  101,
+                  99
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.5804153680801392,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 198,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-06",
+          "question": "¿Cómo envío un documento como impresión retenida para imprimirlo más tarde?",
+          "expected_section": "Sending a Hold Print File",
+          "first_relevant_rank": null,
+          "top3": [
+            {
+              "unit_id": "U-ea12c1299d4bd5d55d93758e",
+              "kind": "section_text",
+              "section": "Printing Stored Documents",
+              "references": [
+                [
+                  121,
+                  119
+                ],
+                [
+                  123,
+                  121
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7371283769607544,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 314,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6745113134384155,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-4d95c8b3959ac94130e29215",
+              "kind": "section_text",
+              "section": "Printing the Journal Manually",
+              "references": [
+                [
+                  81,
+                  79
+                ],
+                [
+                  94,
+                  92
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6528195738792419,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 223,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-07",
+          "question": "¿Cómo imprimo desde el panel un archivo almacenado que se conserve después de imprimirlo?",
+          "expected_section": "Printing a Stored Print File Using the Control Panel",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-6059b1fcc9facd4262a7fa2e",
+              "kind": "section_text",
+              "section": "Printing a Stored Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  103,
+                  101
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.7614812850952148,
+              "relevant": true,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 288,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-fd4875b7610ed16f27e5042c",
+              "kind": "section_text",
+              "section": "Printing a Hold Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  100,
+                  98
+                ],
+                [
+                  101,
+                  99
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6893417835235596,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 198,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-d54bda947c7d37f0c4c9d49d",
+              "kind": "section_text",
+              "section": "Printing a Locked Print File Using the Control Panel",
+              "references": [
+                [
+                  95,
+                  93
+                ],
+                [
+                  98,
+                  96
+                ],
+                [
+                  99,
+                  97
+                ]
+              ],
+              "row_message": null,
+              "cosine": 0.6720675826072693,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 216,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-08",
+          "question": "La impresora muestra \"Job Suspended...\". ¿Qué significa y cómo puedo reanudar el trabajo?",
+          "expected_section": "Status messages",
+          "expected_row_contains": "Job Suspended...",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-08e95c414144130351c559f3",
+              "kind": "table_row",
+              "section": "Status messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ]
+              ],
+              "row_message": "\"Job Suspended...\"",
+              "cosine": 0.6720046997070312,
+              "relevant": true,
+              "match_basis": "exact_quoted_source_message",
+              "retrieved_evidence_tokens": 120,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-a2fa622ba92214f74882c842",
+              "kind": "table_row",
+              "section": "Status messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ]
+              ],
+              "row_message": "\"Suspending print jobs...\"",
+              "cosine": 0.6932927370071411,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 86,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-1a9ebd7a1e44d28ea59e8c19",
+              "kind": "table_row",
+              "section": "Messages Displayed When Using the Facsimile Function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  169,
+                  167
+                ],
+                [
+                  177,
+                  175
+                ],
+                [
+                  184,
+                  182
+                ]
+              ],
+              "row_message": "\"Original(s) is being\nscanned for a different\nfunction.\"",
+              "cosine": 0.6154749393463135,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 486,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-09",
+          "question": "El panel muestra \"Offline\". ¿Qué indica ese estado de la impresora?",
+          "expected_section": "Status messages",
+          "expected_row_contains": "\"Offline\"",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-a738bd75ed9f6f3192860055",
+              "kind": "table_row",
+              "section": "Status messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ]
+              ],
+              "row_message": "\"Offline\"",
+              "cosine": 0.46477994322776794,
+              "relevant": true,
+              "match_basis": "exact_quoted_source_message",
+              "retrieved_evidence_tokens": 66,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-88cc15b9a438b70c113a302f",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nWireless Card\"\n(A \"wireless LAN board\" or\n\"Bluetooth interface unit\" is\nreferred to as a \"wireless\ncard\".)",
+              "cosine": 0.5457288026809692,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 204,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-75c92be8d21088e509bf6b8c",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Cannot connect with the\nwireless card. Turn the main\npower switch off, then\ncheck the card.\"",
+              "cosine": 0.5457288026809692,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 203,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-10",
+          "question": "Aparece \"Hardware Problem: Ethernet\" en la pantalla. ¿Qué causa y solución documenta el manual?",
+          "expected_section": "Messages displayed on the control panel when using the printer function",
+          "expected_row_contains": "Hardware Problem: Ethernet",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-20efdecd34bbac29442fa0c5",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nEthernet\"",
+              "cosine": 0.7068274617195129,
+              "relevant": true,
+              "match_basis": "exact_quoted_source_message",
+              "retrieved_evidence_tokens": 137,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-88cc15b9a438b70c113a302f",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem:\nWireless Card\"\n(A \"wireless LAN board\" or\n\"Bluetooth interface unit\" is\nreferred to as a \"wireless\ncard\".)",
+              "cosine": 0.5761592388153076,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 204,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-4e18e19953d660788afe5147",
+              "kind": "table_row",
+              "section": "Messages displayed on the control panel when using the printer function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  186,
+                  184
+                ],
+                [
+                  187,
+                  185
+                ],
+                [
+                  189,
+                  187
+                ]
+              ],
+              "row_message": "\"Hardware Problem: HDD\"",
+              "cosine": 0.48351430892944336,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 137,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-11",
+          "question": "El trabajo falla con \"Insufficient Memory\". ¿Qué recomienda el manual para este error de impresión?",
+          "expected_section": "Other messages",
+          "expected_row_contains": "Insufficient Memory",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-8b896f28fadb368f0d628547",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  196,
+                  194
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Insufficient Memory\"",
+              "cosine": 0.658432126045227,
+              "relevant": true,
+              "match_basis": "exact_quoted_source_message",
+              "retrieved_evidence_tokens": 274,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-b447b414880d18d7243b323c",
+              "kind": "table_row",
+              "section": "Messages Displayed When Using the Scanner Function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  199,
+                  197
+                ],
+                [
+                  205,
+                  203
+                ]
+              ],
+              "row_message": "\"Memory is full. Press [Write]\nto write the current scanned\ndata to the memory storage\ndevice, or press [Cancel] to\ndelete.\"",
+              "cosine": 0.6296516060829163,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 140,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-ac13783ba13922928ab0ef71",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"99: Error\"",
+              "cosine": 0.6334809064865112,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 249,
+              "requires_visual_reference": false
+            }
+          ]
+        },
+        {
+          "id": "RIC-12",
+          "question": "El registro de impresión indica \"I/O buffer overflow.\". ¿Cuál es la causa y qué indica el manual?",
+          "expected_section": "Other messages",
+          "expected_row_contains": "I/O buffer overflow.",
+          "first_relevant_rank": 1,
+          "top3": [
+            {
+              "unit_id": "U-4e0dfe7e7112ccc99056c78f",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  195,
+                  193
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"I/O buffer overflow.\"",
+              "cosine": 0.6927438378334045,
+              "relevant": true,
+              "match_basis": "exact_quoted_source_message",
+              "retrieved_evidence_tokens": 265,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-561571492441659f99996b50",
+              "kind": "table_row",
+              "section": "Other messages",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  185,
+                  183
+                ],
+                [
+                  190,
+                  188
+                ],
+                [
+                  197,
+                  195
+                ],
+                [
+                  198,
+                  196
+                ]
+              ],
+              "row_message": "\"Staple has been\ncancelled.\"",
+              "cosine": 0.6148574948310852,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 217,
+              "requires_visual_reference": false
+            },
+            {
+              "unit_id": "U-c05b7afc00578701cd9fe1b3",
+              "kind": "table_row",
+              "section": "Messages Displayed When Using the Scanner Function",
+              "references": [
+                [
+                  155,
+                  153
+                ],
+                [
+                  199,
+                  197
+                ],
+                [
+                  206,
+                  204
+                ]
+              ],
+              "row_message": "\"Output buffer is full.\nSending the data has been\ncancelled. Please try again\nlater.\"",
+              "cosine": 0.4523240029811859,
+              "relevant": false,
+              "match_basis": "hybrid_literal",
+              "retrieved_evidence_tokens": 116,
+              "requires_visual_reference": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "broad_question_probe": {
+    "question": "Tengo problemas al enviar impresiones en la Ricoh MP 4002.",
+    "scored_in_benchmark": false,
+    "note": "Nearest passages do not establish a specific cause; this input still needs symptom/error clarification.",
+    "top3": [
+      {
+        "section": "Other messages",
+        "references": [
+          [
+            155,
+            153
+          ],
+          [
+            185,
+            183
+          ],
+          [
+            190,
+            188
+          ],
+          [
+            193,
+            191
+          ],
+          [
+            198,
+            196
+          ]
+        ],
+        "unit_id": "U-947016c96a05dd829c39721f",
+        "cosine": 0.6173462271690369
+      },
+      {
+        "section": "Status messages",
+        "references": [
+          [
+            155,
+            153
+          ],
+          [
+            185,
+            183
+          ],
+          [
+            186,
+            184
+          ]
+        ],
+        "unit_id": "U-91282040038737e44401a6a3",
+        "cosine": 0.6034237742424011
+      },
+      {
+        "section": "Sending Faxes or Scanned Documents When Toner Has Run Out",
+        "references": [
+          [
+            129,
+            127
+          ],
+          [
+            151,
+            149
+          ],
+          [
+            152,
+            150
+          ],
+          [
+            153,
+            151
+          ]
+        ],
+        "unit_id": "U-4d83122b9a7102835874304d",
+        "cosine": 0.5977098345756531
+      }
+    ]
+  },
+  "elapsed_seconds": 12.719,
+  "active_index_unchanged": true,
+  "active_index_hashes": {
+    "config.json": "278f8d8fa19f6184351d48c4432b6a1bc17d520c45558cedc37c363a48baf567",
+    "records.json": "4fe7eebc91dcf93a1c64f772537b6776a94a39e55d70f1496ce21365aaa7e92d",
+    "vectors.npy": "f32ef7ddf937f5ad590d54715b83d9bb11bcb5cba30d3ed0040b46a22ec42b66"
+  },
+  "source_pdf_unchanged": true,
+  "supabase_writes": false,
+  "groq_calls": false,
+  "limitations": [
+    "Diagnostic cases are source-linked and are not a blinded benchmark.",
+    "Retrieval scores are not diagnostic confidence.",
+    "Full units can exceed generation budgets; context selection is a separate pending step.",
+    "Graphical tables remain excluded; procedural units may require their figures.",
+    "No production retriever or API routing is modified by this evaluation."
+  ]
+}

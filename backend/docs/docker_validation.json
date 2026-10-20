@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-10-20T19:47:18.467439+00:00",
+  "image": "ti-support-rag-backend:local",
+  "image_id": "sha256:8a5e7b745b76b5e62dca4fd4b2e724b1701eac0993e2ba07130f2998d1fe5ea5",
+  "size_bytes": 1282325554,
+  "architecture": "amd64",
+  "os": "linux",
+  "api_tests_passed": 24,
+  "http_checks": {
+    "health": 200,
+    "docs": 200,
+    "openapi": 200,
+    "categories_unauthenticated": 401,
+    "categories_authenticated": 200
+  },
+  "configured_healthcheck_passed": true,
+  "runtime_imports_passed": true,
+  "cpu_only": true,
+  "uid": 10001,
+  "credentials_and_local_data_excluded": true,
+  "real_embedding_and_index_compatibility_passed": true,
+  "embedding_dimensions": 384,
+  "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+  "groq_calls": false,
+  "supabase_writes": false,
+  "registry_push": false
+}

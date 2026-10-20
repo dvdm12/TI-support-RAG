@@ -1,0 +1,20 @@
+# Allowlist: credentials, datasets, notebooks and host environments never enter
+# the build context, even when new files appear in the backend directory.
+**
+!Dockerfile
+!requirements-runtime.txt
+!manage.py
+!api/
+!api/**
+!ti_api/
+!ti_api/**
+!src/
+!src/**
+!schemas/
+!schemas/**
+!prompts/
+!prompts/**
+**/__pycache__/
+**/*.py[cod]
+**/.env
+**/.env.*

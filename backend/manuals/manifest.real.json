@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "collection_id": "ti-real-manuals-v1",
+  "description": "Registro de documentos externos reales, separado de los manuales académicos simulados. No es un índice ni una carga a Supabase.",
+  "documents": [
+    {
+      "document_id": "RICOH-MP4002-USER-GUIDE-EN",
+      "category": "hardware",
+      "related_categories": [
+        "software",
+        "redes"
+      ],
+      "title": "User Guide",
+      "language": "en",
+      "simulated": false,
+      "path": "hardware/RICOHMP4002_MANUAL.pdf",
+      "sha256": "3e5a0a2702efdc320633c1409159a0d28d533c1f98239b9f9ddb6dd8b7b8c1d5",
+      "pages": 228,
+      "size_bytes": 5520145,
+      "encrypted": false,
+      "version": "D129-7802",
+      "document_date": null,
+      "equipment": {
+        "manufacturer": "Ricoh",
+        "model": "MP 4002",
+        "attribution_basis": "La página oficial de Ricoh para Aficio MP 4002/4002SP/5002/5002SP enlaza una copia PDF idéntica al archivo aportado; igualdad de bytes y SHA-256 verificados.",
+        "model_verified_from_document": false,
+        "compatible_models": [
+          "MP 4002",
+          "MP 4002SP",
+          "MP 5002",
+          "MP 5002SP"
+        ],
+        "model_verified_from_official_source": true,
+        "compatibility_note": "Guía de usuario compartida por la familia; respetar las diferencias de región y las opciones instaladas descritas en el manual. No acredita compatibilidad con cualquier firmware o configuración."
+      },
+      "provenance": {
+        "kind": "user_upload",
+        "original_filename": "RICOHMP4002_MANUAL.pdf",
+        "received_date": "2026-10-20",
+        "source_url": "https://support.ricoh.com/bb_v1oi/pub_e/oi/0001043/0001043003/VD1297802_01/D1297802_en.pdf",
+        "official_source_verified": true,
+        "official_listing_url": "https://support.ricoh.com/bb_v1oi/html/oi/re/model/mp42/mp42en.htm",
+        "verification_method": "byte_for_byte_and_sha256_match",
+        "verified_at_utc": "2026-10-20T20:42:00.928818+00:00"
+      },
+      "pdf_metadata": {
+        "creation_date": "2011-10-18T09:34:17+09:00",
+        "modification_date": "2011-10-18T11:55:07+09:00",
+        "creator": "AH Formatter V5.3 R1 (5,3,2011,0425) for Windows",
+        "producer": "Antenna House PDF Output Library 2.6.0 (Windows)",
+        "note": "Las fechas técnicas del PDF no acreditan la edición ni la fecha de publicación del manual."
+      },
+      "inspection": {
+        "text_extractable": true,
+        "blank_pdf_pages": [
+          2
+        ],
+        "general_ocr_required": false,
+        "contains_tables": true,
+        "page_numbering": "Conservar por separado el número de página PDF y el número impreso; por ejemplo, la página PDF 185 corresponde a la página impresa 183."
+      },
+      "ingestion_status": "locally_indexed_retrieval_partial",
+      "version_basis": "Identificador editorial impreso en la página PDF 228 y coincidente con el PDF oficial; no es una versión de firmware ni una revisión semántica.",
+      "copyright_year": 2011,
+      "official_listing_update_date": "2012-01-10",
+      "document_date_note": "La fecha de actualización de la descarga oficial se registra aparte; no se ha acreditado una fecha exacta de publicación impresa.",
+      "extraction_profile": {
+        "parser": "pdf-outline-tables-v1",
+        "content_pdf_page_range": [
+          8,
+          220
+        ],
+        "excluded_pdf_page_ranges": [
+          {
+            "first": 1,
+            "last": 1,
+            "reason": "cover"
+          },
+          {
+            "first": 2,
+            "last": 2,
+            "reason": "visually_verified_blank"
+          },
+          {
+            "first": 3,
+            "last": 7,
+            "reason": "table_of_contents"
+          },
+          {
+            "first": 221,
+            "last": 223,
+            "reason": "alphabetical_index"
+          },
+          {
+            "first": 224,
+            "last": 226,
+            "reason": "memo_pages"
+          },
+          {
+            "first": 227,
+            "last": 227,
+            "reason": "copyright_retained_in_document_metadata"
+          },
+          {
+            "first": 228,
+            "last": 228,
+            "reason": "back_cover_publication_identifier_retained_in_metadata"
+          }
+        ],
+        "running_header_bottom": 65,
+        "running_header_max_font_size": 9,
+        "footer_height": 50,
+        "right_sidebar_x0": 480,
+        "profile_note": "Coordenadas en puntos PDF, revisadas para los bytes y SHA-256 registrados. Conserva los títulos grandes de capítulo situados en la banda superior. No es un perfil genérico para otros manuales.",
+        "table_overrides": [
+          {
+            "pdf_page": 75,
+            "bbox": [
+              77.60484,
+              463.88471,
+              460.22737,
+              655.88165
+            ],
+            "settings": {
+              "vertical_strategy": "explicit",
+              "explicit_vertical_lines": [
+                77.60484,
+                137.19162,
+                246.57757,
+                360.52125,
+                460.22736
+              ],
+              "snap_tolerance": 1
+            },
+            "reason": "La detección automática confunde líneas de las ilustraciones con bordes de columna. Coordenadas contrastadas con la tabla renderizada; no añade contenido a las celdas gráficas."
+          }
+        ]
+      },
+      "local_extraction": {
+        "parser_version": "pdf-outline-tables-v1",
+        "output_directory_relative_to_backend": "data/extracted/RICOH-MP4002-USER-GUIDE-EN",
+        "validation_report_relative_to_backend": "docs/ricoh_extraction_validation.json",
+        "extraction_sha256": "ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44",
+        "pages_extracted": 213,
+        "sections": 146,
+        "tables": 92,
+        "table_data_rows": 383,
+        "graphical_tables_not_text_index_eligible": 6,
+        "embeddings_generated": false,
+        "supabase_uploaded": false
+      },
+      "local_fragmentation": {
+        "format": "external-parent-child-v1",
+        "index_id": "ricoh-local-85995a0e67f7d4017a02",
+        "output_directory_relative_to_backend": "data/indexes/ricoh-local-v1",
+        "evidence_units": 498,
+        "search_fragments": 779,
+        "max_fragment_tokens": 128,
+        "dimension": 384,
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+        "embeddings_generated": true,
+        "supabase_uploaded": false,
+        "active_index_changed": false
+      },
+      "local_retrieval_validation": {
+        "report_relative_to_backend": "docs/ricoh_local_retrieval_validation.json",
+        "status": "partial",
+        "cases": 12,
+        "strategy": "hybrid_literal",
+        "hit_at_1": 0.8333333333333334,
+        "hit_at_3": 0.9166666666666666,
+        "failed_case_ids": [
+          "RIC-06"
+        ],
+        "generation_tested": false,
+        "verified_at_utc": "2026-10-20T21:18:41.934139+00:00"
+      }
+    }
+  ]
+}

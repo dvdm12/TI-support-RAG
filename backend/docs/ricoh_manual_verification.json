@@ -1,0 +1,31 @@
+{
+  "verified_at_utc": "2026-10-20T20:42:00.928818+00:00",
+  "document_id": "RICOH-MP4002-USER-GUIDE-EN",
+  "local_pdf": "backend/manuals/hardware/RICOHMP4002_MANUAL.pdf",
+  "official_listing_url": "https://support.ricoh.com/bb_v1oi/html/oi/re/model/mp42/mp42en.htm",
+  "official_listing_model_family": [
+    "MP 4002",
+    "MP 4002SP",
+    "MP 5002",
+    "MP 5002SP"
+  ],
+  "official_pdf_url": "https://support.ricoh.com/bb_v1oi/pub_e/oi/0001043/0001043003/VD1297802_01/D1297802_en.pdf",
+  "local_sha256": "3e5a0a2702efdc320633c1409159a0d28d533c1f98239b9f9ddb6dd8b7b8c1d5",
+  "official_pdf_sha256": "3e5a0a2702efdc320633c1409159a0d28d533c1f98239b9f9ddb6dd8b7b8c1d5",
+  "local_size_bytes": 5520145,
+  "official_size_bytes": 5520145,
+  "identical_bytes": true,
+  "publication_identifier": "D129-7802",
+  "publication_identifier_pdf_page": 228,
+  "copyright_year": 2011,
+  "copyright_pdf_page": 227,
+  "official_listing_update_date_raw": "10/01/2012",
+  "official_listing_update_date": "2012-01-10",
+  "exact_printed_publication_date": null,
+  "semantic_revision": null,
+  "result": "verified_official_identical_copy",
+  "scope": "Identificación documental y compatibilidad de la guía de usuario con la familia publicada por Ricoh; no verifica una impresora física, firmware ni funciones opcionales.",
+  "pdf_unchanged": true,
+  "ingestion_performed": false,
+  "supabase_writes": false
+}

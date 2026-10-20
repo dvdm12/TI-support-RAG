@@ -1,0 +1,14 @@
+[
+  {"id":"RIC-01","question":"¿Qué permisos necesito para instalar el controlador de impresión de red mediante instalación rápida?","expected_section":"Quick Install"},
+  {"id":"RIC-02","question":"¿Cómo abro las propiedades del controlador desde Dispositivos e impresoras para cambiar la configuración?","expected_section":"Displaying the Printer Driver Properties"},
+  {"id":"RIC-03","question":"¿Cómo imprimo un documento normalmente usando el controlador PCL 6 y selecciono la bandeja y el tipo de papel?","expected_section":"When Using the PCL 6 Printer Driver"},
+  {"id":"RIC-04","question":"¿Cómo envío un trabajo de impresión bloqueada con contraseña para recogerlo después?","expected_section":"Sending a Locked Print File"},
+  {"id":"RIC-05","question":"¿Cómo libero una impresión bloqueada introduciendo mi contraseña en el panel de la impresora?","expected_section":"Printing a Locked Print File Using the Control Panel"},
+  {"id":"RIC-06","question":"¿Cómo envío un documento como impresión retenida para imprimirlo más tarde?","expected_section":"Sending a Hold Print File"},
+  {"id":"RIC-07","question":"¿Cómo imprimo desde el panel un archivo almacenado que se conserve después de imprimirlo?","expected_section":"Printing a Stored Print File Using the Control Panel"},
+  {"id":"RIC-08","question":"La impresora muestra \"Job Suspended...\". ¿Qué significa y cómo puedo reanudar el trabajo?","expected_section":"Status messages","expected_row_contains":"Job Suspended..."},
+  {"id":"RIC-09","question":"El panel muestra \"Offline\". ¿Qué indica ese estado de la impresora?","expected_section":"Status messages","expected_row_contains":"\"Offline\""},
+  {"id":"RIC-10","question":"Aparece \"Hardware Problem: Ethernet\" en la pantalla. ¿Qué causa y solución documenta el manual?","expected_section":"Messages displayed on the control panel when using the printer function","expected_row_contains":"Hardware Problem: Ethernet"},
+  {"id":"RIC-11","question":"El trabajo falla con \"Insufficient Memory\". ¿Qué recomienda el manual para este error de impresión?","expected_section":"Other messages","expected_row_contains":"Insufficient Memory"},
+  {"id":"RIC-12","question":"El registro de impresión indica \"I/O buffer overflow.\". ¿Cuál es la causa y qué indica el manual?","expected_section":"Other messages","expected_row_contains":"I/O buffer overflow."}
+]

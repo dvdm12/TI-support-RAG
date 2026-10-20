@@ -9,6 +9,13 @@ from src import config
 
 class TestFindProjectRoot(unittest.TestCase):
 
+    def test_detecta_backend_desde_raiz_del_repositorio(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            (root / "backend" / "prompts").mkdir(parents=True)
+            with patch("src.config.Path.cwd", return_value=root):
+                self.assertEqual(config.find_project_root(), root / "backend")
+
     def test_detecta_raiz_desde_la_raiz_del_proyecto(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)

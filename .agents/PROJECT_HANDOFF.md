@@ -1,8 +1,210 @@
 # Informe de continuidad — TI-support-RAG
 
-Fecha: 14 de octubre de 2026 (America/Bogota).
-Ubicación: `/home/dvdm12/Documents/Obsidian Vault/TI-support-RAG`.
-Este informe describe el estado observado al cierre de la integración Django y Swagger, con actualizaciones posteriores al final (la más reciente: «Revisión local del estado — 14-10-2026, tarde»). Las secciones finales prevalecen sobre las anteriores cuando difieren. No contiene secretos.
+Actualizado: 20 de octubre de 2026 (America/Bogota).
+Repositorio: `/home/dvdm12/Documents/Obsidian Vault/TI-support-RAG`.
+
+## Estado actual para continuar — leer primero
+
+Esta sección prevalece sobre el historial que sigue. Las rutas antiguas del
+historial, como `src/` o `docs/`, ahora corresponden a `backend/src/` y
+`backend/docs/`, salvo las migraciones, ubicadas en `infra/supabase/`.
+No contiene secretos. No releer ni ejecutar integraciones históricas por defecto.
+
+### Solicitud más reciente y punto de continuidad
+
+El usuario autorizó fragmentar la extracción del manual Ricoh y evaluar la
+recuperación local en español. **Esta etapa local está realizada**, con embeddings
+reales y un índice independiente. Resultado diagnóstico: evidencia esperada en
+Top-3 para 11 de 12 preguntas con estrategia híbrida más mensajes literales;
+RIC-06 (envío de impresión retenida) sigue fallando. No se alteró esa expectativa.
+No hubo carga Supabase, llamadas Groq, cambios del índice activo ni despliegue.
+Antes de integrar esta representación con la API hay que resolver la distinción
+Hold/Stored, seleccionar contexto completo dentro de 1000 tokens y adaptar
+persistencia/recuperación de unidades completas. El usuario no ha solicitado
+esa integración. Posteriormente pidió mantener el alcance simple y subir todos
+los cambios a una rama nueva: `codex/backend-infra-ricoh-local`.
+
+### Estructura y cambios locales
+
+- `backend/`: Django/API, `src/`, `schemas/`, `scripts/`, `test/`, `prompts/`,
+  `cases/`, notebooks, corpus, manuales, documentación y requirements.
+- `frontend/`: solo README; framework y aplicación aún no elegidos.
+- `infra/`: `compose.yaml`, README y `supabase/migrations/`.
+- `.agents/`: continuidad y especificación histórica del diagrama del notebook.
+- `.venv/` y `.venv-test/` siguen en la raíz para conservar sus rutas instaladas.
+- Configuración privada en `backend/.env`; plantilla `backend/.env.example`.
+  No imprimir credenciales ni incorporarlas a Git o a la imagen.
+
+Rama de entrega: `codex/backend-infra-ricoh-local`, creada desde `83f2110`
+(`codex/implement-embeddings`). El usuario autorizó incluir todos los cambios
+versionables en un commit y subir esta rama a origin, sin integrar con la rama
+base. La entrega incluye reorganización, Docker, extracción/evaluación local de
+Ricoh y documentación. Los secretos, cachés, índices y extracciones generadas
+siguen ignorados. Consultar `git log -1` y `git status` para el commit y estado
+final de publicación. No ampliar la integración del manual complejo por ahora.
+
+El commit 83f2110 dejó de seguir 47 `.pyc` sin borrarlos localmente. `.gitignore`
+excluye `.env` y `.env.*` (excepto `.env.example`), `.aws/`, entornos, bytecode,
+índices, cachés, trazas y artefactos personales de Drive. Las exclusiones con
+rutas concretas se actualizaron al prefijo `backend/`. Conservarlas.
+
+### Backend desplegado y autenticación
+
+Contenedor **`infra-backend-1`**, saludable en la comprobación del 20-10-2026.
+Imagen `ti-support-rag-backend:local`; imagen desplegada
+`sha256:45686a96c23f1327562b7839305a19dba582099b2f77114146b211df742e54cf`.
+El ID del primer build que figura en el historial y `docker_validation.json`
+corresponde a la validación anterior; Compose reconstruyó después con caché.
+Imagen de unos 1,28 GB sin comprimir: PyTorch CPU es el mayor componente.
+
+- API: `http://127.0.0.1:8000/api/v1/`.
+- Swagger: `http://127.0.0.1:8000/api/v1/docs/`.
+- Endpoints en `backend/api/urls.py` y `controllers.py`; prefijo en
+  `backend/ti_api/urls.py`; recuperación/generación en `backend/api/services.py`.
+- `categories`, `rag/search` y `rag/query` requieren `Authorization: Bearer`
+  con **DJANGO_API_TOKEN**, no una clave o JWT de Supabase. En Swagger introducir
+  solo el valor, sin `Bearer`; la autorización no persiste al recargar.
+- El 401 de categories se reprodujo sin token, con clave Supabase y con Bearer
+  duplicado. Con el token correcto devuelve 200 y las siete categorías.
+  Token del contenedor y del `.env` local comprobados iguales, sin mostrarlos.
+- Conexión Supabase desde el contenedor comprobada: autenticación y 70 fragmentos
+  visibles; proyecto `fmsoacmvsmfrnbmnvizo`. Las sesiones se obtienen mediante
+  usuario/contraseña Auth y clave publicable; no necesita Access Token personal
+  para operar. No usar service_role ni desactivar RLS.
+- El usuario **descartó** la prueba entre dos usuarios; no retomarla por iniciativa
+  propia. Las verificaciones de dos clientes son del mismo usuario.
+
+Compose inyecta el `.env`, publica solo en localhost y monta en lectura
+`backend/data/indexes/sections/` en `/app/data/indexes/sections`.
+Volúmenes: `ti-support-rag-model-cache` y `ti-support-rag-tokenizer-cache`.
+El modelo real se descargó y se comprobó compatible con el índice desde la imagen.
+Gunicorn usa un proceso, cuatro hilos y el semáforo RAG del backend.
+Los cambios de código requieren reconstruir la imagen; los cambios del `.env`
+requieren recrear el contenedor. La imagen no copia el PDF ni datos locales.
+
+### Consultas HTTP reales ejecutadas
+
+Ambas pasaron por Supabase/Groq y devolvieron HTTP 200, `OK_RESPUESTA_PARCIAL`:
+
+1. «El portal de documentos devuelve error 403. ¿Eso demuestra que mi cuenta está
+   suspendida?» → categoría `acceso`; cita ACS-03 y ACS-05; no confirma suspensión.
+   Tiempo HTTP total 20,778 s; latencia del pipeline reportada 3,4762 s.
+2. «Tengo problemas al enviar impresiones en la Ricoh MP 4002.» → `hardware`;
+   cita HW-03 y HW-05 del manual académico general, **no el manual Ricoh**.
+   Tiempo HTTP 8,862 s; pipeline 6,9628 s.
+
+Trazas locales ignoradas por Git:
+`backend/docs/rag_runs/http_query_check_20261020.json` y
+`backend/docs/rag_runs/http_query_ricoh_mp4002_20261020.json`.
+Observación de calidad pendiente: en la segunda, `datos_faltantes: []` pese a
+reconocer que faltan síntomas/configuración/errores; también resume «problemas al
+enviar impresiones» como «no imprime». No afirmar que esto se corrigió.
+No volver a llamar Groq solo para leer esas respuestas guardadas.
+
+### Manual Ricoh: identidad verificada y registro listo
+
+Original intacto: `backend/manuals/hardware/RICOHMP4002_MANUAL.pdf`.
+Registro separado: `backend/manuals/manifest.real.json`.
+Evidencia: `backend/docs/ricoh_manual_verification.json`.
+Guía/estado: `backend/manuals/README.md`.
+
+- ID `RICOH-MP4002-USER-GUIDE-EN`, idioma `en`, 228 páginas, 5.520.145 bytes.
+- SHA-256 `3e5a0a2702efdc320633c1409159a0d28d533c1f98239b9f9ddb6dd8b7b8c1d5`.
+- **Idéntico byte por byte al PDF oficial de Ricoh**. No hace falta repetir la
+  investigación ni volver a atribuir compatibilidad solo al nombre del archivo.
+- Ricoh lo lista para Aficio MP 4002/4002SP/5002/5002SP:
+  https://support.ricoh.com/bb_v1oi/html/oi/re/model/mp42/mp42en.htm
+- Copia oficial comparada:
+  https://support.ricoh.com/bb_v1oi/pub_e/oi/0001043/0001043003/VD1297802_01/D1297802_en.pdf
+- `version: D129-7802` es el código editorial de la página PDF 228; no firmware.
+  Copyright 2011 (página PDF 227). Actualización de la descarga: 2012-01-10;
+  `document_date` queda null porque no se acreditó fecha exacta de publicación.
+- `model_verified_from_official_source` y `official_source_verified`: true.
+  `model_verified_from_document`: false porque el modelo no aparece explícito en
+  el texto del PDF. No es una contradicción: la fuente oficial y los bytes
+  idénticos establecen la asociación. Hay variaciones por región y opciones.
+- Texto extraíble, página PDF 2 visualmente en blanco, tablas de mensajes/causas/
+  soluciones; no requiere OCR general. Página PDF 185 = página impresa 183.
+- `simulated: false`, estado **`locally_indexed_retrieval_partial`**.
+- Extracción local en `backend/data/extracted/RICOH-MP4002-USER-GUIDE-EN/`: JSON,
+  Markdown de revisión, resumen y muestras visuales. Directorio ignorado por Git.
+  Guía: `backend/docs/RICOH_EXTRACTION.md`. Evidencia: `backend/docs/ricoh_extraction_validation.json`.
+
+Se generaron fragmentos y embeddings locales en `backend/data/indexes/ricoh-local-v1/`,
+con formato propio y sin subir este manual a Supabase. Ver
+`backend/docs/RICOH_LOCAL_RETRIEVAL.md` y `backend/docs/ricoh_local_retrieval_validation.json`.
+Los manifiestos académicos `backend/manuals/manifest.json` y
+`backend/data/corpus/v2/manifest.json` conservan sus siete documentos simulados.
+El RAG activo sigue con 70 fragmentos del corpus
+`ti-manuals-v2-d479e96962b17496eaa3`.
+
+### Aspectos técnicos para el próximo trabajo de ingestión
+
+El extractor nuevo `backend/src/rag/external_ingestion.py` y el comando
+`backend/scripts/extract_real_manual.py` procesan el registro real por separado.
+`backend/src/rag/ingestion.py` (académico) solo admite `simulated: true`, rechaza páginas sin
+texto y detecta únicamente encabezados del tipo `HW-02 | ...`. Por eso el importador académico no procesa
+el PDF real; no se modificó su contrato. No marcarlo como simulado ni quitar validaciones sin separar el
+formato real del académico. `manifest.real.json` ahora admite un perfil para el extractor local, todavía
+no un contrato de indexación admitido por el importador académico. `load_corpus` solo lee archivos listados;
+poner el PDF en `manuals/` no activa recuperación.
+
+Conservar procedimientos, condiciones, advertencias y filas completas de tablas,
+la procedencia, idioma, versión y páginas PDF/impresas. El modelo es multilingüe:
+`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, revisión
+`e8f8c211226b894fcb81acc59f3b34ba3efd5f42`, 384 dimensiones normalizadas, máximo
+128 tokens. El corte actual de 80 tokens y los encabezados consumen ese límite;
+evaluarlo antes de aplicarlo a procedimientos largos. No cambiar de modelo sin
+revisar/reconstruir la representación del índice.
+
+La verificación `backend/scripts/verify_supabase.py` admite solo 1000 filas por
+corpus; añadir paginación si se supera. La recuperación léxica ya pagina, pero
+lee todas las filas compatibles: medir el impacto del corpus mayor. Top-3 y
+presupuesto de 1000 tokens de entrada por llamada siguen activos. Validar primero
+extracción y recuperación local en español; después planear la carga remota y el
+cambio de índice/contenedor. No reindexar ni subir por cada consulta.
+
+### Validaciones y comandos actuales
+
+Tras la reorganización: 210 pruebas unittest y 24 pruebas Django/API aprobadas;
+Django check correcto. Sintaxis de notebooks y primera celda de los tres probadas
+desde la raíz, sin ejecutar todos los notebooks. En la imagen: 24 pruebas API,
+imports y embeddings reales/compatibilidad del índice aprobados; HTTP health,
+docs, OpenAPI y categories autenticado 200. No se repitieron esas suites al
+editar metadatos o preparar este handoff. Suite remota completa de diez escenarios
+con configuración final sigue sin aprobarse; no confundirla con dos consultas HTTP.
+
+Desde la raíz del repositorio:
+
+```bash
+source .venv/bin/activate
+cd backend
+python manage.py check
+python manage.py test api
+python -m unittest discover -s test
+```
+
+Docker, desde la raíz:
+
+```bash
+docker compose -f infra/compose.yaml ps
+docker compose -f infra/compose.yaml logs --tail=30 backend
+docker compose -f infra/compose.yaml build
+docker compose -f infra/compose.yaml up -d --wait
+```
+
+El build puede requerir permiso del entorno para actualizar el caché Docker fuera
+del workspace. No cambiar HOME ni eludir permisos. Mantener credenciales fuera
+de salidas y argumentos de comandos. Las consultas Groq reales consumen cuota.
+El usuario indicó que no necesita más trabajo en Drive: no ejecutar el script
+personal de organización ni consultar Drive sin nueva solicitud.
+
+## Historial anterior — referencia, no estado vigente
+
+El informe original es del 14-10-2026. Se conserva abajo junto con sus
+actualizaciones. Sus afirmaciones sobre ramas, rutas, tareas pendientes,
+contenedores, identidad del manual o trabajo sin publicar pueden estar superadas
+por el estado actual de arriba.
 
 ## Resumen para el siguiente agente
 
@@ -174,3 +376,77 @@ Revisión hecha solo en local (sin Supabase, Groq ni Drive), sin modificar códi
 **Pruebas ejecutadas ahora** (`.venv`, `HF_HUB_OFFLINE=1`): `python -m unittest discover -s test` → 209 pruebas OK; `python manage.py test api` → 24 pruebas OK; `python manage.py check` → sin problemas. No se ejecutó el notebook ni ninguna integración remota.
 
 **Pendientes actualizados** (además de los prioritarios de arriba): aclarar con el usuario cuál versión del notebook de clase 08 es la vigente y alinear documentación/validaciones con ella; los fallos de métricas de clase 08 (caso ambiguo y paráfrasis) siguen sin corregir; separar `.pyc` y artefactos de Drive antes de cualquier commit autorizado.
+
+
+## Reorganización backend/frontend/infra — 20-10-2026
+
+El usuario autorizó separar el repositorio para preparar un futuro frontend. El código Python, API Django, notebooks, corpus, manuales, prompts, scripts, pruebas, assets, documentación y requirements.txt están ahora en `backend/`. Las migraciones SQL están en `infra/supabase/migrations/`. `frontend/` contiene un README y todavía no tiene framework ni aplicación. El README de la raíz describe los comandos actuales; `.agents/` sigue en la raíz.
+
+La configuración local existente se movió a `backend/.env`, junto a `backend/.env.example`. Los índices, caché de tiktoken y trazas existentes se movieron con sus directorios a `backend/` y siguen ignorados. Los entornos `.venv/` y `.venv-test/` permanecen en la raíz para conservar sus rutas de instalación. Desde la raíz: `source .venv/bin/activate`, `cd backend`; después se ejecutan los comandos habituales. Los notebooks reconocen también la raíz del repositorio y localizan `backend/`; el de clase 08 utiliza el entorno de la raíz. No se cambiaron sus banderas de ejecución ni sus resultados históricos.
+
+La rama sigue siendo `codex/implement-embeddings`. El último commit anterior a esta reorganización es `83f2110`, subido a origin; el informe inicial sobre trabajo sin publicar de octubre 14 es histórico. Las modificaciones de esta reorganización quedan locales hasta una nueva petición de commit/push.
+
+El usuario descartó expresamente la prueba de aislamiento con dos usuarios Supabase: está fuera del objetivo actual. El 20-10-2026 se verificaron autenticación, 70 fragmentos y RPC desde dos clientes del mismo usuario, sin escribir datos. No crear usuarios ni retomar la prueba descartada por iniciativa propia. No se consultó Drive durante esta reorganización.
+
+Validación posterior al movimiento: 210 pruebas de unittest y 24 pruebas Django/API aprobadas; `manage.py check` sin problemas desde backend y desde la raíz; sintaxis de todos los notebooks y primera celda de los tres notebooks comprobadas desde la raíz, sin ejecutar consultas remotas. Todos los archivos previamente versionados se localizaron en su destino. `.env`, índices, cachés, trazas y artefactos personales de Drive siguen excluidos por Git.
+
+
+## Imagen Docker del backend — 20-10-2026
+
+El usuario pidió una imagen liviana del backend. Se añadieron `backend/Dockerfile`, `backend/.dockerignore`, `backend/requirements-runtime.txt`, `backend/docs/DOCKER.md` e `infra/compose.yaml`. La imagen local `ti-support-rag-backend:local` fue construida con Docker: ID `sha256:8a5e7b745b76b5e62dca4fd4b2e724b1701eac0993e2ba07130f2998d1fe5ea5`, tamaño 1.282.325.554 bytes (Linux amd64). No se subió a un registry.
+
+Usa Python 3.12 slim, construcción por etapas, PyTorch CPU, Gunicorn 26.2.0 con un proceso y cuatro hilos y usuario app (UID 10001). Conserva Sentence Transformers para no cambiar el modelo ni los embeddings. No prometer una imagen diminuta: PyTorch es el principal límite de tamaño. Excluye CUDA, torchvision, EasyOCR, Jupyter, corpus, reportes, notebooks y secretos. Pillow/pytesseract permanecen por imports del pipeline; no incluye el ejecutable Tesseract ni soporta el flujo académico completo de OCR/ingestión/reportes.
+
+Compose inyecta `backend/.env` al ejecutar, monta el índice en lectura y conserva los pesos/tokenizadores en los volúmenes `ti-support-rag-model-cache` y `ti-support-rag-tokenizer-cache`. Los pesos no están dentro de la imagen y ocupan espacio adicional. Primer uso requiere descarga del modelo. El healthcheck solo comprueba HTTP, no proveedores ni disponibilidad del modelo.
+
+Pruebas realizadas dentro de la imagen: 24 pruebas Django/API aprobadas, imports de inferencia y pipeline correctos, PyTorch CPU y UID/exclusiones comprobados. Gunicorn probado por HTTP real: health/docs/OpenAPI 200, categories sin token 401 y con token de prueba 200; healthcheck configurado aprobado. Contenedor HTTP de prueba detenido y eliminado. Ninguna llamada a Groq ni escritura en Supabase durante estas verificaciones.
+
+También se cargó el modelo real dentro del contenedor y se comprobó la compatibilidad de los textos/vectores del índice y una nueva consulta de 384 dimensiones, sin Supabase ni Groq. Modelo descargado y conservado en el volumen de caché para reutilizarlo con Compose. Evidencia: `backend/docs/docker_validation.json`.
+
+
+## Registro del manual externo Ricoh — 20-10-2026
+
+El usuario pidió únicamente el primer paso de incorporación: registrar el documento. El PDF original está en `backend/manuals/hardware/RICOHMP4002_MANUAL.pdf`. Se creó `backend/manuals/manifest.real.json`, con rutas relativas a `manuals/`, ID `RICOH-MP4002-USER-GUIDE-EN`, idioma `en`, 228 páginas, 5.520.145 bytes y SHA-256 `3e5a0a2702efdc320633c1409159a0d28d533c1f98239b9f9ddb6dd8b7b8c1d5`. Estado `registered_pending_ingestion`; `simulated: false`.
+
+Procedencia: archivo aportado por el usuario, sin URL oficial confirmada. La atribución a MP 4002 procede del usuario/nombre; no se encontró ese modelo en el texto. Versión y fecha de publicación quedan null; las fechas técnicas de creación/modificación del PDF se registran aparte. README de manuales actualizado. Hash/tamaño y separación del corpus simulado validados. No se modificaron los manifiestos académicos ni la ingestión, no se generaron embeddings, no se escribieron datos en Supabase y no se reinició el contenedor. El siguiente paso sería adaptar la extracción para documentos reales, páginas vacías y tablas, cuando el usuario lo autorice.
+
+
+## Verificación oficial del manual Ricoh — 20-10-2026
+
+A petición explícita del usuario se verificaron identidad y compatibilidad, sin iniciar ingestión. La página oficial `https://support.ricoh.com/bb_v1oi/html/oi/re/model/mp42/mp42en.htm` lista la familia Aficio MP 4002/4002SP/5002/5002SP y enlaza `https://support.ricoh.com/bb_v1oi/pub_e/oi/0001043/0001043003/VD1297802_01/D1297802_en.pdf`. La descarga oficial y el PDF del usuario son idénticos byte por byte: 5.520.145 bytes y SHA-256 `3e5a0a2702efdc320633c1409159a0d28d533c1f98239b9f9ddb6dd8b7b8c1d5`.
+
+Se actualizó `backend/manuals/manifest.real.json`: `version` = `D129-7802` (identificador editorial impreso en página PDF 228, no firmware); copyright 2011 (página PDF 227); actualización de descarga oficial 2012-01-10, sin atribuirle carácter de fecha exacta de publicación. Asociación con MP 4002 confirmada por la página oficial y la identidad del archivo; `model_verified_from_document` sigue false porque el nombre no aparece explícito en el texto, pero `model_verified_from_official_source` y `official_source_verified` son true. Esta sección sustituye las dudas de atribución y procedencia del registro anterior.
+
+Evidencia en `backend/docs/ricoh_manual_verification.json`; README de manuales actualizado. Hash y coherencia del registro comprobados. El PDF permanece intacto y `ingestion_status` continúa `registered_pending_ingestion`. No se modificaron el importador ni Supabase ni el despliegue. La guía cubre una familia de equipos, con diferencias por región/opciones; no prometer compatibilidad universal de firmware.
+
+
+## Extracción local Ricoh terminada — 20-10-2026
+
+Implementados `backend/src/rag/external_ingestion.py` y `backend/scripts/extract_real_manual.py`, con 11 pruebas nuevas en `backend/test/test_external_ingestion.py`. Se añadió `pdfplumber==0.11.9` únicamente a requirements completo; requirements-runtime e imagen Docker no cambian. El perfil `extraction_profile` del manifiesto real está ligado a los bytes verificados: contenido PDF 8–220, exclusiones explícitas de portada/índices/notas/créditos y coordenadas para encabezados, pie y pestañas laterales. Una corrección geométrica explícita de la tabla de la página PDF 75 evita que las líneas de las ilustraciones rompan las columnas. La página PDF 2 vacía se valida antes de omitirla; una página inesperada sin texto detiene el extractor.
+
+Resultado reproducible local: 213 páginas de contenido, 146 secciones (de 149 marcadores totales), 1.647 párrafos, 92 tablas con 383 filas. Cada bloque tiene ID, coordenadas, página PDF y número impreso. Las filas permanecen completas con celdas originales; `ancestor_section_ids` enlaza las advertencias/condiciones del padre con el subprocedimiento. Los párrafos NO son todavía fragmentos con presupuesto de tokens. Hay 62 candidatos a continuación entre tablas de páginas consecutivas, no fusiones automáticas de filas.
+
+Se revisaron visualmente 11 páginas: 65, 66, 75, 76, 78, 95, 97, 146, 185, 186 y 187. Seis tablas dependen de ilustraciones (páginas 65, 66, 75, 76, 78, 146): conservan su cuadrícula, pero llevan `text_index_eligible: false` y motivos de revisión. No inventar descripciones de los gráficos ni indexar esos bloques como texto completo. La revisión fue del agente, no humana. No se interpretaron semánticamente todas las ilustraciones del manual.
+
+Salidas locales ignoradas: `backend/data/extracted/RICOH-MP4002-USER-GUIDE-EN/extraction.json`, `review.md`, `summary.json`, `previews/`. Resumen de validación apto para versionar: `backend/docs/ricoh_extraction_validation.json`. Guía: `backend/docs/RICOH_EXTRACTION.md`. Estado del registro: `locally_extracted_pending_fragmentation`; `local_extraction` contiene rutas, conteos y hash del resultado. El extractor excluye estos punteros de ciclo de vida de su snapshot para no crear hashes autorreferentes al repetir.
+
+Comando desde backend y con entorno activo: `python -m scripts.extract_real_manual`. Usa pdfplumber/pypdf locales, sin Groq, Supabase ni modelo de embeddings. Comprobaciones: hash del PDF intacto; las 228 páginas contabilizadas; numeración impresa = PDF−2 en las 213 páginas; once pasos/condiciones de Quick Install conservados; advertencia de Standard Printing enlazada al subprocedimiento PCL6; separación correcta de fax/impresión en página 185; sin caracteres de sustitución ni `(cid:...)`; corpus activo sigue con 70 fragmentos. Pasaron 221 pruebas unittest, 24 Django/API, `manage.py check`, `pip check` y diff whitespace.
+
+Incidencia local detectada al verificar Django: `backend/api/controllers.py` tenía `from uuid import uuid4|` (errata preexistente en el árbol local). Se retiró solo el carácter `|`; la API pasó después. No se reconstruyó ni reinició el contenedor. No se cambió el PDF ni los manifiestos académicos, no se generaron embeddings ni se escribieron filas Supabase. El historial anterior que diga que no existe extractor real o que el estado es registered_pending_ingestion está superado por esta sección y el resumen actual.
+
+
+## Fragmentación y recuperación local Ricoh — 20-10-2026
+
+A petición del usuario se implementaron `backend/src/rag/external_chunking.py`, `external_retrieval.py`, `backend/scripts/evaluate_ricoh_local.py` y siete pruebas nuevas en `backend/test/test_external_chunking.py`. Casos fijos: `backend/cases/ricoh_retrieval_es.json`. No se cambió `Chunk`, el formato académico ni el Retriever desplegado, para no invalidar el índice actual de 70 fragmentos.
+
+Índice independiente `backend/data/indexes/ricoh-local-v1/`, ID `ricoh-local-85995a0e67f7d4017a02`: 498 unidades completas (134 secciones textuales + 364 filas de tablas) y 779 vistas de búsqueda, máximo 128 tokens, embeddings reales normalizados de 384 dimensiones con el modelo/revisión activos. Todos los 1647 párrafos se conservan. Las seis tablas gráficas siguen excluidas de texto. Cada unidad conserva cuerpo completo, contexto de antecesores, páginas/versión/hash y fila original. Las vistas tienen offsets contiguos al cuerpo; se valida cobertura, IDs, hashes y muestras recomputadas de vectores. Las unidades largas (115 cuerpos >128 tokens) no se cortan como evidencia final: solo se dividen sus vistas para embeddings. La hidratación recupera toda la unidad y sus advertencias. No es un formato intercambiable directamente con records.json/config.json del índice académico.
+
+Resultados en 12 preguntas diagnósticas en español (7 de procedimientos, 5 con mensajes de pantalla ingleses), sin generación: semantic Top-1 7/12, Top-3 10/12; hybrid Top-1 8/12, Top-3 10/12; hybrid_literal Top-1 10/12, Top-3 11/12, MRR@3 0.8611. El híbrido combina coseno/BM25/RRF y deduplica por unidad. hybrid_literal prioriza coincidencia genérica del mensaje completo entre comillas con la celda Message original; no contiene reglas por ID de caso. La comparación normaliza whitespace de PDF; el mensaje Hardware Problem: Ethernet estaba partido por un salto de línea, no era un error de recuperación. Mantener expectativas, no confundir 11/12 con cumplimiento total ni con una evaluación ciega.
+
+Fallo pendiente real: RIC-06 pregunta por enviar impresión retenida (Sending a Hold Print File), pero recupera documentos almacenados. No se inventaron equivalencias bilingües ni se cambió el esperado a Stored Print. La sonda de la pregunta amplia de impresiones se registra aparte, sin contar como acierto de diagnóstico: faltan síntomas para establecer una causa. Las puntuaciones no son confianza de diagnóstico. La evidencia completa puede superar 128 tokens y al combinar resultados el presupuesto de 1000 tokens de generación: integrar selección contextual antes de activar en el generador.
+
+Reporte: `backend/docs/ricoh_local_retrieval_validation.json`; guía/métricas legibles: `backend/docs/RICOH_LOCAL_RETRIEVAL.md`. Registro/README de manuales actualizados a `locally_indexed_retrieval_partial`; campos `local_fragmentation` y `local_retrieval_validation` guardan cantidades y fallo. Los snapshots del extractor excluyen campos local_* y estado de ciclo de vida para conservar su reproducibilidad. Estos cambios no requieren reextraer el PDF: su JSON revisado conserva hash ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44.
+
+Se reutilizó la caché pública hub del contenedor copiándola a `/tmp/ti-rag-hf/hub`, sin secretos. Comandos desde backend con entorno activo: `HF_HOME=/tmp/ti-rag-hf HF_HUB_OFFLINE=1 OMP_NUM_THREADS=2 python -m scripts.evaluate_ricoh_local` para construir/evaluar; añadir `--existing` para reutilizar vectores. La caché temporal puede desaparecer: usar la revisión fijada y descargar legítimamente si falta. No se hicieron llamadas a Groq/Supabase. Los avisos de tokenizador sobre cuerpos completos largos ocurren al contar tokens; solo las vistas validadas <=128 entran al modelo de embeddings.
+
+Pruebas: 228 unittest aprobadas (incluyen 7 nuevas de fragmentación/hidratación/literales), 24 Django/API aprobadas, `manage.py check` correcto. La evaluación verifica hash del PDF/extracción registrada, hashes de la construcción y que los tres archivos del índice activo no cambien. No se reconstruyó ni reinició Docker; no se cargó Supabase. Todo sigue local sin commit desde la reorganización posterior a 83f2110.

@@ -17,6 +17,8 @@ def find_project_root() -> Path:
     for path in [current, *current.parents]:
         if (path / "prompts").is_dir():
             return path
+        if (path / "backend" / "prompts").is_dir():
+            return path / "backend"
 
     raise FileNotFoundError(
         "No se encontró la raíz del proyecto TI-support-RAG."

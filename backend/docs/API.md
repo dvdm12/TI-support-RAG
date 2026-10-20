@@ -31,7 +31,7 @@ contrato. Los assets se sirven con una lista explícita de archivos permitidos.
 Desde la raíz del repositorio:
 
 ```bash
-source .venv/bin/activate
+source ../.venv/bin/activate
 python -m pip install -r requirements.txt
 python manage.py check
 python manage.py runserver 127.0.0.1:8000
@@ -147,7 +147,7 @@ API. La RLS de Supabase y la ausencia de grants anónimos permanecen vigentes.
 ## Comprobación
 
 ```bash
-source .venv/bin/activate
+source ../.venv/bin/activate
 python manage.py test api
 python -m unittest discover -s test
 ```
