@@ -1,5 +1,6 @@
 """Real regression suite. No mocks, edited model replies or artificial pacing."""
 import argparse
+import csv
 import json
 from pathlib import Path
 from src.rag.embeddings import SentenceEmbedder
@@ -28,6 +29,18 @@ def support_gate_passes(case, result):
             and documentary.get('estado')=='evidencia_insuficiente'
             and documentary.get('citas')==[]
             and documentary.get('respuesta')=='No puedo ofrecer un procedimiento verificado con los pasajes recuperados.')
+
+
+def write_timings(path, results):
+    """Blank cells mean an unexecuted stage, never zero-quality measurements."""
+    stages=list(dict.fromkeys(key for row in results for key in row.get('timings',{})))
+    with path.open('w',newline='',encoding='utf-8') as stream:
+        writer=csv.DictWriter(stream,fieldnames=['case_id','state','failure_stage','timing_version',*stages])
+        writer.writeheader()
+        for row in results:
+            writer.writerow({'case_id':row['id'],'state':row['state'],
+                             'failure_stage':row['failure_stage'],'timing_version':row.get('timing_version'),
+                             **row.get('timings',{})})
 
 
 def main():
@@ -61,9 +74,12 @@ def main():
               'documentary_state':documentary.get('estado'),'category':classification.get('categoria'),
               'latency_seconds':result['latency_seconds'],'failure_stage':result['failure_stage'],
               'support_review':result['rag']['semantic_support_review'],
-              'safe_fallback':result['rag'].get('safe_fallback',False)}
+              'safe_fallback':result['rag'].get('safe_fallback',False),
+              'timing_version':result['rag'].get('timing_version'),
+              'timings':result['rag'].get('timings',{})}
         summary.append(item)
         (args.output/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2))
+        write_timings(args.output/'timings.csv',summary)
         print(json.dumps(item,ensure_ascii=False),flush=True)
         if 'HTTP 429' in (result.get('execution_error') or ''):
             pending=[c['id'] for c in cases[position+1:]]

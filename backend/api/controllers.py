@@ -128,7 +128,8 @@ class QueryController(JsonController):
                             **{k:candidate['metadata'].get(k) for k in ('document_id','title','category','section','source','version','pages')}})
         return JsonResponse({'request_id':self.request_id,'estado':result['state'],
                              'clasificacion':result['classification'],'respuesta_documental':documentary,
-                             'fuentes':sources,'latencia_segundos':result['latency_seconds']},
+                             'fuentes':sources,'latencia_segundos':result['latency_seconds'],
+                             'tiempos_segundos':result['rag'].get('timings',{})},
                             json_dumps_params={'ensure_ascii':False})
 
 

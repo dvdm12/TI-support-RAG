@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-10-21T05:35:15.440650+00:00",
+  "status": "source_integrity_validated",
+  "annotation_sha256": "76e8144f78a18da1f4d183ac10950ef936a974b3c573282191da0daa00dd91fe",
+  "annotation_status": "agent_draft_pending_human_review",
+  "human_review_completed": false,
+  "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+  "source_documents_verified": 7,
+  "source_sections_verified": 35,
+  "source_fragments_verified": 70,
+  "cases": 13,
+  "retrieval_evaluable_cases": 7,
+  "behavior_only_cases": 6,
+  "required_information_units": 35,
+  "catalog_entries": 32,
+  "development_cases": 13,
+  "reserve_cases": 0,
+  "provider_calls": 0,
+  "retrieval_executed": false,
+  "limitation": "Source/structure validation does not certify semantic completeness or replace human review. No retrieval metrics computed.",
+  "negative_controls": {
+    "wrong_corpus": "rejected",
+    "altered_quote": "rejected",
+    "wrong_relevant_union": "rejected"
+  },
+  "validator_sha256": "5352eefc553a561063d24f9a6495fc4fd3a9157ded8f39563b3c111ab09ae4c4"
+}

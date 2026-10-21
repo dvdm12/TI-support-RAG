@@ -64,13 +64,12 @@ class SupabaseRepository:
         except Exception:
             raise RepositoryError('Fallo de recuperación en Supabase.') from None
 
-    def lexical_search(self, corpus_id, query, config, k=10):
+    def lexical_candidates(self, corpus_id, config):
         """Fetch only this user's compatible passages; RLS still applies.
 
         Intended for the small teaching corpus. Paginate rather than trusting
         the server's row limit; never use the local index as a remote fallback.
         """
-        from .lexical import rank
         validate_corpus_id(corpus_id)
         candidates, start = [], 0
         try:
@@ -87,7 +86,11 @@ class SupabaseRepository:
                 start += 500
         except Exception:
             raise RepositoryError('Fallo de recuperación léxica en Supabase.') from None
-        return rank(query, candidates, k)
+        return candidates
+
+    def lexical_search(self, corpus_id, query, config, k=10):
+        from .lexical import rank
+        return rank(query, self.lexical_candidates(corpus_id, config), k)
 
 
 def validate_corpus_id(corpus_id):
@@ -126,10 +129,13 @@ class LocalRepository:
             raise RepositoryError('La construcción no está cargada o es incompatible.')
         return sorted(matches, key=lambda r: (-r.similitud, r.chunk_id))[:k]
 
-    def lexical_search(self, corpus_id, query, config, k=10):
-        from .lexical import rank
+    def lexical_candidates(self, corpus_id, config):
         candidates = [Candidate(chunk_id=c.chunk_id, content=c.text,
                                 metadata=c.model_dump(exclude={'chunk_id', 'text'}), similitud=0)
                       for (corpus, _), (c, _, cfg) in self.rows.items()
                       if corpus == corpus_id and cfg == config]
-        return rank(query, candidates, k)
+        return candidates
+
+    def lexical_search(self, corpus_id, query, config, k=10):
+        from .lexical import rank
+        return rank(query, self.lexical_candidates(corpus_id, config), k)

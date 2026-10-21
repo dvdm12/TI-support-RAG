@@ -11,6 +11,7 @@ from src.groq_client import call_groq, build_payload, ProviderFailure
 from src.token_budget import input_budget, INPUT_TOKEN_LIMIT
 from schemas.rag_response_v1 import RespuestaRAG
 from .config import RAGConfig
+from .timing import measure
 from .context import build_context
 from .citations import validate_response
 from .policy import apply_policy
@@ -39,20 +40,19 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
                       'generation_parameters': {'temperature': 0, 'max_completion_tokens': 800,
                                                 'reasoning_effort':'low',
                                                 'max_retries': 2, 'http_timeout_seconds': [10, 60]},
+                      'timing_version': 'stages-v1', 'timing_unit': 'seconds',
                       'timings': {}}, 'failure_stage': None}
     stage = 'ocr'
     try:
-        begin = time.perf_counter()
-        multimodal = prepare_multimodal_input(case['input'], image_path, ocr_engine=ocr_engine)
-        result['multimodal'] = multimodal if image_path else None
-        user_input, _ = prepare_case_input(case, multimodal if image_path else None)
-        result['rag']['timings']['ocr_seconds'] = time.perf_counter() - begin
+        with measure(result['rag']['timings'], 'ocr_seconds'):
+            multimodal = prepare_multimodal_input(case['input'], image_path, ocr_engine=ocr_engine)
+            result['multimodal'] = multimodal if image_path else None
+            user_input, _ = prepare_case_input(case, multimodal if image_path else None)
         stage = 'classification'
-        begin = time.perf_counter()
-        classification = classifier(case, system_prompt=PROMPT_PATH.read_text(),
-                                    prompt_version=PROMPT_VERSION, model=model, mode=mode,
-                                    multimodal_input=multimodal if image_path else None)
-        result['rag']['timings']['classification_seconds'] = time.perf_counter() - begin
+        with measure(result['rag']['timings'], 'classification_seconds'):
+            classification = classifier(case, system_prompt=PROMPT_PATH.read_text(),
+                                        prompt_version=PROMPT_VERSION, model=model, mode=mode,
+                                        multimodal_input=multimodal if image_path else None)
         result['classification'] = classification.get('validated_output')
         result['validated_output'] = result['classification']
         result['classification_state'] = classification['state']
@@ -69,22 +69,21 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
             result['rag']['policy_overrides'] = overrides
         stage = 'retrieval'
         if mode == 'groq':
-            candidates, timings = retriever.retrieve(user_input, category=result['classification']['categoria'])
+            candidates, timings = retriever.retrieve(user_input, category=result['classification']['categoria'], timings=result['rag']['timings'])
         else:
-            candidates, timings = retriever.retrieve(user_input)
+            candidates, timings = retriever.retrieve(user_input, timings=result['rag']['timings'])
         result['rag']['timings'].update(timings)
         result['rag']['candidates'] = [c.model_dump() for c in candidates]
         if mode == 'groq':
             candidates, result['rag']['applicability_omitted'] = applicable_candidates(
                 user_input,candidates,physical_risk='physical_risk_requires_human' in overrides)
         stage = 'context'
-        begin = time.perf_counter()
-        prompt = RAGConfig().prompt.read_text()
-        generation_format = {'type':'json_schema','json_schema':{
-            'name':'respuesta_rag','strict':True,'schema':RespuestaRAG.model_json_schema()}}
-        request_fits = (lambda text: input_budget(build_payload(prompt,text,model=model,response_format=generation_format))['total_tokens'] <= 850) if mode=='groq' else None
-        context = build_context(user_input, candidates, classification=result['classification'], max_chars=context_chars,request_fits=request_fits)
-        result['rag']['timings']['context_seconds'] = time.perf_counter() - begin
+        with measure(result['rag']['timings'], 'context_seconds'):
+            prompt = RAGConfig().prompt.read_text()
+            generation_format = {'type':'json_schema','json_schema':{
+                'name':'respuesta_rag','strict':True,'schema':RespuestaRAG.model_json_schema()}}
+            request_fits = (lambda text: input_budget(build_payload(prompt,text,model=model,response_format=generation_format))['total_tokens'] <= 850) if mode=='groq' else None
+            context = build_context(user_input, candidates, classification=result['classification'], max_chars=context_chars,request_fits=request_fits)
         result['rag']['catalog'] = {label: c.model_dump() for label, c in context['catalog'].items()}
         result['rag']['omitted'] = context['omitted']
         result['rag']['context_chars'] = context['chars']
@@ -95,51 +94,48 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
             result['rag']['correction_reserve_tokens'] = INPUT_TOKEN_LIMIT-850
         result['user_content_sent'] = context['user_content']
         stage = 'generation'
-        begin = time.perf_counter()
-        local_clarification = mode == 'groq' and 'vague_incident_requires_clarification' in overrides
-        if local_clarification:
-            raw = {'estado':'aclaracion',
-                   'respuesta':' '.join(result['classification']['datos_faltantes']),
-                   'citas':[], 'limitacion':'Falta conocer el comportamiento observado antes de proponer una solución.'}
-            result['rag']['generation_source'] = 'local_clarification_policy'
-            result['rag']['semantic_support_review'] = 'LOCAL_CLARIFICATION'
-        elif not context['catalog']:
-            raw = {'estado': 'evidencia_insuficiente', 'respuesta': 'No se pudo incluir evidencia en el contexto.',
-                   'citas': [], 'limitacion': 'El presupuesto excluyó los pasajes recuperados.'}
-            result['rag']['generation_source'] = 'local_context_limit'
-            result['model'] = None
-        elif mode == 'mock':
-            if documentary_fixture is None:
-                raise ValueError('El modo mock requiere una respuesta documental explícita.')
-            raw = documentary_fixture
-            result['rag']['generation_source'] = 'explicit_mock_fixture'
-        elif mode == 'groq':
-            prompt = RAGConfig().prompt.read_text()
-            result['rag']['prompt_sha256'] = hashlib.sha256(prompt.encode()).hexdigest()
-            response = generator(prompt, context['user_content'], max_retries=2,
-                                 model=model, response_format={'type': 'json_schema', 'json_schema': {
-                                     'name': 'respuesta_rag', 'strict': True,
-                                     'schema': RespuestaRAG.model_json_schema()}})
-            raw = response['raw_output']
-            result.update({key: response.get(key) for key in ('usage', 'metrics', 'http')})
-            result['model'] = response.get('model', model)
-            result['rag']['generation_source'] = 'groq'
-        else:
-            raise ValueError('Modo desconocido.')
-        result['rag']['timings']['generation_seconds'] = time.perf_counter() - begin
+        with measure(result['rag']['timings'], 'generation_seconds'):
+            local_clarification = mode == 'groq' and 'vague_incident_requires_clarification' in overrides
+            if local_clarification:
+                raw = {'estado':'aclaracion',
+                       'respuesta':' '.join(result['classification']['datos_faltantes']),
+                       'citas':[], 'limitacion':'Falta conocer el comportamiento observado antes de proponer una solución.'}
+                result['rag']['generation_source'] = 'local_clarification_policy'
+                result['rag']['semantic_support_review'] = 'LOCAL_CLARIFICATION'
+            elif not context['catalog']:
+                raw = {'estado': 'evidencia_insuficiente', 'respuesta': 'No se pudo incluir evidencia en el contexto.',
+                       'citas': [], 'limitacion': 'El presupuesto excluyó los pasajes recuperados.'}
+                result['rag']['generation_source'] = 'local_context_limit'
+                result['model'] = None
+            elif mode == 'mock':
+                if documentary_fixture is None:
+                    raise ValueError('El modo mock requiere una respuesta documental explícita.')
+                raw = documentary_fixture
+                result['rag']['generation_source'] = 'explicit_mock_fixture'
+            elif mode == 'groq':
+                prompt = RAGConfig().prompt.read_text()
+                result['rag']['prompt_sha256'] = hashlib.sha256(prompt.encode()).hexdigest()
+                response = generator(prompt, context['user_content'], max_retries=2,
+                                     model=model, response_format={'type': 'json_schema', 'json_schema': {
+                                         'name': 'respuesta_rag', 'strict': True,
+                                         'schema': RespuestaRAG.model_json_schema()}})
+                raw = response['raw_output']
+                result.update({key: response.get(key) for key in ('usage', 'metrics', 'http')})
+                result['model'] = response.get('model', model)
+                result['rag']['generation_source'] = 'groq'
+            else:
+                raise ValueError('Modo desconocido.')
         stage = 'validation'
-        begin = time.perf_counter()
-        result['raw_output'] = json.loads(raw) if isinstance(raw, str) else raw
-        documentary = validate_response(raw, context['catalog'])
-        result['rag']['citations_valid'] = True
-        result['rag']['timings']['validation_seconds'] = time.perf_counter() - begin
+        with measure(result['rag']['timings'], 'validation_seconds'):
+            result['raw_output'] = json.loads(raw) if isinstance(raw, str) else raw
+            documentary = validate_response(raw, context['catalog'])
+            result['rag']['citations_valid'] = True
         if mode == 'groq' and context['catalog'] and not local_clarification:
             stage = 'support_review'
-            begin = time.perf_counter()
-            review, diagnostics = review_support(user_input, documentary, context['catalog'], verifier, model)
-            result['rag']['support_review'] = review
-            result['rag']['support_review_diagnostics'] = diagnostics
-            result['rag']['timings']['support_review_seconds'] = time.perf_counter() - begin
+            with measure(result['rag']['timings'], 'support_review_seconds'):
+                review, diagnostics = review_support(user_input, documentary, context['catalog'], verifier, model)
+                result['rag']['support_review'] = review
+                result['rag']['support_review_diagnostics'] = diagnostics
             if not review['supported']:
                 result['rag']['correction_attempts'] = [{
                     'raw_output': result['raw_output'], 'review': review,
@@ -152,17 +148,20 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
                 correction_budget = input_budget(build_payload(correction_prompt,correction_text,model=model,response_format=generation_format))
                 if len(correction_text) <= context_chars and correction_budget['total_tokens'] <= INPUT_TOKEN_LIMIT:
                     stage = 'generation_correction'
-                    corrected = generator(correction_prompt,
-                                          correction_text, max_retries=2, model=model,
-                                          response_format={'type':'json_schema','json_schema':{
-                                              'name':'respuesta_rag','strict':True,
-                                              'schema':RespuestaRAG.model_json_schema()}})
+                    with measure(result['rag']['timings'], 'generation_correction_seconds'):
+                        corrected = generator(correction_prompt,
+                                              correction_text, max_retries=2, model=model,
+                                              response_format={'type':'json_schema','json_schema':{
+                                                  'name':'respuesta_rag','strict':True,
+                                                  'schema':RespuestaRAG.model_json_schema()}})
                     stage = 'validation'
-                    documentary = validate_response(corrected['raw_output'], context['catalog'])
-                    result['raw_output'] = json.loads(corrected['raw_output'])
-                    result.update({key:corrected.get(key) for key in ('usage','metrics','http')})
+                    with measure(result['rag']['timings'], 'validation_seconds'):
+                        documentary = validate_response(corrected['raw_output'], context['catalog'])
+                        result['raw_output'] = json.loads(corrected['raw_output'])
+                        result.update({key:corrected.get(key) for key in ('usage','metrics','http')})
                     stage = 'support_review'
-                    review, diagnostics = review_support(user_input, documentary, context['catalog'], verifier, model)
+                    with measure(result['rag']['timings'], 'support_review_seconds'):
+                        review, diagnostics = review_support(user_input, documentary, context['catalog'], verifier, model)
                     result['rag']['support_review'] = review
                     result['rag']['support_review_diagnostics'] = diagnostics
                     result['rag']['correction_attempts'].append({
@@ -203,5 +202,7 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
         if isinstance(error, ProviderFailure):
             result['execution_error'] += ' ' + str(error)
     finally:
-        result['latency_seconds'] = round(time.perf_counter() - started, 4)
+        elapsed = time.perf_counter() - started
+        result['rag']['timings']['total_seconds'] = elapsed
+        result['latency_seconds'] = round(elapsed, 4)
     return result

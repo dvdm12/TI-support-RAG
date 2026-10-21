@@ -1,0 +1,55 @@
+{
+  "timestamp_utc": "2026-10-21T06:35:45.379782+00:00",
+  "status": "structure_and_source_hashes_validated",
+  "reserve_sha256": "f2efedc7730d7ab86468c9494e6d62de7a1bc2b4d49ad70aaa2f6262fb8778e6",
+  "cases": 12,
+  "documentary_cases": 9,
+  "behavior_cases": 3,
+  "required_information_units": 25,
+  "catalog_entries": 17,
+  "source_documents_verified": 7,
+  "ready_for_first_execution": false,
+  "blockers": [
+    "human_review_pending",
+    "reserve_not_frozen",
+    "selection_decision_missing",
+    "configuration_snapshot_missing"
+  ],
+  "retrieval_executed": false,
+  "provider_calls": 0,
+  "limitation": "Validates structure, exact duplicates, source hashes and quotes against the index; not semantic novelty, annotation completeness, human approval authenticity or absence of undeclared runs.",
+  "negative_controls": [
+    {
+      "control": "duplicate_question",
+      "result": "rejected"
+    },
+    {
+      "control": "development_question",
+      "result": "rejected"
+    },
+    {
+      "control": "altered_quote",
+      "result": "rejected"
+    },
+    {
+      "control": "incorrect_relevant_union",
+      "result": "rejected"
+    },
+    {
+      "control": "behavior_retrieval_contamination",
+      "result": "rejected"
+    },
+    {
+      "control": "declared_previous_execution",
+      "result": "rejected"
+    },
+    {
+      "control": "changed_corpus_hash",
+      "result": "rejected"
+    },
+    {
+      "control": "require_ready_on_draft",
+      "result": "exit_1_as_expected"
+    }
+  ]
+}

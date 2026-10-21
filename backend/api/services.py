@@ -52,8 +52,8 @@ def search(question, category=None):
         raise ServiceBusy()
     try:
         service = retriever(question)
-        candidates,_ = service.retrieve(question,category=category)
-        return {'corpus_id':service.corpus_id,'pasajes':[{
+        candidates,timings = service.retrieve(question,category=category)
+        return {'corpus_id':service.corpus_id,'tiempos_segundos':timings,'pasajes':[{
             'chunk_id':c.chunk_id,'texto':c.content,'similitud':c.similitud,
             'fuente':{k:c.metadata.get(k) for k in ('document_id','title','category','section','source','version','pages')}
         } for c in candidates]}

@@ -828,6 +828,204 @@ class PDFReport:
 
         return story
 
+    def generate_timing_comparison(self, report: dict[str, Any], *, source_json: str | Path | None = None) -> Path:
+        """Descriptive time matrix, using the same tables/styles/page chrome."""
+        from hashlib import sha256
+        if report.get("schema_version") != "timing-comparison-v1":
+            raise ValueError("No es una matriz de comparación de tiempos compatible.")
+        styles=self._styles()
+        p=lambda text, small=False: self._paragraph(text, styles["small" if small else "body"])
+        h=lambda text: self._paragraph(text,styles["section"])
+        def ms(value):
+            return "N/E" if value is None else f"{value*1000:.3f}".replace(".",",")
+        def pct(value):
+            return "N/E" if value is None else f"{value:.2f}%".replace(".",",")
+        def table(rows,widths):
+            return self._table([[p(c,True) for c in row] for row in rows],[w*mm for w in widths])
+        names=("A_semantic","B_hybrid_rrf")
+        all_group=report["groups"]["all"]
+        variants=all_group["variants"]
+        story=[self._paragraph("Comparación de tiempos",styles["title"]),
+               self._paragraph("Recuperación semántica frente a híbrida BM25 + RRF",styles["subtitle"]),
+               Spacer(1,4*mm),p("OBSERVACIONES DE DESARROLLO - " + ("COMPLETA" if report["status"]=="complete" else "INCOMPLETA")),
+               Spacer(1,3*mm)]
+        story.append(table([["Dato","Observación"],
+            ["Medición original UTC",report["measurement_timestamp_utc"]],
+            ["Origen / corpus",report["backend"] + " / " + report["corpus_id"]],
+            ["Casos previstos / registrados",f"{report.get('source_planned_cases','N/D')} / {report.get('source_recorded_cases','N/D')}"],
+            ["Muestra",f"{all_group['recorded_pairs']} pares registrados; {all_group['valid_pairs']} válidos; {all_group['excluded_pairs']} excluidos"],
+            ["Unidad de presentación","Milisegundos (ms). JSON y CSV conservan segundos."],
+            ["Diseño","Una observación por pregunta; embedding y búsqueda semántica compartidos entre A y B."]],[35,151]))
+        story += [Spacer(1,4*mm),h("1. Tiempo total de recuperación")]
+        rows=[["Estadístico (ms)","A: Semántica","B: Híbrida"]]
+        for label,key in (("Media","mean"),("Mediana","median"),("Percentil 95 (*)","p95"),("Mínimo","min"),("Máximo","max")):
+            rows.append([label,*[ms(variants[name]["total_seconds"][key]) for name in names]])
+        story.append(table(rows,[80,53,53]))
+        delta=all_group["paired_difference_seconds"];relative=all_group["paired_relative_change_percent"]
+        story += [Spacer(1,3*mm),p("Coste incremental B - A: mediana " + ms(delta["median"]) + " ms; cambio relativo mediano por par " + pct(relative["median"]) + ".",True),
+                  p("El cambio relativo es (B - A) / A por caso. No equivale al cociente de las medianas. Los pares con A=0 quedan fuera del porcentaje, conservando su diferencia absoluta.",True),
+                  Spacer(1,4*mm),h("2. Mediana por etapa (ms)")]
+        labels={"embedding_seconds":"Embedding de pregunta (compartido)","semantic_search_seconds":"Búsqueda semántica/RPC (compartida)",
+                "lexical_fetch_seconds":"Lectura del corpus léxico","bm25_seconds":"Tokenización y cálculo BM25",
+                "rrf_seconds":"Fusión RRF y selección","candidate_scoring_seconds":"Puntuación de candidatos adicionales",
+                "coordination_seconds":"Resto de coordinación (derivado)"}
+        stages=[["Etapa","A","B"]]
+        for key,label in labels.items():
+            stages.append([label,*[ms(variants[name]["stage_seconds"][key]["median"]) for name in names]])
+        story.append(table(stages,[100,43,43]))
+        story += [Spacer(1,3*mm),p("N/E: etapa que no aplica o no tiene observaciones válidas. No es cero. Las medianas y percentiles de etapas no se suman para obtener la mediana o percentil del total.",True),
+                  p("(*) P95: interpolación lineal en (n - 1) x 0,95. Es una descripción de una muestra pequeña, no una garantía de latencia ni un intervalo de confianza.",True),
+                  PageBreak(),h("3. Comparación por pregunta")]
+        rows=[["Caso / grupo","A (ms)","B (ms)","B - A (ms)","Cambio relativo"]]
+        for case in report["cases"]:
+            valid=case["status"]=="valid"
+            row=[case["id"] + " / " + ("documental" if case["group"]=="documentary" else "comportamiento")]
+            row += [ms(case["variants"][name]["total_seconds"]) if valid else "ERROR" for name in names]
+            row += [ms(case["difference_seconds"]),pct(case["relative_change_percent"])]
+            rows.append(row)
+        story.append(table(rows,[50,32,32,35,37]))
+        story += [Spacer(1,4*mm),h("4. Grupos comparables")]
+        rows=[["Grupo","Pares válidos","Mediana A (ms)","Mediana B (ms)","Mediana B - A (ms)"]]
+        for key,label in (("all","Todos"),("documentary","Documentales"),("behavior","Comportamiento")):
+            group=report["groups"][key]
+            rows.append([label,str(group["valid_pairs"]),*[ms(group["variants"][name]["total_seconds"]["median"]) for name in names],ms(group["paired_difference_seconds"]["median"])])
+        story.append(table(rows,[42,27,38,38,41]))
+        story += [Spacer(1,4*mm),h("Cómo interpretar la comparación"),
+                  p("Los casos de comportamiento se incluyen para medir trabajo computacional, aunque no tengan métricas documentales. El grupo documental permite comparar los mismos casos que la matriz de calidad."),
+                  p("A = embedding + búsqueda semántica. B = embedding + subtotal híbrido. El subtotal híbrido incluye búsqueda semántica, lectura léxica, BM25, RRF, puntuación y coordinación. No se suma otra vez con sus subetapas."),
+                  p("Ambas alternativas comparten componentes medidos. B - A describe el trabajo adicional en estas observaciones; no es el resultado de dos servicios HTTP independientes. Carga de modelos, autenticación y calentamiento quedan fuera del intervalo original."),
+                  p("La rapidez no acredita calidad de recuperación. La configuración elegida requiere contrastar evidencias, fallos, revisión humana y una reserva independiente."),
+                  PageBreak(),h("5. Preguntas y procedencia")]
+        rows=[["Caso","Pregunta de la medición original"]]
+        rows += [[case["id"],case["question"]] for case in report["cases"]]
+        story.append(table(rows,[15,171]))
+        story += [Spacer(1,4*mm),h("Integridad y límites")]
+        source=report.get("source",{})
+        story += [p("Mediciones: " + source.get("filename","No disponible"),True),
+                  p("SHA-256 de las mediciones: " + source.get("sha256","No disponible"),True)]
+        if source_json is not None:
+            source_path=Path(source_json)
+            story += [p("Matriz de tiempos: " + source_path.name,True),p("SHA-256: " + sha256(source_path.read_bytes()).hexdigest(),True)]
+        story += [Spacer(1,2*mm),p("La comparación se calcula desde el JSON guardado, sin llamadas nuevas a proveedores. Se conservan fallos y datos inválidos; se excluye el par completo de los agregados. Las celdas ausentes permanecen vacías en CSV.",True),
+                  p("Una observación por pregunta conocida de desarrollo. No se midió una distribución de ejecuciones repetidas ni una muestra independiente de producción.",True)]
+        self.output_path.parent.mkdir(parents=True,exist_ok=True)
+        doc=SimpleDocTemplate(str(self.output_path),pagesize=A4,leftMargin=12*mm,rightMargin=12*mm,
+            topMargin=20*mm,bottomMargin=17*mm,title="Comparación de tiempos RAG",author="TI-support-RAG")
+        doc.build(story,canvasmaker=partial(NumberedCanvas,header_label="TIEMPOS RAG - DESARROLLO"))
+        return self.output_path
+
+    def generate_retrieval_metrics(self, report: dict[str, Any], *, source_json: str | Path | None = None) -> Path:
+        """Render the annotated A/B retrieval matrix with the existing PDF engine.
+
+        Reads saved observations only: no provider calls, rescoring or changes to
+        the source JSON. Missing/error measurements are never converted to zero.
+        """
+        if not report.get("aggregate") or "cases" not in report:
+            raise ValueError("El reporte no contiene una matriz de recuperación.")
+        from hashlib import sha256
+
+        styles = self._styles()
+        p = lambda value, small=False: self._paragraph(value, styles["small" if small else "body"])
+        heading = lambda value: self._paragraph(value, styles["section"])
+        variants = list(report["aggregate"])
+        names = {"A_semantic": "A: Semántica", "B_hybrid_rrf": "B: Híbrida BM25 + RRF"}
+        def number(value, *, percent=False, digits=4):
+            if value is None:
+                return "N/E"
+            return ((f"{value * 100:.2f}%") if percent else f"{value:.{digits}f}").replace(".", ",")
+        def table(rows, widths, *, small=True):
+            return self._table([[p(cell, small) for cell in row] for row in rows], [w * mm for w in widths])
+        case_rows = report["cases"]
+        paired = [row for row in case_rows if row.get("retrieval_evaluable") and not row.get("error")]
+        errors = sum(bool(row.get("error")) for row in case_rows)
+        annotation = report.get("annotation_validation", {})
+        review = "Revisión humana pendiente" if not annotation.get("human_review_completed") else "Revisión humana registrada"
+        status = "INCOMPLETO: hay errores técnicos" if errors or report.get("status") != "complete" else "EJECUCIÓN COMPLETA"
+        story = [self._paragraph("Evaluación de recuperación", styles["title"]),
+                 self._paragraph("Matriz comparativa de métricas RAG", styles["subtitle"]), Spacer(1, 5 * mm),
+                 p(status + " | Desarrollo | " + review), Spacer(1, 3 * mm)]
+        story.append(table([
+            ["Dato", "Observación"],
+            ["Ejecución UTC", report.get("timestamp_utc", "No disponible")],
+            ["Origen / corpus", f"{report.get('backend', 'No disponible')} / {report.get('corpus_id', 'No disponible')}"],
+            ["Casos", f"{report.get('planned_cases', len(case_rows))} previstos; {len(case_rows)} registrados; {len(paired)} documentales válidos emparejados"],
+            ["Exclusiones", f"{sum(not r.get('retrieval_evaluable') for r in case_rows)} de comportamiento; {errors} errores técnicos"],
+        ], [36, 150]))
+        story += [Spacer(1, 4 * mm), heading("1. Matriz agregada")]
+        metric_rows = [["Métrica", *[names.get(v, v) for v in variants]]]
+        for label, key, percent in [("Precision@3", "precision", True), ("Recall@3", "recall", True),
+                                    ("Hit@3", "hit", True), ("MRR@3", "rr", False),
+                                    ("Cobertura de información Top-3", "coverage", True)]:
+            metric_rows.append([label, *[number(report["aggregate"][v]["metrics_at_3"].get(key), percent=percent) for v in variants]])
+        for label, key, percent in [("Cobertura del contexto tras presupuesto", "context_coverage_mean", True),
+                                    ("Cobertura de candidatos (*)", "candidate_coverage_mean", True),
+                                    ("Mediana de recuperación observada (s)", "retrieval_seconds_median", False)]:
+            metric_rows.append([label, *[number(report["aggregate"][v].get(key), percent=percent) for v in variants]])
+        widths = [90] + [96 / len(variants)] * len(variants)
+        story.append(table(metric_rows, widths))
+        story += [Spacer(1, 3 * mm), p("Promedios macro: cada pregunta documental válida tiene el mismo peso. MRR es el promedio del inverso del primer rango relevante; no es una confianza del modelo.", True),
+                  Spacer(1, 2 * mm), p("(*) A mide hasta diez candidatos semánticos; B mide la unión completa, hasta veinte. Los conjuntos candidatos tienen tamaños distintos.", True)]
+        if paired:
+            unit_count = sum(row.get("units_count", 0) for row in paired)
+            if unit_count:
+                values=[]
+                for name in variants:
+                    covered=sum(round(row["variants"][name]["metrics_at_3"]["coverage"] * row.get("units_count", 0)) for row in paired)
+                    values.append(f"{names.get(name, name)}: {covered}/{unit_count} ({number(covered / unit_count, percent=True)})")
+                story += [Spacer(1, 3 * mm), p("Cobertura ponderada por unidades: " + "; ".join(values) + ". Puede empatar aunque cambie el promedio macro.", True)]
+        story += [Spacer(1, 4 * mm), heading("Alcance de esta evaluación"),
+                  p("Casos conocidos de desarrollo, sin reserva independiente. Las anotaciones del agente requieren revisión humana. La métrica de recuperación no acredita la calidad de respuestas generadas. Los casos de comportamiento quedan fuera del denominador documental."),
+                  PageBreak(), heading("2. Matriz por caso")]
+        labels = [names.get(v, v).split(":")[0] for v in variants]
+        story += [p("Cada celda sigue el orden " + " / ".join(labels) + ". P y R: precisión y recall. RR: rango recíproco. Cobertura: unidades necesarias presentes. N/E significa no evaluable, nunca cero."), Spacer(1, 4 * mm)]
+        matrix = [["Caso", "P@3", "R@3", "RR@3", "Cobertura Top-3", "Cobertura contexto"]]
+        for row in case_rows:
+            cells=[row["id"] + (" / ERROR" if row.get("error") else "")]
+            for key in ("precision", "recall", "rr", "coverage", "context"):
+                values=[]
+                for name in variants:
+                    v=row.get("variants", {}).get(name, {})
+                    value=v.get("context_coverage") if key=="context" else v.get("metrics_at_3", {}).get(key)
+                    values.append("ERROR" if row.get("error") else number(value, percent=key in ("coverage", "context"), digits=3))
+                cells.append(" / ".join(values))
+            matrix.append(cells)
+        story.append(table(matrix, [14, 30, 30, 30, 41, 41]))
+        story += [Spacer(1, 4 * mm), heading("Lectura de resultados")]
+        if len(variants)==2:
+            a,b=variants
+            for row in paired:
+                av,bv=(row["variants"][v]["metrics_at_3"] for v in (a,b))
+                changes=[]
+                for label,key in (("Recall", "recall"), ("cobertura", "coverage")):
+                    if av[key]!=bv[key]:
+                        changes.append(f"{label}: {number(av[key], percent=True)} a {number(bv[key], percent=True)}")
+                if changes:
+                    story.append(p(row["id"] + ": " + "; ".join(changes) + ".", True))
+                if all(row["variants"][v]["metrics_at_3"]["hit"]==0 for v in variants):
+                    story.append(p(row["id"] + ": ninguna alternativa seleccionó evidencia pertinente en Top-3.", True))
+        story += [Spacer(1, 4 * mm), heading("3. Condiciones y tiempos"),
+                  p(f"K={report.get('protocol', {}).get('k', 'N/D')}; profundidad semántica/léxica={report.get('protocol', {}).get('search_depth_per_branch', 'N/D')}; constante RRF={report.get('protocol', {}).get('rrf_constant', 'N/D')}. Ajuste por categoría: {'activado' if report.get('protocol', {}).get('category_boost') else 'desactivado'}."),
+                  p("Los tiempos son observaciones emparejadas de componentes compartidos. Excluyen inicialización y autenticación previas; no son un benchmark de latencia HTTP. Se conserva la duración de fallos, pero no se les asigna calidad cero."),
+                  p(f"Contexto: límite de entrada {report.get('protocol', {}).get('context_budget_input_tokens', 'N/D')} tokens; clasificación y filtros según el protocolo del JSON. Groq: {report.get('groq_calls', 'N/D')} llamadas; escrituras Supabase: {report.get('supabase_writes', 'N/D')}.", True),
+                  PageBreak(), heading("4. Preguntas y trazabilidad")]
+        questions = [["Caso / uso", "Pregunta evaluada"]]
+        for row in case_rows:
+            usage = "Documental" if row.get("retrieval_evaluable") else "Comportamiento"
+            questions.append([row["id"] + " / " + usage, row.get("question", "No disponible")])
+        story.append(table(questions, [32, 154]))
+        story += [Spacer(1, 5 * mm), heading("Fuentes del informe"),
+                  p("Las anotaciones enlazan unidades de información con IDs, citas literales, páginas y archivos del corpus. El JSON de esta ejecución conserva catálogo, rankings, contribuciones RRF, contexto, omisiones, parámetros y tiempos. El CSV permite revisar la matriz sin redondear.", True)]
+        if source_json is not None:
+            source = Path(source_json)
+            story += [Spacer(1, 2 * mm), p("JSON de origen: " + source.name, True),
+                      p("SHA-256: " + sha256(source.read_bytes()).hexdigest(), True)]
+        story += [Spacer(1, 2 * mm), p("PDF generado a partir de observaciones guardadas. No recalcula búsquedas ni modifica la matriz; no declara una configuración ganadora ni completa revisión humana pendiente.", True)]
+        self.output_path.parent.mkdir(parents=True, exist_ok=True)
+        document=SimpleDocTemplate(str(self.output_path),pagesize=A4,leftMargin=12*mm,rightMargin=12*mm,
+            topMargin=20*mm,bottomMargin=17*mm,title="Métricas de recuperación RAG",author="TI-support-RAG")
+        document.build(story,canvasmaker=partial(NumberedCanvas,header_label="MÉTRICAS RAG - DESARROLLO"))
+        return self.output_path
+
     def generate(self) -> Path:
         """Genera el PDF con todos los casos registrados."""
         self.output_path.parent.mkdir(parents=True, exist_ok=True)

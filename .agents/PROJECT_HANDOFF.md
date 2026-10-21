@@ -1,6 +1,6 @@
 # Informe de continuidad — TI-support-RAG
 
-Actualizado: 20 de octubre de 2026 (America/Bogota).
+Actualizado: 21 de octubre de 2026 (America/Bogota).
 Repositorio: `/home/dvdm12/Documents/Obsidian Vault/TI-support-RAG`.
 
 ## Estado actual para continuar — leer primero
@@ -10,7 +10,278 @@ historial, como `src/` o `docs/`, ahora corresponden a `backend/src/` y
 `backend/docs/`, salvo las migraciones, ubicadas en `infra/supabase/`.
 No contiene secretos. No releer ni ejecutar integraciones históricas por defecto.
 
-### Solicitud más reciente y punto de continuidad
+### Entrega Git solicitada el 21-10-2026
+
+El usuario autorizó crear un commit y actualizar el remoto después del cierre.
+Esta autorización corresponde a publicar el trabajo existente, sin avanzar en
+revisión humana, congelación o evaluación de la reserva.
+
+Esta sección forma parte del commit de entrega de tiempos por etapa, métricas
+A/B con PDF automático, comparación de tiempos, estructura de reserva y Swagger
+descriptivo. Rama destino: `codex/backend-infra-ricoh-local`, remoto `origin`.
+Consultar `git log -1` y `git status -sb` para obtener el identificador de esta
+entrega y confirmar sincronización, en lugar de usar e5be392 como último estado.
+Las referencias siguientes a «sin commit/push» describen los momentos históricos
+anteriores a esta publicación. Antes de publicarla se revisaron los 42 archivos
+pendientes, sin coincidencias con secretos locales ni patrones de credenciales;
+se conservan ignorados .env y sus variantes privadas, índices y datos personales.
+No se ejecutó la reserva ni se repitieron llamadas a proveedores para esta entrega.
+
+### Cierre de sesión 21-10-2026 — dejar el trabajo en este punto
+
+El usuario indicó «vamos a dejar así, actualiza .agents». Esta sesión termina
+con documentación de continuidad: no avanzar en los pendientes ni ejecutar la
+reserva como consecuencia de este cierre. Retomar según la siguiente solicitud.
+
+**Completado:** instrumentación de tiempos desplegada; evidencias de desarrollo
+anotadas por el agente; comparación A/B de recuperación y comparación descriptiva
+de tiempos, con JSON/CSV/PDF; estructura de reserva sin ejecución; Swagger más
+descriptivo actualizado en el contenedor local. Se mantiene la preferencia de
+PDF automático para cada exportación de métricas. Corpus académico activo de
+70 fragmentos; Ricoh continúa separado, sin integración en la API.
+
+| Pendiente | Estado al cerrar | Siguiente acción cuando se retome |
+|---|---|---|
+| Evidencias de desarrollo | 35 unidades anotadas por el agente | Revisión humana de fuentes, relevancia y completitud. |
+| Reserva | 12 candidatos, nueve documentales con 25 unidades y tres límites | Revisión humana de expectativas y novedad semántica; sin ejecutar. |
+| Congelación | Protocolo definido, sin aprobar | Registrar decisión con desarrollo, snapshot de configuración y reserva aprobada. |
+| Respuestas | Comparación y revisión humana pendientes | Mismo generador/prompt; evaluar exactitud, respaldo y citas, con muestra revisada por dos integrantes. |
+| Evaluación de reserva | No conectada al evaluador | Adaptar lectura tras congelar y registrar primera apertura; exportar JSON/CSV/PDF. |
+| Decisión final | Resultados preliminares de desarrollo | Justificar semántica o híbrida y contrastar con reserva sin reajustar sobre ella. |
+| Entregables de clase 09 | Evidencias parciales | Consolidar Colab, README/bitácora, presentación PDF y acceso del profesor. |
+| Git remoto | Cambios locales posteriores a e5be392 | Commit y push cuando se soliciten; revisar el diff completo, incluidos archivos nuevos. |
+
+Rama de trabajo: `codex/backend-infra-ricoh-local`. Último commit publicado
+registrado: `e5be392`. No se realizó commit ni push en este cierre.
+Última imagen desplegada y verificada: `9ee9f10dd1f4` (hash completo abajo).
+Últimas verificaciones: 26 pruebas API y HTTP de Swagger/esquema/assets/auth;
+252 pruebas unitarias del trabajo de métricas/tiempos en su ejecución anterior;
+ocho controles negativos de la estructura de reserva. No sumar recuentos ni
+presentarlos como una ejecución conjunta nueva. No se repitieron pruebas,
+consultas a proveedores ni operaciones Docker para actualizar este cierre.
+
+### Actualización 21-10-2026: Swagger descriptivo desplegado
+
+- Usuario pidió ampliar Swagger tras un rechazo de token. Se comprobó que
+  DJANGO_API_TOKEN de backend/.env coincidía con el entorno del contenedor y
+  categories devolvía 200 con él, 401 sin él o con Bearer duplicado. No se pudo
+  determinar el encabezado exacto enviado por el navegador del usuario.
+- `backend/api/documentation.py`: recorrido recomendado, autenticación paso a
+  paso, diferencias entre search/query, límites, campos, citas, tiempos opcionales,
+  estados documentales HTTP 200 y errores con códigos/acciones y encabezados.
+  Ejemplos ilustrativos de entrada, éxito/error y tres resultados de query.
+- `backend/api/contracts.py`: descripciones de campos; mismas restricciones.
+  `backend/api/templates/api/swagger.html`: filtro, enlaces a operaciones y
+  duración HTTP; autorización sigue sin persistirse y assets/validador locales.
+- Todos los ejemplos se validan contra Pydantic y etiquetas de citas: **26 pruebas
+  API locales correctas**. Sin llamadas a proveedores, sin ejecutar reserva.
+- Imagen reconstruida y contenedor recreado, saludable:
+  `sha256:9ee9f10dd1f4c70e1cfbd670a65da8ed76d84ab38b58c3f00dfa375254510153`.
+  HTTP docs/OpenAPI/assets 200; categories autenticado 200, sin token 401.
+  No había navegador disponible para inspección visual; verificación HTTP y esquema.
+- Swagger: http://127.0.0.1:8000/api/v1/docs/ . Recargar y volver a autorizar
+  con solo el valor de DJANGO_API_TOKEN. No se imprimieron ni cambiaron secretos.
+- Guía actualizada: `backend/docs/API.md`. Sin commit ni push nuevos. La reserva
+  continúa como borrador sin ejecución; el despliegue no implica evaluarla.
+
+### Actualización 21-10-2026: conjunto de reserva estructurado, sin ejecutar
+
+- `backend/cases/rag_reserve.json`, esquema propio `rag-reserve-v1`: **12
+  candidatos**, nueve documentales con 25 unidades, tres de límite documental;
+  17 fragmentos en catálogo con citas/offsets. Mismo corpus académico de 70.
+- Guía y preguntas: `backend/docs/RAG_RESERVE.md`. No son paráfrasis deliberadas
+  de desarrollo: cubren intervención interna, archivo individual, cola compartida,
+  Ethernet dañado, incidente compartido, alta, exposición ya ocurrida, bloqueo,
+  cierre por recurso y límites de catálogo/DNS/inventario. Revisión semántica de
+  novedad pendiente; comparten corpus/categorías. No afirmar ceguera ni reserva
+  independiente por familias: el agente conocía desarrollo y resultados previos.
+- Estado **draft_pending_human_review**, split `reserve_candidate`; revisión por
+  caso pendiente y ejecución `not_run`. No hay resultados de reserva.
+- Verificador offline: desde backend,
+  `python3 -m scripts.validate_rag_reserve --output docs/rag_reserve_validation.json`.
+  Comprueba hashes, citas contra índice, duplicados exactos y estructura. Ocho
+  controles negativos correctos; no certificar revisión semántica ni ausencia de
+  ejecuciones externas no registradas. Cero modelos/llamadas a proveedores.
+- `--require-ready` termina 1 mientras faltan revisión humana, congelación,
+  decisión con desarrollo y snapshot de configuración. Solo verifica preparación;
+  nunca ejecuta preguntas. Guardar también commit/huella externa del JSON al congelar.
+- No está conectada al evaluador actual, que sigue fijo a desarrollo. No reemplazar
+  `rag_evidence.json` con estos candidatos. Adaptar lectura cuando corresponda,
+  conservar preguntas aprobadas y PDF automático de las futuras métricas.
+- Secuencia: revisión humana → decisión con desarrollo → congelar configuración
+  y reserva → apertura registrada → interpretar sin tuning sobre estos resultados.
+  Si se usan para ajustar, retirar a desarrollo y crear otra reserva nueva.
+- Sin métricas nuevas, despliegue, commit ni push. No se modificó código RAG/API.
+  Las 252 pruebas previas corresponden al trabajo anterior; este paso se verificó
+  con validación offline y controles negativos, sin repetir la suite ni el benchmark.
+
+### Actualización 21-10-2026: módulo de comparación de tiempos terminado
+
+- Guía: `backend/docs/TIMING_COMPARISON.md`. Implementación en
+  `backend/src/rag/timing_comparison.py` y CLI
+  `backend/scripts/compare_retrieval_times.py`.
+- Desde backend: `../.venv/bin/python -m scripts.compare_retrieval_times`.
+  Lee la matriz guardada y exporta **siempre JSON, CSV y PDF**, sin cargar modelos
+  ni llamar a Supabase/Groq. Conserva la entrada y sus hashes; no repetir consultas
+  para reconstruir informes. `--input` y `--output` permiten otros archivos.
+- Archivos: `backend/docs/retrieval_metrics_20261021_times.json`, `.csv`, `.pdf`.
+  PDF de tres páginas renderizadas e inspeccionadas, sin defectos observados.
+- Trece pares válidos: media/mediana/P95 A = 200,90/188,37/291,13 ms;
+  B = 409,30/398,69/555,66 ms. Mediana de diferencias emparejadas 208,77 ms;
+  mediana de incrementos relativos 112,35%. Lectura léxica mediana 203,68 ms.
+- Grupos separados: todos (13), documentales (7), comportamiento (6). Las
+  medianas documentales son 188,38/401,05 ms; no confundirlas con todos los casos.
+- A=embedding+semántica; B=embedding+subtotal híbrido. No sumar subtotal y sus
+  hojas. Las variantes comparten componentes del experimento original: comparación
+  descriptiva de desarrollo, una observación por pregunta, sin latencia HTTP,
+  inicialización/Auth ni generación. No es un ensayo independiente de latencia.
+- Datos inválidos excluyen el par completo con diagnóstico; etapas no aplicables
+  N/E, sin ceros inventados. Exportación incompleta termina con error tras crear
+  los tres archivos. P95 interpolado lineal; muestra pequeña.
+- Seis pruebas nuevas, suite local completa **252 correctas**, recalculo
+  independiente de estadísticas y comprobación de hash/26 filas CSV. Los recuentos
+  inferiores en secciones siguientes son evidencias históricas.
+- Sin despliegue, commit ni push nuevos. Cambios posteriores a e5be392 locales.
+  Persisten revisión humana, reserva nueva, decisión y entregables consolidados.
+
+### Preferencia vigente: PDF automático de la matriz de métricas
+
+El usuario pidió que **siempre se cree un PDF de estas métricas**, adaptando el
+módulo ya existente. Implementado:
+
+- `PDFReport.generate_retrieval_metrics(report, source_json=...)` en
+  `backend/src/pdf_report.py`, reutilizando estilos, tablas y NumberedCanvas.
+  El método `generate()` de los reportes anteriores no cambia.
+- `scripts.evaluate_retrieval_metrics.write_outputs` genera JSON, CSV y PDF de
+  forma inseparable en el mismo directorio/nombre base. No agregar una opción
+  que omita el PDF por defecto. Las matrices incompletas también generan PDF
+  antes de terminar con error; un error de PDF se propaga y no se oculta.
+- `--from-json <matriz.json>` regenera solamente PDF, sin validar el corpus,
+  inicializar modelos ni llamar a Supabase/Groq. No repetir búsquedas para un PDF.
+- Archivo actual: `backend/docs/retrieval_metrics_20261021.pdf`, tres páginas:
+  agregados, matriz por caso y preguntas/trazabilidad. Mantiene N/E y ERROR,
+  denominadores, revisión humana pendiente y SHA-256 del JSON fuente.
+- PDF regenerado desde el JSON existente, sin alterar las métricas ni llamadas
+  nuevas a proveedores. Tres pruebas nuevas; **246 unitarias correctas**.
+  Se renderizaron e inspeccionaron las tres páginas con Poppler y se comprobó
+  texto/paginación con pdfplumber, sin defectos visuales observados.
+- Documentación en `backend/docs/RETRIEVAL_METRICS.md`. El PDF de métricas no
+  acredita por sí solo la presentación final del proyecto del segundo corte.
+
+Cambios aún locales sobre e5be392; sin commit/push ni reconstrucción del backend
+por esta adaptación de informes. Conservar la preferencia en futuras ejecuciones.
+
+### Actualización 21-10-2026: métricas de recuperación calculadas
+
+El usuario pidió calcular las métricas. **Ejecutado en Supabase real**, sin Groq
+ni escrituras; corpus académico activo de 70 fragmentos, índice intacto.
+
+- Evaluador reproducible: `backend/scripts/evaluate_retrieval_metrics.py`;
+  fórmulas: `backend/src/rag/retrieval_metrics.py`. Cuatro pruebas numéricas y
+  suite local completa de **243 pruebas correctas**. Recalculo independiente de
+  JSON/CSV correcto; no se repitió la regresión generativa de 13 consultas.
+- Se ejecutaron 13 consultas; cero errores técnicos. Solo siete tienen unidades
+  documentales. Los seis casos de comportamiento tienen métricas nulas y quedan
+  fuera de los promedios. Todos siguen siendo desarrollo, sin reserva independiente
+  ni revisión humana de las anotaciones.
+- Comparación controlada: A semántica vs B BM25+semántica+RRF; mismo embedding y
+  búsqueda semántica Top-10 por caso; Top-3 final. Ajuste por categoría desactivado,
+  no se usa la categoría esperada ni se llama al clasificador. B conserva la unión
+  completa hasta 20 candidatos del recuperador actual; no hay reranker.
+- Promedios macro A/B: Precision@3 **47,62% / 52,38%**; Recall@3
+  **73,81% / 80,95%**; Hit@3 **85,71% / 85,71%**; MRR@3
+  **0,8571 / 0,8571**; cobertura Top-3 **78,21% / 80,36%**.
+  Ambas cubren 26/35 unidades en total (micro 74,29%): el pequeño avance macro
+  redistribuye aciertos entre preguntas de diferente número de unidades.
+- Cobertura tras presupuesto **69,29% / 76,79%**. Contextos con prompt rag_v5,
+  850 tokens, clasificación null en ambos y sin filtros de pertinencia; es una
+  medición del recuperador aislado, no del pipeline completo de la API.
+- Medianas observadas **0,1884 / 0,4011 s**: tiempos de componentes compartidos
+  secuenciales, excluyen Auth/carga; no presentarlos como benchmark HTTP independiente.
+- Casos: B mejora E06 (403), empeora cobertura E03 (Wi-Fi), y ambos fallan E05
+  (mensaje sospechoso no abierto) en Top-3. SEG-02 está en candidatos profundos,
+  se pierde en selección. No se cambió configuración ni anotación para ocultarlo.
+- Informes versionables: `backend/docs/RETRIEVAL_METRICS.md`,
+  `backend/docs/retrieval_metrics_20261021.json` y CSV con el mismo nombre.
+  Incluyen preguntas, IDs, catálogo, rankings, aportes RRF, contexto/omisiones,
+  tiempos, parámetros y hashes. El 13/13 previo de comportamiento es otra medida.
+
+Pendientes: revisión humana de anotación/respuestas, reserva nueva, decisión
+sobre configuración tras contrastar los intercambios y entregables consolidados.
+No hay ganador definitivo. No hubo despliegue nuevo ni cambio de API; los cambios
+posteriores a `e5be392` siguen locales y pendientes de commit/push.
+
+### Actualización 21-10-2026: evidencias anotadas
+
+El usuario pidió anotar evidencias para la evaluación de clase 09.
+**Anotación del agente completada; revisión humana pendiente.**
+
+- Datos: `backend/cases/rag_evidence.json`, esquema `rag-evidence-v1`.
+- Lectura de los 70 fragmentos del corpus académico activo y contraste con los
+  siete PDF originales/35 secciones. No se usó el índice Ricoh ni se ejecutó
+  recuperación, embeddings o llamadas Groq/Supabase durante esta anotación.
+- Se conservan preguntas y expectativas de `rag_regression.json`, con su hash.
+  13 casos: siete documentales con 35 unidades requeridas y seis de comportamiento.
+  Cada unidad tiene IDs, cita literal y offsets; catálogo con texto y procedencia.
+  Se anotan condiciones, respuesta esperada, criterios de fallo y exclusiones.
+- Conjunto relevante = unión de IDs de las unidades necesarias. Los seis casos
+  de comportamiento tienen conjunto vacío; sus referencias a reglas de aclaración
+  o rechazo no deben contarse como evidencia que resuelva la solicitud. Excluirlos
+  de promedios de recuperación y cobertura, y evaluar comportamiento aparte.
+- Los 13 casos ya se usaron para ajustar; todos se marcan desarrollo y ninguno
+  reserva. No afirmar anotación ciega ni evaluación independiente. Preparar
+  reserva nueva después, separando familias; no reciclar paráfrasis conocidas.
+- Validador: desde backend `../.venv/bin/python -m scripts.validate_rag_evidence`.
+  Verifica índice/configuración y sus hashes, PDF original, páginas, texto,
+  preguntas originales, IDs, citas/offsets y unión de relevantes. No llama APIs.
+  Inicialmente pasó y rechazó corpus distinto, cita alterada y unión incorrecta.
+  Esto prueba integridad/fuente, no exhaustividad semántica ni revisión humana.
+- Guía legible: `backend/docs/RAG_EVIDENCE.md`; informe:
+  `backend/docs/rag_evidence_validation.json`. No se calcularon métricas ni se
+  eligió estrategia. Pendiente revisión humana de unidades/relevancia/exclusiones.
+
+Los cambios de anotación se suman a la auditoría y tiempos aún locales sobre
+`e5be392`; sin nuevo commit/push ni reconstrucción del contenedor por esta tarea.
+
+### Actualización 21-10-2026: tiempos por etapa implementados
+
+El usuario pidió implementar el desglose de tiempos pendiente de clase 09.
+**Implementado y desplegado**, sin cambiar prompts, corpus ni ranking:
+
+- `src/rag/timing.py`: cronómetro monotónico acumulativo, incluso en excepciones.
+- `Retriever` separa embedding, búsqueda semántica/RPC, lectura paginada del corpus
+  léxico, BM25, RRF y puntuación extra de resultados exclusivamente léxicos.
+  `retrieval_seconds` sigue siendo subtotal sin embedding; no sumarlo de nuevo.
+- `repository.lexical_candidates` separa I/O de ranking; `lexical_search` conserva
+  su interfaz previa y aplica los mismos filtros/ordenación.
+- Pipeline conserva duraciones fallidas, acumula validación/revisión repetidas y
+  mide generación correctiva aparte; agrega `total_seconds` y versión `stages-v1`.
+- API search/query publica `tiempos_segundos`; Swagger y `docs/API.md` actualizados.
+- La regresión escribe tiempos por caso en JSON y `timings.csv`, con estados de
+  error explícitos y celdas vacías para etapas no ejecutadas. No se reescribieron
+  tiempos históricos. No repetir la suite Groq solo para obtener esos archivos.
+- 239 unitarias y 25 API locales correctas; 25 API también dentro de la imagen.
+  Verificación con embeddings reales y el corpus local de 70 registros: mismos
+  candidatos/puntajes que el recuperador previo para las 13 preguntas.
+- HTTP real search/query 200; consulta 403 `OK_VALIDADO`, pipeline 7,5787 s y HTTP
+  8,4919 s. Es una observación, no benchmark. Inicialización de recursos, Auth y
+  carga anterior a `run_rag_case` quedan fuera de los tiempos del pipeline.
+- Imagen activa: `sha256:efb734fd3c91d1ec6b4de90144f1fdb76b6417a794f2df6810a182e7e3e0c67b`.
+  Docker resolvió una nueva base Python al reconstruir; no cambiaron los archivos
+  de dependencias. `pip check`, API en contenedor y ambas consultas reales pasaron.
+- Guía: `backend/docs/STAGE_TIMINGS.md`; evidencia:
+  `backend/docs/stage_timing_validation.json`. Auditoría previa de clase 09:
+  `backend/docs/CLASS09_AUDIT.md`, con actualización de instrumentación.
+
+Base publicada `e5be392` en `codex/backend-infra-ricoh-local`. La auditoría y estos
+cambios posteriores siguen locales, sin nuevo commit/push. El informe
+`backend_validation.json` sigue describiendo la regresión anterior: no atribuir
+su 13/13 a una nueva ejecución remota de esta instrumentación. Siguen pendientes
+la comparación A/B, Precision/Recall/MRR/cobertura del corpus activo, reserva,
+revisión humana y entregables consolidados. Ricoh sigue fuera de la API.
+
+### Historial inmediato: aclaraciones y regresión
+
 
 El usuario pidió resolver el tratamiento de preguntas ambiguas y completar la
 regresión del backend. **Realizado y desplegado** el 20-10-2026:
@@ -74,8 +345,8 @@ rutas concretas se actualizaron al prefijo `backend/`. Conservarlas.
 ### Backend desplegado y autenticación
 
 Contenedor **`infra-backend-1`**, saludable en la comprobación del 20-10-2026.
-Imagen `ti-support-rag-backend:local`; imagen desplegada actual
-`sha256:9130bb2b931300144628ac4e36b488bd7302e5db5f7f1e53b99eee80cf35cc8c`.
+Imagen `ti-support-rag-backend:local`; imagen desplegada actual (21-10-2026)
+`sha256:efb734fd3c91d1ec6b4de90144f1fdb76b6417a794f2df6810a182e7e3e0c67b`.
 El ID del primer build que figura en el historial y `docker_validation.json`
 corresponde a la validación anterior; Compose reconstruyó después con caché.
 Imagen de unos 1,28 GB sin comprimir: PyTorch CPU es el mayor componente.

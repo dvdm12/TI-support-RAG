@@ -1,0 +1,317 @@
+{
+  "timestamp_utc": "2026-10-21T05:12:39.990106+00:00",
+  "timing_version": "stages-v1",
+  "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+  "records": 70,
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "previous_retriever_sha256": "3d4c323e31575fddda09810c0f445a59484f0a16af9e08a1f5de85c949088019",
+  "ranking_unchanged_cases": 13,
+  "active_index_unchanged": true,
+  "cases": [
+    {
+      "id": "E01",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-HW-ce16890de11f36836a7564b8",
+        "TI-HW-e3779dc1181bee97bce68ebe",
+        "TI-HW-03fd0e93e290f701599a8df1"
+      ],
+      "timings": {
+        "embedding_seconds": 0.02298040499954368,
+        "semantic_search_seconds": 0.0008387109992327169,
+        "lexical_fetch_seconds": 0.0003693429971463047,
+        "bm25_seconds": 0.0026860360012506135,
+        "rrf_seconds": 1.6882000636542216e-05,
+        "candidate_scoring_seconds": 4.969002475263551e-06,
+        "retrieval_seconds": 0.003932139999960782
+      }
+    },
+    {
+      "id": "E02",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-SW-9af38c0bab419725c906e172",
+        "TI-SW-0f26c26a4616eaaaafbc0eb4",
+        "TI-SW-e92cc6a0c292912d66a67348"
+      ],
+      "timings": {
+        "embedding_seconds": 0.02750139400086482,
+        "semantic_search_seconds": 0.0007852119997551199,
+        "lexical_fetch_seconds": 0.0004028850016766228,
+        "bm25_seconds": 0.002999325002747355,
+        "rrf_seconds": 1.8545000784797594e-05,
+        "candidate_scoring_seconds": 3.6370001907926053e-06,
+        "retrieval_seconds": 0.0042269750010746066
+      }
+    },
+    {
+      "id": "E03",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-RED-90f2e105d0fb7beb36257c4c",
+        "TI-RED-2dec86185172059d432184d2",
+        "TI-RED-0558a70dc0abee52d8b02307"
+      ],
+      "timings": {
+        "embedding_seconds": 0.02531003300100565,
+        "semantic_search_seconds": 0.000833981997857336,
+        "lexical_fetch_seconds": 0.0004351440002210438,
+        "bm25_seconds": 0.0029753809976682533,
+        "rrf_seconds": 1.658000110182911e-05,
+        "candidate_scoring_seconds": 3.597000613808632e-06,
+        "retrieval_seconds": 0.004289620999770705
+      }
+    },
+    {
+      "id": "E04",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-CTA-ca2db1d57c8f53f73a0c9e8c",
+        "TI-CTA-597213255311f0b4fbea0210",
+        "TI-CTA-49f334091afa0329fa544e08"
+      ],
+      "timings": {
+        "embedding_seconds": 0.026151358000788605,
+        "semantic_search_seconds": 0.0008593279999331571,
+        "lexical_fetch_seconds": 0.0004446120001375675,
+        "bm25_seconds": 0.003265547002229141,
+        "rrf_seconds": 1.964599869097583e-05,
+        "candidate_scoring_seconds": 3.7670033634640276e-06,
+        "retrieval_seconds": 0.004611606000253232
+      }
+    },
+    {
+      "id": "E05",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-SEG-33986fa241103c5e58715a58",
+        "TI-SEG-bb9b19a0f7619c181cc2ab47",
+        "TI-SEG-eb10a5d4cef4a0cf4dec16a3"
+      ],
+      "timings": {
+        "embedding_seconds": 0.033887962003063876,
+        "semantic_search_seconds": 0.0009453070015297271,
+        "lexical_fetch_seconds": 0.0005161750013940036,
+        "bm25_seconds": 0.003606628000852652,
+        "rrf_seconds": 2.1620002371491864e-05,
+        "candidate_scoring_seconds": 4.719000571640208e-06,
+        "retrieval_seconds": 0.005116448999615386
+      }
+    },
+    {
+      "id": "E06",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-ACS-77182b9c9fd41fa7c2bc36a8",
+        "TI-ACS-93726c088c680fd0ddd0ef4d",
+        "TI-ACS-a1750f0fd42d655014a305cf"
+      ],
+      "timings": {
+        "embedding_seconds": 0.03341398599877721,
+        "semantic_search_seconds": 0.0009800419975363184,
+        "lexical_fetch_seconds": 0.0005086800010758452,
+        "bm25_seconds": 0.0039023749995976686,
+        "rrf_seconds": 2.1548999939113855e-05,
+        "candidate_scoring_seconds": 4.587996954796836e-06,
+        "retrieval_seconds": 0.005437553001684137
+      }
+    },
+    {
+      "id": "E07",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-OTR-f159202c1ecb7118a53eddf6",
+        "TI-OTR-eb318097c7d8cb5107b76418",
+        "TI-ACS-fe549d504904bf826331f637"
+      ],
+      "timings": {
+        "embedding_seconds": 0.030132297997624846,
+        "semantic_search_seconds": 0.0010655699989001732,
+        "lexical_fetch_seconds": 0.0005582619996857829,
+        "bm25_seconds": 0.004313664998335298,
+        "rrf_seconds": 2.2502001229440793e-05,
+        "candidate_scoring_seconds": 0.05999184999745921,
+        "retrieval_seconds": 0.06597855899963179
+      }
+    },
+    {
+      "id": "E08",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-OTR-6353cc2e820a6d490a57e25c",
+        "TI-OTR-eb318097c7d8cb5107b76418",
+        "TI-SW-e319892523472ea5ea233121"
+      ],
+      "timings": {
+        "embedding_seconds": 0.02818746800039662,
+        "semantic_search_seconds": 0.0011178670029039495,
+        "lexical_fetch_seconds": 0.0005945390003034845,
+        "bm25_seconds": 0.004197631998977158,
+        "rrf_seconds": 1.9316001271363348e-05,
+        "candidate_scoring_seconds": 4.989000444766134e-06,
+        "retrieval_seconds": 0.005957976001809584
+      }
+    },
+    {
+      "id": "E09",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-RED-2c0364eb11bae7a987d183e7",
+        "TI-RED-2b4fc28ccdee8a3d6a78783d",
+        "TI-RED-9e4bccb6004ef427cd84496f"
+      ],
+      "timings": {
+        "embedding_seconds": 0.0357622440023988,
+        "semantic_search_seconds": 0.0012189939989184495,
+        "lexical_fetch_seconds": 0.0005935979970672633,
+        "bm25_seconds": 0.004382914001325844,
+        "rrf_seconds": 2.1640000340994447e-05,
+        "candidate_scoring_seconds": 0.057609248000517255,
+        "retrieval_seconds": 0.06385339299959014
+      }
+    },
+    {
+      "id": "E10",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-CTA-ca2db1d57c8f53f73a0c9e8c",
+        "TI-CTA-49f334091afa0329fa544e08",
+        "TI-RED-0558a70dc0abee52d8b02307"
+      ],
+      "timings": {
+        "embedding_seconds": 0.04545351300112088,
+        "semantic_search_seconds": 0.0011421319977671374,
+        "lexical_fetch_seconds": 0.0006205070021678694,
+        "bm25_seconds": 0.00450931800151011,
+        "rrf_seconds": 2.1961001039016992e-05,
+        "candidate_scoring_seconds": 5.881000106455758e-06,
+        "retrieval_seconds": 0.006323722998786252
+      }
+    },
+    {
+      "id": "E11",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-HW-8cb1c8d60c007dcc0f5658d9",
+        "TI-HW-cf0a47bdd37696cfac62d119",
+        "TI-HW-fe3876a517eb8caba6a230a3"
+      ],
+      "timings": {
+        "embedding_seconds": 0.030251164000219433,
+        "semantic_search_seconds": 0.001310984000156168,
+        "lexical_fetch_seconds": 0.0006507329999294598,
+        "bm25_seconds": 0.004284501999791246,
+        "rrf_seconds": 2.6219000574201345e-05,
+        "candidate_scoring_seconds": 0.15912056900197058,
+        "retrieval_seconds": 0.16542213999855448
+      }
+    },
+    {
+      "id": "E12",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-HW-03fd0e93e290f701599a8df1",
+        "TI-HW-8cb1c8d60c007dcc0f5658d9",
+        "TI-HW-b7d11bf9b500c24869deb4e5"
+      ],
+      "timings": {
+        "embedding_seconds": 0.029406791996734682,
+        "semantic_search_seconds": 0.001116594998165965,
+        "lexical_fetch_seconds": 0.0005860339988430496,
+        "bm25_seconds": 0.004262692000338575,
+        "rrf_seconds": 3.976399966632016e-05,
+        "candidate_scoring_seconds": 4.9489972298033535e-06,
+        "retrieval_seconds": 0.00603297400084557
+      }
+    },
+    {
+      "id": "E13",
+      "same_results_as_previous_retriever": true,
+      "candidate_ids": [
+        "TI-SW-759cda965d3455b3d287a31b",
+        "TI-SW-49ddca7d6059371453f686de",
+        "TI-SW-e319892523472ea5ea233121"
+      ],
+      "timings": {
+        "embedding_seconds": 0.02799743700234103,
+        "semantic_search_seconds": 0.0011282360028417315,
+        "lexical_fetch_seconds": 0.0006408349981938954,
+        "bm25_seconds": 0.004328843999246601,
+        "rrf_seconds": 2.8873000701423734e-05,
+        "candidate_scoring_seconds": 5.649999366141856e-06,
+        "retrieval_seconds": 0.006160160002764314
+      }
+    }
+  ],
+  "base_commit": "e5be392",
+  "tests": {
+    "unit_passed": 239,
+    "api_passed": 25,
+    "timing_tests": 5,
+    "api_in_container_passed": 25
+  },
+  "source_sha256": {
+    "src/rag/timing.py": "6f0a169b42d0f42b45ecacd723df042930776ccea328816808e6819d3b6c207d",
+    "src/rag/retrieval.py": "5900c621f8b4cc2b7f8f9cbaa58994b90149a34a6007af2ab4cf1f99f1db808f",
+    "src/rag/repository.py": "1e2c79184777b565268455b2a15da73a95b355162e43dce25bcc8d8fdc65ba5d",
+    "src/rag/pipeline.py": "4027717cf8935b5e29c51c258a7fdd3f5d7fef61d5e76cf3a6ff2e7442d03679",
+    "scripts/validate_rag_scenarios.py": "16efbc3964d5103c692397fd7418bb5b18e23b2e9eb594ff1b58a75c35367ffa",
+    "api/controllers.py": "495374787572ed9cc7628939c6693b6a0c3b510583feea59d0dbd6d420f21a91",
+    "api/services.py": "bbcc67ba2a81ba35c4fd550aba95b44b4fe2a19fd71bdc3dc5163ed099355eed",
+    "api/documentation.py": "44afe17545713072d6754721099d0b524cc93dc0c7b7ae307118eeb318c1baf5"
+  },
+  "http_validation": {
+    "timestamp_utc": "2026-10-21T05:26:39.433059+00:00",
+    "question": "El portal de documentos devuelve error 403. ¿Eso demuestra que mi cuenta está suspendida?",
+    "scope": "Two real HTTP observations, not a latency comparison. Search includes cold resource initialization in HTTP elapsed time; query follows with cached model. Supabase read-only and one query through Groq.",
+    "results": [
+      {
+        "endpoint": "rag/search/",
+        "http_status": 200,
+        "elapsed_http_seconds": 21.44639953299702,
+        "timings": {
+          "embedding_seconds": 0.07286066500091692,
+          "semantic_search_seconds": 1.5638982629970997,
+          "lexical_fetch_seconds": 0.20861208000133047,
+          "bm25_seconds": 0.005373452997446293,
+          "rrf_seconds": 4.675800300901756e-05,
+          "candidate_scoring_seconds": 1.626099765417166e-05,
+          "retrieval_seconds": 1.777990155002044
+        },
+        "response_state": null,
+        "checks_passed": true
+      },
+      {
+        "endpoint": "rag/query/",
+        "http_status": 200,
+        "elapsed_http_seconds": 8.491926749000413,
+        "timings": {
+          "ocr_seconds": 6.733000191161409e-06,
+          "classification_seconds": 1.1427413339988561,
+          "embedding_seconds": 0.04862491399762803,
+          "semantic_search_seconds": 4.351459024997894,
+          "lexical_fetch_seconds": 0.18871518000014476,
+          "bm25_seconds": 0.005603484001767356,
+          "rrf_seconds": 4.0176000766223297e-05,
+          "candidate_scoring_seconds": 1.0769999789772555e-05,
+          "retrieval_seconds": 4.545864502997574,
+          "context_seconds": 0.0027101799969386775,
+          "generation_seconds": 1.1169746769992344,
+          "validation_seconds": 0.0004839589964831248,
+          "support_review_seconds": 0.7168910869986576,
+          "total_seconds": 7.578748616997473
+        },
+        "response_state": "OK_VALIDADO",
+        "checks_passed": true
+      }
+    ]
+  },
+  "deployment": {
+    "container": "infra-backend-1",
+    "image_id": "sha256:efb734fd3c91d1ec6b4de90144f1fdb76b6417a794f2df6810a182e7e3e0c67b",
+    "health": "healthy"
+  },
+  "local_validation_scope": "Offline real embeddings and exact local search; no Supabase or Groq calls. Model loading, index checks and warm-up excluded. Not a remote latency benchmark.",
+  "scope": "Stage timing instrumentation: offline ranking equivalence and two real deployed HTTP observations, reported separately. Not a comparative latency benchmark."
+}

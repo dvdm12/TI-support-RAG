@@ -11,7 +11,13 @@ el endpoint de estado.
 
 Abre [Swagger UI](http://127.0.0.1:8000/api/v1/docs/) con el servidor activo.
 El esquema está en `/api/v1/openapi.json` (OpenAPI 3.1). Ambos son públicos.
-La interfaz documenta los cuatro endpoints, sus cuerpos, respuestas y errores.
+La interfaz documenta los cuatro endpoints con recorrido recomendado, autenticación
+paso a paso, propósito, límites y descripción de campos. Cada operación ofrece
+ejemplos de entrada, éxito y errores con acciones sugeridas. La consulta incluye
+ejemplos de respuesta documentada, aclaración y evidencia insuficiente; todos
+son ilustrativos y no constituyen mediciones ni respuestas garantizadas.
+El explorador permite filtrar operaciones, enlazarlas y ver el tiempo HTTP de
+una petición, distinto de los tiempos internos publicados por el pipeline.
 
 Para probar rutas protegidas, pulsa **Authorize**, introduce el valor de
 `DJANGO_API_TOKEN` de tu `.env` (sin el prefijo `Bearer`) y confirma. Después
@@ -31,7 +37,8 @@ contrato. Los assets se sirven con una lista explícita de archivos permitidos.
 Desde la raíz del repositorio:
 
 ```bash
-source ../.venv/bin/activate
+source .venv/bin/activate
+cd backend
 python -m pip install -r requirements.txt
 python manage.py check
 python manage.py runserver 127.0.0.1:8000
@@ -41,7 +48,9 @@ Se prepararon `DJANGO_SECRET_KEY` y `DJANGO_API_TOKEN` en `.env` con valores
 aleatorios distintos, sin publicarlos. `.env.example` documenta los nombres.
 Para otro entorno, configura valores nuevos y `DJANGO_ALLOWED_HOSTS` (lista
 separada por comas). `DJANGO_DEBUG` es false por defecto. Reinicia el proceso
-tras cambiar estas variables. El servidor de desarrollo se usa localmente;
+tras cambiar estas variables. En Docker Compose, recrea el contenedor con
+`docker compose -f infra/compose.yaml up -d --force-recreate backend` desde
+la raíz; reiniciar el mismo contenedor no recarga el archivo de entorno. El servidor de desarrollo se usa localmente;
 para un despliegue emplea el entrypoint WSGI/ASGI y configura sus tiempos de
 espera según las llamadas RAG, que pueden esperar por cuota del proveedor.
 
@@ -162,3 +171,26 @@ equivale a haber ejecutado generación Groq a través del endpoint.
 Referencias: [controllers/View](https://docs.djangoproject.com/en/5.2/ref/class-based-views/base/),
 [JsonResponse](https://docs.djangoproject.com/en/5.2/ref/request-response/),
 [configuración](https://docs.djangoproject.com/en/5.2/ref/settings/).
+
+## Tiempos por etapa
+
+`rag/query` y `rag/search` incluyen `tiempos_segundos`, un objeto de duraciones
+en segundos. La consulta separa clasificación, embedding, búsqueda semántica,
+lectura léxica, BM25, RRF, puntuación adicional, contexto, generación, validación,
+revisión y total; solo se publican etapas ejecutadas. `retrieval_seconds` es un
+subtotal y `total_seconds` lo contiene: no sumarlos otra vez con sus subetapas.
+El tiempo HTTP puede ser mayor por inicialización/autenticación previa al pipeline.
+Ver [definiciones y exportación CSV](STAGE_TIMINGS.md).
+
+## Actualización de Swagger: documentación descriptiva
+
+Se ampliaron las explicaciones sin cambiar rutas, campos aceptados ni
+autenticación. Un 401 usa el token local de API, no el de Supabase; Swagger
+añade Bearer automáticamente y olvida la autorización al recargar. Se documentan
+los cuatro estados documentales HTTP 200, prioridad/confianza del clasificador,
+fuentes y etiquetas, preferencias de categoría, límites y errores por código.
+Los tiempos muestran cada etapa opcional y advierten sobre subtotales contenidos.
+
+Las 26 pruebas API pasan, incluida validación de todos los ejemplos de entrada,
+éxito y error contra los modelos Pydantic y coherencia de etiquetas de cita.
+Las pruebas no llaman a proveedores ni ejecutan el conjunto de reserva.

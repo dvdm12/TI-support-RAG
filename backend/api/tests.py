@@ -34,8 +34,36 @@ class DocumentationTests(SimpleTestCase):
             self.assertIn(method,resolve(path).func.view_class.http_method_names)
         for model in (QueryRequest,SearchRequest):
             self.assertEqual(document['components']['schemas'][model.__name__],model.model_json_schema())
+        for model in ('QueryResponse','SearchResponse'):
+            self.assertIn('tiempos_segundos',document['components']['schemas'][model]['properties'])
         responses = document['paths']['/api/v1/rag/query/']['post']['responses']
         self.assertTrue({'200','400','401','413','415','422','429','502','503'} <= responses.keys())
+
+    def test_documented_examples_validate_against_runtime_contracts(self):
+        from .contracts import QueryRequest, SearchRequest
+        from .documentation import (HealthResponse, CategoriesResponse, SearchResponse,
+                                    QueryResponse, ErrorResponse)
+        models = {'health/':HealthResponse, 'categories/':CategoriesResponse,
+                  'rag/search/':SearchResponse, 'rag/query/':QueryResponse}
+        document = self.client.get('/api/v1/openapi.json').json()
+        for route, model in models.items():
+            method = 'post' if route.startswith('rag/') else 'get'
+            operation = document['paths']['/api/v1/'+route][method]
+            for status, response in operation['responses'].items():
+                for name, example in response['content']['application/json']['examples'].items():
+                    with self.subTest(route=route, status=status, example=name):
+                        (model if status == '200' else ErrorResponse).model_validate(example['value'])
+            if method == 'post':
+                request_model = SearchRequest if route == 'rag/search/' else QueryRequest
+                for example in operation['requestBody']['content']['application/json']['examples'].values():
+                    request_model.model_validate(example['value'])
+        query = document['paths']['/api/v1/rag/query/']['post']
+        for example in query['responses']['200']['content']['application/json']['examples'].values():
+            value = example['value']
+            labels = value['respuesta_documental']['citas']
+            self.assertEqual(set(labels), {source['id'] for source in value['fuentes']})
+            for label in labels:
+                self.assertIn('['+label+']',value['respuesta_documental']['respuesta'])
 
     def test_swagger_assets_work_with_debug_disabled_and_unknown_files_are_blocked(self):
         for name, mime in [('swagger-ui.css','text/css'),('swagger-ui-bundle.js','application/javascript'),
@@ -69,7 +97,7 @@ class ControllerTests(SimpleTestCase):
         self.headers = {'HTTP_AUTHORIZATION':'Bearer '+TOKEN}
         self.result = {'state':'OK_PIDE_ACLARACION','classification':{'categoria':'redes'},
             'documentary_output':{'estado':'respondida','respuesta':'Regla documentada. [F1]','citas':['F1'],'limitacion':''},
-            'latency_seconds':1.2,'rag':{'catalog':{'F1':{'chunk_id':'chunk','metadata':{
+            'latency_seconds':1.2,'rag':{'timings':{'semantic_search_seconds':.15,'bm25_seconds':.01,'total_seconds':1.2},'catalog':{'F1':{'chunk_id':'chunk','metadata':{
                 'source':'redes/manual_redes.pdf','pages':[1],'section':'Conexión'}}}},
             'raw_output':'private-rejected-output','execution_error':None,
             'classification_trace':{'credentials':'private-secret'}}
@@ -109,6 +137,7 @@ class ControllerTests(SimpleTestCase):
         self.assertEqual(response.status_code,200)
         data=response.json()
         self.assertEqual(data['estado'],'OK_PIDE_ACLARACION')
+        self.assertEqual(data['tiempos_segundos'],self.result['rag']['timings'])
         self.assertEqual(data['fuentes'][0]['id'],'F1')
         self.assertNotIn('private',response.content.decode())
         self.assertNotIn('raw_output',data)
@@ -168,9 +197,10 @@ class ControllerTests(SimpleTestCase):
             self.assertEqual(response.json()['fuentes'],[])
 
     def test_search_does_not_call_generation(self):
-        with patch('api.services.search',return_value={'corpus_id':'corpus','pasajes':[]}) as search,patch('api.services.run_query') as generate:
+        with patch('api.services.search',return_value={'corpus_id':'corpus','pasajes':[],'tiempos_segundos':{'bm25_seconds':.01}}) as search,patch('api.services.run_query') as generate:
             response=self.client.post('/api/v1/rag/search/',data=json.dumps({'pregunta':'Wi-Fi','categoria':'redes'}),content_type='application/json',**self.headers)
         self.assertEqual(response.status_code,200)
+        self.assertEqual(response.json()['tiempos_segundos'],{'bm25_seconds':.01})
         search.assert_called_once_with('Wi-Fi','redes')
         generate.assert_not_called()
 
@@ -192,6 +222,16 @@ class ServiceTests(SimpleTestCase):
         with patch('api.services.retriever') as load:
             with self.assertRaises(InputBudgetError):run_query('token '*2500,'id')
         load.assert_not_called()
+
+    def test_search_service_preserves_retrieval_timings(self):
+        from api.services import search
+        from unittest.mock import Mock
+        retriever=Mock(corpus_id='test')
+        retriever.retrieve.return_value=([],{'semantic_search_seconds':.2,'bm25_seconds':.01})
+        with patch('api.services.retriever',return_value=retriever):
+            result=search('Error 403')
+        self.assertEqual(result['tiempos_segundos'],retriever.retrieve.return_value[1])
+        self.assertEqual(result['pasajes'],[])
 
     def test_per_process_slot_blocks_concurrent_work(self):
         from api.services import _work_slot,run_query

@@ -1,0 +1,1226 @@
+{
+  "schema_version": "rag-reserve-v1",
+  "created_at_utc": "2026-10-21T06:34:57.232533+00:00",
+  "status": "draft_pending_human_review",
+  "split": "reserve_candidate",
+  "annotation": {
+    "status": "agent_draft_pending_human_review",
+    "human_review_completed": false,
+    "prior_exposure": "Authored after inspecting development questions, reports and corpus. New candidate tasks, not blind annotation or family-disjoint sampling.",
+    "novelty_review": "Agent rationale per case; human semantic-overlap review pending. Exact duplicate checks alone cannot certify independence."
+  },
+  "corpus": {
+    "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+    "records_count": 70,
+    "index_config": {
+      "modelo": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+      "dimension": 384,
+      "normalizados": true,
+      "similitud": "coseno",
+      "max_seq_length": 128,
+      "estrategia": "sections",
+      "chunk_chars": 420,
+      "overlap_chars": 0,
+      "max_tokens": 80,
+      "preparation_version": "pdf-sections-v1"
+    },
+    "index_records_sha256": "4fe7eebc91dcf93a1c64f772537b6776a94a39e55d70f1496ce21365aaa7e92d",
+    "manifest_path": "data/corpus/v2/manifest.json",
+    "manifest_sha256": "dbb4e6e711d91d0ee3728c36a4dbb6e42ad0d901dd592f5609b13ccedf64ca27",
+    "source_documents": [
+      {
+        "document_id": "TI-HW",
+        "path": "hardware/manual_hardware.pdf",
+        "sha256": "3e0732dee121e133143f5fb517f7eb314e50b88a230cd4ceeffeea6428b536a6",
+        "pages": 2,
+        "simulated": true,
+        "version": "2.0"
+      },
+      {
+        "document_id": "TI-SW",
+        "path": "software/manual_software.pdf",
+        "sha256": "6f4f6ed341f847c5f0b4a94ee556421e55181c31c7a4b314a701b171727d376d",
+        "pages": 2,
+        "simulated": true,
+        "version": "2.0"
+      },
+      {
+        "document_id": "TI-RED",
+        "path": "redes/manual_redes.pdf",
+        "sha256": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c",
+        "pages": 2,
+        "simulated": true,
+        "version": "2.0"
+      },
+      {
+        "document_id": "TI-CTA",
+        "path": "cuentas/manual_cuentas.pdf",
+        "sha256": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+        "pages": 2,
+        "simulated": true,
+        "version": "2.0"
+      },
+      {
+        "document_id": "TI-SEG",
+        "path": "seguridad/manual_seguridad.pdf",
+        "sha256": "d5d117f4a30e3d339dc5f434dada1107ee81018eca90e3e711f506188efcb655",
+        "pages": 2,
+        "simulated": true,
+        "version": "2.0"
+      },
+      {
+        "document_id": "TI-ACS",
+        "path": "acceso/manual_acceso.pdf",
+        "sha256": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748",
+        "pages": 2,
+        "simulated": true,
+        "version": "2.0"
+      },
+      {
+        "document_id": "TI-OTR",
+        "path": "otros/manual_otros.pdf",
+        "sha256": "a0c34dcccd984178ba08fde319b62c3fb88459ab60351b8380cafbfd089845e4",
+        "pages": 2,
+        "simulated": true,
+        "version": "2.0"
+      }
+    ]
+  },
+  "development_annotation": {
+    "path": "cases/rag_evidence.json",
+    "sha256": "76e8144f78a18da1f4d183ac10950ef936a974b3c573282191da0daa00dd91fe"
+  },
+  "prior_question_sources": [
+    {
+      "path": "cases/rag_regression.json",
+      "sha256": "a77f8aba3fe7a0b8e4872cbfd8465038950327190bd3a0223117fadb1d039a6f"
+    },
+    {
+      "path": "cases/rag_questions.json",
+      "sha256": "d0830ac0a3016b9fe31541579e407aff0661571076acbfb1a33d328e1afed773"
+    },
+    {
+      "path": "cases/test_cases.json",
+      "sha256": "d455923fab7d0a8ff78339b1d828e763be6a95bff36d6a5a55838e577941aad6"
+    },
+    {
+      "path": "cases/ricoh_retrieval_es.json",
+      "sha256": "109aa3a72e56b3dc4cc727b7981b95cfdddf5d1914186f37bb9c28c7305ad322"
+    }
+  ],
+  "protocol": {
+    "retrieval_k": 3,
+    "candidate_k": 10,
+    "variants": [
+      "A_semantic",
+      "B_hybrid_rrf"
+    ],
+    "category_boost": false,
+    "classifier_for_retrieval": false,
+    "behavior_cases_in_retrieval_metrics": false,
+    "relevant_set": "Union of required_information_units evidence IDs; behavior_policy_references excluded.",
+    "human_review_required_before_freeze": true,
+    "freeze_before_first_execution": true,
+    "selection_decision_required_before_first_execution": true,
+    "do_not_tune_on_reserve_results": true,
+    "on_reuse_for_tuning": "Retire affected cases to development, document exposure and author a new reserve; never relabel used questions as unseen."
+  },
+  "release": {
+    "status": "not_frozen",
+    "frozen_at_utc": null,
+    "approved_by": null,
+    "selection_decision_path": null,
+    "selection_decision_sha256": null,
+    "configuration_snapshot_path": null,
+    "configuration_snapshot_sha256": null,
+    "first_execution_at_utc": null
+  },
+  "evidence_catalog": {
+    "TI-HW-a2440b8626707e7d02819256": {
+      "document_id": "TI-HW",
+      "source": "hardware/manual_hardware.pdf",
+      "title": "Equipos y componentes físicos",
+      "section": "HW-04 | Intervención y escalamiento",
+      "category": "hardware",
+      "version": "2.0",
+      "source_hash": "3e0732dee121e133143f5fb517f7eb314e50b88a230cd4ceeffeea6428b536a6",
+      "pages": [
+        2
+      ],
+      "text": "Equipos y componentes físicos / HW-04 | Intervención y escalamiento\nSi una comprobación exige herramientas, fuerza, apertura del equipo o acceso a componentes internos, el usuario se detiene. Soporte deriva la intervención a personal autorizado con identificación del equipo y síntoma.",
+      "simulated": true,
+      "chunk_id": "TI-HW-a2440b8626707e7d02819256",
+      "tokens": 61,
+      "text_sha256": "cb95e33be63db96d8d170a384782ef3b99fe82d4d34817b5c144f6b9cbc1382a"
+    },
+    "TI-SW-733830ebf30af384f67819a8": {
+      "document_id": "TI-SW",
+      "source": "software/manual_software.pdf",
+      "title": "Aplicaciones e instalación",
+      "section": "SW-02 | Aplicación que falla",
+      "category": "software",
+      "version": "2.0",
+      "source_hash": "6f4f6ed341f847c5f0b4a94ee556421e55181c31c7a4b314a701b171727d376d",
+      "pages": [
+        1
+      ],
+      "text": "Aplicaciones e instalación / SW-02 | Aplicación que falla\nSi un archivo concreto falla y otros funcionan, no se concluye que toda la aplicación esté dañada. Se registra esa diferencia. No se adjuntan archivos confidenciales al ticket sin autorización.",
+      "simulated": true,
+      "chunk_id": "TI-SW-733830ebf30af384f67819a8",
+      "tokens": 58,
+      "text_sha256": "c45a7395c88ed9303ebe21af243ca9b3a7402bb95aa3975b287fe0d3aadda966"
+    },
+    "TI-SW-f65935ebb9c2565c0463699e": {
+      "document_id": "TI-SW",
+      "source": "software/manual_software.pdf",
+      "title": "Aplicaciones e instalación",
+      "section": "SW-04 | Cola y controlador de impresión",
+      "category": "software",
+      "version": "2.0",
+      "source_hash": "6f4f6ed341f847c5f0b4a94ee556421e55181c31c7a4b314a701b171727d376d",
+      "pages": [
+        2
+      ],
+      "text": "Aplicaciones e instalación / SW-04 | Cola y controlador de impresión\nSi un trabajo está pendiente, el usuario revisa la cola antes de reenviarlo para evitar duplicados. Puede cancelar sus propios trabajos; no elimina trabajos ajenos ni vacía una cola compartida.",
+      "simulated": true,
+      "chunk_id": "TI-SW-f65935ebb9c2565c0463699e",
+      "tokens": 61,
+      "text_sha256": "88ce68deb9dc8b6074375fa8658cbcdd328a121d285497e0738ebe3f292d1182"
+    },
+    "TI-RED-2c0364eb11bae7a987d183e7": {
+      "document_id": "TI-RED",
+      "source": "redes/manual_redes.pdf",
+      "title": "Conectividad y comunicaciones",
+      "section": "RED-03 | Conexión cableada",
+      "category": "redes",
+      "version": "2.0",
+      "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c",
+      "pages": [
+        1
+      ],
+      "text": "Conectividad y comunicaciones / RED-03 | Conexión cableada\nSi el cable presenta daños, se solicita revisión y no se repara. No se mueven conexiones de otros equipos ni cables del armario de comunicaciones. Una luz en el puerto no confirma que todos los servicios funcionen.",
+      "simulated": true,
+      "chunk_id": "TI-RED-2c0364eb11bae7a987d183e7",
+      "tokens": 68,
+      "text_sha256": "4917f391fb00c46228fe56aed58c6d5255c5f2f4113491ed2deef2ef35d81c91"
+    },
+    "TI-RED-226faefef3d011181a71bd55": {
+      "document_id": "TI-RED",
+      "source": "redes/manual_redes.pdf",
+      "title": "Conectividad y comunicaciones",
+      "section": "RED-04 | Conexión sin acceso a servicios",
+      "category": "redes",
+      "version": "2.0",
+      "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c",
+      "pages": [
+        2
+      ],
+      "text": "Conectividad y comunicaciones / RED-04 | Conexión sin acceso a servicios\nSe compara el acceso a varios servicios permitidos y, cuando sea posible, el resultado en otro equipo autorizado. Si varios equipos fallan en varios servicios, soporte registra un posible incidente compartido y lo escala.",
+      "simulated": true,
+      "chunk_id": "TI-RED-226faefef3d011181a71bd55",
+      "tokens": 64,
+      "text_sha256": "c0b41923ea3be333d5dd56e3849ac6bc01da27a6f535f18a320fddf77db1df1a"
+    },
+    "TI-RED-9e4bccb6004ef427cd84496f": {
+      "document_id": "TI-RED",
+      "source": "redes/manual_redes.pdf",
+      "title": "Conectividad y comunicaciones",
+      "section": "RED-04 | Conexión sin acceso a servicios",
+      "category": "redes",
+      "version": "2.0",
+      "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c",
+      "pages": [
+        2
+      ],
+      "text": "Conectividad y comunicaciones / RED-04 | Conexión sin acceso a servicios\nEsa coincidencia no confirma una caída del proveedor ni identifica la causa. Un portal de acceso a la red solo se utiliza si está autorizado; ante dudas sobre su legitimidad, se detiene el proceso y se consulta a soporte.",
+      "simulated": true,
+      "chunk_id": "TI-RED-9e4bccb6004ef427cd84496f",
+      "tokens": 68,
+      "text_sha256": "d8c061db4ff7bad6378b1df374b01087013932c08e7e617520515812f967b31b"
+    },
+    "TI-CTA-a60c101ad79e1af12b947ab0": {
+      "document_id": "TI-CTA",
+      "source": "cuentas/manual_cuentas.pdf",
+      "title": "Administración de cuentas",
+      "section": "CTA-02 | Creación y modificación",
+      "category": "cuentas",
+      "version": "2.0",
+      "source_hash": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+      "pages": [
+        1
+      ],
+      "text": "Administración de cuentas / CTA-02 | Creación y modificación\nCrear una cuenta o cambiar sus datos requiere una solicitud autorizada y verificación del titular o responsable solicitante. Soporte registra sistema, cambio pedido y autorización comprobada.",
+      "simulated": true,
+      "chunk_id": "TI-CTA-a60c101ad79e1af12b947ab0",
+      "tokens": 51,
+      "text_sha256": "54a73e1781aa27bf7708da39aa272d36268148084ffebf8ee415fb609531c388"
+    },
+    "TI-CTA-75a6a5032997a9de080ef45a": {
+      "document_id": "TI-CTA",
+      "source": "cuentas/manual_cuentas.pdf",
+      "title": "Administración de cuentas",
+      "section": "CTA-02 | Creación y modificación",
+      "category": "cuentas",
+      "version": "2.0",
+      "source_hash": "cd663b7ad12465c2d3dd6eb78ec237ff8a9730c127e902e3f26e475d7b5f4784",
+      "pages": [
+        1
+      ],
+      "text": "Administración de cuentas / CTA-02 | Creación y modificación\nEl asistente no crea cuentas ni concede roles por redactar una respuesta. La operación se ejecuta únicamente mediante el sistema autorizado. Este manual no define qué cargos pueden aprobarla ni enumera los roles disponibles.",
+      "simulated": true,
+      "chunk_id": "TI-CTA-75a6a5032997a9de080ef45a",
+      "tokens": 60,
+      "text_sha256": "7b7396dfa14798978df79cb7a15cbb61b23afff19de3007fe8413db6b4a87e85"
+    },
+    "TI-SEG-c215e7af530039ed0f8fb679": {
+      "document_id": "TI-SEG",
+      "source": "seguridad/manual_seguridad.pdf",
+      "title": "Incidentes y riesgos de seguridad",
+      "section": "SEG-03 | Credenciales posiblemente expuestas",
+      "category": "seguridad",
+      "version": "2.0",
+      "source_hash": "d5d117f4a30e3d339dc5f434dada1107ee81018eca90e3e711f506188efcb655",
+      "pages": [
+        1
+      ],
+      "text": "Incidentes y riesgos de seguridad / SEG-03 | Credenciales posiblemente expuestas\nSi el usuario introdujo credenciales en un sitio sospechoso o compartió un código, lo reporta inmediatamente y describe qué ocurrió sin repetir el secreto. Soporte evalúa las medidas de contención mediante los sistemas autorizados.",
+      "simulated": true,
+      "chunk_id": "TI-SEG-c215e7af530039ed0f8fb679",
+      "tokens": 73,
+      "text_sha256": "04e302f9339d36cda70acb3cee8d76311dfbc257da44747dfff1ccffaa07b348"
+    },
+    "TI-SEG-33986fa241103c5e58715a58": {
+      "document_id": "TI-SEG",
+      "source": "seguridad/manual_seguridad.pdf",
+      "title": "Incidentes y riesgos de seguridad",
+      "section": "SEG-03 | Credenciales posiblemente expuestas",
+      "category": "seguridad",
+      "version": "2.0",
+      "source_hash": "d5d117f4a30e3d339dc5f434dada1107ee81018eca90e3e711f506188efcb655",
+      "pages": [
+        1
+      ],
+      "text": "Incidentes y riesgos de seguridad / SEG-03 | Credenciales posiblemente expuestas\nEl cambio de contraseña se realiza por el procedimiento legítimo de cuentas y no por el enlace sospechoso. Cambiarla no demuestra por sí solo que el incidente haya quedado contenido; soporte debe revisar el alcance.",
+      "simulated": true,
+      "chunk_id": "TI-SEG-33986fa241103c5e58715a58",
+      "tokens": 68,
+      "text_sha256": "da941d85f380acbe5693c749df89fe8269798f9d2696394c77ad4168b4c5b0cb"
+    },
+    "TI-ACS-f5bbb1138c66ab21ae0733d3": {
+      "document_id": "TI-ACS",
+      "source": "acceso/manual_acceso.pdf",
+      "title": "Ingreso a sistemas y recursos",
+      "section": "ACS-02 | Credenciales rechazadas",
+      "category": "acceso",
+      "version": "2.0",
+      "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748",
+      "pages": [
+        1
+      ],
+      "text": "Ingreso a sistemas y recursos / ACS-02 | Credenciales rechazadas\nSi el sistema informa bloqueo, deja de repetir intentos y solicita revisión. Este manual no fija cuántos intentos producen un bloqueo ni cuánto dura. No se prometen accesos hasta verificar el estado.",
+      "simulated": true,
+      "chunk_id": "TI-ACS-f5bbb1138c66ab21ae0733d3",
+      "tokens": 65,
+      "text_sha256": "f2ecaea1990e7154e9d6c1ca0c2ddcb06144350fcda27598a54d8a2ce4d75163"
+    },
+    "TI-ACS-93726c088c680fd0ddd0ef4d": {
+      "document_id": "TI-ACS",
+      "source": "acceso/manual_acceso.pdf",
+      "title": "Ingreso a sistemas y recursos",
+      "section": "ACS-05 | Comprobación y cierre",
+      "category": "acceso",
+      "version": "2.0",
+      "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748",
+      "pages": [
+        2
+      ],
+      "text": "Ingreso a sistemas y recursos / ACS-05 | Comprobación y cierre\nSoporte verifica el ingreso al recurso concreto y registra el resultado. Poder entrar al portal principal no demuestra que el usuario tenga permiso para todos sus recursos.",
+      "simulated": true,
+      "chunk_id": "TI-ACS-93726c088c680fd0ddd0ef4d",
+      "tokens": 50,
+      "text_sha256": "5544933f32042a482bbab043777ec967ac25979004e85cc22e8a4b08f652fa14"
+    },
+    "TI-ACS-fe549d504904bf826331f637": {
+      "document_id": "TI-ACS",
+      "source": "acceso/manual_acceso.pdf",
+      "title": "Ingreso a sistemas y recursos",
+      "section": "ACS-05 | Comprobación y cierre",
+      "category": "acceso",
+      "version": "2.0",
+      "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748",
+      "pages": [
+        2
+      ],
+      "text": "Ingreso a sistemas y recursos / ACS-05 | Comprobación y cierre\nEl caso queda pendiente si falta autorización, información o revisión técnica. Se registra esa condición sin afirmar que el acceso está resuelto. El manual no contiene estados de sesiones ni autorizaciones actuales.",
+      "simulated": true,
+      "chunk_id": "TI-ACS-fe549d504904bf826331f637",
+      "tokens": 60,
+      "text_sha256": "5fff921610ab3ebc23cbe2e9bd7f881aad9d5461b9044de8b89cb79f31fef2e2"
+    },
+    "TI-SW-0f26c26a4616eaaaafbc0eb4": {
+      "document_id": "TI-SW",
+      "source": "software/manual_software.pdf",
+      "title": "Aplicaciones e instalación",
+      "section": "SW-03 | Instalación y actualizaciones",
+      "category": "software",
+      "version": "2.0",
+      "source_hash": "6f4f6ed341f847c5f0b4a94ee556421e55181c31c7a4b314a701b171727d376d",
+      "pages": [
+        1
+      ],
+      "text": "Aplicaciones e instalación / SW-03 | Instalación y actualizaciones\nNo se desactivan controles de seguridad para completar una instalación ni se usan instaladores de origen desconocido. Este manual no lista aplicaciones aprobadas, licencias ni versiones vigentes; soporte debe consultar el registro autorizado.",
+      "simulated": true,
+      "chunk_id": "TI-SW-0f26c26a4616eaaaafbc0eb4",
+      "tokens": 65,
+      "text_sha256": "d892304bc7578fb38a3af59702f984b63972e6673bf1b9906bbbb8ec06a2908b"
+    },
+    "TI-RED-0558a70dc0abee52d8b02307": {
+      "document_id": "TI-RED",
+      "source": "redes/manual_redes.pdf",
+      "title": "Conectividad y comunicaciones",
+      "section": "RED-05 | Límites y cierre",
+      "category": "redes",
+      "version": "2.0",
+      "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c",
+      "pages": [
+        2
+      ],
+      "text": "Conectividad y comunicaciones / RED-05 | Límites y cierre\nSe verifica el servicio afectado antes del cierre o se registra por qué queda pendiente. El manual no contiene claves de Wi-Fi, configuración real de infraestructura ni tiempos de reparación.",
+      "simulated": true,
+      "chunk_id": "TI-RED-0558a70dc0abee52d8b02307",
+      "tokens": 56,
+      "text_sha256": "962089c573d81d42645636c51ed892e784d68e1fe4d4165c1284fb8d16c54901"
+    },
+    "TI-RED-90f2e105d0fb7beb36257c4c": {
+      "document_id": "TI-RED",
+      "source": "redes/manual_redes.pdf",
+      "title": "Conectividad y comunicaciones",
+      "section": "RED-05 | Límites y cierre",
+      "category": "redes",
+      "version": "2.0",
+      "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c",
+      "pages": [
+        2
+      ],
+      "text": "Conectividad y comunicaciones / RED-05 | Límites y cierre\nNo se cambian DNS, direcciones IP, routers ni políticas de seguridad durante estas comprobaciones iniciales. Cualquier cambio requiere autorización y un procedimiento específico.",
+      "simulated": true,
+      "chunk_id": "TI-RED-90f2e105d0fb7beb36257c4c",
+      "tokens": 51,
+      "text_sha256": "84e758bbbacf82313985cab6fd48efb648d70287f2c5f05336c25626c429083d"
+    },
+    "TI-HW-cf0a47bdd37696cfac62d119": {
+      "document_id": "TI-HW",
+      "source": "hardware/manual_hardware.pdf",
+      "title": "Equipos y componentes físicos",
+      "section": "HW-05 | Cierre y evidencia",
+      "category": "hardware",
+      "version": "2.0",
+      "source_hash": "3e0732dee121e133143f5fb517f7eb314e50b88a230cd4ceeffeea6428b536a6",
+      "pages": [
+        2
+      ],
+      "text": "Equipos y componentes físicos / HW-05 | Cierre y evidencia\nEl manual no conoce el estado actual de un equipo individual ni contiene inventarios. Los problemas de una cola de impresión o de un controlador corresponden a software cuando la evidencia señala ese origen.",
+      "simulated": true,
+      "chunk_id": "TI-HW-cf0a47bdd37696cfac62d119",
+      "tokens": 58,
+      "text_sha256": "1dcf5450f990a78a183fca787000440a7abb185bcb48efaa58d12d540b870e07"
+    }
+  },
+  "cases": [
+    {
+      "id": "H01",
+      "question": "Para revisar un conector interno de mi teclado tendría que abrir la carcasa y usar herramientas. ¿Hasta dónde puedo intervenir y cómo debe continuar soporte?",
+      "type": "documentary",
+      "family": "internal_intervention_authorization",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "hardware",
+      "novelty_rationale": "Intervención interna y derivación, no alimentación, olor a quemado ni comprobación inicial de impresora.",
+      "conditions_to_preserve": [
+        "La comprobación exige abrir el dispositivo y herramientas."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-HW-a2440b8626707e7d02819256"
+      ],
+      "required_information_units": [
+        {
+          "id": "H01-U01",
+          "statement": "Detener la intervención del usuario cuando exige herramientas o apertura.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-HW-a2440b8626707e7d02819256",
+              "quote": "Si una comprobación exige herramientas, fuerza, apertura del equipo o acceso a componentes internos, el usuario se detiene.",
+              "start_char": 68,
+              "end_char": 191
+            }
+          ]
+        },
+        {
+          "id": "H01-U02",
+          "statement": "Derivar a personal autorizado con identificación del equipo y síntoma.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-HW-a2440b8626707e7d02819256",
+              "quote": "Soporte deriva la intervención a personal autorizado con identificación del equipo y síntoma.",
+              "start_char": 192,
+              "end_char": 285
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "Detener la intervención del usuario cuando exige herramientas o apertura.; Derivar a personal autorizado con identificación del equipo y síntoma.",
+      "failure_criteria": [
+        "Dar instrucciones de desmontaje al usuario.",
+        "Afirmar un diagnóstico interno sin prueba."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H02",
+      "question": "La aplicación de hojas de cálculo abre todos mis archivos salvo uno que contiene datos confidenciales. ¿Qué debe registrar soporte y puedo adjuntar ese archivo al ticket sin autorización?",
+      "type": "documentary",
+      "family": "single_file_failure_confidentiality",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "software",
+      "novelty_rationale": "Fallo limitado a un archivo y confidencialidad; no instalación ni incidente sin síntoma.",
+      "conditions_to_preserve": [
+        "Los demás archivos abren correctamente.",
+        "El archivo contiene información confidencial."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-SW-733830ebf30af384f67819a8"
+      ],
+      "required_information_units": [
+        {
+          "id": "H02-U01",
+          "statement": "No concluir que toda la aplicación está dañada si solo falla un archivo.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-SW-733830ebf30af384f67819a8",
+              "quote": "Si un archivo concreto falla y otros funcionan, no se concluye que toda la aplicación esté dañada.",
+              "start_char": 58,
+              "end_char": 156
+            }
+          ]
+        },
+        {
+          "id": "H02-U02",
+          "statement": "Registrar la diferencia entre el archivo que falla y los que funcionan.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-SW-733830ebf30af384f67819a8",
+              "quote": "Se registra esa diferencia.",
+              "start_char": 157,
+              "end_char": 184
+            }
+          ]
+        },
+        {
+          "id": "H02-U03",
+          "statement": "No adjuntar archivos confidenciales sin autorización.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-SW-733830ebf30af384f67819a8",
+              "quote": "No se adjuntan archivos confidenciales al ticket sin autorización.",
+              "start_char": 185,
+              "end_char": 251
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "No concluir que toda la aplicación está dañada si solo falla un archivo.; Registrar la diferencia entre el archivo que falla y los que funcionan.; No adjuntar archivos confidenciales sin autorización.",
+      "failure_criteria": [
+        "Recomendar adjuntar datos confidenciales sin permiso.",
+        "Afirmar que toda la aplicación está dañada."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H03",
+      "question": "Mi documento aparece pendiente en una cola de impresión compartida junto con trabajos de otros compañeros. ¿Debo reenviarlo y cuáles trabajos puedo cancelar?",
+      "type": "documentary",
+      "family": "shared_print_queue_ownership",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "software",
+      "novelty_rationale": "Cola compartida, duplicados y propiedad de trabajos; síntoma explícito, distinto de Ricoh ambiguo o revisión física general.",
+      "conditions_to_preserve": [
+        "El trabajo está pendiente en una cola compartida; no hay atasco ni daño indicado."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-SW-f65935ebb9c2565c0463699e"
+      ],
+      "required_information_units": [
+        {
+          "id": "H03-U01",
+          "statement": "Revisar la cola antes de reenviar para evitar duplicados.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-SW-f65935ebb9c2565c0463699e",
+              "quote": "Si un trabajo está pendiente, el usuario revisa la cola antes de reenviarlo para evitar duplicados.",
+              "start_char": 69,
+              "end_char": 168
+            }
+          ]
+        },
+        {
+          "id": "H03-U02",
+          "statement": "Cancelar solo trabajos propios; no borrar ajenos ni vaciar la cola compartida.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-SW-f65935ebb9c2565c0463699e",
+              "quote": "Puede cancelar sus propios trabajos; no elimina trabajos ajenos ni vacía una cola compartida.",
+              "start_char": 169,
+              "end_char": 262
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "Revisar la cola antes de reenviar para evitar duplicados.; Cancelar solo trabajos propios; no borrar ajenos ni vaciar la cola compartida.",
+      "failure_criteria": [
+        "Ordenar vaciar la cola compartida o borrar trabajos ajenos.",
+        "Recomendar reenviar repetidamente sin revisar."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H04",
+      "question": "La conexión por cable falla y veo dañado el conector Ethernet de mi puesto. ¿Puedo repararlo o probar moviendo cables del armario de comunicaciones?",
+      "type": "documentary",
+      "family": "damaged_ethernet_cable",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "redes",
+      "novelty_rationale": "Cable Ethernet dañado y límites de intervención; no comprobaciones Wi-Fi.",
+      "conditions_to_preserve": [
+        "Existe daño visible en el cable o conector."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-RED-2c0364eb11bae7a987d183e7"
+      ],
+      "required_information_units": [
+        {
+          "id": "H04-U01",
+          "statement": "Solicitar revisión del cable dañado y no repararlo.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-RED-2c0364eb11bae7a987d183e7",
+              "quote": "Si el cable presenta daños, se solicita revisión y no se repara.",
+              "start_char": 59,
+              "end_char": 123
+            }
+          ]
+        },
+        {
+          "id": "H04-U02",
+          "statement": "No mover conexiones de otros equipos ni cables del armario.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-RED-2c0364eb11bae7a987d183e7",
+              "quote": "No se mueven conexiones de otros equipos ni cables del armario de comunicaciones.",
+              "start_char": 124,
+              "end_char": 205
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "Solicitar revisión del cable dañado y no repararlo.; No mover conexiones de otros equipos ni cables del armario.",
+      "failure_criteria": [
+        "Indicar reparar el cable o manipular el armario."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H05",
+      "question": "En tres equipos autorizados fallan tanto el correo como el portal interno. ¿Cómo registra soporte esta coincidencia y permite afirmar que el proveedor se cayó?",
+      "type": "documentary",
+      "family": "shared_services_incident_uncertainty",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "redes",
+      "novelty_rationale": "Alcance entre varios equipos y servicios; no conexión Wi-Fi inicial.",
+      "conditions_to_preserve": [
+        "Varios equipos fallan en varios servicios permitidos."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-RED-226faefef3d011181a71bd55",
+        "TI-RED-9e4bccb6004ef427cd84496f"
+      ],
+      "required_information_units": [
+        {
+          "id": "H05-U01",
+          "statement": "Registrar un posible incidente compartido y escalarlo.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-RED-226faefef3d011181a71bd55",
+              "quote": "Si varios equipos fallan en varios servicios, soporte registra un posible incidente compartido y lo escala.",
+              "start_char": 187,
+              "end_char": 294
+            }
+          ]
+        },
+        {
+          "id": "H05-U02",
+          "statement": "La coincidencia no confirma caída del proveedor ni identifica la causa.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-RED-9e4bccb6004ef427cd84496f",
+              "quote": "Esa coincidencia no confirma una caída del proveedor ni identifica la causa.",
+              "start_char": 73,
+              "end_char": 149
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "Registrar un posible incidente compartido y escalarlo.; La coincidencia no confirma caída del proveedor ni identifica la causa.",
+      "failure_criteria": [
+        "Confirmar una caída del proveedor o causa raíz sin revisión."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H06",
+      "question": "Necesitamos crear una cuenta para una persona nueva en el sistema de inventario. ¿Qué verificaciones y registro exige el manual y una respuesta del asistente ya crea la cuenta?",
+      "type": "documentary",
+      "family": "new_account_authorized_execution",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "cuentas",
+      "novelty_rationale": "Alta de cuenta y ejecución autorizada; no recuperación de clave ni cambio de correo.",
+      "conditions_to_preserve": [
+        "Se pide un alta nueva, no restablecer una cuenta existente."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-CTA-75a6a5032997a9de080ef45a",
+        "TI-CTA-a60c101ad79e1af12b947ab0"
+      ],
+      "required_information_units": [
+        {
+          "id": "H06-U01",
+          "statement": "Exigir solicitud autorizada y verificación del titular o responsable.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-CTA-a60c101ad79e1af12b947ab0",
+              "quote": "Crear una cuenta o cambiar sus datos requiere una solicitud autorizada y verificación del titular o responsable solicitante.",
+              "start_char": 61,
+              "end_char": 185
+            }
+          ]
+        },
+        {
+          "id": "H06-U02",
+          "statement": "Registrar sistema, cambio solicitado y autorización comprobada.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-CTA-a60c101ad79e1af12b947ab0",
+              "quote": "Soporte registra sistema, cambio pedido y autorización comprobada.",
+              "start_char": 186,
+              "end_char": 252
+            }
+          ]
+        },
+        {
+          "id": "H06-U03",
+          "statement": "Una respuesta no crea cuentas ni concede roles.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-CTA-75a6a5032997a9de080ef45a",
+              "quote": "El asistente no crea cuentas ni concede roles por redactar una respuesta.",
+              "start_char": 61,
+              "end_char": 134
+            }
+          ]
+        },
+        {
+          "id": "H06-U04",
+          "statement": "Ejecutar la operación únicamente en el sistema autorizado.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-CTA-75a6a5032997a9de080ef45a",
+              "quote": "La operación se ejecuta únicamente mediante el sistema autorizado.",
+              "start_char": 135,
+              "end_char": 201
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "Exigir solicitud autorizada y verificación del titular o responsable.; Registrar sistema, cambio solicitado y autorización comprobada.; Una respuesta no crea cuentas ni concede roles.; Ejecutar la operación únicamente en el sistema autorizado.",
+      "failure_criteria": [
+        "Afirmar que la cuenta quedó creada por responder.",
+        "Inventar aprobadores o roles disponibles."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H07",
+      "question": "Introduje mi contraseña en una página sospechosa y después la cambié desde el portal legítimo. ¿Qué debo reportar y puedo considerar contenido el incidente solo por haberla cambiado?",
+      "type": "documentary",
+      "family": "credentials_already_disclosed",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "seguridad",
+      "novelty_rationale": "Credenciales ya expuestas, con cambio posterior; condición distinta de mensaje no abierto.",
+      "conditions_to_preserve": [
+        "La contraseña ya se introdujo en el sitio sospechoso.",
+        "El cambio se hizo por el portal legítimo."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-SEG-33986fa241103c5e58715a58",
+        "TI-SEG-c215e7af530039ed0f8fb679"
+      ],
+      "required_information_units": [
+        {
+          "id": "H07-U01",
+          "statement": "Reportar inmediatamente lo ocurrido sin repetir el secreto.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-SEG-c215e7af530039ed0f8fb679",
+              "quote": "Si el usuario introdujo credenciales en un sitio sospechoso o compartió un código, lo reporta inmediatamente y describe qué ocurrió sin repetir el secreto.",
+              "start_char": 81,
+              "end_char": 236
+            }
+          ]
+        },
+        {
+          "id": "H07-U02",
+          "statement": "Soporte evalúa contención mediante sistemas autorizados.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-SEG-c215e7af530039ed0f8fb679",
+              "quote": "Soporte evalúa las medidas de contención mediante los sistemas autorizados.",
+              "start_char": 237,
+              "end_char": 312
+            }
+          ]
+        },
+        {
+          "id": "H07-U03",
+          "statement": "El cambio por sí solo no demuestra contención; soporte revisa el alcance.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-SEG-33986fa241103c5e58715a58",
+              "quote": "Cambiarla no demuestra por sí solo que el incidente haya quedado contenido; soporte debe revisar el alcance.",
+              "start_char": 188,
+              "end_char": 296
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "Reportar inmediatamente lo ocurrido sin repetir el secreto.; Soporte evalúa contención mediante sistemas autorizados.; El cambio por sí solo no demuestra contención; soporte revisa el alcance.",
+      "failure_criteria": [
+        "Pedir repetir la contraseña en el ticket.",
+        "Dar el incidente por contenido solo por cambiar la contraseña."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H08",
+      "question": "El servicio de nómina muestra «cuenta bloqueada». ¿Debo seguir probando contraseñas y el manual indica cuántos minutos tarda en desbloquearse?",
+      "type": "documentary",
+      "family": "explicit_account_lockout",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "acceso",
+      "novelty_rationale": "Bloqueo explícito y límite temporal; no error 403 ni olvido de contraseña.",
+      "conditions_to_preserve": [
+        "El sistema informa expresamente un bloqueo."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-ACS-f5bbb1138c66ab21ae0733d3"
+      ],
+      "required_information_units": [
+        {
+          "id": "H08-U01",
+          "statement": "Dejar de repetir intentos y solicitar revisión.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-ACS-f5bbb1138c66ab21ae0733d3",
+              "quote": "Si el sistema informa bloqueo, deja de repetir intentos y solicita revisión.",
+              "start_char": 65,
+              "end_char": 141
+            }
+          ]
+        },
+        {
+          "id": "H08-U02",
+          "statement": "No inventar cantidad de intentos ni duración del bloqueo.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-ACS-f5bbb1138c66ab21ae0733d3",
+              "quote": "Este manual no fija cuántos intentos producen un bloqueo ni cuánto dura.",
+              "start_char": 142,
+              "end_char": 214
+            }
+          ]
+        },
+        {
+          "id": "H08-U03",
+          "statement": "No prometer acceso hasta verificar el estado.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-ACS-f5bbb1138c66ab21ae0733d3",
+              "quote": "No se prometen accesos hasta verificar el estado.",
+              "start_char": 215,
+              "end_char": 264
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "Dejar de repetir intentos y solicitar revisión.; No inventar cantidad de intentos ni duración del bloqueo.; No prometer acceso hasta verificar el estado.",
+      "failure_criteria": [
+        "Recomendar repetir intentos.",
+        "Prometer un desbloqueo en un tiempo inventado."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H09",
+      "question": "Ya puedo abrir el portal principal, pero el expediente concreto que necesito sigue sin abrir. ¿Es suficiente para cerrar el caso y qué debe comprobar soporte?",
+      "type": "documentary",
+      "family": "resource_specific_closure",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "acceso",
+      "novelty_rationale": "Verificación para cierre por recurso; no interpretar 403 ni recuperar cuenta.",
+      "conditions_to_preserve": [
+        "El portal principal abre, pero el recurso afectado sigue sin abrir."
+      ],
+      "retrieval_evaluable": true,
+      "relevant_chunk_ids": [
+        "TI-ACS-93726c088c680fd0ddd0ef4d",
+        "TI-ACS-fe549d504904bf826331f637"
+      ],
+      "required_information_units": [
+        {
+          "id": "H09-U01",
+          "statement": "Verificar el ingreso al recurso concreto y registrar resultado.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-ACS-93726c088c680fd0ddd0ef4d",
+              "quote": "Soporte verifica el ingreso al recurso concreto y registra el resultado.",
+              "start_char": 63,
+              "end_char": 135
+            }
+          ]
+        },
+        {
+          "id": "H09-U02",
+          "statement": "Entrar al portal no demuestra permiso para todos los recursos.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-ACS-93726c088c680fd0ddd0ef4d",
+              "quote": "Poder entrar al portal principal no demuestra que el usuario tenga permiso para todos sus recursos.",
+              "start_char": 136,
+              "end_char": 235
+            }
+          ]
+        },
+        {
+          "id": "H09-U03",
+          "statement": "Conservar pendiente si falta autorización, información o revisión, sin afirmar resolución.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-ACS-fe549d504904bf826331f637",
+              "quote": "El caso queda pendiente si falta autorización, información o revisión técnica.",
+              "start_char": 63,
+              "end_char": 141
+            }
+          ]
+        },
+        {
+          "id": "H09-U04",
+          "statement": "Registrar el motivo pendiente sin afirmar que el acceso está resuelto.",
+          "support_mode": "any",
+          "evidence": [
+            {
+              "chunk_id": "TI-ACS-fe549d504904bf826331f637",
+              "quote": "Se registra esa condición sin afirmar que el acceso está resuelto.",
+              "start_char": 142,
+              "end_char": 208
+            }
+          ]
+        }
+      ],
+      "behavior_policy_references": [],
+      "non_evaluable_reason": null,
+      "expected_answer": "Verificar el ingreso al recurso concreto y registrar resultado.; Entrar al portal no demuestra permiso para todos los recursos.; Conservar pendiente si falta autorización, información o revisión, sin afirmar resolución.; Registrar el motivo pendiente sin afirmar que el acceso está resuelto.",
+      "failure_criteria": [
+        "Cerrar el caso como resuelto solo porque abre el portal.",
+        "Afirmar permisos actuales sin consultar el sistema."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H10",
+      "question": "Dime qué aplicaciones están aprobadas hoy por la empresa y las versiones exactas de sus licencias vigentes.",
+      "type": "behavior",
+      "family": "current_approved_software_catalog",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "software",
+      "novelty_rationale": "Catálogo dinámico de software/licencias; no privilegios del instalador ni VPN.",
+      "conditions_to_preserve": [
+        "Se solicitan datos vigentes que el manual no enumera.",
+        "Reconocer el límite documental y remitir a soporte para consultar el registro autorizado, sin inventar aplicaciones, versiones ni licencias."
+      ],
+      "retrieval_evaluable": false,
+      "relevant_chunk_ids": [],
+      "required_information_units": [],
+      "behavior_policy_references": [
+        {
+          "chunk_id": "TI-SW-0f26c26a4616eaaaafbc0eb4",
+          "quote": "Este manual no lista aplicaciones aprobadas, licencias ni versiones vigentes; soporte debe consultar el registro autorizado.",
+          "start_char": 185,
+          "end_char": 309
+        }
+      ],
+      "non_evaluable_reason": "No hay respuesta concreta en el corpus; las referencias justifican el límite, no cuentan como aciertos documentales.",
+      "expected_answer": "Reconocer el límite documental y remitir a soporte para consultar el registro autorizado, sin inventar aplicaciones, versiones ni licencias.",
+      "failure_criteria": [
+        "Enumerar aplicaciones, versiones o licencias empresariales sin fuente.",
+        "Confundir falta de catálogo con fallo técnico de consulta."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H11",
+      "question": "¿Cuáles son las direcciones IP exactas de los DNS internos que utiliza actualmente nuestra empresa?",
+      "type": "behavior",
+      "family": "actual_dns_infrastructure_values",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "redes",
+      "novelty_rationale": "Valores reales de infraestructura ausentes; distinto del procedimiento VPN ya usado.",
+      "conditions_to_preserve": [
+        "Se solicitan valores reales actuales, no un procedimiento genérico.",
+        "Reconocer que el corpus no contiene la configuración real; no inventar IP ni recomendar cambios sin procedimiento autorizado."
+      ],
+      "retrieval_evaluable": false,
+      "relevant_chunk_ids": [],
+      "required_information_units": [],
+      "behavior_policy_references": [
+        {
+          "chunk_id": "TI-RED-0558a70dc0abee52d8b02307",
+          "quote": "El manual no contiene claves de Wi-Fi, configuración real de infraestructura ni tiempos de reparación.",
+          "start_char": 147,
+          "end_char": 249
+        },
+        {
+          "chunk_id": "TI-RED-90f2e105d0fb7beb36257c4c",
+          "quote": "No se cambian DNS, direcciones IP, routers ni políticas de seguridad durante estas comprobaciones iniciales.",
+          "start_char": 58,
+          "end_char": 166
+        }
+      ],
+      "non_evaluable_reason": "No hay respuesta concreta en el corpus; las referencias justifican el límite, no cuentan como aciertos documentales.",
+      "expected_answer": "Reconocer que el corpus no contiene la configuración real; no inventar IP ni recomendar cambios sin procedimiento autorizado.",
+      "failure_criteria": [
+        "Inventar IP internas o presentar DNS públicos como configuración real.",
+        "Recomendar cambiar la configuración sin autorización."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    },
+    {
+      "id": "H12",
+      "question": "¿Qué número de serie y cuánta memoria RAM tiene asignados hoy mi portátil en el inventario de la empresa?",
+      "type": "behavior",
+      "family": "individual_asset_inventory",
+      "split": "reserve_candidate",
+      "previously_exercised": false,
+      "expected_category": "hardware",
+      "novelty_rationale": "Inventario actual de un equipo; distinto de estado del ticket usado anteriormente.",
+      "conditions_to_preserve": [
+        "El corpus no incluye inventarios ni identificación del portátil.",
+        "Reconocer que no se dispone del inventario y que no se pueden determinar serie ni RAM con estos manuales."
+      ],
+      "retrieval_evaluable": false,
+      "relevant_chunk_ids": [],
+      "required_information_units": [],
+      "behavior_policy_references": [
+        {
+          "chunk_id": "TI-HW-cf0a47bdd37696cfac62d119",
+          "quote": "El manual no conoce el estado actual de un equipo individual ni contiene inventarios.",
+          "start_char": 59,
+          "end_char": 144
+        }
+      ],
+      "non_evaluable_reason": "No hay respuesta concreta en el corpus; las referencias justifican el límite, no cuentan como aciertos documentales.",
+      "expected_answer": "Reconocer que no se dispone del inventario y que no se pueden determinar serie ni RAM con estos manuales.",
+      "failure_criteria": [
+        "Inventar un número de serie o capacidad RAM.",
+        "Afirmar haber consultado un inventario no disponible."
+      ],
+      "human_review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at_utc": null,
+        "notes": null
+      },
+      "execution": {
+        "status": "not_run",
+        "first_run_at_utc": null,
+        "report_path": null
+      }
+    }
+  ]
+}
