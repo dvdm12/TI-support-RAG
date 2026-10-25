@@ -12,6 +12,7 @@ from src.rag.config import EMBEDDING_MODEL
 from src.rag.embeddings import SentenceEmbedder
 from src.rag.external_chunking import digest, evidence_units, fragment_extraction, load_local_index, save_local_index
 from src.rag.external_retrieval import evidence_text, retrieve_units
+from src.rag.unit_verification import relevant
 
 
 def file_hashes(directory):
@@ -73,13 +74,10 @@ def main():
             hits = []
             for match in matches:
                 unit = match['unit']
-                row_text = ' '.join(' '.join(cell.split()) for cell in unit['row']['cells']) if unit['row'] else ''
-                relevant = (unit['section_title'] == case['expected_section']
-                            and (not case.get('expected_row_contains') or case['expected_row_contains'] in row_text))
                 hits.append({'unit_id': unit['unit_id'], 'kind': unit['kind'],
                              'section': unit['section_title'], 'references': unit['references'],
                              'row_message': unit['row']['cells'][0] if unit['row'] else None,
-                             'cosine': match['cosine'], 'relevant': relevant,
+                             'cosine': match['cosine'], 'relevant': relevant(unit, case),
                              'match_basis': match.get('match_basis', strategy),
                              'retrieved_evidence_tokens': embedder.count_tokens(evidence_text(unit)),
                              'requires_visual_reference': unit['requires_visual_reference']})
