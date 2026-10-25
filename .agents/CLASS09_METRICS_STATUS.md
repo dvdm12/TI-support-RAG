@@ -1,12 +1,25 @@
-# Estado de métricas de clase 09 — 21-10-2026
+# Estado de métricas de clase 09 — continuidad 24-10-2026
 
 Tabla contrastada con las diapositivas locales y las evidencias publicadas en
-`aea3002`. «Calculada» acredita disponibilidad de la medida, no aprobación de
+`aea3002` y ampliadas en `c5826c0`. «Calculada» acredita disponibilidad de la medida, no aprobación de
 calidad. El curso no fija un umbral numérico mínimo. Desarrollo tiene siete casos
 documentales evaluables y seis de comportamiento; las anotaciones siguen
 pendientes de revisión humana. Reserva: 12 candidatos sin ejecutar.
 
 ## Lectura vigente para continuar
+
+Actualización 24-10-2026: código, informes y pruebas publicados en c5826c0;
+270 unitarias y 26 API repetidas correctamente antes del commit. Las pruebas
+HTTP y de extracción de esta sesión verifican operación, no completan revisión
+humana ni métricas pendientes. Reserva sin abrir. La mejora del extractor tiene línea base, contratos, pipeline, adaptadores, estrategias y validaciones implementados por separado;
+no completa la evaluación semántica pendiente de clase 09.
+El paso 7 añadió controles PDF sintéticos y OCR local separado; 348 unitarias
+correctas no acreditan calidad semántica. El usuario difirió inicialmente la prueba con otros PDF, pero después autorizó
+buscarlos en la web: seis evaluados, 357 unitarias correctas y límites del
+pipeline documentados en WEB_PDF_EVALUATION.md. Nueve controles por componente
+no equivalen a ingestión completa: 0/6 con el perfil genérico; sin mejora RAG
+acreditada, revisión humana ni cambios a las métricas de clase.
+Las secciones posteriores conservan el orden histórico de las mediciones.
 
 La comparación de tokens está completada para generación: 14 llamadas reales,
 siete pares, A 6.592 / B 6.523 tokens. Las respuestas/contextos se conservan en

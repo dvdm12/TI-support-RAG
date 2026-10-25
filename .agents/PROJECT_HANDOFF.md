@@ -1,6 +1,6 @@
 # Informe de continuidad — TI-support-RAG
 
-Actualizado: 21 de octubre de 2026 (America/Bogota).
+Actualizado: 24 de octubre de 2026 (America/Bogota).
 Repositorio: `/home/dvdm12/Documents/Obsidian Vault/TI-support-RAG`.
 
 ## Estado actual para continuar — leer primero
@@ -9,6 +9,402 @@ Esta sección prevalece sobre el historial que sigue. Las rutas antiguas del
 historial, como `src/` o `docs/`, ahora corresponden a `backend/src/` y
 `backend/docs/`, salvo las migraciones, ubicadas en `infra/supabase/`.
 No contiene secretos. No releer ni ejecutar integraciones históricas por defecto.
+
+### Publicación solicitada de la revisión del extractor
+
+El usuario autorizó generar un commit y actualizar la rama remota actual.
+Esta revisión reúne los pasos 1–7, sus pruebas y guías, la línea base congelada,
+la evaluación de PDF públicos y el catálogo de candidatos por categoría.
+La base publicada anterior es c5826c0; el hash de esta revisión se obtiene de
+Git para evitar una referencia circular dentro del propio commit.
+
+- Fetch previo: HEAD y origin/codex/backend-infra-ricoh-local sin divergencia.
+- Se repitieron las 357 unitarias correctamente antes de preparar la publicación.
+  No nueva suite API, Supabase, modelos ni reserva.
+- Los archivos ignorados, incluidos los diez PDF descargados, informes JSON/CSV/
+  PDF extensos, extracciones e índices, permanecen locales. No forzar su inclusión.
+  Los PDF candidatos no se trasladaron a manuals/ como parte de este commit.
+- Las afirmaciones de 'sin commit/push' de secciones anteriores son historial
+  del momento de cada tarea, no una prohibición de publicar esta revisión.
+- Validar hash y sincronización remota con Git; esta nota por sí sola no acredita
+  que la operación de push haya terminado. Paso 8 continúa pendiente.
+
+### Actualización 24-10-2026: PDF candidatos por las siete categorías
+
+Petición posterior: encontrar en la web fuentes relevantes para resolver
+problemas de hardware, software, redes, cuentas, seguridad, acceso y otros.
+La búsqueda se completó; no corresponde repetirla sin nueva necesidad.
+
+- backend/docs/PDF_CANDIDATES_BY_CATEGORY.md y registro
+  backend/docs/fixtures/category_pdf_candidates_v1.json: 12 candidatos, diez
+  PDF descargados/abiertos/verificados con SHA-256, 363 páginas totales y las
+  siete categorías cubiertas. Hubo búsqueda de términos y revisión dirigida,
+  no aprobación semántica completa de las 363 páginas.
+- Fuentes verificadas: HP User Guide 2024 (inglés), LibreOffice 24.8 capítulos
+  1 y 12, Cisco DHCP/Ping-Traceroute, Universidad Piloto contraseña/MFA 2026,
+  INCIBE ciberataques/copias, Icesi cambio de dispositivo MFA y Sabaneta mesa
+  de ayuda 2017. Los documentos y sus procedimientos conservan producto,
+  versión y ámbito institucional; no adoptar contactos, permisos o SLA ajenos.
+- MFA Icesi requiere acceso existente a la cuenta; no cubre pérdida total de
+  MFA ni autorización HTTP 403. Quedan huecos para autorización de recursos,
+  altas/bajas, aplicaciones específicas y Wi-Fi del entorno real. Otros apoya
+  aclaración/derivación, no es una categoría para ocultar casos clasificables.
+- Dos descargas pendientes por validación TLS: IDEP políticas/VPN y DNP mesas
+  de ayuda 2025. Fuentes localizadas en web; no afirmar copia local ni aprobación.
+  No se desactivó verificación de certificados.
+- Copias e inventario LOCAL IGNORADO:
+  backend/docs/rag_runs/category_pdf_discovery/20261024/. El registro versionable
+  conserva URL, hash, páginas, problemas cubiertos, límites y aprobación falsa.
+- No se ejecutó pipeline completo ni se crearon unidades/embeddings/índices de
+  estos candidatos. No transferirles los resultados de los seis PDF previos.
+  No cambios a corpus académico, Ricoh, Supabase o clase09/reserva. Se verificaron
+  las nueve referencias del baseline intactas. Sin nuevas suites/API, commit/push.
+- Sigue pendiente el paso 8. Esta tarea fue descubrimiento documental.
+
+### Actualización 24-10-2026: evaluación de PDF públicos completada
+
+Esta actualización prevalece sobre el aplazamiento anterior: el usuario pidió
+buscar PDF en la web y aplicar tests. La búsqueda y la evaluación ya se hicieron;
+no hace falta pedirle documentos para repetir estas mismas pruebas.
+
+- Seis originales descargados: health de Camelot, BERT de ACL, Attention arXiv
+  v5 y linn/skew/rotated_skew de OCRmyPDF. Son cuatro contenidos independientes,
+  con tres variantes de un mismo escaneado. Seis páginas seleccionadas revisadas;
+  no todo el contenido de los artículos. Nada añadido al registro/corpus activo.
+- Registro de URL/hash/versiones: backend/docs/fixtures/web_pdf_sources_v1.json.
+  Runner offline backend/scripts/evaluate_web_pdfs.py; todos los hashes se
+  comprueban antes y después. Transcripción OCR externa también fijada.
+- Nueve controles por componente correctos. 24 celdas muestreadas de health
+  coinciden; no se resolvió su encabezado multinivel ni se indexaron datos sin
+  encabezados. BERT: 48/50 líneas por columna, anclas y 3.868 caracteres NFKC
+  conservados. Corrección del comprobador para ligaduras ﬁ/ﬂ; sin cambio productivo.
+  Perfil plano de tabla jerárquica se rechaza antes de forzar celdas.
+- 0/6 completan el pipeline con perfil genérico: cinco sin marcadores;
+  Attention sin número impreso en primera página. Requieren perfiles/estrategias
+  adicionales; los controles de rechazo no son éxitos de ingestión completa.
+- OCR siempre review/no indexable. Confianza 92,54–93,84 pero WER 47,89–48,68 %
+  contra transcripción mantenida por OCRmyPDF, con artefactos y sin anotación
+  humana nueva. Recuperación de tokens sin orden 94,74–95,79 %; se constató
+  mezcla de columnas al leer instrucciones. Confianza no equivale a exactitud.
+- Nueve pruebas nuevas; 105 específicas y 357 unitarias completas correctas.
+  Sin nueva suite API ni sandbox histórico repetido. Ricoh reextraído idéntico:
+  ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44;
+  498 unidades con hash guardado y nueve referencias intactas.
+- Guía backend/docs/WEB_PDF_EVALUATION.md. Evidencia LOCAL IGNORADA:
+  backend/docs/rag_runs/web_pdfs/check_20261024/results_final/ con report.json,
+  checks.csv, report.pdf, sondas y tres candidatos OCR. results/ es anterior y
+  diagnóstica; no mezclar su falso fallo literal de ligaduras con el informe final.
+- Pendientes de soporte: documentos sin marcadores, límites horizontales de
+  secciones, encabezados multinivel y OCR con segmentación. Esta sesión mide
+  límites y no los declara resueltos. No acredita calidad RAG ni revisión humana.
+- No se cambió código de producción, PDF/perfil Ricoh, índices, Supabase o modelos.
+  Sin commit/push. Clase09/reserva/RIC-06 intactos. Próximo paso solicitado: 8.
+
+### Actualización 24-10-2026: paso 7 del extractor en alcance local completado
+
+Prevalece sobre los pendientes históricos del paso 7. El usuario indicó que
+otros PDF reales se probarán al finalizar, cuando los consiga. Esa evaluación
+queda pendiente; no pedirlos otra vez ni buscarlos por iniciativa propia.
+Pasos 8–9 pendientes; siguiente solicitado será verificar unidades/recuperación.
+
+- column_text: geometría explícita, lectura por columna, cobertura de caracteres,
+  cierre de párrafos entre columnas. Rechaza contenido sin región única y cambios
+  de sección dentro de columnas incompatibles con el contrato actual. La
+  validación de archivos guardados también comprueba geometría y orden.
+- borderless_tables: solo región con límites explícitos de celdas, sin inferir
+  filas/columnas ni cortar caracteres; cuadrícula/caracteres conservados.
+  Cuadrículas explícitas cortas no se confunden con iconos pequeños.
+- pdf_ocr_review.py reutiliza Tesseract local; scripts/review_pdf_scan.py genera
+  candidato OCR separado con hash/página/raster/palabras/coordenadas/confianza.
+  Siempre review y no indexable; requiere imagen sin texto nativo. Poppler y
+  Tesseract spa/eng presentes en esta máquina, sin descargas. No fallback,
+  interpretación tabular/figuras ni conversión automática a extracción v1.
+- scripts/complex_pdf_samples.py y evaluate_complex_pdfs.py: cuatro fuentes PDF
+  controladas reproducibles, cinco páginas. Nueve controles correctos; contraste
+  visual de tablas, columnas, continuidad e imagen y lectura del informe PDF.
+  OCR de control recupera cuatro textos completos, 12 palabras; confianza media
+  95,58 no acredita exactitud semántica general. No son manuales externos reales.
+- 22 pruebas nuevas, 96 específicas y 348 unitarias completas correctas. Pipeline
+  completo probado con layouts especializados e índice de estructura inyectado.
+  Sin nueva suite API ni repetición del sandbox histórico de pasos 1–3.
+- Extracción real Ricoh completa idéntica al baseline,
+  ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44;
+  498 unidades con hash guardado, seis tablas excluidas, nueve referencias intactas.
+- Guía backend/docs/COMPLEX_PDF_EVALUATION.md. Evidencia técnica LOCAL IGNORADA:
+  backend/docs/rag_runs/complex_pdfs/check_20261024_final/ con JSON/CSV/PDF,
+  muestras, trazas y candidato OCR. Mantener separados sintéticos, regresión
+  Ricoh y futura evaluación documental nueva; no afirmar mejora de calidad RAG.
+- Sin proveedores, embeddings, Supabase, cambios al PDF/perfil/índices activos,
+  despliegue, commit ni push. Clase09/reserva/RIC-06 pendientes intactos.
+
+### Actualización 24-10-2026: paso 6 del extractor completado
+
+Esta sección prevalece sobre pendientes históricos de validaciones. Pasos 1–6
+implementados; pasos 7–9 pendientes. No iniciar integración ni OCR por defecto.
+
+- backend/src/rag/extraction_rules.py: reglas compartidas de tablas, representación
+  de texto y elegibilidad. extraction_validation.py: especificaciones componibles
+  de contrato, política de estrategias y orden/límites/texto de secciones.
+- Informe extraction-validation-v1 con accepted/review/error, motivos,
+  coordenadas de procedencia (página/sección/bloque) y listas de elegibilidad.
+  Accepted acredita estructura, no revisión humana ni semántica correcta.
+- Cualquier error bloquea construcción del documento. Tablas gráficas, glifos
+  sin resolver y páginas text_only no aportan unidades ni contexto ambiguos.
+  Una región text_only excluye conservadoramente toda la página. Continuaciones
+  siguen en review; filas completas sin otros problemas permanecen independientes.
+- Pipeline valida antes de retornar; evidence_units revalida entradas completas
+  versionadas. Entradas históricas parciales en memoria reciben reglas por bloque.
+  CLI agrega validation_report.json y su hash/estado/conteos en summary.json;
+  ante fallo escribe diagnóstico exclusivo, relanza y no publica resultado parcial.
+- 14 pruebas nuevas, 74 específicas y 326 unitarias completas correctas.
+  Sin nueva suite API ni repetición del script sandbox de pasos 1–3.
+- CLI real /tmp/ti-ricoh-validation-step6: 1.673 bloques accepted, 66 review,
+  cero error; 1.733 elegibles, seis tablas gráficas excluidas. Extracción idéntica
+  byte a byte a línea base, hash ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44.
+  Las 498 unidades reconstruidas mantienen hash del índice guardado. Nueve
+  referencias y baseline congelada intactos.
+- Guía backend/docs/EXTRACTION_VALIDATION.md. Informe técnico LOCAL IGNORADO:
+  backend/docs/rag_runs/extraction_validation/check_20261024.json.
+- Sin proveedores/modelos, Supabase, cambios de PDF/perfil/datos/índices activos,
+  despliegue, commit ni push. Clase09 y RIC-06 pendientes intactos.
+  Siguiente paso solicitado: 7, evaluar nuevas muestras complejas.
+
+### Actualización 24-10-2026: paso 5 del extractor completado
+
+Prevalece sobre los pendientes de estrategias descritos más abajo. Solo se
+implementó el paso 5; validaciones formales/casos nuevos/integración pendientes.
+
+- backend/src/rag/extraction_strategies.py: NativeTextStrategy, RuledTableStrategy,
+  TextOnlyTableStrategy e interfaces inyectables con política estricta de páginas
+  y regiones. Configuración opcional extraction_profile.strategies; ausencia
+  mantiene texto nativo/tablas con bordes y correcciones previas. Perfil Ricoh intacto.
+- Selecciones explícitas con motivo; text_only registra diagnóstico review y
+  conserva texto sin estructura tabular, nunca sustitución automática. Nombres
+  no implementados (OCR), rangos/regiones superpuestos, cortes de tablas y
+  redetecciones sin tabla/pérdida de palabras previamente recuperadas se rechazan.
+- Prueba real Ricoh185 detectó que recortar de nuevo por bordes exactos podía
+  perder una celda. Se reutilizan cuadrículas completas cuando settings no cambia;
+  si hay redetección, pérdida de texto requiere revisión. Conservación de palabras
+  no acredita relaciones semánticas correctas entre causas y soluciones.
+- Trace opcional strategy_trace= fuera del resultado v1. CLI extract_real_manual
+  guarda strategy_trace.json y cantidad/checksum en summary.json; la extracción
+  guardada histórica no se sobrescribió para añadir esta traza.
+- Diez pruebas nuevas; 60 específicas y 312 unitarias completas correctas.
+  Sin nueva suite API ni repetición del script sandbox de 23 comprobaciones.
+- CLI real en /tmp/ti-ricoh-strategies-step5: 228 registros (213 selecciones
+  native_text/ruled_tables y 15 exclusiones), todos con motivo; checksum comprobado.
+  JSON extraído idéntico a referencia, hash ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44;
+  sin secciones ni nueve referencias modificadas. Línea base congelada intacta.
+- Guía backend/docs/EXTRACTION_STRATEGIES.md. Informe técnico LOCAL IGNORADO:
+  backend/docs/rag_runs/extraction_strategies/check_20261024.json. Comparación
+  previa backend/docs/rag_runs/extraction_baseline/20261025T033208168385Z.json.
+- Sin nuevos métodos especializados validados para escaneados, tablas sin bordes
+  o diagramas. Sin proveedores, modelos, Supabase, cambios de fuente/perfil/
+  datos/índices, despliegue, commit o push. Próximo paso solicitado: 6,
+  formalizar reglas e informes de aceptado/revisión/error. Clase09 pendiente intacta.
+
+### Actualización 24-10-2026: paso 4 del extractor completado
+
+Prevalece sobre los pendientes de adaptadores descritos más abajo. Solo se
+encapsularon bibliotecas; estrategias y siguientes pasos pendientes.
+
+- Nuevo módulo backend/src/rag/pdf_adapters.py con interfaces de estructura,
+  documento/página de layout, OutlineEntry y TableSnapshot. pypdf/pdfplumber
+  se importan al abrir sus contextos, exclusivamente dentro de ese módulo.
+- external_ingestion no importa bibliotecas ni accede a sus objetos internos.
+  Recibe datos comunes y conserva reglas de perfil, IDs, bloques y contratos.
+  extract_real_document/analyze_document/extract_pages admiten backends= con
+  factories de contexto PDFBackends. Defaults conservan el uso previo.
+- Helpers públicos conservan entrada nativa vía compatibilidad. page_tables
+  entrega TableSnapshot consumible por table_block; no prometer API privada nativa.
+  Vistas de caracteres conservan identidad para exclusiones exactas.
+- Ocho pruebas nuevas, 50 específicas correctas y 302 unitarias completas
+  correctas. Una prueba ejecuta todo el pipeline con backend en memoria y
+  imports de ambas bibliotecas bloqueados; no presentar su fuente sintética
+  como PDF real. También se probaron cierres/fallos, marcadores, tablas y página185 real.
+- Extracción real completa idéntica (hash ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44),
+  sin secciones ni nueve referencias cambiadas; línea base congelada intacta.
+- Guía backend/docs/PDF_ADAPTERS.md. Informe técnico LOCAL IGNORADO:
+  backend/docs/rag_runs/extraction_baseline/20261025T032202977078Z.json.
+- Sin nueva suite API ni sandbox de 23 comprobaciones repetido. Sin OCR,
+  proveedores, Supabase, cambios de fuente/perfil/datos/índices, despliegue,
+  commit o push. Próximo paso solicitado: 5, estrategias por página/región.
+
+### Actualización 24-10-2026: paso 3 del extractor completado
+
+Esta sección prevalece sobre los pendientes del paso 3 descritos más abajo.
+Solo se separaron etapas; adaptadores y estrategias siguen pendientes.
+
+- external_ingestion.extract_real_document coordina cinco etapas: fuente,
+  análisis, extracción de páginas, reconstrucción documental y validación final.
+  Subetapas por página: auditoría, layout y reconstrucción de bloques.
+- Estado explícito por documento (IDs/continuaciones/auditoría), sin acumular
+  resultados al reutilizar un análisis. Páginas/documento/stream de análisis
+  se cierran también ante errores. Se conservan excepciones originales con
+  notas de etapa/página y se interrumpe el flujo ante fallo.
+- Interfaz pública, helpers existentes, serialización v1 y consumidores
+  conservados. No OCR, adaptadores, estrategias nuevas ni interpretación gráfica.
+- Siete pruebas nuevas; 42 específicas correctas y 294 unitarias completas
+  correctas. Sin nueva ejecución de suite API ni proveedores.
+- Extracción completa idéntica a línea base (hash ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44),
+  sin secciones ni nueve referencias locales cambiadas. Línea base congelada intacta.
+- Guía backend/docs/EXTRACTION_PIPELINE.md. Informe técnico LOCAL IGNORADO:
+  backend/docs/rag_runs/extraction_baseline/20261025T030355523352Z.json.
+- Sin cambios al PDF/perfil/datos/índices, Supabase, despliegue, commit ni push.
+  Pendientes de clase 09 y fallo histórico RIC-06 intactos. Siguiente paso
+  cuando se solicite: 4, encapsular bibliotecas mediante adaptadores.
+
+### Actualización 24-10-2026: paso 2 del extractor completado
+
+Esta sección prevalece sobre los pendientes de pasos 1/2 descritos más abajo.
+El usuario autorizó definir contratos; no se avanzó a separar etapas (paso 3).
+
+- `backend/src/rag/extraction_contracts.py`: modelos Pydantic estrictos para
+  fuente/perfil, auditoría de páginas, jerarquía de secciones, párrafos,
+  tablas y filas. Extensiones de metadatos documentales se conservan.
+- Validación estructural de versión, geometría finita/ordenada, referencias,
+  páginas completas, IDs únicos, antecesores, columnas, filas y continuaciones.
+  No acredita respaldo semántico, exhaustividad ni revisión humana.
+- FigureReference y ExtractionDiagnostic son contratos separados; el resultado
+  v1 sigue admitiendo solo párrafos/tablas. No se inventa extracción de figuras
+  ni se añaden campos que rompan los consumidores actuales.
+- external_ingestion.extract_real_document valida el resultado y devuelve el
+  diccionario original; no model_dump ni cambio de serialización/schema_version.
+- 11 pruebas nuevas, 35 específicas correctas y suite unitaria completa de
+  287 pruebas correctas. Sin nueva ejecución de la suite API.
+- Extracción completa idéntica a línea base, hash
+  ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44;
+  sin secciones ni nueve referencias locales cambiadas. Código del extractor
+  cambia por la nueva validación; el comprobador lo informa por separado y
+  la línea base congelada no se modifica.
+- Guía `backend/docs/EXTRACTION_CONTRACTS.md`; informe técnico LOCAL IGNORADO
+  `backend/docs/rag_runs/extraction_baseline/20261025T023955782724Z.json`.
+- Sin cambios de fuente, perfil, extracción guardada, índices, proveedores,
+  Supabase, despliegue, commit o push. Pasos 3–9 y pendientes de clase 09 siguen
+  abiertos. Siguiente paso cuando se solicite: separar las etapas/pipeline.
+
+### Actualización 24-10-2026: paso 1 del extractor completado
+
+Esta actualización prevalece sobre las afirmaciones inferiores de implementación
+no iniciada. Solo se implementó la línea base; pasos 2–9 pendientes.
+
+- Referencia versionable: `backend/docs/baselines/ricoh_extraction_v1.json`.
+  Conserva fuente/perfil, huellas de extracción completa y por sección, páginas,
+  exclusiones, nueve archivos locales, código y versiones de bibliotecas.
+- Nuevo comprobador: desde backend,
+  `../.venv/bin/python -m scripts.check_extraction_baseline`.
+  Reextrae en memoria, compara y crea un informe técnico JSON local nuevo;
+  termina con error ante diferencias. La creación --create exige referencia
+  histórica idéntica; ni referencia ni informes existentes se sobrescriben.
+- Dos extracciones completas (creación y comprobación) idénticas a la guardada,
+  hash ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44;
+  sin secciones ni archivos de referencia cambiados. Código/entorno registrados
+  por separado, para permitir refactorizaciones que conserven la extracción.
+- 24 pruebas específicas correctas: 18 existentes + seis nuevas. Dos controles
+  CLI de sobrescritura también rechazados con código 2 y referencia intacta.
+  No presentar como nueva ejecución de 270 unitarias o 26 API.
+- Guía: `backend/docs/EXTRACTION_BASELINE.md`. Informe local ignorado:
+  `backend/docs/rag_runs/extraction_baseline/20261025T023423132332Z.json`.
+  Los datos locales se requieren para comprobar; las huellas no son un respaldo.
+- Sin modificar PDF, perfil, extractor existente, extracción guardada o índices;
+  sin modelos, proveedores, Supabase, despliegue, commit ni push. Pendientes
+  métricas/revisión humana/reserva sin cambios. Siguiente paso: contratos,
+  únicamente cuando se solicite. Plan actualizado en EXTRACTOR_IMPLEMENTATION_PLAN.md.
+
+### Continuidad vigente 24-10-2026 — publicación y verificaciones
+
+Esta sección prevalece sobre la continuidad del 21-10-2026 y el historial posterior.
+El usuario solicitó actualizar .agents tras crear y publicar el commit; esta tarea
+solo documenta, sin iniciar implementación, reserva ni nuevas integraciones.
+
+#### Git y pruebas
+
+- Rama `codex/backend-infra-ricoh-local`, HEAD y remoto comprobados iguales en
+  `c5826c070079d0460c16bc915e9bfd12ecd2b259`:
+  `feat: improve hybrid retrieval and add coverage and token reports`.
+- Publicados los 34 archivos pendientes: recuperación híbrida v2, rag_v6,
+  completitud de evidencia, comparación real de tokens, JSON/CSV/PDF, pruebas
+  y continuidad. Las frases antiguas «pendientes de commit/push sobre aea3002»
+  quedan superadas para esos cambios.
+- Repetidas antes de publicar: 270 pruebas unitarias y 26 API correctas;
+  git diff --check sin errores. Los 34 archivos, incluidos JSON y texto de PDF,
+  se revisaron sin coincidencias con secretos locales ni patrones de credenciales.
+- Árbol limpio después del push. Esta actualización de .agents queda local;
+  no implica otro commit/push. No se ha implementado la refactorización del extractor.
+
+#### Endpoints y Supabase — verificación realizada en esta sesión
+
+- Backend `infra-backend-1` saludable, imagen
+  `sha256:a414431ee034403f145f1ca2576223bdff9a71febb4b242f98830954343a5d4b`.
+- 19/19 controles HTTP correctos: health, Swagger, OpenAPI, JS/CSS y siete
+  categorías; controles de autenticación, método, JSON, campos, categoría,
+  Content-Type y tamaño; búsquedas y query reales HTTP 200.
+- Supabase Auth, inventario y RPC verificados desde dos clientes nuevos del
+  mismo usuario. 70 fragmentos coinciden con el índice local; ranking, texto
+  y similitud consistentes. Sin upsert, cambios de corpus ni prueba entre usuarios.
+- Una solicitud a rag/query sobre error 403 consumió Groq mediante clasificación,
+  generación y revisión documental. No confundir una solicitud HTTP con una sola
+  llamada al proveedor. Citas F1/F2/F3 estructuralmente coherentes.
+- Observación de calidad: estado OK_PIDE_ACLARACION y datos_faltantes vacío;
+  hay respuesta documental y limitación que solicita más información. Pendiente
+  revisar coherencia, sin atribuir validación semántica ni revisión humana.
+- Search HTTP 26,3582 s en la primera búsqueda observada; query HTTP 4,0937 s
+  y pipeline 3,0447 s. Observaciones individuales, no benchmark ni diagnóstico
+  probado de la demora inicial.
+- Evidencia LOCAL IGNORADA: `backend/docs/rag_runs/endpoint_check_20261024/`
+  contiene endpoints.json, supabase.json y RESULTADOS.md. No repetir llamadas
+  para leerla. No está en el commit ni disponible automáticamente en otro clon.
+
+#### Copia local de Supabase
+
+Existen `backend/data/indexes/sections/{records.json,vectors.npy,config.json}`
+y `infra/supabase/migrations/20261014_documentary_rag.sql`. Permiten reconstruir
+el corpus y su estructura con configuración y autenticación adecuadas, pero no
+son un respaldo completo. No se encontró dump de base ni respaldo de usuarios
+Auth. El upsert no elimina filas adicionales: no garantiza volver exactamente
+al estado completo del proyecto. No se creó respaldo ni se restauró nada.
+
+#### Extracción Ricoh verificada
+
+- 18/18 pruebas de extracción/fragmentación correctas (11 + 7); estas pruebas
+  forman parte de la suite de 270, no sumar sus recuentos como cobertura nueva.
+- Extracción completa en `/tmp/ti-ricoh-extraction-verification-20261024`,
+  idéntica byte a byte a la guardada: SHA-256
+  `ca1178c5ddda48bb0940f7cd8ee88d15e288ed82892a1fdda702ea630ec46f44`.
+- 228 páginas contabilizadas; 213 de contenido y 15 excluidas; 146 secciones,
+  1.647 párrafos, 92 tablas, 383 filas y 62 candidatas a continuación sin fusionar.
+- Numeración PDF/impresa comprobada en todas las páginas de contenido.
+  Quick Install conserva once pasos y condición de privilegios.
+- Las unidades regeneradas coinciden con las 498 del índice local; hashes y
+  cobertura de las 779 vistas, vectores de 384 dimensiones, comprobados.
+- Revisión visual DEL AGENTE, no humana: PDF 75 (tabla con diagramas) y 185
+  (fax e impresión separados). Seis tablas gráficas de PDF 65/66/75/76/78/146
+  excluidas de indexación textual. No interpreta diagramas ni activa OCR solo.
+- Perfil específico para los bytes Ricoh registrados; no es extractor universal.
+  RIC-06 (Hold Print/Stored Print) sigue siendo un fallo histórico de recuperación,
+  no reevaluado en esta verificación. No se ejecutó generación ni Supabase.
+- Evidencia LOCAL IGNORADA: `backend/docs/rag_runs/ricoh_extraction_check_20261024/`
+  con verification.json y RESULTADOS.md. No sobrescribir la extracción guardada.
+- RICOH_EXTRACTION.md conserva un siguiente paso histórico de fragmentación ya
+  realizado; prevalecen el manifiesto actual y RICOH_LOCAL_RETRIEVAL.md.
+
+#### Procedimiento acordado y clase 09
+
+Plan en `.agents/EXTRACTOR_IMPLEMENTATION_PLAN.md`: línea base → contratos →
+pipeline → adaptadores → estrategias → validaciones → casos complejos →
+fragmentación/recuperación → integración y evaluación RAG. Es planificación;
+el usuario pidió publicar primero y luego actualizar continuidad, no ejecutar
+la refactorización como parte de esta tarea.
+
+Clase-09 del directorio padre fue leída (17 diapositivas y notebook; ZIP y
+extraídos coinciden). La entrega pide línea base y al menos una mejora; el demo
+propone A/B/C con reranking. No asumir que todas las técnicas son obligatorias.
+Sin umbral numérico de aprobación; 12–20 casos es escala didáctica, no garantía.
+Pendientes revisión humana de 14 respuestas, respaldo/citas por afirmación,
+abstenciones, reserva, decisión, notebook Colab consolidado y presentación PDF.
+No confundir PDF de métricas con presentación. Ricoh permanece fuera de la API.
+
+### Historial de continuidad — 21-10-2026 y anteriores
 
 ### Continuidad consolidada 21-10-2026 — actualización solicitada
 

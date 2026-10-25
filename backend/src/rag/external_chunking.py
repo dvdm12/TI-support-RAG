@@ -13,6 +13,8 @@ import numpy as np
 
 from .embeddings import validate_vectors
 from .external_ingestion import normalized
+from .extraction_rules import block_indexing_decision
+from .extraction_validation import require_valid_extraction
 
 FORMAT = 'external-parent-child-v1'
 
@@ -22,6 +24,17 @@ def digest(value):
 
 
 def evidence_units(extraction):
+    # Full versioned documents must pass all specifications before any units
+    # are built. Legacy in-memory inputs still receive per-block safety checks.
+    report = require_valid_extraction(extraction) if 'schema_version' in extraction else None
+    decisions = {b['block_id']: b for b in report['blocks']} if report else {
+        b['id']: block_indexing_decision(b) for s in extraction['sections'] for b in s['blocks']}
+    if any(d['status'] == 'error' for d in decisions.values()):
+        raise ValueError('Bloque ambiguo marcado como indexable; revisar antes de fragmentar.')
+
+    def eligible(block):
+        return decisions[block['id']]['text_index_eligible']
+
     document = extraction['document']
     if document['simulated'] is not False:
         raise ValueError('Esta construcción es exclusivamente para documentos reales.')
@@ -29,8 +42,11 @@ def evidence_units(extraction):
     units, excluded = [], []
     for section in extraction['sections']:
         ancestors = [sections[i] for i in section['ancestor_section_ids']]
-        paragraphs = [b for b in section['blocks'] if b['type'] == 'paragraph']
-        context = [b for s in ancestors for b in s['blocks'] if b['type'] == 'paragraph']
+        paragraphs = [b for b in section['blocks'] if b['type'] == 'paragraph' and eligible(b)]
+        context = [b for s in ancestors for b in s['blocks'] if b['type'] == 'paragraph' and eligible(b)]
+        excluded.extend({'block_id': b['id'], 'pdf_page': b['pdf_page'],
+                         'reason': decisions[b['id']]['reasons']}
+                        for b in section['blocks'] if b['type'] == 'paragraph' and not eligible(b))
         graphics = [b['id'] for s in [*ancestors, section] for b in s['blocks']
                     if b['type'] == 'table' and not b['text_index_eligible']]
 
@@ -56,9 +72,9 @@ def evidence_units(extraction):
         if paragraphs:
             register('section_text', '\n\n'.join(b['text'] for b in paragraphs), paragraphs, context)
         for table in (b for b in section['blocks'] if b['type'] == 'table'):
-            if not table['text_index_eligible']:
+            if not eligible(table):
                 excluded.append({'block_id': table['id'], 'pdf_page': table['pdf_page'],
-                                 'reason': table['review_flags']})
+                                 'reason': table.get('review_flags') or decisions[table['id']]['reasons']})
                 continue
             for row in table['rows']:
                 if len(row['cells']) != len(table['headers']) or any(c is None for c in row['cells']):

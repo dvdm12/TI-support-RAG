@@ -1,0 +1,182 @@
+{
+  "schema_version": "web-pdf-sources-v1",
+  "review_scope": "Targeted public pages and regions, not whole-document semantic approval.",
+  "sources": [
+    {
+      "id": "health",
+      "url": "https://raw.githubusercontent.com/camelot-dev/camelot/92777b852e00933a5c4b9ba642601784604356cd/tests/files/health.pdf",
+      "landing_page": "https://github.com/camelot-dev/camelot/blob/92777b852e00933a5c4b9ba642601784604356cd/tests/files/health.pdf",
+      "sha256": "efdcd7794fc9397dd3626075f025fa27a95b1180331b0b2c5b89a6c85ae3c4f6",
+      "file": "health.pdf",
+      "bytes": 87419,
+      "pages": 1,
+      "outline_entries": 0
+    },
+    {
+      "id": "scan",
+      "url": "https://raw.githubusercontent.com/ocrmypdf/OCRmyPDF/f23020e9a97cb1d23c75eb9ce93f0c5f50e1fb63/tests/resources/linn.pdf",
+      "landing_page": "https://github.com/ocrmypdf/OCRmyPDF/blob/f23020e9a97cb1d23c75eb9ce93f0c5f50e1fb63/tests/resources/linn.pdf",
+      "sha256": "e923f6e8e036185f8f2aae5f7fdeefd8ac658d627cebd4ebf630de4cbf0a2d64",
+      "file": "scan.pdf",
+      "bytes": 75273,
+      "pages": 1,
+      "outline_entries": 0
+    },
+    {
+      "id": "skew",
+      "url": "https://raw.githubusercontent.com/ocrmypdf/OCRmyPDF/f23020e9a97cb1d23c75eb9ce93f0c5f50e1fb63/tests/resources/skew.pdf",
+      "landing_page": "https://github.com/ocrmypdf/OCRmyPDF/blob/f23020e9a97cb1d23c75eb9ce93f0c5f50e1fb63/tests/resources/skew.pdf",
+      "sha256": "6be6b54d49df71351974774404e299b756d8d3cbeb2c4a31f15fae8dd983d72f",
+      "file": "skew.pdf",
+      "bytes": 76013,
+      "pages": 1,
+      "outline_entries": 0
+    },
+    {
+      "id": "rotated",
+      "url": "https://raw.githubusercontent.com/ocrmypdf/OCRmyPDF/f23020e9a97cb1d23c75eb9ce93f0c5f50e1fb63/tests/resources/rotated_skew.pdf",
+      "landing_page": "https://github.com/ocrmypdf/OCRmyPDF/blob/f23020e9a97cb1d23c75eb9ce93f0c5f50e1fb63/tests/resources/rotated_skew.pdf",
+      "sha256": "5122c07d05a61219eb9f8305776ef16def6b34c29358e05c5ae2e884a351438f",
+      "file": "rotated.pdf",
+      "bytes": 76401,
+      "pages": 1,
+      "outline_entries": 0
+    },
+    {
+      "id": "attention",
+      "url": "https://arxiv.org/pdf/1706.03762v5",
+      "landing_page": "https://arxiv.org/abs/1706.03762v5",
+      "sha256": "bfaaec89262875f927cf1b38b2da2d775f3309b7bea3537f29b606ca67e79065",
+      "file": "attention.pdf",
+      "bytes": 2201700,
+      "pages": 15,
+      "outline_entries": 10
+    },
+    {
+      "id": "bert",
+      "url": "https://aclanthology.org/N19-1423.pdf",
+      "landing_page": "https://aclanthology.org/N19-1423/",
+      "sha256": "987545ffb087f1ece898142c403a516baeabeb70ce19089397fac6f7db12c3d4",
+      "file": "bert.pdf",
+      "bytes": 786279,
+      "pages": 16,
+      "outline_entries": 0
+    }
+  ],
+  "ocr_reference": {
+    "file": "linn.txt",
+    "url": "https://raw.githubusercontent.com/ocrmypdf/OCRmyPDF/f23020e9a97cb1d23c75eb9ce93f0c5f50e1fb63/tests/resources/linn.txt",
+    "sha256": "18fbd25ca0fc7783f3b7f0e93e91e9408d2d517739f646fecbdf6209628204b1",
+    "reference_kind": "OCRmyPDF-maintained transcript; contains artifacts; not newly human-certified ground truth."
+  },
+  "health_probe": {
+    "pdf_page": 1,
+    "bbox": [
+      36,
+      124,
+      580,
+      189
+    ],
+    "settings": {
+      "vertical_strategy": "explicit",
+      "horizontal_strategy": "explicit",
+      "explicit_vertical_lines": [
+        36,
+        155,
+        220,
+        279,
+        338,
+        385,
+        451,
+        517,
+        580
+      ],
+      "explicit_horizontal_lines": [
+        124,
+        145,
+        167,
+        189
+      ]
+    },
+    "expected_grid": [
+      [
+        "Andhra Pradesh",
+        "47,824,589",
+        "9,967,837",
+        "1,275,000",
+        "15,000",
+        "59,082,426",
+        "14,898,243",
+        "73,980,669"
+      ],
+      [
+        "Arunachal Pradesh",
+        "2,241,609",
+        "107,549",
+        "23,000",
+        "0",
+        "2,372,158",
+        "86,336",
+        "2,458,494"
+      ],
+      [
+        "Assam",
+        "14,874,821",
+        "2,554,197",
+        "161,600",
+        "0",
+        "17,590,618",
+        "4,408,505",
+        "21,999,123"
+      ]
+    ],
+    "interpretation": "Three data rows only; multi-level headers are excluded from this probe and remain unresolved; never index as complete evidence."
+  },
+  "bert_columns": {
+    "pdf_page": 2,
+    "body_top": 60,
+    "body_bottom": 770,
+    "columns": [
+      [
+        70,
+        60,
+        295,
+        770
+      ],
+      [
+        300,
+        60,
+        528,
+        770
+      ]
+    ],
+    "anchors": [
+      [
+        "word based only on its context. Unlike left-to-",
+        "right context (Mikolov et al., 2013)."
+      ],
+      [
+        "These approaches have been generalized to",
+        "et al., 2018a). Left-to-right language model-"
+      ]
+    ],
+    "interpretation": "Reading-order probe only; section headings within columns not mapped to v1 sections."
+  },
+  "source_rights": [
+    {
+      "source": "OCRmyPDF scans and transcript",
+      "notice": "Forat Electronics, 1985; GFDL-1.2-or-later or CC-BY-SA-3.0 as declared by upstream.",
+      "url": "https://github.com/ocrmypdf/OCRmyPDF/blob/main/REUSE.toml"
+    },
+    {
+      "source": "Camelot health.pdf",
+      "notice": "Public test document hosted by Camelot; original health-financing report. Test locally; upstream software license is not assumed to license all PDF content.",
+      "url": "https://github.com/camelot-dev/camelot/tree/master/tests/files"
+    },
+    {
+      "source": "BERT and Attention",
+      "notice": "Publisher/arXiv papers; downloaded unchanged for local targeted evaluation, outside the active corpus.",
+      "url": "https://aclanthology.org/N19-1423/"
+    }
+  ]
+}

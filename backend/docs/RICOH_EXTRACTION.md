@@ -25,6 +25,11 @@ En `data/extracted/RICOH-MP4002-USER-GUIDE-EN/`, ignorado por Git:
 - `review.md`: lectura por sección, con páginas PDF e impresas y filas completas
   de las tablas. Las imágenes permanecen en el PDF original.
 - `summary.json`: cantidades, hash del JSON y limitaciones.
+- `validation_report.json`: estado estructural, reglas y elegibilidad por bloque;
+  se genera desde el paso 6, separado de la extracción v1.
+- `strategy_trace.json`: selecciones por página/región, exclusiones y diagnósticos;
+  lo generan las nuevas ejecuciones del CLI desde el paso 5. Las extracciones
+  históricas pueden no tenerlo; no se regeneran automáticamente para añadirlo.
 - `previews/`: muestras renderizadas para la revisión visual de esta ejecución;
   no las genera el comando de extracción.
 
@@ -76,3 +81,14 @@ recuperación local en español. El importador académico `load_corpus` conserva
 contrato y el registro real no se puede pasar todavía al indexador existente.
 
 Implementación geométrica: [documentación de pdfplumber](https://github.com/jsvine/pdfplumber).
+
+La implementación actual separa contratos, pipeline, adaptadores y estrategias.
+Ver `EXTRACTION_STRATEGIES.md` para selección explícita y trazas sin modificar
+el JSON v1 ni el perfil Ricoh activo. El siguiente paso histórico de fragmentación
+de esta guía ya se realizó; su estado está en `RICOH_LOCAL_RETRIEVAL.md`.
+Las validaciones y el bloqueo de evidencia ambigua están documentados en
+`EXTRACTION_VALIDATION.md`. Los pasos 1–6 están implementados; evaluar nuevas
+muestras complejas corresponde al paso 7.
+Ese paso ya incorporó pruebas controladas y estrategias explícitas, descritas
+en `COMPLEX_PDF_EVALUATION.md`; otros PDF reales se evaluarán al cierre por
+indicación del usuario. El perfil Ricoh mantiene su configuración original.
