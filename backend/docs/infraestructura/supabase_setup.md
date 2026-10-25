@@ -55,7 +55,7 @@ La respuesta documental fue aceptada con F1 y F3; la decisión local conservó
 `OK_PIDE_ACLARACION`. El catálogo apunta a HW-02 y HW-04. La revisión de respaldo
 semántico permanece explícita, sin equiparar citas válidas a garantía de verdad.
 
-La evidencia sin secretos está en `docs/supabase_verification.json`. Las trazas
+La evidencia sin secretos está en `docs/infraestructura/supabase_verification.json`. Las trazas
 completas de ejecución quedan en `docs/rag_runs/`, excluido de Git.
 
 Se creó `.venv` con Python 3.12.3, se activó antes de instalar dependencias y se

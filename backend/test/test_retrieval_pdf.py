@@ -12,7 +12,7 @@ from src.rag.config import ROOT
 
 class RetrievalPDFTests(unittest.TestCase):
     def setUp(self):
-        self.report=json.loads((ROOT/'docs/retrieval_metrics_20261021.json').read_text())
+        self.report=json.loads((ROOT/'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json').read_text())
 
     def text(self,path):
         with pdfplumber.open(path) as doc:

@@ -14,7 +14,7 @@ from scripts.compare_generation_tokens import prepare, write_outputs
 
 class TokenComparisonTests(unittest.TestCase):
     def setUp(self):
-        self.report=prepare(ROOT/'docs/coverage_improvements_20261021.json',ROOT/'cases/rag_evidence.json')
+        self.report=prepare(ROOT/'docs/evaluacion/recuperacion/coverage_improvements_20261021.json',ROOT/'cases/rag_evidence.json')
 
     def observed(self,prompt=10,completion=4,status='contract_valid'):
         return {'status':status,'usage':{'prompt_tokens':prompt,'completion_tokens':completion,'total_tokens':prompt+completion},

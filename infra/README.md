@@ -8,4 +8,4 @@ Las credenciales locales se mantienen en `../backend/.env`, excluido de Git. Est
 
 `compose.yaml` ejecuta el backend con el índice en modo lectura y cachés persistentes
 para el modelo y tiktoken. Desde la raíz: `docker compose -f infra/compose.yaml up -d`.
-Consulta [la guía Docker](../backend/docs/DOCKER.md) antes del primer arranque.
+Consulta [la guía Docker](../backend/docs/infraestructura/DOCKER.md) antes del primer arranque.

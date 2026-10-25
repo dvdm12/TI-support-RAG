@@ -58,7 +58,7 @@ implementación, no una revisión humana ni un juez semántico independiente.
   pero no se separan embedding, RPC, contexto y validación. La consulta inicial
   reutiliza candidatos del punto 6, cuya recuperación no está incluida en el
   total medido del punto 8.
-- Fragmentación: hay comparación reproducible en `docs/rag_comparison.json`,
+- Fragmentación: hay comparación reproducible en `docs/evaluacion/recuperacion/rag_comparison.json`,
   pero la elección final de `sections` conserva revisión semántica pendiente.
 - Como control adicional del proyecto, 5 de 6 salidas respetaron simultáneamente
   las longitudes pedidas en el prompt (90 palabras de respuesta y 25 de
@@ -72,8 +72,8 @@ Sesión: `docs/rag_runs/clase08/20261014T203144285329Z/`.
 Incluye `clase_08_ejecutado.ipynb`, las seis consultas, carga, persistencia,
 `Clase_08_Evidencia_RAG.json`, `metricas_clase08.json` y `bitacora.json`.
 Las trazas permanecen fuera de Git; el resumen revisable es
-`docs/class08_metrics.json`, y la ejecución está en
-`docs/class08_metrics_execution.json`.
+`docs/clases/clase08/class08_metrics.json`, y la ejecución está en
+`docs/clases/clase08/class08_metrics_execution.json`.
 
 Fuentes de los criterios: `parcial2/Clase_08_RevealJS/index.html`, apartados de
 trazabilidad, avance y pruebas (líneas 445–485), y puntos 9–10 del notebook

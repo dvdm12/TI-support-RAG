@@ -16,7 +16,7 @@ from scripts import evaluate_retrieval_metrics as evaluator
 
 class CompleteCoverageTests(unittest.TestCase):
     def setUp(self):
-        self.source = json.loads((ROOT/'docs/retrieval_metrics_20261021.json').read_text())
+        self.source = json.loads((ROOT/'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json').read_text())
         self.annotations = json.loads((ROOT/'cases/rag_evidence.json').read_text())
 
     def test_alternatives_and_incomplete_information_are_distinct_from_hits(self):
@@ -80,7 +80,7 @@ class CompleteCoverageTests(unittest.TestCase):
         with self.assertRaises(ValueError): enrich_saved_report(self.source,self.annotations)
 
     def test_cli_exports_all_formats_without_model_or_providers(self):
-        source=ROOT/'docs/retrieval_metrics_20261021.json';before=source.read_bytes()
+        source=ROOT/'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json';before=source.read_bytes()
         with tempfile.TemporaryDirectory() as folder:
             output=Path(folder)/'complete.json'
             with contextlib.ExitStack() as stack:

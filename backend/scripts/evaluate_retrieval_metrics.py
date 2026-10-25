@@ -151,7 +151,7 @@ def main():
     parser.add_argument('--backend',choices=('supabase','local'),default='supabase')
     parser.add_argument('--annotations',type=Path,default=ROOT/'cases/rag_evidence.json')
     parser.add_argument('--index',type=Path,default=ROOT/'data/indexes/sections')
-    parser.add_argument('--output',type=Path,default=ROOT/'docs/retrieval_metrics_20261021.json')
+    parser.add_argument('--output',type=Path,default=ROOT/'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json')
     args=parser.parse_args()
     if args.from_json is not None:
         print(generate_pdf(json.loads(args.from_json.read_text()),args.from_json))

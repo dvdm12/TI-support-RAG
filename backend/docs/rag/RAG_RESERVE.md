@@ -20,7 +20,7 @@ No llamar a estos candidatos «reserva validada» antes de la revisión y congel
   unidades, IDs relevantes, citas con offsets y criterios de fallo. Cada caso
   registra revisión humana pendiente y ejecución `not_run`.
 - `scripts/validate_rag_reserve.py`: verificador local sin modelos ni proveedores.
-- `docs/rag_reserve_validation.json`: comprobación de estructura, hashes, citas y
+- `docs/evaluacion/validaciones/rag_reserve_validation.json`: comprobación de estructura, hashes, citas y
   ocho controles negativos. No contiene métricas del sistema.
 
 ## Matriz de candidatos
@@ -85,7 +85,7 @@ implementa ese experimento. No se escoge ganador con estos candidatos.
 Desde backend:
 
 ```sh
-python3 -m scripts.validate_rag_reserve --output docs/rag_reserve_validation.json
+python3 -m scripts.validate_rag_reserve --output docs/evaluacion/validaciones/rag_reserve_validation.json
 python3 -m scripts.validate_rag_reserve --require-ready
 ```
 

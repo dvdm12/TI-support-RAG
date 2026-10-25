@@ -25,7 +25,7 @@ def main():
     parser.add_argument('--extraction', type=Path, default=Path('data/extracted/RICOH-MP4002-USER-GUIDE-EN/extraction.json'))
     parser.add_argument('--output', type=Path, default=Path('data/indexes/ricoh-local-v1'))
     parser.add_argument('--cases', type=Path, default=Path('cases/ricoh_retrieval_es.json'))
-    parser.add_argument('--report', type=Path, default=Path('docs/ricoh_local_retrieval_validation.json'))
+    parser.add_argument('--report', type=Path, default=Path('docs/extractor/ricoh_local_retrieval_validation.json'))
     parser.add_argument('--revision', default='e8f8c211226b894fcb81acc59f3b34ba3efd5f42')
     parser.add_argument('--existing', action='store_true')
     args = parser.parse_args()

@@ -10,7 +10,7 @@ from src.rag.comparison import compare_strategies
 def main():
     parser = argparse.ArgumentParser(description='Comparar tres cortes; no asigna ganador automáticamente.')
     parser.add_argument('--revision')
-    parser.add_argument('--output', type=Path, default=Path('docs/rag_comparison.json'))
+    parser.add_argument('--output', type=Path, default=Path('docs/evaluacion/recuperacion/rag_comparison.json'))
     args = parser.parse_args()
     result = compare_strategies(load_corpus(RAGConfig().manifest), SentenceEmbedder(args.revision),
                                json.loads((ROOT / 'cases/rag_questions.json').read_text()),

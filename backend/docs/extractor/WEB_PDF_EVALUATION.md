@@ -9,7 +9,7 @@ representativo de manuales técnicos ni una aprobación semántica humana.
 
 ## Fuentes y procedencia
 
-El registro congelado `docs/fixtures/web_pdf_sources_v1.json` incluye URL de
+El registro congelado `docs/extractor/fixtures/web_pdf_sources_v1.json` incluye URL de
 descarga, página de origen, SHA-256, tamaño y páginas. Los recursos de GitHub
 usan commits concretos; Attention usa arXiv v5. La referencia OCR también tiene
 hash. Las copias descargadas y los resultados extensos permanecen locales,

@@ -165,7 +165,7 @@ Las 24 pruebas de API comprueban Swagger, sus assets locales, OpenAPI y, con
 servicios simulados, auth, contratos,
 CSRF/Bearer, límites, errores, fuentes y concurrencia sin gastar cuota Groq.
 Las 201 pruebas existentes siguen siendo independientes. Las comprobaciones
-HTTP reales se registran en `docs/api_validation.json`; una búsqueda real no
+HTTP reales se registran en `docs/api/api_validation.json`; una búsqueda real no
 equivale a haber ejecutado generación Groq a través del endpoint.
 
 Referencias: [controllers/View](https://docs.djangoproject.com/en/5.2/ref/class-based-views/base/),
@@ -180,7 +180,7 @@ lectura léxica, BM25, RRF, puntuación adicional, contexto, generación, valida
 revisión y total; solo se publican etapas ejecutadas. `retrieval_seconds` es un
 subtotal y `total_seconds` lo contiene: no sumarlos otra vez con sus subetapas.
 El tiempo HTTP puede ser mayor por inicialización/autenticación previa al pipeline.
-Ver [definiciones y exportación CSV](STAGE_TIMINGS.md).
+Ver [definiciones y exportación CSV](../evaluacion/tiempos/STAGE_TIMINGS.md).
 
 ## Actualización de Swagger: documentación descriptiva
 

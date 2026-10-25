@@ -244,7 +244,7 @@ def export(output, report):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--sources', type=Path, required=True)
-    parser.add_argument('--config', type=Path, default=Path('docs/fixtures/web_pdf_sources_v1.json'))
+    parser.add_argument('--config', type=Path, default=Path('docs/extractor/fixtures/web_pdf_sources_v1.json'))
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--with-ricoh', action='store_true')
     args = parser.parse_args()

@@ -56,7 +56,7 @@ PROMPTS_DIR = PROJECT_ROOT / "prompts"
 PROMPT_VERSION, PROMPT_PATH = find_latest_prompt(PROMPTS_DIR)
 
 TEST_PATH = PROJECT_ROOT / "cases" / "test_cases.json"
-RESULTS_PATH = PROJECT_ROOT / "docs" / "results.json"
+RESULTS_PATH = PROJECT_ROOT / "docs" / "parcial1" / "results.json"
 
 def get_secret(name: str) -> str:
     """Load credentials only when an integration is actually used."""

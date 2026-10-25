@@ -28,7 +28,7 @@ Se conserva el paquete original `TI-support-RAG_Manuales_PDF.zip`. Los PDF organ
 
 Cada manual se conserva una sola vez en su categoría principal. Las referencias a otras categorías permanecen en el contenido original.
 
-El corpus activo de ingestión está en [data/corpus/v2](../data/corpus/v2/README.md), con su propio manifiesto y copias idénticas de estos PDF. La implementación procesa únicamente ese corpus; no ingiere ambos directorios. El ZIP, este índice y los `.gitkeep` no son manuales adicionales. La comparación ejecutada se conserva en [docs/rag_comparison.json](../docs/rag_comparison.json).
+El corpus activo de ingestión está en [data/corpus/v2](../data/corpus/v2/README.md), con su propio manifiesto y copias idénticas de estos PDF. La implementación procesa únicamente ese corpus; no ingiere ambos directorios. El ZIP, este índice y los `.gitkeep` no son manuales adicionales. La comparación ejecutada se conserva en [docs/evaluacion/recuperacion/rag_comparison.json](../docs/evaluacion/recuperacion/rag_comparison.json).
 
 ## Documentos externos reales
 
@@ -53,7 +53,7 @@ copyright de 2011 y la descarga oficial indica actualización del 10 de enero de
 2012. No se interpreta esa actualización ni las fechas técnicas del PDF como
 fecha exacta de publicación. La guía es compartida por la familia y conserva
 diferencias por región y opciones instaladas. Evidencia de la comparación:
-[ricoh_manual_verification.json](../docs/ricoh_manual_verification.json).
+[ricoh_manual_verification.json](../docs/extractor/ricoh_manual_verification.json).
 
 La inspección encontró texto extraíble, una página 2 en blanco y tablas que
 relacionan mensajes, causas y soluciones. La futura extracción deberá conservar
@@ -61,7 +61,7 @@ esas relaciones y distinguir la página PDF de la numeración impresa.
 
 El comando local `python -m scripts.extract_real_manual`, ejecutado desde
 `backend/`, procesa este registro mediante `src/rag/external_ingestion.py`.
-La [guía de extracción](../docs/RICOH_EXTRACTION.md) describe el perfil geométrico,
+La [guía de extracción](../docs/extractor/RICOH_EXTRACTION.md) describe el perfil geométrico,
 las salidas revisables, la preservación de contexto y las seis tablas gráficas
 que no son elegibles para indexación de texto. Resultado:
 [revisión por secciones](../data/extracted/RICOH-MP4002-USER-GUIDE-EN/review.md).
@@ -71,7 +71,7 @@ El registro tiene estado `locally_indexed_retrieval_partial`. Se construyó un
 embeddings reales de hasta 128 tokens por vista. La evaluación diagnóstica
 recuperó evidencia esperada entre los tres primeros resultados en 11 de 12
 preguntas en español; el caso de impresión retenida sigue fallando. Detalles:
-[fragmentación y recuperación local](../docs/RICOH_LOCAL_RETRIEVAL.md).
+[fragmentación y recuperación local](../docs/extractor/RICOH_LOCAL_RETRIEVAL.md).
 
 No se cargaron filas en Supabase ni se cambió el índice de la API. El importador
 e indexador académicos mantienen su contrato original; no añadir el PDF real al

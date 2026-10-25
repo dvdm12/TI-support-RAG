@@ -94,7 +94,7 @@ def evaluate_samples(directory, *, ocr=True):
 
 
 def ricoh_regression(root):
-    baseline = json.loads((root/'docs/baselines/ricoh_extraction_v1.json').read_text())
+    baseline = json.loads((root/'docs/extractor/baselines/ricoh_extraction_v1.json').read_text())
     manifest = root/'manuals/manifest.real.json'
     check_inputs(baseline, manifest, baseline['document_id'])
     result = extract_real_document(manifest, baseline['document_id'])

@@ -48,7 +48,7 @@ en `index_manuals`; `sections` es el valor inicial, no una ganadora demostrada.
 El solapamiento efectivo se limita a la mitad de un corte acortado por tokens,
 para garantizar progreso; inspeccionar los cortes registrados al comparar.
 
-`docs/rag_comparison.json` conserva configuración, corpus_id por variante,
+`docs/evaluacion/recuperacion/rag_comparison.json` conserva configuración, corpus_id por variante,
 cortes reales, tamaños, duplicados exactos, Top-k, condiciones y revisión
 pendiente. Las coincidencias de sección y condición son controles automáticos,
 no una evaluación semántica completa. El notebook
@@ -204,7 +204,7 @@ antes de compartirlas.
 
 Las pruebas con adaptadores simulados y el chequeo textual de SQL no sustituyen
 esta comprobación contra PostgreSQL/RLS. Los resultados ejecutados y el alcance
-disponible se registran en `docs/rag_validation.md`.
+disponible se registran en `docs/evaluacion/validaciones/rag_validation.md`.
 
 Referencias de implementación: [Sentence Transformers](https://www.sbert.net/docs/package_reference/sentence_transformer/model.html),
 [Supabase Auth](https://supabase.com/docs/reference/python/auth-signinwithpassword),

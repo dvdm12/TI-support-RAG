@@ -60,7 +60,7 @@ comparables de la tabla de clase 09 quedan medidos; el resto del pipeline no.
 ## Archivos y uso
 
 - `scripts/compare_generation_tokens.py`: preparación, medición y checkpoints.
-- `docs/generation_tokens_20261021.json`: protocolo, preguntas, contextos/catálogos,
+- `docs/evaluacion/generacion/generation_tokens_20261021.json`: protocolo, preguntas, contextos/catálogos,
   respuestas crudas/validadas, usage, HTTP permitido, estimación local separada,
   agregados y hashes. Sin encabezados de autenticación ni cuerpos de error.
 - CSV con el mismo nombre: 14 filas, tokens y estado por combinación.
@@ -76,7 +76,7 @@ Desde backend, **solo cuando se necesite una nueva medición**:
 Este comando consume cuota real de Groq. No repetirlo para volver a exportar:
 
 ```sh
-../.venv/bin/python -m scripts.compare_generation_tokens --from-json docs/generation_tokens_20261021.json --output docs/tokens_reexportados.json
+../.venv/bin/python -m scripts.compare_generation_tokens --from-json docs/evaluacion/generacion/generation_tokens_20261021.json --output docs/tokens_reexportados.json
 ```
 
 Toda exportación escribe JSON/CSV/PDF, incluso antes de empezar y tras cada

@@ -98,9 +98,9 @@ def write_outputs(report, output):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--source',type=Path,default=ROOT/'docs/coverage_improvements_20261021.json')
+    parser.add_argument('--source',type=Path,default=ROOT/'docs/evaluacion/recuperacion/coverage_improvements_20261021.json')
     parser.add_argument('--annotations',type=Path,default=ROOT/'cases/rag_evidence.json')
-    parser.add_argument('--output',type=Path,default=ROOT/'docs/generation_tokens_20261021.json')
+    parser.add_argument('--output',type=Path,default=ROOT/'docs/evaluacion/generacion/generation_tokens_20261021.json')
     parser.add_argument('--resume',action='store_true',help='Continúa solo peticiones no realizadas o HTTP 429; conserva observaciones previas.')
     parser.add_argument('--from-json',type=Path,help='Reexporta JSON/CSV/PDF sin llamadas; requiere --output distinto de fuentes.')
     args=parser.parse_args()

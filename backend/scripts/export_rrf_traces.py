@@ -11,8 +11,8 @@ from src.rag.models import Candidate
 from src.rag.retrieval import fuse_rankings, select_ranked_candidates
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = 'docs/retrieval_metrics_20261021.json'
-IMPROVED = 'docs/coverage_improvements_20261021.json'
+BASE = 'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json'
+IMPROVED = 'docs/evaluacion/recuperacion/coverage_improvements_20261021.json'
 ANNOTATIONS = 'cases/rag_evidence.json'
 RECORDS = 'data/indexes/sections/records.json'
 
@@ -169,7 +169,7 @@ def write_outputs(report, output):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=ROOT / 'docs/rrf_traces_20261025.json')
+    parser.add_argument('--output', type=Path, default=ROOT / 'docs/evaluacion/recuperacion/rrf_traces_20261025.json')
     args = parser.parse_args()
     if args.output.suffix != '.json':
         raise ValueError('La salida debe terminar en .json.')

@@ -96,9 +96,9 @@ sin esas etapas; sus resultados deben identificarse con ese alcance.
 
 ## Evidencias y reproducción
 
-- `docs/retrieval_metrics_20261021.json`: parámetros, métricas, candidatos,
+- `docs/evaluacion/recuperacion/retrieval_metrics_20261021.json`: parámetros, métricas, candidatos,
   ranking semántico y BM25, contribuciones RRF, contexto, omisiones y tiempos.
-- `docs/retrieval_metrics_20261021.csv`: 26 filas (13 casos por dos variantes);
+- `docs/evaluacion/recuperacion/retrieval_metrics_20261021.csv`: 26 filas (13 casos por dos variantes);
   campos de calidad vacíos para los seis casos de comportamiento.
 - `cases/rag_evidence.json`: unidades y fuentes congeladas.
 - Cuatro pruebas numéricas del evaluador y suite local de 243 pruebas correctas.
@@ -140,10 +140,10 @@ Un fallo de renderizado se propaga: no se informa éxito silenciosamente.
 Para regenerar el PDF existente sin modelos, conexión ni consumo de proveedores:
 
 ```sh
-../.venv/bin/python -m scripts.evaluate_retrieval_metrics --from-json docs/retrieval_metrics_20261021.json
+../.venv/bin/python -m scripts.evaluate_retrieval_metrics --from-json docs/evaluacion/recuperacion/retrieval_metrics_20261021.json
 ```
 
-Salida actual: `docs/retrieval_metrics_20261021.pdf`, tres páginas revisadas
+Salida actual: `docs/evaluacion/recuperacion/retrieval_metrics_20261021.pdf`, tres páginas revisadas
 visualmente. Se añadieron tres pruebas de exportación automática, regeneración
 sin proveedores y matrices incompletas; pasan las 246 pruebas locales. Las
 métricas originales se conservaron sin ejecutar nuevamente Supabase ni Groq.
@@ -152,7 +152,7 @@ métricas originales se conservaron sin ejecutar nuevamente Supabase ni Groq.
 
 `scripts.compare_retrieval_times` resume las etapas ya medidas y exporta siempre
 JSON, CSV y PDF, sin repetir búsquedas. Ver `TIMING_COMPARISON.md` y
-`docs/retrieval_metrics_20261021_times.pdf`. Separa los 13 casos de tiempos de los
+`docs/evaluacion/recuperacion/retrieval_metrics_20261021_times.pdf`. Separa los 13 casos de tiempos de los
 siete documentales usados para calidad; no confundir sus medianas.
 
 ## Cobertura completa por pregunta (derivación posterior)
@@ -178,7 +178,7 @@ Desde backend, sin modelos ni proveedores:
 ../.venv/bin/python -m scripts.summarize_complete_coverage
 ```
 
-Genera `docs/retrieval_metrics_20261021_coverage.json`, CSV y PDF de cuatro páginas.
+Genera `docs/evaluacion/recuperacion/retrieval_metrics_20261021_coverage.json`, CSV y PDF de cuatro páginas.
 `--input`, `--annotations` y `--output` permiten otras rutas; la entrada y las
 anotaciones no se sobrescriben. Se comprueba la huella de anotación usada en la
 medición y la coherencia entre preguntas, IDs, unidades y fracciones almacenadas.

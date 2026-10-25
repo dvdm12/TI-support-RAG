@@ -91,7 +91,7 @@ class RRFTraceTests(unittest.TestCase):
     def test_changed_index_fails_before_replay(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for name in ('docs/retrieval_metrics_20261021.json', 'docs/coverage_improvements_20261021.json',
+            for name in ('docs/evaluacion/recuperacion/retrieval_metrics_20261021.json', 'docs/evaluacion/recuperacion/coverage_improvements_20261021.json',
                          'cases/rag_evidence.json', 'data/indexes/sections/records.json'):
                 path = root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -102,8 +102,8 @@ class RRFTraceTests(unittest.TestCase):
                 build_report(root)
 
     def test_saved_csv_exports_every_union_candidate_and_contribution(self):
-        report = json.loads((ROOT / 'docs/rrf_traces_20261025.json').read_text())
-        with (ROOT / 'docs/rrf_traces_20261025.csv').open(encoding='utf-8-sig', newline='') as stream:
+        report = json.loads((ROOT / 'docs/evaluacion/recuperacion/rrf_traces_20261025.json').read_text())
+        with (ROOT / 'docs/evaluacion/recuperacion/rrf_traces_20261025.csv').open(encoding='utf-8-sig', newline='') as stream:
             rows = list(csv.DictReader(stream))
         expected = {(case['id'], r['chunk_id']): r for case in report['cases'] for r in case['rrf_union']}
         self.assertEqual(len(rows), len(expected))

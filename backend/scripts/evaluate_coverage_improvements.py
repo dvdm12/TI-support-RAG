@@ -56,8 +56,8 @@ def observation(question, selected, units, prompt):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--source',type=Path,default=ROOT/'docs/retrieval_metrics_20261021.json')
-    parser.add_argument('--output',type=Path,default=ROOT/'docs/coverage_improvements_20261021.json')
+    parser.add_argument('--source',type=Path,default=ROOT/'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json')
+    parser.add_argument('--output',type=Path,default=ROOT/'docs/evaluacion/recuperacion/coverage_improvements_20261021.json')
     args=parser.parse_args()
     if args.output.suffix!='.json' or args.output.resolve()==args.source.resolve():
         raise ValueError('Usa una salida JSON distinta del informe original.')

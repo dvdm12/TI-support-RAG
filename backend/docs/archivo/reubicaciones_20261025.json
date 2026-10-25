@@ -1,0 +1,369 @@
+{
+  "scope": "Physical relocation only; historical JSON/CSV/PDF/PNG bytes unchanged",
+  "moves": [
+    {
+      "from": "backend/docs/API.md",
+      "to": "backend/docs/api/API.md"
+    },
+    {
+      "from": "backend/docs/BACKEND_VALIDATION.md",
+      "to": "backend/docs/evaluacion/validaciones/BACKEND_VALIDATION.md"
+    },
+    {
+      "from": "backend/docs/CLASE08.md",
+      "to": "backend/docs/clases/clase08/CLASE08.md"
+    },
+    {
+      "from": "backend/docs/CLASS09_AUDIT.md",
+      "to": "backend/docs/parcial2/guias/CLASS09_AUDIT.md"
+    },
+    {
+      "from": "backend/docs/COMPLEX_PDF_EVALUATION.md",
+      "to": "backend/docs/extractor/COMPLEX_PDF_EVALUATION.md"
+    },
+    {
+      "from": "backend/docs/COVERAGE_IMPROVEMENTS.md",
+      "to": "backend/docs/evaluacion/recuperacion/COVERAGE_IMPROVEMENTS.md"
+    },
+    {
+      "from": "backend/docs/DOCKER.md",
+      "to": "backend/docs/infraestructura/DOCKER.md"
+    },
+    {
+      "from": "backend/docs/EXTRACTION_BASELINE.md",
+      "to": "backend/docs/extractor/EXTRACTION_BASELINE.md"
+    },
+    {
+      "from": "backend/docs/EXTRACTION_CONTRACTS.md",
+      "to": "backend/docs/extractor/EXTRACTION_CONTRACTS.md"
+    },
+    {
+      "from": "backend/docs/EXTRACTION_PIPELINE.md",
+      "to": "backend/docs/extractor/EXTRACTION_PIPELINE.md"
+    },
+    {
+      "from": "backend/docs/EXTRACTION_STRATEGIES.md",
+      "to": "backend/docs/extractor/EXTRACTION_STRATEGIES.md"
+    },
+    {
+      "from": "backend/docs/EXTRACTION_VALIDATION.md",
+      "to": "backend/docs/extractor/EXTRACTION_VALIDATION.md"
+    },
+    {
+      "from": "backend/docs/GENERATION_TOKENS.md",
+      "to": "backend/docs/evaluacion/generacion/GENERATION_TOKENS.md"
+    },
+    {
+      "from": "backend/docs/PDF_ADAPTERS.md",
+      "to": "backend/docs/extractor/PDF_ADAPTERS.md"
+    },
+    {
+      "from": "backend/docs/PDF_CANDIDATES_BY_CATEGORY.md",
+      "to": "backend/docs/extractor/PDF_CANDIDATES_BY_CATEGORY.md"
+    },
+    {
+      "from": "backend/docs/RAG.md",
+      "to": "backend/docs/rag/RAG.md"
+    },
+    {
+      "from": "backend/docs/RAG_EVIDENCE.md",
+      "to": "backend/docs/rag/RAG_EVIDENCE.md"
+    },
+    {
+      "from": "backend/docs/RAG_RESERVE.md",
+      "to": "backend/docs/rag/RAG_RESERVE.md"
+    },
+    {
+      "from": "backend/docs/RETRIEVAL_METRICS.md",
+      "to": "backend/docs/evaluacion/recuperacion/RETRIEVAL_METRICS.md"
+    },
+    {
+      "from": "backend/docs/RICOH_EXTRACTION.md",
+      "to": "backend/docs/extractor/RICOH_EXTRACTION.md"
+    },
+    {
+      "from": "backend/docs/RICOH_LOCAL_RETRIEVAL.md",
+      "to": "backend/docs/extractor/RICOH_LOCAL_RETRIEVAL.md"
+    },
+    {
+      "from": "backend/docs/RRF_TRACES.md",
+      "to": "backend/docs/evaluacion/recuperacion/RRF_TRACES.md"
+    },
+    {
+      "from": "backend/docs/STAGE_TIMINGS.md",
+      "to": "backend/docs/evaluacion/tiempos/STAGE_TIMINGS.md"
+    },
+    {
+      "from": "backend/docs/TI-support-RAG Notebook Activity Workflow.png",
+      "to": "backend/docs/parcial1/TI-support-RAG Notebook Activity Workflow.png",
+      "sha256": "9598d17ba1b3487fb2f45b0c1c86133cd8b02b0f7914046cf42b610eec2d0b9a"
+    },
+    {
+      "from": "backend/docs/TIMING_COMPARISON.md",
+      "to": "backend/docs/evaluacion/tiempos/TIMING_COMPARISON.md"
+    },
+    {
+      "from": "backend/docs/UNIT_RETRIEVAL_VERIFICATION.md",
+      "to": "backend/docs/extractor/UNIT_RETRIEVAL_VERIFICATION.md"
+    },
+    {
+      "from": "backend/docs/WEB_PDF_EVALUATION.md",
+      "to": "backend/docs/extractor/WEB_PDF_EVALUATION.md"
+    },
+    {
+      "from": "backend/docs/analisis_material_parcial2.md",
+      "to": "backend/docs/parcial2/guias/analisis_material_parcial2.md"
+    },
+    {
+      "from": "backend/docs/api_validation.json",
+      "to": "backend/docs/api/api_validation.json",
+      "sha256": "27f588dd376cb64cc9526f762b290107eecc8817157f5b884d51693774b6bd4b"
+    },
+    {
+      "from": "backend/docs/backend_supabase_validation.json",
+      "to": "backend/docs/infraestructura/backend_supabase_validation.json",
+      "sha256": "1045c1b1b0b3c85644301fa034a95008ee2a7c2534d4ce96e7939ece67cc7821"
+    },
+    {
+      "from": "backend/docs/backend_validation.json",
+      "to": "backend/docs/evaluacion/validaciones/backend_validation.json",
+      "sha256": "184808d65b2a875290eff87859a6d7a629063458e8d708dd3259fe6d5e98d62b"
+    },
+    {
+      "from": "backend/docs/baselines/ricoh_extraction_v1.json",
+      "to": "backend/docs/extractor/baselines/ricoh_extraction_v1.json",
+      "sha256": "7dc92621017abae7ee7a3ef6d73b685a1f5c49a19f305cb8bbf8153325b79235"
+    },
+    {
+      "from": "backend/docs/bitacora_parcial.md",
+      "to": "backend/docs/parcial1/bitacora_parcial.md"
+    },
+    {
+      "from": "backend/docs/class08_metrics.json",
+      "to": "backend/docs/clases/clase08/class08_metrics.json",
+      "sha256": "4cb8ba94ae5c86ec4b31c19a61803e54cd5a76a5c7b1080aa9be93466a87e668"
+    },
+    {
+      "from": "backend/docs/class08_metrics_execution.json",
+      "to": "backend/docs/clases/clase08/class08_metrics_execution.json",
+      "sha256": "daa88432c01f6d7dbf5dc898ff5cc4227977b627c17eaec26b1cafa85746cef4"
+    },
+    {
+      "from": "backend/docs/class08_metrics_report.md",
+      "to": "backend/docs/clases/clase08/class08_metrics_report.md"
+    },
+    {
+      "from": "backend/docs/class08_notebook_retest.json",
+      "to": "backend/docs/clases/clase08/class08_notebook_retest.json",
+      "sha256": "b9dfc282bdb938f8b99bda240153785d753004dbea1fbfd94b8a59714ff43e17"
+    },
+    {
+      "from": "backend/docs/class08_notebook_validation.json",
+      "to": "backend/docs/clases/clase08/class08_notebook_validation.json",
+      "sha256": "69a32f577ef581c4516410f9a8bb347ed8e94e6a203f1642d9ff4df943726a2b"
+    },
+    {
+      "from": "backend/docs/class08_practice_validation.json",
+      "to": "backend/docs/clases/clase08/class08_practice_validation.json",
+      "sha256": "5718edda0644da399a974b3f59472775af05bc7fa1a0e8505253b3bde58fd9e2"
+    },
+    {
+      "from": "backend/docs/coverage_improvements_20261021.csv",
+      "to": "backend/docs/evaluacion/recuperacion/coverage_improvements_20261021.csv",
+      "sha256": "6207d7326db3e60dc653d24003a968bba601acf8158f0db4550d5aed86b90aff"
+    },
+    {
+      "from": "backend/docs/coverage_improvements_20261021.json",
+      "to": "backend/docs/evaluacion/recuperacion/coverage_improvements_20261021.json",
+      "sha256": "ff5ac34198de6aedea96849831ad5535f2cc6080040282705d08c4107c6f4406"
+    },
+    {
+      "from": "backend/docs/coverage_improvements_20261021.pdf",
+      "to": "backend/docs/evaluacion/recuperacion/coverage_improvements_20261021.pdf",
+      "sha256": "e9f13848200215ebc031f0de1edfe5e2ac1958faccf0964b97ae32b67c10fc9b"
+    },
+    {
+      "from": "backend/docs/coverage_improvements_http_validation.json",
+      "to": "backend/docs/evaluacion/recuperacion/coverage_improvements_http_validation.json",
+      "sha256": "c1bae3179840546058a9a690d90b85ecad8a6301adbde2f12d4b52665f374f37"
+    },
+    {
+      "from": "backend/docs/coverage_improvements_trace_validation.json",
+      "to": "backend/docs/evaluacion/recuperacion/coverage_improvements_trace_validation.json",
+      "sha256": "df57d89b331b315ad6ce5850b727b13a5ce156643fb58fccfb771890268183f9"
+    },
+    {
+      "from": "backend/docs/current_notebook_cells_validation.json",
+      "to": "backend/docs/clases/clase08/current_notebook_cells_validation.json",
+      "sha256": "4859416212cb473af3b349844b59a62f3f9a5a233f0111166bcfdb31a2a09ed9"
+    },
+    {
+      "from": "backend/docs/docker_validation.json",
+      "to": "backend/docs/infraestructura/docker_validation.json",
+      "sha256": "659dc27714c9f11ec1679a52b3d2b45f0417a767662f54bed39fb189bb7b0800"
+    },
+    {
+      "from": "backend/docs/drive_classes_07_08_upload.json",
+      "to": "backend/docs/archivo/drive/drive_classes_07_08_upload.json",
+      "sha256": "4e8a3da243315822e606ce0709507ad2de9ce1b3cd7df48220875fc079b207c0"
+    },
+    {
+      "from": "backend/docs/drive_upload_verification.json",
+      "to": "backend/docs/archivo/drive/drive_upload_verification.json",
+      "sha256": "6a7edc62142a013c41daf769bbd6b989cf11117433930f377465d762dd1e696e"
+    },
+    {
+      "from": "backend/docs/fixtures/category_pdf_candidates_v1.json",
+      "to": "backend/docs/extractor/fixtures/category_pdf_candidates_v1.json",
+      "sha256": "da4ea83457a03a9fd95bd139a522db48ca05f994b77f98dd79f50f139824211b"
+    },
+    {
+      "from": "backend/docs/fixtures/web_pdf_sources_v1.json",
+      "to": "backend/docs/extractor/fixtures/web_pdf_sources_v1.json",
+      "sha256": "ecd7bc7bd3418fd5d061f8b981b9c10652987de220c13bb557b1b850b20be50e"
+    },
+    {
+      "from": "backend/docs/generation_tokens_20261021.csv",
+      "to": "backend/docs/evaluacion/generacion/generation_tokens_20261021.csv",
+      "sha256": "2865911a2ab28519d64f606623fc3818719314f06d2c7d583b82c42c708258aa"
+    },
+    {
+      "from": "backend/docs/generation_tokens_20261021.json",
+      "to": "backend/docs/evaluacion/generacion/generation_tokens_20261021.json",
+      "sha256": "d08dc1db1a61fe63e7b6d9e94035ce575cd9a8500c9f285ea74457c1a55eee2d"
+    },
+    {
+      "from": "backend/docs/generation_tokens_20261021.pdf",
+      "to": "backend/docs/evaluacion/generacion/generation_tokens_20261021.pdf",
+      "sha256": "8d8243165fd74ae2db00cdd4ba4c07f15fef8dbaff81216b9ff45e7eb5d9a750"
+    },
+    {
+      "from": "backend/docs/model_results_report.pdf",
+      "to": "backend/docs/parcial1/model_results_report.pdf",
+      "sha256": "4677f80d991baa9cce7f34c8bc8e4085aa58b3232441088fb9e0e27fbd24dad3"
+    },
+    {
+      "from": "backend/docs/rag_comparison.json",
+      "to": "backend/docs/evaluacion/recuperacion/rag_comparison.json",
+      "sha256": "e55d617339474333dbc6e4c3748b7075e0872729c9bc493bc42a91366ab81f8f"
+    },
+    {
+      "from": "backend/docs/rag_evidence_validation.json",
+      "to": "backend/docs/evaluacion/validaciones/rag_evidence_validation.json",
+      "sha256": "1416af38ec8b70e06c9193e2c47d8c831cd415bebabfc1bacc5413884e6aa86c"
+    },
+    {
+      "from": "backend/docs/rag_hardening_verification.json",
+      "to": "backend/docs/evaluacion/validaciones/rag_hardening_verification.json",
+      "sha256": "2483af1127a7eb1ca31d348d5d24da6cd767d8d3152587c50e5a1b623d288431"
+    },
+    {
+      "from": "backend/docs/rag_live_checks.json",
+      "to": "backend/docs/evaluacion/validaciones/rag_live_checks.json",
+      "sha256": "e7955eaca071a62ebfd406b9feef7f048b83a7c119b5cc33ad6fb90aabb387fd"
+    },
+    {
+      "from": "backend/docs/rag_reserve_validation.json",
+      "to": "backend/docs/evaluacion/validaciones/rag_reserve_validation.json",
+      "sha256": "02cdc4feb71ee223fc9eb42a98c77e9f9da61c421955810cad3211ee81b25b61"
+    },
+    {
+      "from": "backend/docs/rag_validation.md",
+      "to": "backend/docs/evaluacion/validaciones/rag_validation.md"
+    },
+    {
+      "from": "backend/docs/results.json",
+      "to": "backend/docs/parcial1/results.json",
+      "sha256": "be1b1d4c23656f043b8df158f83a0086ff738d9b17185250b6aca07afdfa3e2b"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021.csv",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021.csv",
+      "sha256": "db7540101afefc69b0cda276f08409a3900715c118aa917c675f5bf1527c0283"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021.json",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021.json",
+      "sha256": "090eb6e6c2bd9891bfbb2955a73cb65cb5cdf8e2bfed12fe4b781a2ddfb40c91"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021.pdf",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021.pdf",
+      "sha256": "4c547e41cf273b2b9a16014a725ce2ccb55cd706a28850a32457216b87673621"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021_coverage.csv",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021_coverage.csv",
+      "sha256": "f56ae2247639f7ff855ed94a775d5b066975e45034ca6bd35c97647a11061549"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021_coverage.json",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021_coverage.json",
+      "sha256": "f822e3f69dd2a0fcceccddeb5c4410f962418b8f0ea8b8d61eb8c761a0881093"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021_coverage.pdf",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021_coverage.pdf",
+      "sha256": "c51255adcd79dd23158e6d849b2a3b2ef71331ee372a0fcdf7f9ede357eab36d"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021_times.csv",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021_times.csv",
+      "sha256": "bde94bbbff4ef4368986480ed67428299c5667d5a4c36b576cd6eacc45c41eb5"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021_times.json",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021_times.json",
+      "sha256": "496a278d9123925196e3cdc150ff0d5eaf15fee4ee60c8c9e85b5d88add7b60d"
+    },
+    {
+      "from": "backend/docs/retrieval_metrics_20261021_times.pdf",
+      "to": "backend/docs/evaluacion/recuperacion/retrieval_metrics_20261021_times.pdf",
+      "sha256": "cda4cc7c0aae59290bc105225cd5fe95df01d6dcc27fdf2107c617714fbd1e23"
+    },
+    {
+      "from": "backend/docs/ricoh_extraction_validation.json",
+      "to": "backend/docs/extractor/ricoh_extraction_validation.json",
+      "sha256": "a05fd4874e9bde3631115f4d8108439085e1b10f8e7f009777d5ed0cb87fd4b7"
+    },
+    {
+      "from": "backend/docs/ricoh_local_retrieval_validation.json",
+      "to": "backend/docs/extractor/ricoh_local_retrieval_validation.json",
+      "sha256": "c54450940ee82b89484871023976b8a98e1a5f86161b13182be4618fbfe2dd82"
+    },
+    {
+      "from": "backend/docs/ricoh_manual_verification.json",
+      "to": "backend/docs/extractor/ricoh_manual_verification.json",
+      "sha256": "11dfa72698362edeb19a0fe1f77409be5331a041747399f8f1762324fbdf6b66"
+    },
+    {
+      "from": "backend/docs/rrf_traces_20261025.csv",
+      "to": "backend/docs/evaluacion/recuperacion/rrf_traces_20261025.csv",
+      "sha256": "d13e690cbb48cef4740b89d781294f052290421f519fa467da1215a5af452f62"
+    },
+    {
+      "from": "backend/docs/rrf_traces_20261025.json",
+      "to": "backend/docs/evaluacion/recuperacion/rrf_traces_20261025.json",
+      "sha256": "dc1f9f26648c375c400d71c8919a6e9366e743eb44bcd4d1e31fa372c4dae9b5"
+    },
+    {
+      "from": "backend/docs/rrf_traces_20261025.pdf",
+      "to": "backend/docs/evaluacion/recuperacion/rrf_traces_20261025.pdf",
+      "sha256": "5e636b74ae20208c4a2d806a36d7fcf20b882a76c557a74610d41dee2db4eaf3"
+    },
+    {
+      "from": "backend/docs/stage_timing_validation.json",
+      "to": "backend/docs/evaluacion/tiempos/stage_timing_validation.json",
+      "sha256": "d753d83f86222b5fbdd09829830c534207cc6a2cc93add4591a50f3bcae03efc"
+    },
+    {
+      "from": "backend/docs/supabase_setup.md",
+      "to": "backend/docs/infraestructura/supabase_setup.md"
+    },
+    {
+      "from": "backend/docs/supabase_verification.json",
+      "to": "backend/docs/infraestructura/supabase_verification.json",
+      "sha256": "3bc517cc2c1df21d669e959ce1c1eb219fa0501377192fb237a37ed06a026c45"
+    }
+  ]
+}

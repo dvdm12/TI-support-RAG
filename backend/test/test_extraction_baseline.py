@@ -106,8 +106,8 @@ class BaselineTests(unittest.TestCase):
             path = artifact_paths(root, 'RICOH')['data/extracted/RICOH/extraction.json']
             path.parent.mkdir(parents=True)
             path.write_bytes(extraction_bytes(original))
-            (root / 'docs').mkdir()
-            (root / 'docs/ricoh_extraction_validation.json').write_text(json.dumps({
+            (root / 'docs/extractor').mkdir(parents=True)
+            (root / 'docs/extractor/ricoh_extraction_validation.json').write_text(json.dumps({
                 'extraction_sha256': sha256(path.read_bytes()), 'source_sha256': 'registered'}))
             changed = copy.deepcopy(original)
             changed['sections'][0]['blocks'][0]['text'] = 'An invented instruction.'

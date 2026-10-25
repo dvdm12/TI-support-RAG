@@ -2,6 +2,9 @@
 
 Prototipo académico de una Mesa de Ayuda TI con IA generativa, validación estructural y trazabilidad.
 
+Consultar el [índice de documentación por contenido](docs/README.md) y el
+[material actual del Parcial 2](docs/parcial2/README.md).
+
 Las rutas y comandos de esta guía parten de `backend/`, salvo la clonación. El entorno virtual está en `../.venv/`.
 
 > **Principio:** el modelo propone; el programa comprueba; el sistema decide.
@@ -11,10 +14,10 @@ Las rutas y comandos de esta guía parten de `backend/`, salvo la clonación. El
 La rama de trabajo incorpora ingestión de siete manuales simulados, comparación
 de fragmentación, embeddings de 384 componentes, recuperación local/Supabase,
 respuesta documental separada de la clasificación y validación de citas.
-La configuración, comandos y límites están en [docs/RAG.md](docs/RAG.md).
-Las comprobaciones ejecutadas están en [docs/rag_validation.md](docs/rag_validation.md).
-La tabla siguiente describe la base del primer corte; la sección RAG del notebook
-es opcional y se mantiene desactivada hasta configurar índice y servicios.
+La configuración, comandos y límites están en [docs/rag/RAG.md](docs/rag/RAG.md).
+Las comprobaciones ejecutadas están en [docs/evaluacion/validaciones/rag_validation.md](docs/evaluacion/validaciones/rag_validation.md).
+La tabla siguiente describe la base histórica del primer corte. El notebook
+actual de Parcial 2 inicia con Groq y Supabase activos y requiere credenciales propias.
 
 ## Estado del proyecto
 
@@ -29,9 +32,9 @@ es opcional y se mantiene desactivada hasta configurar índice y servicios.
 | Punto de entrada | `notebooks/ti_support.ipynb` |
 | Contrato | `schemas/request_v1.py` |
 | Validación | Pydantic |
-| Resultados | `docs/results.json` |
-| Evidencia | `docs/model_results_report.pdf` |
-| Bitácora | `docs/bitacora_parcial.md` |
+| Resultados | `docs/parcial1/results.json` |
+| Evidencia | `docs/parcial1/model_results_report.pdf` |
+| Bitácora | `docs/parcial1/bitacora_parcial.md` |
 
 > **Entorno:** la ejecución local utiliza `venv` + `requirements.txt`; no depende de Conda.
 
@@ -104,7 +107,7 @@ GROQ_API_KEY=tu_clave_de_groq
 
 El cliente carga esta variable mediante `src/config.py` cuando realiza una consulta a Groq; las importaciones y los mocks no requieren credenciales.
 
-**No subir `.env` al repositorio.** La clave debe ser propia del usuario o del revisor. El flujo del primer corte solo requiere Groq; el RAG remoto añade las credenciales de Supabase indicadas en `docs/RAG.md`.
+**No subir `.env` al repositorio.** La clave debe ser propia del usuario o del revisor. El flujo del primer corte solo requiere Groq; el RAG remoto añade las credenciales de Supabase indicadas en `docs/rag/RAG.md`.
 
 ### 5. Preparar el notebook
 
@@ -216,8 +219,8 @@ docs/multimodal/multimodal_demo.png
 | Evidencia | Ubicación |
 |---|---|
 | Resultado estructurado | salida de la celda de defensa |
-| Resultados persistidos | `docs/results.json` |
-| PDF consolidado | `docs/model_results_report.pdf` |
+| Resultados persistidos | `docs/parcial1/results.json` |
+| PDF consolidado | `docs/parcial1/model_results_report.pdf` |
 | Casos reproducibles | `cases/test_cases.json` |
 | Imagen multimodal | `docs/multimodal/multimodal_demo.png` |
 
@@ -232,7 +235,7 @@ docs/multimodal/multimodal_demo.png
 | Variable de activación | `ENABLE_MANUAL_DEFENSE = True` |
 | Campo de entrada | `Solicitud:` |
 | Imagen opcional | Selección desde la misma defensa manual |
-| Evidencia generada | `docs/results.json` y PDF |
+| Evidencia generada | `docs/parcial1/results.json` y PDF |
 
 ## Casos de prueba
 
@@ -260,10 +263,10 @@ docs/multimodal/multimodal_demo.png
 | Casos | `cases/test_cases.json` | Casos de prueba |
 | Prompts | `prompts/system_v0.md` … `system_v4.md` | Versionado |
 | Evaluación | `src/evaluation.py` | Evaluación funcional |
-| Resultados | `docs/results.json` | Registro estructurado |
-| PDF | `docs/model_results_report.pdf` | Evidencia consolidada |
+| Resultados | `docs/parcial1/results.json` | Registro estructurado |
+| PDF | `docs/parcial1/model_results_report.pdf` | Evidencia consolidada |
 | Imagen | `docs/multimodal/multimodal_demo.png` | Evidencia multimodal |
-| Bitácora | `docs/bitacora_parcial.md` | Decisiones, errores y estado |
+| Bitácora | `docs/parcial1/bitacora_parcial.md` | Decisiones, errores y estado |
 | Flujo | `assets/flujo_trabajo.png` | Diagrama de actividades |
 | Componentes | `assets/diagrama_componentes_ti_support.jpeg` | Diagrama de componentes |
 
@@ -300,7 +303,7 @@ Cada ejecución puede conservar:
 | Decisión | Estado final |
 | Métricas | Latencia y tokens |
 | Multimodalidad | Texto OCR y metadatos |
-| Persistencia | `docs/results.json` + PDF |
+| Persistencia | `docs/parcial1/results.json` + PDF |
 
 ## Mocks
 
@@ -328,8 +331,8 @@ Los mocks de `src/mocks.py` sirven para probar comportamiento controlado del pro
 2. Revisar `notebooks/ti_support.ipynb`.
 3. Consultar `cases/test_cases.json`.
 4. Revisar `prompts/` y `schemas/`.
-5. Consultar `docs/results.json` y `docs/model_results_report.pdf`.
-6. Revisar `docs/bitacora_parcial.md`.
+5. Consultar `docs/parcial1/results.json` y `docs/parcial1/model_results_report.pdf`.
+6. Revisar `docs/parcial1/bitacora_parcial.md`.
 
 ### Ejecutar una nueva consulta localmente
 
@@ -350,20 +353,19 @@ Los mocks de `src/mocks.py` sirven para probar comportamiento controlado del pro
 El proyecto expone una API local para estado, categorías, búsqueda y consulta
 RAG. Desde `backend/`, activa `../.venv` y ejecuta `python manage.py runserver`.
 Las consultas usan el token Bearer configurado en `.env` como `DJANGO_API_TOKEN`.
-Endpoints, ejemplos, contratos y validaciones: [docs/API.md](docs/API.md).
+Endpoints, ejemplos, contratos y validaciones: [docs/api/API.md](docs/api/API.md).
 Swagger UI: http://127.0.0.1:8000/api/v1/docs/ · OpenAPI: `/api/v1/openapi.json`.
 
-## Clase 08: notebook RAG
+## Notebook consolidado y material de Clase 08
 
-[Notebook adaptado de la clase 08](notebooks/clase_08_rag_supabase_groq.ipynb):
-corpus, índice, Supabase, recuperación, contratos, generación, pruebas,
-persistencia y evidencia. Sigue los diez pasos principales del profesor como
-código cliente de nuestros componentes (`src/class08_client.py`). Usa el kernel
-Python de `.venv`. Ejecutar todo conecta, carga el índice mediante upsert y
-realiza una consulta Groq; solo las cinco pruebas adicionales están desactivadas.
-Los resultados se guardan por sesión en `docs/rag_runs/clase08/`, sin sobrescribir
-ejecuciones previas ni exportar credenciales. El notebook anterior con opciones
-de demostración fue sustituido por este recorrido de práctica.
+El [notebook actual de Parcial 2](notebooks/parcial2.ipynb) integra el recorrido
+RAG y utiliza los componentes del backend. Inicia con Groq y Supabase activos;
+la carga del índice requiere una bandera explícita. Los notebooks anteriores
+fueron retirados; la [guía histórica de Clase 08](docs/clases/clase08/CLASE08.md)
+y sus evidencias permanecen organizadas por contenido.
+
+Consultar la [guía del profesor](notebooks/GUIA_PROFESOR.md). Las nuevas salidas
+se guardan en `docs/parcial2/ejecuciones/<fecha-UTC>/`, con PDF, JSON, CSV y ZIP.
 
 Para registrar el kernel del notebook desde el entorno activado:
 

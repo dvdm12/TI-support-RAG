@@ -10,7 +10,7 @@ from src.rag.complete_coverage import enrich_saved_report
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--input', type=Path, default=ROOT/'docs/retrieval_metrics_20261021.json')
+    parser.add_argument('--input', type=Path, default=ROOT/'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json')
     parser.add_argument('--annotations', type=Path, default=ROOT/'cases/rag_evidence.json')
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()

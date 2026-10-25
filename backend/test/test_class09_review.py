@@ -60,7 +60,17 @@ class Class09ReviewTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / API).exists(), "Traza HTTP solo disponible en esta máquina")
     def test_build_matches_saved_observations_and_full_source_text(self):
         rebuilt = build_sheet()
-        self.assertEqual(rebuilt.model_dump(), self.sheet.model_dump())
+        # The stored sheet is immutable evidence; only its historical source path
+        # differs after physically organizing the documents.
+        expected = self.sheet.model_dump()
+        old_generation = 'docs/generation_tokens_20261021.json'
+        for source in expected['sources']:
+            if source['path'] == old_generation:
+                source['path'] = GENERATION
+        for row in expected['rows']:
+            if row['source_path'] == old_generation:
+                row['source_path'] = GENERATION
+        self.assertEqual(rebuilt.model_dump(), expected)
         generation = json.loads((ROOT / GENERATION).read_text())
         api = json.loads((ROOT / API).read_text())
         records = {r["chunk_id"]: r for r in json.loads((ROOT / "data/indexes/sections/records.json").read_text())}

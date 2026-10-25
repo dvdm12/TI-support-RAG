@@ -4,6 +4,8 @@ import hashlib
 import io
 import json
 import unittest
+import os
+from unittest.mock import patch
 import tempfile
 import zipfile
 from pathlib import Path
@@ -88,7 +90,7 @@ class Parcial2NotebookTests(unittest.TestCase):
             self.assertIn('infra/supabase/migrations/20261014_documentary_rag.sql', names)
             self.assertEqual(json.loads(archive.read('backend/data/indexes/sections/config.json'))['config']['dimension'], 384)
 
-    def test_default_mode_cannot_call_providers_or_write_supabase(self):
+    def test_default_mode_uses_groq_and_supabase_without_automatic_upload(self):
         tree = ast.parse(self.cells['configuracion'])
         literals = {}
         for node in tree.body:
@@ -97,24 +99,81 @@ class Parcial2NotebookTests(unittest.TestCase):
                     literals[node.targets[0].id] = ast.literal_eval(node.value)
                 except (ValueError, TypeError):
                     pass
-        self.assertEqual(literals['MODE'], 'evidencia_guardada')
-        self.assertFalse(literals['USE_SUPABASE'])
+        self.assertEqual(literals['MODE'], 'consulta_real')
+        self.assertTrue(literals['USE_SUPABASE'])
         self.assertFalse(literals['ALLOW_SUPABASE_UPSERT'])
         self.assertFalse(self.notebook['metadata']['parcial2']['human_review_completed'])
         self.assertFalse(self.notebook['metadata']['parcial2']['reserve_executed'])
 
-    def test_professor_form_starts_in_saved_mode_and_uses_own_secrets(self):
+    def test_professor_form_starts_with_remote_query_and_uses_own_secrets(self):
         tree = ast.parse(self.cells['panel-profesor'])
         action = next(node for node in tree.body if isinstance(node, ast.Assign)
                       and isinstance(node.targets[0], ast.Name) and node.targets[0].id == 'ACCION')
-        self.assertEqual(ast.literal_eval(action.value), 'Caso guardado')
+        self.assertEqual(ast.literal_eval(action.value), 'Consultar con Groq')
+        remote = next(node for node in tree.body if isinstance(node, ast.Assign)
+                      and isinstance(node.targets[0], ast.Name) and node.targets[0].id == 'USAR_SUPABASE')
+        self.assertTrue(ast.literal_eval(remote.value))
         self.assertIn('load_own_secrets(names)', self.cells['panel-profesor'])
         self.assertIn('userdata.get(name)', self.cells['modelo-secretos'])
         self.assertIn('hashlib.sha256(downloaded).hexdigest() != BUNDLE_SHA256', self.cells['paquete'])
 
+    def results_locator(self):
+        tree = ast.parse(self.cells['configuracion'])
+        helper = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'results_root')
+        namespace = dict(Path=Path, os=os)
+        exec(compile(ast.Module(body=[helper], type_ignores=[]), 'paths', 'exec'), namespace)
+        return namespace['results_root']
+
+    def test_results_stay_in_backend_docs_from_all_supported_start_directories(self):
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {}, clear=True):
+            root = Path(directory)
+            backend = root / 'backend'
+            (backend / 'src/rag').mkdir(parents=True)
+            (backend / 'notebooks').mkdir()
+            (backend / 'requirements-parcial2.txt').touch()
+            locate = self.results_locator()
+            for start in [root, backend, backend / 'notebooks']:
+                with self.subTest(start=start):
+                    self.assertEqual(locate(start, False), backend / 'docs/parcial2')
+            self.assertEqual(locate(root / 'standalone', False), root / 'standalone/backend/docs/parcial2')
+            self.assertEqual(locate(root, True), Path('/content/parcial2/backend/docs/parcial2'))
+
+    def test_custom_results_directory_is_independent_of_temporary_workspace(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / 'professor-results'
+            with patch.dict(os.environ, {'PARCIAL2_OUTPUT_DIR': str(target), 'PARCIAL2_WORKDIR': '/tmp/unrelated'}):
+                self.assertEqual(self.results_locator()(Path(directory), False), target)
+                self.assertEqual(self.results_locator()(Path(directory), True), target)
+
+    def secret_loader(self, env_file):
+        tree = ast.parse(self.cells['modelo-secretos'])
+        helper = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'load_own_secrets')
+        namespace = dict(IN_COLAB=False, LOCAL_ENV_FILE=env_file, os=os)
+        exec(compile(ast.Module(body=[helper], type_ignores=[]), 'secrets', 'exec'), namespace)
+        return namespace['load_own_secrets']
+
+    def test_local_secrets_survive_extraction_directory_and_preserve_environment(self):
+        with tempfile.TemporaryDirectory() as directory:
+            env_file = Path(directory) / '.env'
+            env_file.write_text('GROQ_API_KEY=fixture-file\nSUPABASE_URL=https://fixture.invalid\n')
+            loader = self.secret_loader(env_file)
+            with patch.dict(os.environ, {'GROQ_API_KEY': 'fixture-environment'}, clear=True):
+                with patch('builtins.print') as output:
+                    loader(['GROQ_API_KEY', 'SUPABASE_URL'])
+                self.assertEqual(os.environ['GROQ_API_KEY'], 'fixture-environment')
+                self.assertEqual(os.environ['SUPABASE_URL'], 'https://fixture.invalid')
+                self.assertNotIn('fixture', str(output.call_args_list))
+
+    def test_missing_local_credentials_stop_with_configuration_instructions(self):
+        with patch.dict(os.environ, {}, clear=True):
+            with self.assertRaisesRegex(RuntimeError, 'GROQ_API_KEY.*PARCIAL2_ENV_FILE'):
+                self.secret_loader(None)(['GROQ_API_KEY'])
+        with self.assertRaisesRegex(RuntimeError, 'No existe.*PARCIAL2_ENV_FILE'):
+            self.secret_loader(Path('/nonexistent/parcial2/.env'))(['GROQ_API_KEY'])
+
     def test_snapshot_copies_original_api_answers_but_no_arbitrary_headers(self):
         with zipfile.ZipFile(io.BytesIO(self.raw)) as archive:
-            api = json.loads(archive.read('backend/docs/parcial2_saved_api.json'))
+            api = json.loads(archive.read('backend/docs/parcial2/evidencias/parcial2_saved_api.json'))
             review = json.loads(archive.read('backend/docs/human_review/class09_review_v1.json'))
             expected = {r['case_id']: r['response'] for r in review['rows'] if r['variant'] == 'API_system_v8'}
             self.assertEqual(len(api['cases']), 13)

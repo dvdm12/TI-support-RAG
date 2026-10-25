@@ -33,7 +33,7 @@ En `data/extracted/RICOH-MP4002-USER-GUIDE-EN/`, ignorado por Git:
 - `previews/`: muestras renderizadas para la revisión visual de esta ejecución;
   no las genera el comando de extracción.
 
-El resumen revisado está en `docs/ricoh_extraction_validation.json`, separado de
+El resumen revisado está en `docs/extractor/ricoh_extraction_validation.json`, separado de
 los datos derivados extensos.
 
 ## Reglas de preservación

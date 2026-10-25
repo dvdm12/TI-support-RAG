@@ -21,15 +21,15 @@ Ver [guía del profesor](GUIA_PROFESOR.md) para los formularios y secretos propi
    comprobar su hash. Si no está disponible, subir **`parcial2_recursos.zip`** cuando
    se solicite; también se puede subir antes al explorador. Se instalan las dependencias fijadas en
    `requirements-parcial2.txt` y Tesseract con idioma español. Requiere Internet
-   para instalación y descarga del tokenizer. El modo inicial reproduce evidencias:
-   no llama a Groq ni Supabase ni necesita secretos.
+   para instalación y descarga del tokenizer. El inicio usa `consulta_real` y
+   Supabase activo: configurar los cinco secretos propios antes de ejecutar todo.
+   El punto 10 y el panel hacen dos consultas reales independientes; consumen cuota.
    Al terminar, usar el **Panel del profesor**: seleccionar caso guardado, búsqueda
    BM25/híbrida o consulta nueva. Se ejecuta solo esa celda para cada pregunta.
-3. Para una consulta nueva, cambiar `MODE` a `consulta_real` en la primera celda.
-   Registrar `GROQ_API_KEY` en Colab Secrets y autorizar acceso al notebook. Se
+3. `MODE='consulta_real'` ya está seleccionado en la primera celda. Registrar `GROQ_API_KEY` en Colab Secrets y autorizar acceso al notebook. Se
    descarga la revisión fijada del modelo de embeddings y se ejecuta el pipeline
    con clasificación, recuperación, generación, revisión y validación reales.
-4. Para usar Supabase, habilitar `USE_SUPABASE` y registrar `SUPABASE_URL`,
+4. `USE_SUPABASE=True` ya está seleccionado. Registrar `SUPABASE_URL`,
    `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_EMAIL`, `SUPABASE_PASSWORD` en Secrets.
    La base debe tener usuario autorizado, SQL incluido y corpus compatible. La
    conexión comprueba Auth, inventario y RPC. Un fallo remoto no cambia a local.
@@ -46,16 +46,39 @@ Ver [guía del profesor](GUIA_PROFESOR.md) para los formularios y secretos propi
 
 En local, colocar el ZIP junto al notebook y usar el entorno del proyecto ya
 preparado; el notebook no instala dependencias automáticamente fuera de Colab.
+Lee las cinco credenciales de `backend/.env` al iniciar desde la raíz, `backend/`
+o `backend/notebooks/`; `PARCIAL2_ENV_FILE` permite una ruta absoluta distinta.
+No requiere iniciar Django: usa directamente los componentes Python.
+El panel inicia en **Consultar con Groq** y `USAR_SUPABASE=True`.
+Para reproducción sin servicios, seleccionar explícitamente
+`MODE='evidencia_guardada'`, `USE_SUPABASE=False` y **Caso guardado** en el panel.
 `PARCIAL2_RESOURCES` permite indicar otra ruta del ZIP. La extracción temporal no
 modifica el índice original. `PARCIAL2_WORKDIR` fija una carpeta de trabajo aislada.
 
+Las salidas locales se guardan permanentemente en
+`backend/docs/parcial2/ejecuciones/<fecha-UTC>/resultados/`, con
+`parcial2_resultados.zip` al lado. `PARCIAL2_OUTPUT_DIR` cambia esa raíz sin cambiar
+el directorio de recursos. En Colab se usa `/content/parcial2/backend/docs/parcial2/`.
+Ver el [índice de material para el profesor](../docs/parcial2/README.md).
+
 ## Evidencia y pendientes
 
-El notebook fue ejecutado completo en kernel Python 3.12 local, en una carpeta
-aislada, en modo de evidencias con OCR real. Se conservaron las salidas. La
-instalación en Colab, Auth/RPC y las consultas nuevas Groq **no se validaron en
-esa ejecución**. La comparación histórica, sus tokens y sus latencias se etiquetan
-con su alcance; no son observaciones nuevas ni una prueba de generalización.
+El 25-10-2026 se ejecutaron las **18 celdas de código** en un kernel local
+Python 3.12 aislado, con `consulta_real`, Groq y Supabase activos. Las salidas originales
+se preservaron en la evidencia de esa ejecución. Se verificaron OCR real, extracción, fragmentación,
+Auth, 70 fragmentos, RPC y dos consultas reales: punto 10 `OK_REQUIERE_HUMANO`
+con respuesta documental, y panel `OK_VALIDADO`. El panel comprobó persistencia
+desde un segundo cliente del mismo usuario sin carga adicional. Se generaron los
+JSON/CSV/PDF y la interacción del panel. No se cargaron filas ni se abrió reserva.
+Los resultados compartibles y la verificación se preservaron en
+[`backend/docs/parcial2/ejecuciones/20261025T183222Z/`](../docs/parcial2/ejecuciones/20261025T183222Z/).
+La evidencia técnica original sigue en `backend/docs/rag_runs/notebook_live_20261025/`
+(ignorada por Git).
+
+La instalación y ejecución en Colab siguen pendientes. La comparación histórica,
+sus tokens y sus latencias conservan su alcance; no son nuevas mediciones A/B ni
+una prueba de generalización. Las dos consultas nuevas tampoco sustituyen la
+revisión humana ni la evaluación de reserva.
 
 T9 está preparado y verificado localmente, pero aún no cumple su cierre final:
 faltan nombres del equipo, revisión humana T2/T3, reserva aprobada/congelada/evaluada
@@ -79,3 +102,9 @@ no incluye `.env`, `.agents`, credenciales ni `cases/rag_reserve.json`. Necesita
 el notebook se limpian sus salidas: ejecutar de nuevo antes de acreditar resultados.
 Este paquete conserva la instantánea del código al prepararlo; no descarga cambios
 remotos silenciosamente. Las huellas identifican lo que realmente se ejecutó.
+
+Tras reorganizar `backend/docs/`, se regeneraron el notebook y su ZIP con las
+nuevas rutas. El notebook se distribuye limpio; la ejecución real anterior sigue
+en `backend/docs/parcial2/ejecuciones/20261025T183222Z/`. Se comprobó de nuevo el
+recorrido completo sin proveedores y la exportación de resultados con el paquete
+reorganizado, sin repetir consultas Groq ni acceder a la reserva.

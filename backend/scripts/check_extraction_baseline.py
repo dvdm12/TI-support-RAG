@@ -12,7 +12,7 @@ from src.rag.external_ingestion import extract_real_document
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCUMENT_ID = 'RICOH-MP4002-USER-GUIDE-EN'
-BASELINE = ROOT / 'docs/baselines/ricoh_extraction_v1.json'
+BASELINE = ROOT / 'docs/extractor/baselines/ricoh_extraction_v1.json'
 
 
 def main():

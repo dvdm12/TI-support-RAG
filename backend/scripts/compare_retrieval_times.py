@@ -27,7 +27,7 @@ def write_outputs(report, output):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--input',type=Path,default=ROOT/'docs/retrieval_metrics_20261021.json')
+    parser.add_argument('--input',type=Path,default=ROOT/'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json')
     parser.add_argument('--output',type=Path,help='Nombre base JSON; CSV y PDF se crean junto a él.')
     args=parser.parse_args()
     output=args.output or args.input.with_name(args.input.stem+'_times.json')

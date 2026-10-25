@@ -7,10 +7,13 @@ Mesa de Ayuda TI con recuperación documental en Supabase, generación con Groq 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dvdm12/TI-support-RAG/blob/codex/backend-infra-ricoh-local/backend/notebooks/parcial2.ipynb)
 
 Ejecuta el notebook y usa el **Panel del profesor** al final: trece casos guardados,
-preguntas nuevas al corpus y generación opcional con **secretos propios de Colab**.
+preguntas nuevas al corpus y generación con **credenciales propias**. El inicio
+usa Groq y Supabase activos; configurar Secrets en Colab o `.env` en local.
 El ZIP de recursos se descarga automáticamente desde la misma rama y se verifica
 por SHA256; también se puede subir manualmente. La reproducción y búsqueda BM25
-no necesitan claves. [Instrucciones para el profesor](backend/notebooks/GUIA_PROFESOR.md).
+siguen disponibles sin claves al seleccionarlas explícitamente. [Instrucciones para el profesor](backend/notebooks/GUIA_PROFESOR.md).
+Los PDF, datos y evidencias se organizan en
+[backend/docs/parcial2](backend/docs/parcial2/README.md), con una carpeta por ejecución.
 
 ```text
 backend/   API, código Python, notebooks, corpus, pruebas y documentación
@@ -48,7 +51,7 @@ python manage.py test api
 python -m unittest discover -s test
 ```
 
-Documentación: [backend](backend/README.md), [API](backend/docs/API.md), [RAG](backend/docs/RAG.md) e [infraestructura](infra/README.md).
+Documentación: [índice por contenido](backend/docs/README.md), [backend](backend/README.md), [API](backend/docs/api/API.md), [RAG](backend/docs/rag/RAG.md) e [infraestructura](infra/README.md).
 
 ## Docker
 
@@ -58,4 +61,4 @@ docker compose -f infra/compose.yaml up -d
 ```
 
 Usa `backend/.env` y el índice local existente. Detalles de dependencias, modelos
-y volúmenes: [backend en Docker](backend/docs/DOCKER.md).
+y volúmenes: [backend en Docker](backend/docs/infraestructura/DOCKER.md).

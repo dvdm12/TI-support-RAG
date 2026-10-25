@@ -2,7 +2,7 @@
 
 Paso 1 del procedimiento de mejora. Antes de refactorizar se fija el resultado
 comprobado del PDF Ricoh MP 4002, versión documental D129-7802. La referencia
-versionable es `docs/baselines/ricoh_extraction_v1.json`.
+versionable es `docs/extractor/baselines/ricoh_extraction_v1.json`.
 
 ## Qué se conserva
 
@@ -58,7 +58,7 @@ no se sobrescriben. Para las pruebas específicas:
 ```
 
 La creación exige que la extracción nueva coincida byte a byte con el JSON
-guardado y con el hash del informe histórico `docs/ricoh_extraction_validation.json`.
+guardado y con el hash del informe histórico `docs/extractor/ricoh_extraction_validation.json`.
 La referencia se escribe con creación exclusiva: repetir el comando no puede
 reemplazarla. No ejecutar `--create` para hacer que una regresión desaparezca.
 

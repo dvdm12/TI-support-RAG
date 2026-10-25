@@ -1,0 +1,121 @@
+{
+  "started_utc": "2026-10-25T18:32:22.105842+00:00",
+  "mode": "consulta_real",
+  "supabase_enabled": true,
+  "supabase_upload_enabled": false,
+  "cells": [
+    {
+      "id": "configuracion",
+      "seconds": 0.03,
+      "ok": true
+    },
+    {
+      "id": "paquete",
+      "seconds": 0.03,
+      "ok": true
+    },
+    {
+      "id": "instalacion",
+      "seconds": 0.24,
+      "ok": true
+    },
+    {
+      "id": "entrada",
+      "seconds": 0.07,
+      "ok": true
+    },
+    {
+      "id": "modelo-secretos",
+      "seconds": 0.01,
+      "ok": true
+    },
+    {
+      "id": "contratos",
+      "seconds": 0.01,
+      "ok": true
+    },
+    {
+      "id": "ocr",
+      "seconds": 0.54,
+      "ok": true
+    },
+    {
+      "id": "seguridad",
+      "seconds": 0.0,
+      "ok": true
+    },
+    {
+      "id": "regresion",
+      "seconds": 0.01,
+      "ok": true
+    },
+    {
+      "id": "corpus",
+      "seconds": 0.13,
+      "ok": true
+    },
+    {
+      "id": "fragmentacion",
+      "seconds": 9.88,
+      "ok": true
+    },
+    {
+      "id": "persistencia",
+      "seconds": 3.84,
+      "ok": true
+    },
+    {
+      "id": "recorrido",
+      "seconds": 17.43,
+      "ok": true
+    },
+    {
+      "id": "mejora",
+      "seconds": 0.06,
+      "ok": true
+    },
+    {
+      "id": "metricas",
+      "seconds": 0.01,
+      "ok": true
+    },
+    {
+      "id": "revision",
+      "seconds": 0.02,
+      "ok": true
+    },
+    {
+      "id": "exportacion",
+      "seconds": 0.12,
+      "ok": true
+    },
+    {
+      "id": "panel-profesor",
+      "seconds": 11.47,
+      "ok": true
+    }
+  ],
+  "success": true,
+  "checks": {
+    "point10_state": "OK_REQUIERE_HUMANO",
+    "point10_failure": null,
+    "point10_documentary_state": "respondida",
+    "point10_remote_repository": true,
+    "panel_mode": "live_query",
+    "panel_backend": "supabase",
+    "panel_state": "OK_VALIDADO",
+    "panel_failure": null,
+    "panel_supabase": {
+      "rows_verified": 70,
+      "upsert_performed": false,
+      "persistence_new_client": true,
+      "second_client_upsert": false,
+      "owner_isolation": "No probado: ambos clientes usan el mismo usuario."
+    },
+    "ocr_executed": true,
+    "exports_exist": true,
+    "corpus_rows": 70,
+    "uploads_disabled": true
+  },
+  "finished_utc": "2026-10-25T18:33:06.757099+00:00"
+}

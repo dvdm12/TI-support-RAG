@@ -1,0 +1,193 @@
+{
+  "timestamp_utc": "2026-10-25T18:32:55.068505+00:00",
+  "mode": "consulta_real",
+  "bundle_sha256": "9f310d394fa75de98af518ff7333139a6c932a33363093b1b5f1b5f262371d85",
+  "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+  "config": {
+    "modelo": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "dimension": 384,
+    "normalizados": true,
+    "similitud": "coseno",
+    "max_seq_length": 128,
+    "estrategia": "sections",
+    "chunk_chars": 420,
+    "overlap_chars": 0,
+    "max_tokens": 80,
+    "preparation_version": "pdf-sections-v1"
+  },
+  "classifier_prompt": "system_v8",
+  "generator_prompt": "rag_v6",
+  "team": [],
+  "ocr_executed": true,
+  "human_review": "pending_human_review",
+  "reserve_executed": false,
+  "query": {
+    "input": "El portal de documentos devuelve error 403. ¿Eso demuestra que mi cuenta está suspendida? ¿Qué debe revisar soporte?",
+    "state": "OK_REQUIERE_HUMANO",
+    "classification": {
+      "categoria": "acceso",
+      "prioridad": "media",
+      "resumen": "El portal de documentos devuelve error 403. Se pregunta si indica suspensión de cuenta y qué debe revisar soporte.",
+      "datos_faltantes": [],
+      "requiere_humano": true,
+      "confianza": 0.85
+    },
+    "documentary_output": {
+      "estado": "respondida",
+      "respuesta": "Un error 403 no confirma que la cuenta esté suspendida; indica que el recurso solicitado no está autorizado [F1]. El soporte debe revisar el recurso, la sesión y los permisos del usuario [F1]. Si falta permiso, se tramita una solicitud de autorización [F3].",
+      "citas": [
+        "F1",
+        "F3"
+      ],
+      "limitacion": "Respuesta dentro de 90 palabras."
+    },
+    "usage": {
+      "prompt_tokens": 769,
+      "completion_tokens": 125,
+      "total_tokens": 894
+    },
+    "failure_stage": null,
+    "latency_seconds": 17.3983,
+    "rag": {
+      "candidates": [
+        {
+          "chunk_id": "TI-ACS-77182b9c9fd41fa7c2bc36a8",
+          "content": "Ingreso a sistemas y recursos / ACS-03 | Error 403 o recurso no autorizado\nUn error 403, por sí solo, no confirma que la cuenta esté suspendida. Soporte revisa el recurso solicitado, la sesión y los permisos mediante el sistema autorizado.",
+          "metadata": {
+            "pages": [
+              1
+            ],
+            "title": "Ingreso a sistemas y recursos",
+            "source": "acceso/manual_acceso.pdf",
+            "tokens": 60,
+            "section": "ACS-03 | Error 403 o recurso no autorizado",
+            "version": "2.0",
+            "category": "acceso",
+            "simulated": true,
+            "document_id": "TI-ACS",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748"
+          },
+          "similitud": 0.750075533981591
+        },
+        {
+          "chunk_id": "TI-ACS-93726c088c680fd0ddd0ef4d",
+          "content": "Ingreso a sistemas y recursos / ACS-05 | Comprobación y cierre\nSoporte verifica el ingreso al recurso concreto y registra el resultado. Poder entrar al portal principal no demuestra que el usuario tenga permiso para todos sus recursos.",
+          "metadata": {
+            "pages": [
+              2
+            ],
+            "title": "Ingreso a sistemas y recursos",
+            "source": "acceso/manual_acceso.pdf",
+            "tokens": 50,
+            "section": "ACS-05 | Comprobación y cierre",
+            "version": "2.0",
+            "category": "acceso",
+            "simulated": true,
+            "document_id": "TI-ACS",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748"
+          },
+          "similitud": 0.466496676206589
+        },
+        {
+          "chunk_id": "TI-ACS-a1750f0fd42d655014a305cf",
+          "content": "Ingreso a sistemas y recursos / ACS-03 | Error 403 o recurso no autorizado\nSi el usuario necesita un permiso que no tiene, se tramita una solicitud con la autorización correspondiente. El asistente no concede acceso ni indica cómo evadir restricciones. El manual no lista permisos individuales.",
+          "metadata": {
+            "pages": [
+              1
+            ],
+            "title": "Ingreso a sistemas y recursos",
+            "source": "acceso/manual_acceso.pdf",
+            "tokens": 64,
+            "section": "ACS-03 | Error 403 o recurso no autorizado",
+            "version": "2.0",
+            "category": "acceso",
+            "simulated": true,
+            "document_id": "TI-ACS",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748"
+          },
+          "similitud": 0.458843437364307
+        }
+      ],
+      "catalog": {
+        "F1": {
+          "chunk_id": "TI-ACS-77182b9c9fd41fa7c2bc36a8",
+          "content": "Ingreso a sistemas y recursos / ACS-03 | Error 403 o recurso no autorizado\nUn error 403, por sí solo, no confirma que la cuenta esté suspendida. Soporte revisa el recurso solicitado, la sesión y los permisos mediante el sistema autorizado.",
+          "metadata": {
+            "pages": [
+              1
+            ],
+            "title": "Ingreso a sistemas y recursos",
+            "source": "acceso/manual_acceso.pdf",
+            "tokens": 60,
+            "section": "ACS-03 | Error 403 o recurso no autorizado",
+            "version": "2.0",
+            "category": "acceso",
+            "simulated": true,
+            "document_id": "TI-ACS",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748"
+          },
+          "similitud": 0.750075533981591
+        },
+        "F2": {
+          "chunk_id": "TI-ACS-93726c088c680fd0ddd0ef4d",
+          "content": "Ingreso a sistemas y recursos / ACS-05 | Comprobación y cierre\nSoporte verifica el ingreso al recurso concreto y registra el resultado. Poder entrar al portal principal no demuestra que el usuario tenga permiso para todos sus recursos.",
+          "metadata": {
+            "pages": [
+              2
+            ],
+            "title": "Ingreso a sistemas y recursos",
+            "source": "acceso/manual_acceso.pdf",
+            "tokens": 50,
+            "section": "ACS-05 | Comprobación y cierre",
+            "version": "2.0",
+            "category": "acceso",
+            "simulated": true,
+            "document_id": "TI-ACS",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748"
+          },
+          "similitud": 0.466496676206589
+        },
+        "F3": {
+          "chunk_id": "TI-ACS-a1750f0fd42d655014a305cf",
+          "content": "Ingreso a sistemas y recursos / ACS-03 | Error 403 o recurso no autorizado\nSi el usuario necesita un permiso que no tiene, se tramita una solicitud con la autorización correspondiente. El asistente no concede acceso ni indica cómo evadir restricciones. El manual no lista permisos individuales.",
+          "metadata": {
+            "pages": [
+              1
+            ],
+            "title": "Ingreso a sistemas y recursos",
+            "source": "acceso/manual_acceso.pdf",
+            "tokens": 64,
+            "section": "ACS-03 | Error 403 o recurso no autorizado",
+            "version": "2.0",
+            "category": "acceso",
+            "simulated": true,
+            "document_id": "TI-ACS",
+            "source_hash": "8635e8624bf10f7e95ecfeb3c144167a8d94b6804071e000254c4d2163649748"
+          },
+          "similitud": 0.458843437364307
+        }
+      },
+      "omitted": [],
+      "timings": {
+        "ocr_seconds": 3.40700353262946e-06,
+        "classification_seconds": 13.090593841996451,
+        "embedding_seconds": 0.018340884998906404,
+        "semantic_search_seconds": 1.2152431329959654,
+        "lexical_fetch_seconds": 0.3021490030005225,
+        "bm25_seconds": 0.004392057999211829,
+        "rrf_seconds": 0.0010996769997291267,
+        "candidate_scoring_seconds": 6.262001988943666e-06,
+        "retrieval_seconds": 1.5229211749974638,
+        "context_seconds": 0.0020549629989545792,
+        "generation_seconds": 1.526823965999938,
+        "validation_seconds": 0.00042708699766080827,
+        "support_review_seconds": 1.2338627759963856,
+        "total_seconds": 17.398309397001867
+      },
+      "semantic_support_review": "MODEL_SUPPORTED",
+      "safe_fallback": null
+    },
+    "context": "{\"pregunta\":\"El portal de documentos devuelve error 403. ¿Eso demuestra que mi cuenta está suspendida? ¿Qué debe revisar soporte?\",\"clasificacion\":{\"categoria\":\"acceso\",\"datos_faltantes\":[]},\"corpus_simulado\":true,\"evidencia\":[{\"etiqueta\":\"F1\",\"texto\":\"Ingreso a sistemas y recursos / ACS-03 | Error 403 o recurso no autorizado\\nUn error 403, por sí solo, no confirma que la cuenta esté suspendida. Soporte revisa el recurso solicitado, la sesión y los permisos mediante el sistema autorizado.\"},{\"etiqueta\":\"F2\",\"texto\":\"Ingreso a sistemas y recursos / ACS-05 | Comprobación y cierre\\nSoporte verifica el ingreso al recurso concreto y registra el resultado. Poder entrar al portal principal no demuestra que el usuario tenga permiso para todos sus recursos.\"},{\"etiqueta\":\"F3\",\"texto\":\"Ingreso a sistemas y recursos / ACS-03 | Error 403 o recurso no autorizado\\nSi el usuario necesita un permiso que no tiene, se tramita una solicitud con la autorización correspondiente. El asistente no concede acceso ni indica cómo evadir restricciones. El manual no lista permisos individuales.\"}]}"
+  }
+}

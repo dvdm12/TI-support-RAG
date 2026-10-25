@@ -24,8 +24,8 @@ def bundled_files():
     names = ['requirements-parcial2.txt', 'data/indexes/sections/config.json',
         'data/indexes/sections/records.json', 'data/indexes/sections/vectors.npy',
         'cases/test_cases.json', 'cases/rag_regression.json', 'cases/rag_evidence.json',
-        'docs/retrieval_metrics_20261021.json', 'docs/coverage_improvements_20261021.json',
-        'docs/generation_tokens_20261021.json', 'docs/rrf_traces_20261025.json',
+        'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json', 'docs/evaluacion/recuperacion/coverage_improvements_20261021.json',
+        'docs/evaluacion/generacion/generation_tokens_20261021.json', 'docs/evaluacion/recuperacion/rrf_traces_20261025.json',
         'docs/human_review/class09_review_v1.json', 'docs/human_review/class09_review_v1.csv']
     for name in names:
         files['backend/' + name] = (BACKEND / name).read_bytes()
@@ -42,7 +42,7 @@ def bundled_files():
             'http_seconds': row['http_seconds'], 'expected_states': row['expected_states'],
             **{key: response.get(key) for key in ('estado', 'clasificacion', 'respuesta_documental',
                                                  'fuentes', 'tiempos_segundos')}})
-    files['backend/docs/parcial2_saved_api.json'] = json.dumps(safe, ensure_ascii=False).encode()
+    files['backend/docs/parcial2/evidencias/parcial2_saved_api.json'] = json.dumps(safe, ensure_ascii=False).encode()
     files['bundle_manifest.json'] = json.dumps({p: sha(b) for p, b in files.items()}, sort_keys=True).encode()
     return files
 
@@ -90,7 +90,7 @@ def build_notebook(raw=None):
     **Para el profesor:** usar **Entorno de ejecución → Ejecutar todo**. Los recursos
     se descargan del repositorio público y se verifican; si no están disponibles,
     se puede subir el ZIP adjunto. Al final aparece **Panel del profesor**, con
-    selector de casos, pregunta libre, búsqueda y consulta opcional con Groq.
+    consulta real con Groq y recuperación en Supabase activadas desde el inicio.
     No hay que editar funciones. Para generación se usan **sus propios secretos**.
     ''', 'portada')
     md('''
@@ -100,22 +100,34 @@ def build_notebook(raw=None):
     En local, colocar el ZIP junto al notebook o indicar su ruta en `RESOURCE_ZIP`.
     Así el código del notebook es legible y los recursos se pueden inspeccionar
     sin decodificar Base64. Ejecutar las celdas en orden.
-    El modo inicial `evidencia_guardada` reproduce los
-    experimentos existentes y realiza extracción, OCR y comprobaciones locales.
-    **No llama a Groq ni Supabase.** Instalar dependencias en Colab sí usa Internet.
+    El modo inicial es **`consulta_real` con `USE_SUPABASE=True`**: conecta a
+    Supabase y consulta Groq. Preparar las credenciales propias antes de ejecutar todo.
+    Se descarga el modelo de embeddings fijado y cada consulta puede consumir varias
+    llamadas (clasificación, generación, revisión y corrección).
 
-    Para probar una solicitud nueva con el modelo, usar `consulta_real`: descarga
-    el modelo de embeddings fijado y solicita `GROQ_API_KEY` desde Colab Secrets.
-    `USE_SUPABASE=True` añade lectura autenticada de la base vectorial. Cada consulta
-    puede consumir varias llamadas (clasificación, generación, revisión y corrección).
+    **En local:** usar el kernel Python 3.12 del proyecto con dependencias instaladas
+    y Tesseract disponible. Se lee `.env` en la carpeta de inicio, `backend/.env`
+    desde la raíz, o `../.env` desde `backend/notebooks`, sin copiarlo al ZIP.
+    Para otra ubicación, definir `PARCIAL2_ENV_FILE` antes de ejecutar las celdas.
+    Las variables ya presentes en el entorno tienen prioridad.
+    **En Colab:** registrar `GROQ_API_KEY`, `SUPABASE_URL`,
+    `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_EMAIL` y `SUPABASE_PASSWORD` en Secrets.
+    El proyecto Supabase necesita usuario Auth, la migración SQL incluida y los
+    70 fragmentos cargados para ese usuario. Si faltan, preparar SQL/usuario y activar
+    `ALLOW_SUPABASE_UPSERT=True` solo para la primera carga del índice académico.
+    La carga está desactivada por defecto; una conexión fallida no cambia a local.
+
+    Para reproducir sin servicios, elegir explícitamente `MODE='evidencia_guardada'`
+    y `USE_SUPABASE=False`; en el panel elegir `Caso guardado` y desactivar
+    `USAR_SUPABASE`. Esto muestra observaciones históricas, no consultas nuevas.
     La reserva se ejecuta fuera de este notebook, después de aprobación y congelación.
     ''', 'preparacion')
     code('''
     import os, sys, json, hashlib, io, zipfile, subprocess, tempfile, shutil, time
     from pathlib import Path
     IN_COLAB = 'google.colab' in sys.modules or 'COLAB_RELEASE_TAG' in os.environ
-    MODE = 'evidencia_guardada'  # 'consulta_real' para una ejecución nueva
-    USE_SUPABASE = False
+    MODE = 'consulta_real'  # 'evidencia_guardada' solo para reproducción sin servicios
+    USE_SUPABASE = True
     LOAD_EMBEDDING_MODEL = MODE == 'consulta_real'
     RUN_OCR = True
     INSTALL_DEPENDENCIES = IN_COLAB
@@ -124,9 +136,33 @@ def build_notebook(raw=None):
     TEAM = []  # Registrar nombres reales; no inventarlos.
     QUESTION = 'El portal de documentos devuelve error 403. ¿Eso demuestra que mi cuenta está suspendida? ¿Qué debe revisar soporte?'
     IMAGE_PATH = None  # Ruta de una imagen propia; la modalidad se muestra en el punto 4.
+    # Capturar el .env local antes de cambiar a la carpeta temporal del ZIP.
+    if os.environ.get('PARCIAL2_ENV_FILE'):
+        LOCAL_ENV_FILE = Path(os.environ['PARCIAL2_ENV_FILE']).expanduser().resolve()
+    else:
+        env_candidates = [Path.cwd() / '.env', Path.cwd() / 'backend/.env', Path.cwd().parent / '.env']
+        LOCAL_ENV_FILE = next((p.resolve() for p in env_candidates if p.is_file()), None)
     RESOURCE_ZIP = Path(os.environ.get('PARCIAL2_RESOURCES', 'parcial2_recursos.zip')).resolve()
     RESOURCE_URL = 'https://raw.githubusercontent.com/dvdm12/TI-support-RAG/refs/heads/codex/backend-infra-ricoh-local/backend/notebooks/parcial2_recursos.zip'
     WORKSPACE = Path(os.environ.get('PARCIAL2_WORKDIR', '/content/parcial2' if IN_COLAB else tempfile.mkdtemp(prefix='parcial2-'))).resolve()
+    # Resultados permanentes separados de los recursos extraídos del ZIP.
+    def results_root(start, in_colab):
+        if os.environ.get('PARCIAL2_OUTPUT_DIR'):
+            return Path(os.environ['PARCIAL2_OUTPUT_DIR']).expanduser().resolve()
+        if in_colab:
+            return Path('/content/parcial2/backend/docs/parcial2')
+        start = Path(start).resolve()
+        candidates = [start / 'backend', start, start.parent]
+        local_backend = next((p for p in candidates
+                              if (p / 'src/rag').is_dir() and (p / 'requirements-parcial2.txt').is_file()),
+                             start / 'backend')
+        return local_backend / 'docs/parcial2'
+
+    from datetime import datetime, timezone
+    OUTPUT_ROOT = results_root(Path.cwd(), IN_COLAB)
+    RUN_ID = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    RUN_DIR = OUTPUT_ROOT / 'ejecuciones' / RUN_ID
+    RESULTS_ZIP = RUN_DIR / 'parcial2_resultados.zip'
     assert MODE in {'evidencia_guardada', 'consulta_real'}
     if USE_SUPABASE or ALLOW_SUPABASE_UPSERT:
         assert MODE == 'consulta_real', 'La reproducción no accede a Supabase.'
@@ -219,7 +255,7 @@ def build_notebook(raw=None):
     from src.decision import run_decision_contract_checks
     from src.config import MODEL, PROMPT_VERSION, PROMPT_PATH
     from src.rag.config import RAGConfig
-    api_saved = read_json('docs/parcial2_saved_api.json')
+    api_saved = read_json('docs/parcial2/evidencias/parcial2_saved_api.json')
     annotations = read_json('cases/rag_evidence.json')
     case_map = {c['id']: c for c in annotations['cases']}
     saved_case = next(c for c in api_saved['cases'] if c['id'] == 'E06')
@@ -240,6 +276,11 @@ def build_notebook(raw=None):
     ''', 'punto-2')
     code('''
     def load_own_secrets(names):
+        if not IN_COLAB and LOCAL_ENV_FILE is not None:
+            from dotenv import load_dotenv
+            if not LOCAL_ENV_FILE.is_file():
+                raise RuntimeError('No existe el archivo indicado en PARCIAL2_ENV_FILE.')
+            load_dotenv(LOCAL_ENV_FILE, override=False)
         for name in names:
             if IN_COLAB:
                 from google.colab import userdata
@@ -252,7 +293,7 @@ def build_notebook(raw=None):
                 os.environ[name] = value
                 del value
             elif not os.environ.get(name):
-                raise RuntimeError('Configura la variable de entorno ' + name)
+                raise RuntimeError('Configura ' + name + ' en el entorno o en tu .env (PARCIAL2_ENV_FILE).')
         print('Secretos propios disponibles; valores ocultos.')
     if MODE == 'consulta_real':
         required = ['GROQ_API_KEY']
@@ -460,7 +501,7 @@ def build_notebook(raw=None):
     from src.rag.token_comparison import response_format
     from src.groq_client import build_payload
     from src.token_budget import input_budget
-    base = read_json('docs/retrieval_metrics_20261021.json')
+    base = read_json('docs/evaluacion/recuperacion/retrieval_metrics_20261021.json')
     inventory = {c.chunk_id: Candidate(chunk_id=c.chunk_id, content=c.text,
                  metadata=c.model_dump(exclude={'chunk_id','text'}), similitud=0) for c in chunks}
     live_result = None
@@ -510,7 +551,7 @@ def build_notebook(raw=None):
     assert [r['chunk_id'] for r in example] == ['A','C','B','D']
     assert [round(r['rrf_score'],6) for r in example] == [.032522,.032266,.016129,.015873]
     display(pd.DataFrame(example))
-    traces = read_json('docs/rrf_traces_20261025.json')
+    traces = read_json('docs/evaluacion/recuperacion/rrf_traces_20261025.json')
     for case in traces['cases']:
         sem = [inventory[r['chunk_id']].model_copy(update={'similitud': r['cosine']}) for r in case['semantic_ranking']]
         selected, reproduced = select_ranked_candidates(case['question'], sem, rank(case['question'], list(inventory.values()), 10))
@@ -518,7 +559,7 @@ def build_notebook(raw=None):
     print('13/13 selecciones híbridas v2 reproducidas localmente, sin categorías esperadas.')
     display(pd.DataFrame(next(c for c in traces['cases'] if c['id']=='E06')['rrf_union']))
     # Generación A/B efectivamente comparable: mismo rag_v6, modelo y parámetros.
-    paired_generation = read_json('docs/generation_tokens_20261021.json')
+    paired_generation = read_json('docs/evaluacion/generacion/generation_tokens_20261021.json')
     assert paired_generation['protocol']['prompt_version'] == 'rag_v6'
     assert paired_generation['protocol']['temperature'] == 0
     assert paired_generation['protocol']['classifier_run'] is False
@@ -548,7 +589,7 @@ def build_notebook(raw=None):
     ''', 'punto-12')
     code('''
     from src.rag.retrieval_metrics import metrics, coverage
-    improved = read_json('docs/coverage_improvements_20261021.json')
+    improved = read_json('docs/evaluacion/recuperacion/coverage_improvements_20261021.json')
     evaluation_rows = []
     for label, report, variant in [('Semántica A histórica', base, 'A_semantic'),
                                   ('Híbrida v1 histórica', base, 'B_hybrid_rrf'),
@@ -568,7 +609,7 @@ def build_notebook(raw=None):
     retrieval_table = pd.DataFrame(evaluation_rows)
     display(retrieval_table)
     assert evaluation_rows[-1]['recall'] == 1 and evaluation_rows[-1]['cobertura_contexto'] == 1
-    token_report = read_json('docs/generation_tokens_20261021.json')
+    token_report = read_json('docs/evaluacion/generacion/generation_tokens_20261021.json')
     token_rows = [{'variante': name, 'pares': value['paired_usage']['total_tokens']['n'],
                    'tokens_generacion': value['paired_usage']['total_tokens']['sum']}
                   for name,value in token_report['summary']['variants'].items()]
@@ -606,15 +647,19 @@ def build_notebook(raw=None):
     Se exportan métricas de recuperación recalculadas en JSON, CSV y PDF con los
     denominadores, y una traza de sesión permitida por campos explícitos. El reporte
     existente de tokens se conserva como evidencia histórica. No se exportan secretos
-    ni encabezados HTTP. Descargar el ZIP de resultados y guardar la bitácora del equipo.
+    ni encabezados HTTP. En local se guardan en
+    `backend/docs/parcial2/ejecuciones/<fecha-UTC>/resultados/` y su ZIP al lado.
+    Cada ejecución tiene su carpeta; repetir el panel actualiza su interacción y ZIP.
+    `PARCIAL2_OUTPUT_DIR` permite elegir otra raíz. En Colab la raíz es
+    `/content/parcial2/backend/docs/parcial2/`; descargar el ZIP antes de cerrar la sesión.
     En Colab limpiar salidas antes de publicar si se ensayan datos privados propios.
     ''', 'exportacion-texto')
     code('''
     from datetime import datetime, timezone
     from src.pdf_report import PDFReport
     from src.rag.complete_coverage import details
-    export_dir = WORKSPACE / 'resultados_parcial2'
-    export_dir.mkdir(exist_ok=True)
+    export_dir = RUN_DIR / 'resultados'
+    export_dir.mkdir(parents=True, exist_ok=True)
     retrieval_table.to_csv(export_dir / 'metricas_recuperacion.csv', index=False)
     (export_dir / 'metricas_recuperacion.json').write_text(json.dumps({
         'scope': 'Recalculated from saved known development selections; no new retrieval measurements',
@@ -646,16 +691,21 @@ def build_notebook(raw=None):
             ['candidates','catalog','omitted','timings','semantic_support_review','safe_fallback']}
         session_trace['query']['context'] = live_result.get('user_content_sent')
     (export_dir / 'traza_sesion.json').write_text(json.dumps(session_trace, ensure_ascii=False, indent=2))
-    shutil.make_archive(str(WORKSPACE / 'parcial2_resultados'), 'zip', export_dir)
+    shutil.make_archive(str(RESULTS_ZIP.with_suffix('')), 'zip', export_dir)
+    print('Carpeta de resultados:', export_dir)
+    print('ZIP de resultados:', RESULTS_ZIP)
     print('Resultados disponibles:', sorted(p.name for p in export_dir.iterdir()))
     if IN_COLAB:
         from google.colab import files
-        print('Para descargar: files.download(str(WORKSPACE / "parcial2_resultados.zip"))')
+        print('Para descargar: files.download(str(RESULTS_ZIP))')
     ''', 'exportacion')
     md('''
     ## Panel del profesor
-    Después de ejecutar el notebook, cambiar los campos de la siguiente celda y
-    pulsar su botón de ejecución tantas veces como se quiera.
+    El panel inicia en **Consultar con Groq** y **USAR_SUPABASE=True**.
+    Ejecutarlo realiza una consulta nueva con las credenciales propias configuradas.
+    Después de ejecutar el notebook, cambiar la pregunta y ejecutar esta celda de
+    nuevo para cada interacción. La consulta del punto 10 y la del panel son dos
+    ejecuciones reales independientes y ambas consumen cuota.
 
     | Acción | Qué hace | Credenciales |
     |---|---|---|
@@ -667,24 +717,24 @@ def build_notebook(raw=None):
     búsqueda híbrida descarga la revisión fijada del embedder en su primera ejecución.
     La búsqueda sola muestra evidencia, **no genera una respuesta**.
 
-    Para el recorrido remoto de Clase 08, habilitar `USAR_SUPABASE`, crear el
-    esquema SQL incluido en un proyecto propio y registrar los cuatro secretos
-    Supabase además de Groq. Si ese usuario todavía no tiene el corpus, habilitar
+    Para el recorrido remoto de Clase 08, `USAR_SUPABASE` ya está habilitado.
+    Crear el esquema SQL incluido en un proyecto propio y registrar los cuatro
+    secretos Supabase además de Groq. Si ese usuario todavía no tiene el corpus, habilitar
     `CARGAR_CORPUS_PROPIO` para cargar únicamente su índice académico. Se verifican
     inventario y persistencia desde un segundo cliente **sin segunda carga**.
     No se comparten credenciales ni se concede acceso al corpus del equipo por nombre.
     La carga es una operación explícita sobre el proyecto del profesor.
 
-    Cada interacción se guarda en `interaccion_profesor.json` y en el ZIP de
-    resultados descargable. Son consultas exploratorias, no una ejecución de reserva.
+    Cada interacción actualiza `interaccion_profesor.json` y el ZIP dentro de
+    la carpeta permanente de la ejecución (`RUN_DIR`). Son consultas exploratorias, no una ejecución de reserva.
     ''', 'panel-profesor-texto')
     code('''
     #@title Panel del profesor · cambiar campos y ejecutar esta celda
-    ACCION = "Caso guardado" #@param ["Caso guardado", "Buscar en corpus", "Consultar con Groq"]
+    ACCION = "Consultar con Groq" #@param ["Caso guardado", "Buscar en corpus", "Consultar con Groq"]
     CASO = "E06" #@param ["E01","E02","E03","E04","E05","E06","E07","E08","E09","E10","E11","E12","E13"]
     PREGUNTA = "¿Qué debo comprobar si no puedo conectarme al Wi-Fi?" #@param {type:"string"}
     BUSQUEDA_HIBRIDA = False #@param {type:"boolean"}
-    USAR_SUPABASE = False #@param {type:"boolean"}
+    USAR_SUPABASE = True #@param {type:"boolean"}
     CARGAR_CORPUS_PROPIO = False #@param {type:"boolean"}
     DESCARGAR_RESULTADOS = False #@param {type:"boolean"}
 
@@ -724,10 +774,10 @@ def build_notebook(raw=None):
         if interaction.get('failure_stage'):
             print('Fallo técnico en:', interaction['failure_stage'])
         (export_dir / 'interaccion_profesor.json').write_text(json.dumps(interaction, ensure_ascii=False, indent=2))
-        shutil.make_archive(str(WORKSPACE / 'parcial2_resultados'), 'zip', export_dir)
+        shutil.make_archive(str(RESULTS_ZIP.with_suffix('')), 'zip', export_dir)
         if DESCARGAR_RESULTADOS and IN_COLAB:
             from google.colab import files
-            files.download(str(WORKSPACE / 'parcial2_resultados.zip'))
+            files.download(str(RESULTS_ZIP))
     except Exception as error:
         print('Operación no completada:', type(error).__name__)
         print('Comprueba pregunta, secretos propios, SQL, corpus, cuota y conexión. No se muestra el cuerpo del error.')

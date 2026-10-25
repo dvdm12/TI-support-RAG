@@ -6,26 +6,50 @@ El enlace abre la entrega de `codex/backend-infra-ricoh-local`.
 Alternativa: subir `parcial2.ipynb` a Colab y
 `parcial2_recursos.zip` a su explorador de archivos cuando se solicite.
 
-## Interacción sin claves
+## Inicio con Groq y Supabase
 
-1. Abrir el notebook en una sesión CPU de Colab y seleccionar **Ejecutar todo**.
-   La primera ejecución instala dependencias, Tesseract e incorpora recursos.
-2. Ir al **Panel del profesor** al final. Los campos son formularios nativos de
-   Colab; elegir una acción y ejecutar de nuevo esa celda para cada interacción.
-3. **Caso guardado** permite elegir E01-E13 y revisar pregunta, respuesta y pasajes
-   completos. Es evidencia histórica, no una respuesta nueva.
-4. **Buscar en corpus** admite preguntas libres mediante BM25, sin modelo generativo.
-   `BUSQUEDA_HIBRIDA=True` añade embeddings semánticos y RRF; descarga el modelo
-   fijado la primera vez. No requiere Groq ni Supabase, pero sí Internet para el modelo.
-5. `DESCARGAR_RESULTADOS=True` descarga la evidencia de la interacción y las métricas.
+El notebook inicia en `MODE='consulta_real'`, `USE_SUPABASE=True`. El panel
+inicia en **Consultar con Groq** y `USAR_SUPABASE=True`. Ejecutar todo hace
+una consulta en el punto 10 y otra en el panel; ambas consumen cuota Groq.
+No requiere iniciar Django ni Docker: invoca directamente los componentes Python.
 
-## Preguntas nuevas con generación
+### En local
 
-En el panel de Secretos de Colab, registrar **GROQ_API_KEY propia**, autorizando
-acceso al notebook. Elegir **Consultar con Groq**, escribir la pregunta y ejecutar
-la celda. Se usa el mismo pipeline del proyecto: clasificación, recuperación,
-contexto, generación, validación y revisión. Consume cuota de la cuenta del profesor.
-La cuenta del equipo no se comparte ni se incorpora al ZIP.
+1. Abrir el notebook en Jupyter/VS Code con el kernel Python 3.12 del proyecto,
+   `backend/requirements.txt` instalado y Tesseract con idioma español disponible.
+   Colocar `parcial2_recursos.zip` junto al notebook.
+2. Configurar credenciales propias en `backend/.env`, usando `.env.example`:
+   `GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
+   `SUPABASE_EMAIL`, `SUPABASE_PASSWORD`. Nunca escribir valores en celdas.
+3. Iniciar el kernel desde la raíz, `backend/` o `backend/notebooks/`.
+   Se identifica el `.env` antes de extraer recursos al directorio temporal.
+   Para otra ubicación, definir `PARCIAL2_ENV_FILE` con la ruta absoluta al `.env`
+   en el entorno del kernel. Las variables existentes tienen prioridad.
+4. Preparar Supabase según la sección siguiente y ejecutar las celdas en orden.
+   Si faltan credenciales o falla la conexión, corregir la configuración y repetir;
+   no se sustituye Supabase por un repositorio local.
+5. En el panel, cambiar `PREGUNTA` y ejecutar esa celda para cada consulta nueva.
+   Los comentarios `#@param` son formularios en Colab y variables editables en local.
+   Se muestran clasificación, respuesta, fuentes, contexto y tiempos, y se guarda
+   `interaccion_profesor.json` en el ZIP de resultados.
+6. Abrir `backend/docs/parcial2/ejecuciones/<fecha-UTC>/resultados/` para ver el
+   PDF, los JSON y CSV. El ZIP queda junto a `resultados/`. El
+   [índice para el profesor](../docs/parcial2/README.md) explica los archivos y
+   enlaza una ejecución real comprobada. `PARCIAL2_OUTPUT_DIR` cambia la raíz.
+
+### En Colab
+
+Registrar los cinco nombres anteriores en **Secrets**, autorizar acceso al
+notebook y ejecutar todo. La instalación de dependencias y Tesseract es automática
+solo en Colab. Se utilizan siempre credenciales propias del profesor.
+
+## Reproducción opcional sin claves
+
+Elegir explícitamente `MODE='evidencia_guardada'` y `USE_SUPABASE=False` antes
+de ejecutar todo; en el panel elegir **Caso guardado** y desactivar `USAR_SUPABASE`.
+E01–E13 muestran observaciones históricas. **Buscar en corpus** admite preguntas
+libres mediante BM25 sin claves; `BUSQUEDA_HIBRIDA=True` añade embeddings/RRF y
+descarga el modelo fijado. La búsqueda sola no genera una respuesta.
 
 ## Demostración Supabase de Clase 08
 
@@ -33,12 +57,13 @@ Con credenciales propias de Supabase, el profesor necesita preparar su proyecto:
 
 1. Ejecutar `infra/supabase/migrations/20261014_documentary_rag.sql`, incluido en los
    recursos y en el repositorio, y crear un usuario de práctica en Supabase Auth.
-2. Añadir a Colab Secrets `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
+2. Añadir al `.env` local o a Colab Secrets `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
    `SUPABASE_EMAIL`, `SUPABASE_PASSWORD`; usar clave publicable y credenciales Auth.
-3. En **Consultar con Groq**, habilitar `USAR_SUPABASE`. Si ese usuario todavía
-   no tiene el corpus, marcar explícitamente `CARGAR_CORPUS_PROPIO` para cargar los
-   70 fragmentos académicos en su propio proyecto. Desmarcar en consultas posteriores.
-4. Se verifican inventario y recuperación desde un segundo cliente del mismo
+3. Si el usuario no tiene el corpus, activar `ALLOW_SUPABASE_UPSERT=True` en la
+   configuración para cargar los 70 fragmentos en el punto 9. Desactivar después
+   de la primera carga. En el panel existe la opción equivalente
+   `CARGAR_CORPUS_PROPIO`; ambas están desactivadas por defecto.
+4. El punto 9 verifica Auth, inventario y RPC. En el panel se verifican inventario y recuperación desde un segundo cliente del mismo
    usuario, sin segunda carga, comparando IDs, textos y cosenos. Esto comprueba
    persistencia y no acredita aislamiento entre usuarios.
 
@@ -49,8 +74,17 @@ del equipo. La base local no sustituye un fallo de conexión remoto.
 
 El corpus es académico simulado. El notebook integra los doce puntos de Clase 09,
 pero revisión humana, reserva y conclusión final permanecen pendientes. La interfaz
-no abre la reserva. La ejecución local fue validada; una sesión Colab con instalación
-y secretos debe comprobarse por separado. No se inicia Django ni Docker en Colab.
+no abre la reserva. El 25-10-2026 se ejecutaron las 18 celdas de código en local
+con Groq y Supabase reales: dos consultas correctas, 70 fragmentos verificados,
+persistencia comprobada desde un segundo cliente y exportaciones generadas.
+No se cargaron filas. Las salidas originales se preservaron en la evidencia de esa ejecución. Colab sigue
+pendiente de validación; no se inicia Django ni Docker en Colab.
 
 Referencias de funcionamiento: [FAQ oficial de Colab](https://research.google.com/colaboratory/faq.html),
 [formularios de Colab](https://colab.research.google.com/notebooks/forms.ipynb).
+
+Tras reorganizar `backend/docs/`, se regeneraron el notebook y su ZIP con las
+nuevas rutas. El notebook se distribuye limpio; la ejecución real anterior sigue
+en `backend/docs/parcial2/ejecuciones/20261025T183222Z/`. Se comprobó de nuevo el
+recorrido completo sin proveedores y la exportación de resultados con el paquete
+reorganizado, sin repetir consultas Groq ni acceder a la reserva.

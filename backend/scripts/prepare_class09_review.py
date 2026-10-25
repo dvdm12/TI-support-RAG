@@ -8,7 +8,7 @@ from pathlib import Path
 from schemas.human_review_v1 import HumanJudgement, ReviewSheet
 
 ROOT = Path(__file__).resolve().parents[1]
-GENERATION = "docs/generation_tokens_20261021.json"
+GENERATION = "docs/evaluacion/generacion/generation_tokens_20261021.json"
 API = "docs/rag_runs/backend_check_20261025/phase_b_v8.json"
 ANNOTATIONS = "cases/rag_evidence.json"
 RECORDS = "data/indexes/sections/records.json"

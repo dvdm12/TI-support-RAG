@@ -69,7 +69,7 @@ def create_baseline(root, manifest, document_id, result, *, created_at_utc, git_
     source, document, profile = read_registered_document(manifest, document_id)
     references = artifact_paths(root, document_id)
     saved = references[f'data/extracted/{document_id}/extraction.json'].read_bytes()
-    historical = json.loads((root / 'docs/ricoh_extraction_validation.json').read_text())
+    historical = json.loads((root / 'docs/extractor/ricoh_extraction_validation.json').read_text())
     if (saved != extraction_bytes(result)
             or sha256(saved) != historical['extraction_sha256']
             or historical['source_sha256'] != document['sha256']

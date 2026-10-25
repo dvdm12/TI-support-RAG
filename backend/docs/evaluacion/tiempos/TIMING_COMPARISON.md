@@ -9,10 +9,10 @@ Desde `backend/`, con las dependencias del proyecto:
 
 ```sh
 ../.venv/bin/python -m scripts.compare_retrieval_times
-../.venv/bin/python -m scripts.compare_retrieval_times --input docs/retrieval_metrics_20261021.json --output docs/comparacion.json
+../.venv/bin/python -m scripts.compare_retrieval_times --input docs/evaluacion/recuperacion/retrieval_metrics_20261021.json --output docs/comparacion.json
 ```
 
-La salida predeterminada es `docs/retrieval_metrics_20261021_times.json`,
+La salida predeterminada es `docs/evaluacion/recuperacion/retrieval_metrics_20261021_times.json`,
 acompañada siempre por CSV y PDF con el mismo nombre base. El archivo de entrada
 se conserva. El PDF actual tiene tres páginas revisadas visualmente.
 

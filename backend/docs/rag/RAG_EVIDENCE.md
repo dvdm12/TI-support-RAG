@@ -11,7 +11,7 @@ copiar las respuestas del modelo. La anotación ocurre después de los experimen
 previos y antes de la futura comparación A/B: no debe presentarse como ciega.
 
 - Datos: `cases/rag_evidence.json`.
-- Integridad: `docs/rag_evidence_validation.json`.
+- Integridad: `docs/evaluacion/validaciones/rag_evidence_validation.json`.
 - Corpus: `ti-manuals-v2-d479e96962b17496eaa3`.
 - Siete casos documentales, seis de comportamiento y 35 unidades de información.
 

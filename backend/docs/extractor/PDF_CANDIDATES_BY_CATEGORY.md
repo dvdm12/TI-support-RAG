@@ -9,7 +9,7 @@ de todas ellas. Los dominios pertenecen al fabricante, proyecto o institución
 responsable. No se utilizaron repositorios de manuales sin procedencia.
 
 Registro con URL, SHA-256, versión/contexto, páginas y límites:
-`docs/fixtures/category_pdf_candidates_v1.json`. Las copias completas y el
+`docs/extractor/fixtures/category_pdf_candidates_v1.json`. Las copias completas y el
 inventario de descarga son locales e ignorados por Git, en
 `docs/rag_runs/category_pdf_discovery/20261024/`. No están disponibles
 automáticamente al clonar el repositorio.

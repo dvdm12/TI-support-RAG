@@ -43,7 +43,7 @@ class CoverageImprovementTests(unittest.TestCase):
         self.assertEqual(applicable_candidates('Adjunto sospechoso sin abrir.',[candidate])[0],[])
 
     def test_smaller_prompt_preserves_whole_passages_and_missing_data(self):
-        source=json.loads((ROOT/'docs/retrieval_metrics_20261021.json').read_text())
+        source=json.loads((ROOT/'docs/evaluacion/recuperacion/retrieval_metrics_20261021.json').read_text())
         case=next(c for c in source['cases'] if c['id']=='E04')
         candidates=[]
         for ident in case['variants']['B_hybrid_rrf']['selected_ids']:

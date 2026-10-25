@@ -382,10 +382,10 @@ class TestConfigPaths(unittest.TestCase):
             "results.json",
         )
 
-    def test_results_path_esta_en_directorio_docs(self):
+    def test_results_path_esta_en_directorio_parcial1(self):
         self.assertEqual(
-            config.RESULTS_PATH.parent.name,
-            "docs",
+            config.RESULTS_PATH.parent.relative_to(config.PROJECT_ROOT).as_posix(),
+            "docs/parcial1",
         )
 
     def test_prompts_dir_se_llama_prompts(self):
@@ -425,7 +425,7 @@ class TestConfigInitialization(unittest.TestCase):
 
         (root / "prompts").mkdir()
         (root / "test").mkdir()
-        (root / "docs").mkdir()
+        (root / "docs" / "parcial1").mkdir(parents=True)
 
         (root / "prompts" / "system_v0.md").write_text(
             "prompt 0",
@@ -438,7 +438,7 @@ class TestConfigInitialization(unittest.TestCase):
         )
 
         (root / "test" / "test_cases.json").touch()
-        (root / "docs" / "results.json").touch()
+        (root / "docs" / "parcial1" / "results.json").touch()
 
         if include_key:
             (root / ".env").write_text(
@@ -576,8 +576,7 @@ class TestConfigConsistency(unittest.TestCase):
         self.assertEqual(
             config.RESULTS_PATH,
             config.PROJECT_ROOT
-            / "docs"
-            / "results.json",
+            / "docs" / "parcial1" / "results.json",
         )
 
 

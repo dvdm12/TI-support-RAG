@@ -40,12 +40,12 @@ umbral mínimo numérico para estas métricas ni porcentajes institucionales.
 | Tokens del proveedor | Cumple como registro disponible | Las trazas reales registran usage por llamada; falta presentarlo junto a alternativas comparables y exportar evidencia compartible. |
 | Errores separados de falta de evidencia | Cumple en la regresión existente | Estados técnicos/formato y bloqueo por cuota son explícitos. Las abstenciones seguras quedan diferenciadas de respuestas aprobadas por el revisor. |
 
-`docs/backend_validation.json` acredita **13/13 criterios de comportamiento**,
+`docs/evaluacion/validaciones/backend_validation.json` acredita **13/13 criterios de comportamiento**,
 234 unitarias y 24 API. No acredita Precision@3, Recall@3, MRR ni cobertura.
 De esos 13 casos, ocho tienen `MODEL_SUPPORTED`, tres `LOCAL_CLARIFICATION`
 y dos un reemplazo seguro tras `MODEL_REJECTED` (E07/E09).
 
-`docs/ricoh_local_retrieval_validation.json` sí contiene Hit@3 y MRR@3 para
+`docs/extractor/ricoh_local_retrieval_validation.json` sí contiene Hit@3 y MRR@3 para
 12 preguntas del índice Ricoh local (11/12 Top-3 en la mejor variante). Ese
 corpus está fuera de la API y no es la comparación del RAG académico activo.
 No mezclar sus resultados con los 13 casos de regresión del backend.
@@ -63,7 +63,7 @@ No mezclar sus resultados con los 13 casos de regresión del backend.
 | Trazabilidad de rankings y contribuciones | Parcial | Se conservan candidatos finales, pero el recuperador activo no exporta rankings semántico/léxico separados y aportes RRF por candidato para la comparación. |
 | Reranking | No implementado; opcional para la entrega | No se encontró CrossEncoder ni variante C. Solo sería pendiente obligatorio si elegimos reproducir el demo completo A/B/C. |
 | Revisión humana de respuestas y citas | Pendiente | El revisor es otro llamado de modelo. No hay una ficha actual completada por personas ni comparación independiente entre dos integrantes. La bitácora histórica del primer corte no acredita la revisión de las respuestas actuales. |
-| Conclusión y decisión comparativa | Pendiente | `docs/rag_comparison.json` compara fragmentación, no A/B de recuperación; `winner` es null y `semantic_review` sigue PENDIENTE. |
+| Conclusión y decisión comparativa | Pendiente | `docs/evaluacion/recuperacion/rag_comparison.json` compara fragmentación, no A/B de recuperación; `winner` es null y `semantic_review` sigue PENDIENTE. |
 
 La implementación léxica normaliza tildes, elimina stopwords (incluidas `no`,
 `sin`) y aplica una reducción de plurales. Difiere del baseline transparente del
@@ -80,7 +80,7 @@ registrar la configuración y revisar negaciones/códigos. El ajuste por categor
 | OCR/modalidad anterior integrado en la demostración final | Parcial | Existen OCR y parámetro `image_path` del pipeline; la regresión final de 13 casos fue textual y el notebook deja OCR desactivado. No falta agregar OCR HTTP: eso no es un requisito docente. |
 | Notebook final ejecutable en Colab sin ejecutar otros notebooks | Pendiente | Los notebooks dependen del checkout local. El de clase 08 exige que el kernel sea exactamente `.venv` del proyecto y no instala dependencias. No hay ejecución final demostrada en Colab con bootstrap y secretos. |
 | README y bitácora del segundo corte | Parcial | README raíz describe ejecución, pero no identifica al equipo; backend/README y bitácora siguen anunciando Parcial 1 y system_v4. La configuración real es system_v7/rag_v5. La continuidad en .agents no reemplaza la bitácora de entrega. |
-| Presentación final en PDF | No acreditada | Existe `docs/model_results_report.pdf` vinculado al primer corte, pero no se identificó una presentación final del segundo corte con comparación, decisión y fallos. No se revisó visualmente ese PDF en esta auditoría. |
+| Presentación final en PDF | No acreditada | Existe `docs/parcial1/model_results_report.pdf` vinculado al primer corte, pero no se identificó una presentación final del segundo corte con comparación, decisión y fallos. No se revisó visualmente ese PDF en esta auditoría. |
 | Repositorio accesible al profesor | Por confirmar | GitHub y rama publicados; no se verificaron los permisos particulares del profesor. |
 | Evidencia final reproducible y compartible | Parcial | Hay documentación y reportes versionados; las trazas completas están ignoradas. Falta un export limpio con anotaciones, variantes, rankings, contexto, respuestas, revisión humana, métricas y versiones. |
 
@@ -122,8 +122,8 @@ otras métricas ni acredita el conjunto de reserva o la revisión humana.
 existentes, con condiciones, criterios de fallo, IDs relevantes, citas y offsets:
 siete casos documentales, 35 unidades y seis casos solo de comportamiento. La
 integridad se contrastó con los siete PDF originales y 70 fragmentos mediante
-`scripts/validate_rag_evidence.py`; ver `docs/rag_evidence_validation.json` y
-`docs/RAG_EVIDENCE.md`. No se anotaron respuestas del modelo como verdad fuente.
+`scripts/validate_rag_evidence.py`; ver `docs/evaluacion/validaciones/rag_evidence_validation.json` y
+`docs/rag/RAG_EVIDENCE.md`. No se anotaron respuestas del modelo como verdad fuente.
 La anotación no es ciega: todas las preguntas ya participaron en desarrollo.
 Quedan pendientes revisión humana de relevancia/unidades y reserva nueva. Aún no
 se ejecutó la comparación A/B ni se calcularon las métricas con estas anotaciones.

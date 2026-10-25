@@ -58,8 +58,8 @@ sesión conserva los anteriores. Las respuestas rechazadas no se exportan como
 texto aceptado. Los errores registran tipo, etapa y HTTP cuando procede, sin
 mensajes del proveedor ni secretos.
 
-La comprobación actual se registra en `docs/class08_practice_validation.json`.
-`docs/class08_notebook_validation.json` y `docs/class08_notebook_retest.json`
+La comprobación actual se registra en `docs/clases/clase08/class08_practice_validation.json`.
+`docs/clases/clase08/class08_notebook_validation.json` y `docs/clases/clase08/class08_notebook_retest.json`
 son evidencia histórica del notebook anterior con opciones de demostración;
 sus cifras y comportamiento predeterminado no describen esta adaptación.
 

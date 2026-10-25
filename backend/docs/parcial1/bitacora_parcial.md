@@ -142,7 +142,7 @@ Solicitud del usuario
 | `cases/test_cases.json` | Casos de prueba |
 | `prompts/system_v0.md` a `system_v4.md` | Evolución versionada del prompt |
 | `evaluation.py` | Evaluación funcional independiente |
-| `docs/results.json` | Resultados registrados |
+| `docs/parcial1/results.json` | Resultados registrados |
 | `docs/multimodal/multimodal_demo.png` | Evidencia visual persistente |
 | `docs/model_results_report(20260920-203211).pdf` | Trazabilidad consolidada actual |
 | `README.md` | Documentación de uso y proyecto |
@@ -435,7 +435,7 @@ Estado: **corregido**.
 | OCR | `src/ocr/` |
 | Cliente | `src/groq_client.py` |
 | Casos | `cases/test_cases.json` |
-| Resultados | `docs/results.json` |
+| Resultados | `docs/parcial1/results.json` |
 | PDF consolidado actual | `docs/model_results_report(20260920-203211).pdf` |
 | Imagen multimodal | `docs/multimodal/multimodal_demo.png` |
 | Bitácora del parcial | `docs/bitacora_parcial_1.md` |

@@ -33,7 +33,7 @@ Fecha: 2026-10-14. Rama: `codex/implement-embeddings`.
 ## Comparación de fragmentación
 
 Corpus, ocho preguntas, representación y Top-3 constantes. Evidencia completa:
-`docs/rag_comparison.json`; los índices se generan en `data/indexes/`.
+`docs/evaluacion/recuperacion/rag_comparison.json`; los índices se generan en `data/indexes/`.
 
 | Variante | Fragmentos | Tokens mínimo / promedio / máximo | Corpus ID |
 |---|---:|---|---|
@@ -55,7 +55,7 @@ permanece vacío y la revisión semántica de la comparación queda pendiente.
 
 ## Generación real y límites observados
 
-La evidencia revisable está en `docs/rag_live_checks.json`; las trazas completas
+La evidencia revisable está en `docs/evaluacion/validaciones/rag_live_checks.json`; las trazas completas
 de ejecución se escriben en `docs/rag_runs/`, excluido de Git por defecto.
 
 1. Error 403 con `rag_v1`: el generador listó F1 pero no escribió `[F1]` dentro
@@ -112,14 +112,14 @@ las tres políticas y los permisos efectivos en PostgreSQL. Se cargaron 70
 fragmentos dos veces, sin duplicados, y se verificaron IDs, textos y búsqueda RPC
 desde dos clientes autenticados del mismo usuario. Una prueba completa recuperó
 evidencia remota y obtuvo una respuesta documental aceptada con Groq y citas
-válidas. Los resultados están en `docs/supabase_setup.md` y
-`docs/supabase_verification.json`. **Queda pendiente el aislamiento entre dos
-usuarios reales de Auth.** Los pasos reproducibles están en `docs/RAG.md`.
+válidas. Los resultados están en `docs/infraestructura/supabase_setup.md` y
+`docs/infraestructura/supabase_verification.json`. **Queda pendiente el aislamiento entre dos
+usuarios reales de Auth.** Los pasos reproducibles están en `docs/rag/RAG.md`.
 
 La suite completa también pasó en el nuevo entorno `.venv` (Python 3.12.3):
 185 pruebas. Las instalaciones y estas últimas comprobaciones utilizaron ese
 entorno activado. Las versiones del entorno remoto verificado se conservan en
-`docs/supabase_verification.json`; el entorno temporal descrito antes corresponde
+`docs/infraestructura/supabase_verification.json`; el entorno temporal descrito antes corresponde
 a las primeras pruebas de comparación.
 
 Falta ampliar la revisión semántica, justificar una estrategia con más preguntas,
@@ -154,7 +154,7 @@ y bloqueó siete por cuota. **No se declara una validación remota completa de l
 diez escenarios con la configuración final.**
 
 Las ejecuciones intermedias y fallos permanecen en `docs/rag_runs/`; el resumen
-sin secretos está en `docs/rag_hardening_verification.json`. Sigue pendiente el
+sin secretos está en `docs/evaluacion/validaciones/rag_hardening_verification.json`. Sigue pendiente el
 aislamiento entre dos usuarios Auth reales y el notebook completo. La revisión
 por el mismo modelo puede tener fallos correlacionados; los controles locales
 no equivalen a una garantía semántica para toda consulta futura.

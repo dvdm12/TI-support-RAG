@@ -207,7 +207,7 @@ class ExtractionValidationTests(unittest.TestCase):
         file = root/'data/extracted/RICOH-MP4002-USER-GUIDE-EN/extraction.json'
         if not file.exists():
             self.skipTest('Local Ricoh extraction unavailable.')
-        baseline = json.loads((root/'docs/baselines/ricoh_extraction_v1.json').read_text())
+        baseline = json.loads((root/'docs/extractor/baselines/ricoh_extraction_v1.json').read_text())
         value = json.loads(file.read_text())
         report = require_valid_extraction(value)
         self.assertEqual(report['status'], 'review')
