@@ -3,7 +3,9 @@ from unittest.mock import Mock, patch
 
 import requests
 
-from src import groq_client
+from schemas.request_v1 import SolicitudTI
+from src import config, groq_client
+from src.token_budget import input_budget
 
 
 _credentials = patch("src.groq_client.get_secret", return_value="test-key")
@@ -1182,6 +1184,57 @@ class TestResponseSchema(unittest.TestCase):
                 "alta",
             },
         )
+
+    def test_schema_resumen_tiene_limites_de_solicitud_ti(self):
+        # E06: sin maxLength el modelo respondía dentro del resumen (>240).
+        resumen = groq_client.RESPONSE_SCHEMA[
+            "json_schema"
+        ]["schema"]["properties"]["resumen"]
+        field = SolicitudTI.model_json_schema()["properties"]["resumen"]
+
+        self.assertEqual(resumen["type"], "string")
+        self.assertEqual(resumen["minLength"], field["minLength"])
+        self.assertEqual(resumen["maxLength"], field["maxLength"])
+        self.assertEqual(
+            (resumen["minLength"], resumen["maxLength"]),
+            (10, 240),
+        )
+
+
+class TestClassifierPrompt(unittest.TestCase):
+
+    def test_prompt_activo_es_v8(self):
+        self.assertEqual(config.PROMPT_VERSION, "system_v8")
+
+    def test_prompt_declara_limite_y_no_responder_en_resumen(self):
+        prompt = config.PROMPT_PATH.read_text(encoding="utf-8")
+
+        self.assertIn("resumen: 10-240 caracteres", prompt)
+        self.assertIn("no la respondas", prompt)
+        self.assertIn("No preguntes datos ya presentes", prompt)
+
+    def test_v8_solo_cambia_la_regla_del_resumen(self):
+        v7 = (config.PROMPTS_DIR / "system_v7.md").read_text(encoding="utf-8")
+        v8 = (config.PROMPTS_DIR / "system_v8.md").read_text(encoding="utf-8")
+        removed = set(v7.splitlines()) - set(v8.splitlines())
+        added = set(v8.splitlines()) - set(v7.splitlines())
+
+        self.assertEqual(
+            removed,
+            {"No preguntes datos ya presentes ni añadas síntomas, alcance o causas al resumen."},
+        )
+        self.assertEqual(len(added), 2)
+
+    def test_prompt_y_esquema_caben_en_presupuesto_de_entrada(self):
+        budget = input_budget(
+            groq_client.build_payload(
+                config.PROMPT_PATH.read_text(encoding="utf-8"),
+                "x",
+            )
+        )
+
+        self.assertLessEqual(budget["total_tokens"], 700)
+        self.assertLess(budget["total_tokens"], budget["limit"])
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 # Procedimiento de mejora del extractor PDF — 24-10-2026
 
-Estado: pasos 1–7 implementados y verificados en el alcance local acordado el 24-10-2026.
-El usuario autorizó posteriormente buscar PDF públicos y evaluarlos; seis probados, con límites registrados. Pasos 8–9 pendientes.
+Estado: pasos 1–8 implementados y verificados en el alcance local acordado (paso 8 el 25-10-2026).
+El usuario autorizó posteriormente buscar PDF públicos y evaluarlos; seis probados, con límites registrados. Paso 9 pendiente.
 Objetivo: ampliar soporte de PDF complejos conservando procedencia y evidencia.
 Los patrones facilitan cambios; no demuestran por sí solos mejor calidad del RAG.
 
@@ -14,7 +14,7 @@ Los patrones facilitan cambios; no demuestran por sí solos mejor calidad del RA
 | 5 — completado | Estrategias native_text/ruled_tables/text_only, selección explícita por página/región y traza separada | Strategy | 60 pruebas específicas y 312 unitarias correctas; CLI real con 228 registros y extracción idéntica. |
 | 6 — completado | Reglas componibles e informe separado; bloqueo documental y elegibilidad por bloque | Specification | 74 pruebas específicas y 326 unitarias correctas; Ricoh idéntico, seis tablas excluidas y 498 unidades con hash intacto. |
 | 7 — completado en alcance local | Tablas sin bordes/columnas explícitas, continuaciones y OCR separado, con muestras controladas | Estrategias especializadas | Controles sintéticos y seis PDF públicos evaluados; 357 unitarias. Nueve controles de componentes correctos, 0/6 con pipeline genérico; Ricoh idéntico. |
-| 8 | Verificar unidades completas y recuperación en español | Preservación + evaluación | Cobertura antes/después; separar pérdidas de extracción de fallos de búsqueda. |
+| 8 — completado | Verificar unidades completas y recuperación en español | Preservación + evaluación | Extracción y 498 unidades idénticas antes/después; 194.084 caracteres PDF contabilizados sin pérdidas; 0 pérdidas previas a búsqueda en 12 casos; fallos solo de búsqueda (RIC-06; RIC-09 sin literal). 433 unitarias. |
 | 9 | Preparar corpus aprobado, selección contextual y evaluar respuestas | Integración controlada | Fidelidad, corrección, citas, utilidad, tiempos y tokens; decisión antes del despliegue. |
 
 Alcance inicial propuesto: pasos 1–6, local. Conservar perfil declarativo Ricoh,
@@ -214,3 +214,24 @@ Los informes/PDF descargados/índices ignorados quedan locales; no se reindexa,
 no se mueve la colección candidata a manuals/ ni se inicia el paso 8 al publicar.
 Las anotaciones históricas de ausencia de commit/push describen cada tarea
 anterior y no sustituyen esta autorización posterior.
+
+
+## Paso 8 implementado
+
+`backend/src/rag/unit_verification.py` y `backend/scripts/verify_units_retrieval.py`;
+guía `backend/docs/UNIT_RETRIEVAL_VERIFICATION.md`. Reextrae Ricoh, compara con
+la extracción registrada y el índice ricoh-local-v1, contabiliza caracteres del
+PDF por página y clasifica cada caso en extraction_loss/unit_loss/fragment_loss/
+search_failure/retrieved. Exporta JSON/CSV/PDF en directorio nuevo.
+Resultado: extracción idéntica (ca1178c5…), 498/498 unidades idénticas, 194.084
+caracteres en 213 páginas con 0 faltantes/0 sobrantes, 1.647 párrafos y 364 filas
+en una unidad, 19 filas gráficas excluidas con motivo. semantic/hybrid fallan
+RIC-06 y RIC-09 en búsqueda; hybrid_literal solo RIC-06. Ninguna pérdida previa.
+evaluate_ricoh_local usa la regla `relevant` compartida; posiciones idénticas.
+76 pruebas nuevas (mutación 18/19, el restante equivalente), 433 unitarias. Evidencia local ignorada en
+backend/docs/rag_runs/unit_retrieval/check_20261025/. Sin Groq/Supabase/índices.
+No resuelve RIC-06 ni evalúa respuestas. Los diez PDF candidatos quedaron fuera:
+sonda del 25-10 los bloquea a todos (6 sin marcadores; HP/LibreOffice con pie
+"título + número"; SEG-BACKUP con marcadores fuera del rango numerado). Evidencia
+en backend/docs/rag_runs/category_pdf_discovery/20261024/extraction_probe_20261025/.
+Siguiente cuando se solicite: paso 9, o soporte de perfiles para candidatos.

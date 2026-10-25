@@ -1,6 +1,6 @@
 # Informe de continuidad — TI-support-RAG
 
-Actualizado: 24 de octubre de 2026 (America/Bogota).
+Actualizado: 25 de octubre de 2026 (America/Bogota).
 Repositorio: `/home/dvdm12/Documents/Obsidian Vault/TI-support-RAG`.
 
 ## Estado actual para continuar — leer primero
@@ -9,6 +9,58 @@ Esta sección prevalece sobre el historial que sigue. Las rutas antiguas del
 historial, como `src/` o `docs/`, ahora corresponden a `backend/src/` y
 `backend/docs/`, salvo las migraciones, ubicadas en `infra/supabase/`.
 No contiene secretos. No releer ni ejecutar integraciones históricas por defecto.
+
+### Actualización: Corrección E06 25-10-2026 (sin commit)
+
+Causa: el clasificador respondía la pregunta dentro de `resumen` (>240 caracteres);
+system_v7 no declaraba el límite y RESPONSE_SCHEMA no tenía maxLength.
+- prompts/system_v8.md: una regla «resumen: 10-240 caracteres; reformula la solicitud,
+  no la respondas…» (sustituye la línea equivalente de v7; v7 se conserva).
+- src/groq_client.py: resumen con minLength 10 / maxLength 240 (Groq lo acepta en strict).
+- Presupuesto del clasificador 661 → 690/1000 tokens. 5 pruebas nuevas en
+  test_groq_client.py; 463 unitarias y 26 API correctas.
+- Experimento previo: E06 3/3 válido con prompt solo y 3/3 con prompt + maxLength.
+- Imagen f5118f3a626c (healthy); rollback en tag rollback-69245ccd8178.
+- Repetición de los 13 casos de desarrollo: 13/13 HTTP 200, estado documental
+  esperado 13/13, categoría 12/12 (E10 sin categoría esperada); resúmenes 32–146
+  caracteres. E06 responde con ACS-03 citado. Evidencia phase_b_v8.json.
+- E10 queda OK_PIDE_ACLARACION por confianza 0.0 < 0.60 con datos_faltantes vacío
+  (regla previa de decision.py; explica también la observación histórica de 403).
+
+### Actualización 25-10-2026: validador de salida estricto (sin commit)
+
+Decisión del usuario: `confianza` estricta y `datos_faltantes` sin cadenas vacías.
+- backend/schemas/request_v1.py: confianza StrictFloat (enteros 0/1 válidos;
+  rechaza strings, booleanos, NaN e infinito) y elementos de datos_faltantes con
+  min_length=1 tras recortar espacios.
+- backend/src/validator.py: errores de raíz sin prefijo ": " vacío.
+- test/test_validator.py: 25 pruebas; validator.py y request_v1.py al 100 % de
+  líneas y ramas; 14/14 mutantes detectados. Suite 458 unitarias y 26 API correctas.
+  Mocks actuales siguen válidos. RESPONSE_SCHEMA de Groq sin cambios (ya number).
+- Contenedor reconstruido 25-10-2026: imagen 69245ccd8178 (healthy); validador estricto
+  comprobado dentro del contenedor; health, docs y openapi 200. Imagen previa etiquetada
+  ti-support-rag-backend:rollback-a414431ee034. Sin consultas Groq/Supabase en la verificación.
+
+### Actualización 25-10-2026: paso 8 completado (sin commit)
+
+Prevalece sobre los pendientes del paso 8. Publicación previa confirmada con Git:
+HEAD 7be846f sincronizado con origin/codex/backend-infra-ricoh-local.
+
+- Nuevos: backend/src/rag/unit_verification.py, scripts/verify_units_retrieval.py,
+  test/test_unit_verification.py (55), test/test_verify_units_retrieval.py (21) y docs/UNIT_RETRIEVAL_VERIFICATION.md.
+  evaluate_ricoh_local reutiliza `relevant`; rangos por caso idénticos al informe.
+- Ricoh: extracción nueva idéntica a la registrada, 498 unidades idénticas e
+  índice coincidente; 194.084 caracteres del PDF contabilizados, 0 pérdidas;
+  1.647 párrafos + 364 filas en una unidad, 19 filas gráficas excluidas.
+- 12 casos en español: 0 pérdidas de extracción/unidad/fragmento. Fallos solo de
+  búsqueda: RIC-06 (todas) y RIC-09 (semantic/hybrid). RIC-06 sigue abierto.
+- 433 unitarias correctas; sin nueva suite API, Groq, Supabase ni índices.
+  Evidencia local ignorada: backend/docs/rag_runs/unit_retrieval/check_20261025/.
+- Sonda de los diez PDF candidatos (25-10): 0/10 completan el pipeline genérico.
+  Seis sin marcadores; HP y LibreOffice numeran el pie junto al título; SEG-BACKUP
+  tiene marcadores fuera del rango numerado. Requiere cambio de extractor/perfil,
+  no hecho. Evidencia local en category_pdf_discovery/20261024/extraction_probe_20261025/.
+- Cambios sin commit/push. Siguiente según solicitud: paso 9 o soporte de candidatos.
 
 ### Publicación solicitada de la revisión del extractor
 

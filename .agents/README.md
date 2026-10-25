@@ -1,6 +1,6 @@
 # Continuidad de TI-support-RAG
 
-Actualizado el 24-10-2026 (America/Bogota). Leer primero el estado vigente al
+Actualizado el 25-10-2026 (America/Bogota). Leer primero el estado vigente al
 inicio de [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md); los apartados anteriores
 conservados como historial pueden contener cifras y pendientes superados.
 
@@ -24,6 +24,30 @@ conservados como historial pueden contener cifras y pendientes superados.
   La verificación Ricoh independiente pasó 18 pruebas; no sumarla como suite distinta.
 - Observación pendiente: query 403 devuelve OK_PIDE_ACLARACION con datos_faltantes
   vacío. Conservar la respuesta para revisar coherencia; no declarar fallo de conectividad.
+
+## Corrección E06 25-10-2026 (sin commit)
+
+prompt system_v8 + maxLength 240 en el resumen enviado a Groq. 13/13 casos de
+desarrollo HTTP 200 con estado documental esperado; imagen f5118f3a626c.
+Detalle en CLASS09_METRICS_STATUS.md y PROJECT_HANDOFF.md.
+
+## Validador estricto 25-10-2026 (sin commit)
+
+confianza StrictFloat y datos_faltantes sin vacíos (decisión del usuario); errores
+de raíz sin ": " inicial. test/test_validator.py: 25 pruebas, 100 % de cobertura
+de validator.py y request_v1.py. Suite: 458 unitarias y 26 API correctas.
+Contenedor reconstruido: imagen 69245ccd8178 healthy; rollback en tag rollback-a414431ee034. Detalle en PROJECT_HANDOFF.md.
+
+## Paso 8 completado el 25-10-2026 (sin commit)
+
+Publicación previa confirmada: HEAD 7be846f sincronizado con origin.
+Paso 8 implementado: unit_verification.py, verify_units_retrieval.py, 76 pruebas
+y guía backend/docs/UNIT_RETRIEVAL_VERIFICATION.md. Ricoh: extracción y 498
+unidades idénticas antes/después, 194.084 caracteres sin pérdidas; en 12 casos
+españoles no hay pérdidas previas a la búsqueda. Fallos solo de búsqueda: RIC-06
+(todas las estrategias) y RIC-09 (sin literal). 433 unitarias correctas.
+Los diez PDF candidatos: 0/10 pasan el pipeline genérico (sonda 25-10); su
+soporte requiere cambios de perfil/extractor. Siguiente: paso 9 si se solicita.
 
 ## Búsqueda posterior: candidatos por categoría
 
@@ -71,7 +95,7 @@ correctos; 0/6 completan el pipeline con el perfil genérico. OCR mezcla columna
 WER 47,89–48,68 % contra transcripción externa con artefactos, no verdad humana.
 Guía `backend/docs/WEB_PDF_EVALUATION.md`; código productivo intacto en esa
 evaluación. No repetir búsquedas ni iniciar mejoras adicionales por defecto.
-Continuar con el paso 8 (unidades completas y recuperación en español) cuando se solicite avanzar;
+El paso 8 se completó el 25-10-2026 (ver arriba); continuar con el paso 9 cuando se solicite;
 no abrir reserva ni integrar Ricoh como consecuencia de esta actualización.
 
 En evaluación de clase 09 sigue pendiente la revisión humana de las 14 respuestas

@@ -141,3 +141,39 @@ comprobados; tres páginas PDF revisadas. Sin despliegue, commit ni push nuevos.
 **Siguiente pendiente según la tabla:** revisión humana de fidelidad, corrección,
 utilidad y respaldo de las respuestas. No iniciada ni sustituida por validación
 del contrato. Reserva y anotaciones continúan pendientes de aprobación.
+
+## Verificación HTTP del backend desplegado 25-10-2026
+
+Imagen 69245ccd8178, solo desarrollo (13 casos), reserva sin abrir. Evidencia local
+ignorada en backend/docs/rag_runs/backend_check_20261025/.
+- Contrato HTTP: 18/18 controles (auth 401, 400, 405, 413, 422 sin Groq).
+- /rag/search/ sin categoría: P@3 66,67 %, R@3 100 %, Hit@3 100 %, MRR@3 1,0,
+  cobertura de unidades 100 %, 7/7 completas; coincide con híbrida v2.
+- /rag/query/ (13 llamadas Groq): 11×200 y 2×502. E06 falla 4/4 en clasificación:
+  el modelo genera `resumen` >240 caracteres (límite previo, no del cambio estricto).
+  E01 502 aislado; pasó 3/3 en repeticiones.
+- Sin errores técnicos: estado documental esperado 11/11, categoría 11/11,
+  aclaración 3/3, abstención innecesaria 0/5, abstención correcta 3/3 por estado
+  (2/3 estricto: E10 atribuye a F1/F3 afirmaciones sobre antivirus que no respaldan).
+- Revisión DEL AGENTE (no humana): respaldo 23/23 afirmaciones en las 5 respondidas;
+  presencia de cita por afirmación 17/23 (E04 cita en bloque al final, E05 parcial);
+  unidades cubiertas por la respuesta 20/25, completas 3/5 (E05 3/6, E12 3/5).
+- Latencia HTTP query mediana 5,94 s (2,56–33,63; abstenciones ~30 s por revisión y
+  corrección). El endpoint no expone tokens. Revisión humana sigue pendiente.
+
+## Corrección E06 25-10-2026 (sin commit)
+
+Causa: el clasificador respondía la pregunta dentro de `resumen` (>240 caracteres);
+system_v7 no declaraba el límite y RESPONSE_SCHEMA no tenía maxLength.
+- prompts/system_v8.md: una regla «resumen: 10-240 caracteres; reformula la solicitud,
+  no la respondas…» (sustituye la línea equivalente de v7; v7 se conserva).
+- src/groq_client.py: resumen con minLength 10 / maxLength 240 (Groq lo acepta en strict).
+- Presupuesto del clasificador 661 → 690/1000 tokens. 5 pruebas nuevas en
+  test_groq_client.py; 463 unitarias y 26 API correctas.
+- Experimento previo: E06 3/3 válido con prompt solo y 3/3 con prompt + maxLength.
+- Imagen f5118f3a626c (healthy); rollback en tag rollback-69245ccd8178.
+- Repetición de los 13 casos de desarrollo: 13/13 HTTP 200, estado documental
+  esperado 13/13, categoría 12/12 (E10 sin categoría esperada); resúmenes 32–146
+  caracteres. E06 responde con ACS-03 citado. Evidencia phase_b_v8.json.
+- E10 queda OK_PIDE_ACLARACION por confianza 0.0 < 0.60 con datos_faltantes vacío
+  (regla previa de decision.py; explica también la observación histórica de 403).

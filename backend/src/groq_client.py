@@ -92,7 +92,8 @@ RESPONSE_SCHEMA = {
                     "type": "string",
                     "enum": ["baja", "media", "alta"],
                 },
-                "resumen": {"type": "string"},
+                # Same bounds as SolicitudTI so the provider sees the limit (E06).
+                "resumen": {"type": "string", "minLength": 10, "maxLength": 240},
                 "datos_faltantes": {
                     "type": "array",
                     "items": {"type": "string"},
