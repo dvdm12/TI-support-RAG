@@ -1,6 +1,6 @@
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictStr
 
 
 Categoria = Literal[
@@ -35,12 +35,15 @@ class SolicitudTI(BaseModel):
         max_length=240,
     )
 
-    datos_faltantes: list[StrictStr]
+    # Whitespace is stripped first, so blank entries fail min_length.
+    datos_faltantes: list[Annotated[StrictStr, Field(min_length=1)]]
 
     requiere_humano: StrictBool
 
-    confianza: float = Field(
+    # Strict: numbers only (ints allowed); no strings, booleans, NaN or infinity.
+    confianza: StrictFloat = Field(
         ge=0.0,
         le=1.0,
+        allow_inf_nan=False,
     )
 

@@ -23,6 +23,7 @@ def validate_output(data: dict) -> tuple[bool, list[str], SolicitudTI | None]:
         for item in error.errors():
             location = ".".join(str(part) for part in item["loc"])
             message = item["msg"]
-            errors.append(f"{location}: {message}")
+            # Root-level errors (e.g. input is not an object) have no location.
+            errors.append(f"{location}: {message}" if location else message)
 
         return False, errors, None
