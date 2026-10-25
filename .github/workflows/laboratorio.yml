@@ -138,7 +138,7 @@ jobs:
           python -m scripts.validate_lab report --output "$LAB_OUTPUT" "${args[@]}"
       - name: Revisar evidencias antes de publicarlas
         id: scan
-        if: always() && steps.install.outcome == 'success'
+        if: always()
         run: python -m scripts.validate_lab scan --output "$LAB_OUTPUT"
       - name: Conservar informes, JSON, CSV y PDF
         if: always() && steps.scan.outcome == 'success'
@@ -155,5 +155,5 @@ jobs:
       - name: Detener Docker y eliminar credenciales temporales
         if: always()
         run: |
+          trap 'rm -f .env' EXIT
           if [[ -f .env ]]; then docker compose -f ../infra/compose.yaml down --volumes; fi
-          rm -f .env

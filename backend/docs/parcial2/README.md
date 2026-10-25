@@ -63,3 +63,17 @@ El [workflow de GitHub Actions](guias/GITHUB_ACTIONS.md) reconstruye la aplicaci
 ejecuta el notebook y prueba la API Docker. Distingue comprobaciones técnicas de
 requisitos académicos pendientes. La integración real necesita cinco secretos
 propios de pruebas; los PR no consumen Groq y los push son sin proveedores por defecto.
+
+### Primera ejecución real en GitHub · 25-10-2026
+
+[Actions 40240988844](https://github.com/dvdm12/TI-support-RAG/actions/runs/40240988844)
+reconstruyó el entorno en Ubuntu 24.04 y terminó correctamente. Sus artifacts
+se descargan desde esa ejecución de Actions. El informe registra:
+505 pruebas detectadas (502 ejecutadas y tres omisiones locales documentadas),
+26 pruebas API, 18 celdas con Groq/Supabase reales y siete controles HTTP contra
+la imagen Docker recién construida. No se cargaron filas ni se abrió la reserva.
+El resultado técnico fue correcto; la entrega académica continúa parcial.
+
+Este registro corresponde a su commit de origen. La mejora posterior del
+comprobador evalúa evidencias disponibles y declaraciones humanas en lugar de
+mantener una lista fija de pendientes; no reescribe los informes anteriores.

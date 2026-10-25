@@ -246,22 +246,54 @@ def compliance(output):
     technical = technical and all(v == 'success' for v in outcomes.values())
     nb = stages.get('notebook', {})
     human = read_json(ROOT / 'docs/human_review/class09_review_v1.json')
-    # Report present limitations explicitly. A runner cannot approve humans or open reserve.
-    pending = ['Nombres del equipo en el notebook', 'Revisión humana y métricas de respuesta',
-               'Reserva aprobada, congelada y evaluada fuera del workflow',
-               'Decisión comparativa final', 'Bitácora del segundo corte y presentación PDF',
-               'Ejecución real en Colab (un runner Linux no la acredita)']
-    if not nb.get('live'):
-        pending.insert(0, 'Ejecución real con Groq y Supabase')
-    result = dict(technical_passed=bool(technical), laboratory_status='partial',
-                  complete_lab=False, human_review_status=human.get('status'), pending=pending,
-                  external_services_verified=bool(nb.get('live') and nb.get('passed') and stages.get('http', {}).get('live') and stages.get('http', {}).get('passed')),
-                  step_outcomes=outcomes, stages=stages,
-                  scope='Technical reconstruction only; no reserve execution or human grading')
+    source = read_json(ROOT / 'notebooks/parcial2.ipynb')
+    config = next(c for c in source['cells'] if c['id'] == 'configuracion')
+    team = []
+    for node in ast.parse(''.join(config['source'])).body:
+        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'TEAM' for t in node.targets):
+            try:
+                team = ast.literal_eval(node.value)
+            except (ValueError, TypeError):
+                team = []
+    def reviewed(judgment):
+        return (all(isinstance(judgment.get(k), bool) for k in ('correccion', 'fidelidad', 'respaldo', 'utilidad'))
+                and all(judgment.get(k) for k in ('revisor', 'fecha', 'justificacion')))
+    rows = human.get('rows', [])
+    independent = sum(all(reviewed(j) for j in row.get('independent_reviews', []))
+                      and len(row.get('independent_reviews', [])) >= 2
+                      and len({j.get('revisor') for j in row.get('independent_reviews', [])}) >= 2
+                      and reviewed(row.get('adjudication', {})) for row in rows)
+    attest_path = ROOT / 'docs/parcial2/cumplimiento_humano.json'
+    attest = read_json(attest_path) if attest_path.is_file() else {}
+    def attested(name):
+        # Declarations belong to named people, never to this automated checker.
+        item = attest.get(name, {})
+        paths = item.get('evidence', [])
+        return bool(item.get('approved') is True and item.get('reviewer') and item.get('date') and paths
+                    and all((ROOT / p).resolve().is_relative_to(ROOT)
+                            and (ROOT / p).is_file() for p in paths))
+    external = bool(nb.get('live') and nb.get('passed') and stages.get('http', {}).get('live') and stages.get('http', {}).get('passed'))
+    requirements = [
+        ('Groq y Supabase reales desde notebook y API', external, 'measured'),
+        ('Nombres del equipo en el notebook', isinstance(team, list) and bool(team) and all(isinstance(n, str) and n.strip() for n in team), 'source'),
+        ('Revisión humana completa con doble revisión y adjudicación de al menos tres casos', human.get('status') == 'completed' and bool(rows) and all(reviewed(r.get('human_review', {})) for r in rows) and independent >= 3, 'human_sheet'),
+        ('Métricas de respuesta revisadas', attested('answer_metrics'), 'human_declaration'),
+        ('Reserva aprobada, congelada y evaluada fuera del workflow', attested('reserve'), 'human_declaration'),
+        ('Decisión comparativa final', attested('decision'), 'human_declaration'),
+        ('Bitácora y presentación del segundo corte', attested('deliverables'), 'human_declaration'),
+        ('Ejecución real en Colab', attested('colab'), 'human_declaration'),
+    ]
+    pending = [name for name, passed, _ in requirements if not passed]
+    complete = bool(technical and not pending)
+    result = dict(technical_passed=bool(technical), laboratory_status='evidence_complete' if complete else 'partial',
+                  complete_lab=complete, human_review_status=human.get('status'), pending=pending,
+                  requirements=[dict(name=n, passed=bool(ok), evidence_type=kind) for n, ok, kind in requirements],
+                  external_services_verified=external, step_outcomes=outcomes, stages=stages,
+                  scope='Technical reconstruction and evidence completeness; human declarations are not independently verified. No official grading or reserve execution.')
     write_json(output / 'laboratorio.json', result)
     lines = ['# Validación del laboratorio', '',
              '**Reconstrucción técnica:** ' + ('correcta' if technical else 'incompleta o fallida'),
-             '', '**Entrega Clase 09:** parcial; no acredita aprobación del laboratorio.',
+             '', '**Entrega Clase 09:** ' + ('evidencias completas' if complete else 'parcial') + '; no es una calificación oficial.',
              '', '## Comprobaciones', '']
     for name in ('prepare', 'unit', 'notebook', 'http'):
         lines.append('- ' + name + ': ' + ('correcto' if stages.get(name, {}).get('passed') else 'fallido/no ejecutado'))
@@ -277,8 +309,9 @@ def compliance(output):
 
 def scan_artifacts(output):
     """Never upload an artifact containing a configured credential, including ZIPs."""
-    from dotenv import load_dotenv
-    load_dotenv(ROOT / '.env')
+    if (ROOT / '.env').is_file():
+        from dotenv import load_dotenv
+        load_dotenv(ROOT / '.env')
     values = [os.environ[n].encode() for n in (*REQUIRED_SECRETS, 'DJANGO_API_TOKEN', 'DJANGO_SECRET_KEY')
               if os.environ.get(n) and len(os.environ[n]) >= 8]
     def check(data):

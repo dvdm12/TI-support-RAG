@@ -107,9 +107,14 @@ reflejarlo aunque todas las pruebas de software pasen.
 
 ## Estado de validación
 
-El workflow debe publicarse antes de ejecutarlo en GitHub. Las comprobaciones
-locales sobre un checkout limpio usan las dependencias del entorno local; no
-sustituyen la primera instalación y construcción efectivas en el runner.
+La [primera ejecución real](https://github.com/dvdm12/TI-support-RAG/actions/runs/40240988844)
+terminó correctamente el 25-10-2026: instalación desde cero, 18 celdas con
+proveedores reales, construcción Docker y HTTP. Sus artifacts originales se
+pueden descargar desde la ejecución de Actions durante el plazo de conservación.
+La activación temporal de proveedores por push quedó deshabilitada.
+Las comprobaciones locales sobre checkout limpio complementan esa evidencia;
+no se presentan como una sesión Colab ni como una reconstrucción del proyecto
+Supabase alojado, que ya estaba preparado.
 
 Referencias oficiales:
 [activación manual](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch),

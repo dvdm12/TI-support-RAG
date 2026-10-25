@@ -63,6 +63,38 @@ class LabValidationTests(unittest.TestCase):
             os.environ['LAB_DOCKER_BUILD_OUTCOME'] = 'skipped'
             self.assertFalse(lab.compliance(output)['technical_passed'])
 
+    def test_complete_evidence_can_pass_without_hardcoded_pending_requirements(self):
+        output = Path(self.tmp.name) / 'complete'
+        for name in ['prepare', 'unit', 'notebook', 'http']:
+            lab.write_json(output / (name + '.json'), {'passed': True, 'live': True})
+        human_path = self.root / 'docs/human_review/class09_review_v1.json'
+        human = json.loads(human_path.read_text())
+        human['status'] = 'completed'
+        def judgment(name):
+            return dict(correccion=True, fidelidad=True, respaldo=True, utilidad=True,
+                        revisor=name, fecha='2026-10-25', justificacion='Synthetic test fixture only.')
+        for row in human['rows']:
+            row['human_review'] = judgment('Fixture reviewer A')
+            row['independent_reviews'] = [judgment('Fixture reviewer A'), judgment('Fixture reviewer B')]
+            row['adjudication'] = judgment('Fixture reviewer A')
+        lab.write_json(human_path, human)
+        notebook = self.root / 'notebooks/parcial2.ipynb'
+        nb = json.loads(notebook.read_text())
+        for cell in nb['cells']:
+            if cell['id'] == 'configuracion':
+                cell['source'] = [line.replace('TEAM = []', "TEAM = ['Fixture reviewer A', 'Fixture reviewer B']") for line in cell['source']]
+        lab.write_json(notebook, nb)
+        declaration = dict(approved=True, reviewer='Fixture reviewer A', date='2026-10-25',
+                           evidence=['docs/human_review/class09_review_v1.json'])
+        lab.write_json(self.root / 'docs/parcial2/cumplimiento_humano.json',
+                       {k: declaration for k in ['answer_metrics', 'reserve', 'decision', 'deliverables', 'colab']})
+        env = {'LAB_' + n + '_OUTCOME': 'success' for n in ['INSTALL', 'DJANGO', 'API_TESTS', 'DOCKER_BUILD', 'DOCKER_START']}
+        with patch.object(lab, 'ROOT', self.root), patch.dict(os.environ, env, clear=True):
+            result = lab.compliance(output)
+        self.assertTrue(result['complete_lab'])
+        self.assertEqual(result['pending'], [])
+        self.assertIn('human_declaration', [r['evidence_type'] for r in result['requirements']])
+
     def test_nested_zip_secrets_block_artifact_publication(self):
         output = Path(self.tmp.name) / 'artifacts'
         output.mkdir()
