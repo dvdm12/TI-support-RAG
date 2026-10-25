@@ -166,3 +166,46 @@ estructura y procedencia están verificadas localmente; ocho controles negativos
 correctos. Pendientes revisión humana y de novedad semántica, decisión con
 desarrollo, congelación, conexión al evaluador y primera evaluación registrada.
 No hay métricas de reserva ni independencia por familias acreditada.
+
+## Actualización 21-10-2026: cobertura completa y tabla consolidada
+
+La tabla vigente de métricas está en `.agents/CLASS09_METRICS_STATUS.md` respecto
+a la raíz del repositorio. Se cerró el primer parcial: proporción de preguntas
+con todas sus unidades cubiertas. Top-3 A/B: 4/7 y 5/7; contexto: 3/7 y 4/7.
+Reporte derivado JSON/CSV/PDF `retrieval_metrics_20261021_coverage`, conservando
+las observaciones originales. Sin ejecución de reserva ni llamadas a proveedores.
+259 pruebas unitarias locales correctas, incluyendo siete nuevas; PDF de cuatro
+páginas inspeccionadas.
+
+La revisión directa de las diapositivas también identifica pendientes explícitos
+que no deben ocultarse dentro de una revisión genérica: cobertura de citas por
+afirmación, tasa de abstención correcta y tasa de abstención innecesaria. Siguen
+pendientes, junto con fidelidad/corrección/utilidad revisadas por personas y
+comparación equivalente de tokens A/B. Esta tarea no los ejecutó ni acredita.
+
+## Actualización 21-10-2026: mejoras aplicadas de cobertura
+
+La híbrida mejorada normaliza términos técnicos, filtra aplicabilidad antes de
+Top-3, pondera léxico 2 frente a semántica 1 y usa rag_v6 compacto. Comparación
+offline sobre rankings semánticos reales guardados: siete casos documentales
+completos en Top-3/contexto y 35/35 unidades. Ver `COVERAGE_IMPROVEMENTS.md` y
+`coverage_improvements_20261021.*`. Es ajuste con desarrollo conocido, no prueba
+independiente ni evaluación de respuestas. Nuevas latencias y tokens reales
+comparativos quedan pendientes; las métricas históricas se conservan.
+263 unitarias y 26 API pasan; tres búsquedas HTTP reales correctas tras despliegue.
+Revisión humana, reserva congelada, generación/revisión de respuestas y
+entregables de clase 09 siguen pendientes. No se llamó a Groq ni se abrió reserva.
+
+## Actualización 21-10-2026: comparación generativa de tokens completada
+
+Se midió usage real Groq de A semántica y B híbrida con el mismo rag_v6, modelo,
+esquema y parámetros: siete pares, 14 llamadas HTTP 200, sin errores o usage
+faltante. A 6.592 / B 6.523 tokens, medias 941,71/931,86. Ver
+`GENERATION_TOKENS.md` y JSON/CSV/PDF `generation_tokens_20261021`.
+
+Se cubre el pendiente de comparación **de generación**; no consumo total de
+query, clasificación/revisión/corrección ni nuevas latencias completas. No se
+abrió reserva. Los 14 contratos/citas estructuralmente válidos no prueban
+fidelidad/corrección/utilidad: respuestas/contextos guardados para revisión humana.
+270 unitarias locales correctas, siete pruebas nuevas; PDF de tres páginas
+renderizadas e inspeccionadas. No hubo despliegue ni commit/push nuevos.

@@ -10,6 +10,168 @@ historial, como `src/` o `docs/`, ahora corresponden a `backend/src/` y
 `backend/docs/`, salvo las migraciones, ubicadas en `infra/supabase/`.
 No contiene secretos. No releer ni ejecutar integraciones históricas por defecto.
 
+### Continuidad consolidada 21-10-2026 — actualización solicitada
+
+El usuario pidió actualizar .agents después de completar los tokens reales.
+Esta actualización solo documenta el estado; no ejecuta los pendientes.
+
+| Área | Estado vigente | Próximo paso |
+|---|---|---|
+| Recuperación y contexto | Híbrida v2/rag_v6 desplegados; 7/7 documentales completos y 35/35 unidades en desarrollo conocido | Revisión humana y validación independiente, sin afirmar generalización. |
+| Tokens comparables | 14 generaciones Groq reales, siete pares; A 6.592 / B 6.523 | Usar respuestas guardadas para revisión; no repetir medición por defecto. |
+| Fidelidad/corrección/utilidad/respaldo | Pendiente de revisión humana | Revisar las 14 respuestas frente a sus contextos y justificar cada criterio; muestra por dos integrantes. |
+| Cobertura de citas | Pendiente | Identificar afirmaciones y medir cuáles tienen referencia; adecuación semántica por separado. |
+| Abstención correcta/innecesaria | Pendiente | Revisar poblaciones sin cobertura y respondibles; errores técnicos aparte. |
+| Reserva | 12 candidatos, sin revisión final/congelación/ejecución | Aprobar anotaciones y novedad, fijar decisión/configuración y después abrirla de forma registrada. |
+| Entrega clase 09 | Parcial | Consolidar notebook Colab, README/bitácora, presentación, decisión y acceso del profesor. |
+| Git | Base publicada aea3002; cambios posteriores locales | Commit/push cuando se soliciten, revisando código y archivos nuevos. |
+
+Fuentes para retomar: `.agents/CLASS09_METRICS_STATUS.md`,
+`backend/docs/GENERATION_TOKENS.md` y
+`backend/docs/generation_tokens_20261021.json`. Este último conserva contexto,
+catálogo, salida cruda/validada y revisión humana pendiente por pregunta.
+No confundir contrato/citas estructuralmente válidos con fidelidad o revisión
+humana. El experimento de tokens solo mide generación directa y no el costo
+completo de query; diferencia de −69 tokens no acredita ahorro estable.
+
+Últimas verificaciones ya realizadas: 270 unitarias; 26 API en el despliegue
+anterior; 14 HTTP 200 de Groq, usage sin faltantes y PDF de tres páginas revisado.
+No se repitieron pruebas o llamadas para esta actualización. Imagen API vigente
+`a414431ee034`; corpus/anotaciones/reserva intactos. Sin nuevo despliegue,
+commit ni push. El detalle histórico empieza a continuación.
+
+### Actualización 21-10-2026: siguiente paso de tabla, tokens reales, completado
+
+El usuario autorizó «procede con el siguiente paso, según la tabla»: comparación
+de consumo de tokens, primer parcial restante. **Ejecutada con Groq real**, no
+solo estimaciones. No avanzar automáticamente a revisión humana ni reserva.
+
+- `backend/src/rag/token_comparison.py` y
+  `backend/scripts/compare_generation_tokens.py`. Generación directa A semántica
+  frente a B híbrida v2, mismo rag_v6/modelo/esquema/temperatura/límites. Ambas
+  aplican pertinencia antes de Top-3; usan lecturas semánticas/selecciones guardadas.
+  Sin consulta Supabase, embeddings nuevos ni clasificación. A no debe confundirse
+  con la A histórica de recuperación sin esta política/prompt.
+- **14 llamadas Groq reales**, siete preguntas documentales E01/E02/E03/E04/E05/E06/E12;
+  HTTP 200, usage válido y contrato/citas estructuralmente válidos en las 14.
+  Cero errores, reintentos o usage desconocido. Orden A/B y B/A alternado.
+  Solo generación; excluye clasificación, revisor y corrección. No es costo de query.
+- Uso informado A: entrada 5.354, salida 1.238, total **6.592**; medias
+  764,86/176,86/**941,71**. B: entrada 5.388, salida 1.135, total **6.523**;
+  medias 769,71/162,14/**931,86**. Total ejecución **13.115 tokens**.
+  B−A = −69 (−1,05%) en esta ejecución; medianas totales A/B 947/950. No afirmar
+  ahorro estable, mejor calidad, consumo total del pipeline ni precio monetario.
+- Máxima entrada real 785, dentro de 1000. Presupuesto local separado de usage;
+  salida puede incluir razonamiento. Uso de salidas inválidas también se conserva
+  en contabilidad; pares sin usage válido se excluyen y cuentan, nunca son cero.
+- Archivos `backend/docs/generation_tokens_20261021.json`, `.csv`, `.pdf`.
+  PDF tres páginas renderizadas/revisadas, 14 filas CSV, sumas/medias/hashes
+  comprobados independientemente. Guía `backend/docs/GENERATION_TOKENS.md`.
+- JSON guarda respuestas, contextos, catálogos y human_review pending por caso.
+  **contract_valid no acredita respaldo semántico ni revisión humana**. El siguiente
+  pendiente de la tabla es fidelidad/corrección/utilidad/citas por personas; usar
+  estas respuestas guardadas sin repetir las 14 llamadas por defecto.
+- Siempre JSON/CSV/PDF, incluso checkpoint inicial y tras cada llamada. Para
+  reexportar sin proveedores, desde backend:
+  `../.venv/bin/python -m scripts.compare_generation_tokens --from-json
+  docs/generation_tokens_20261021.json --output docs/tokens_reexportados.json`.
+  `--resume` solo peticiones no realizadas/HTTP 429 y protocolo/código idénticos;
+  no sobrescribir una medición previa ni regenerar porque falte revisarla.
+- **270 unitarias locales correctas**, siete nuevas. Tests sin proveedores;
+  las únicas llamadas reales de esta tarea fueron las 14 documentadas a Groq.
+- Tabla `.agents/CLASS09_METRICS_STATUS.md` y auditoría actualizadas. Reserva
+  sigue sin ejecutar; seis casos de comportamiento excluidos de este experimento.
+  Pendientes anotación/revisión humana, reserva congelada, métricas de citas y
+  abstención, consumo total si se quiere reportar, decisión y entregables.
+- Sin cambios al corpus/anotaciones, despliegue, commit o push nuevos.
+  Imagen API vigente sigue a414431ee034; base Git publicada aea3002.
+  Mejoras de cobertura, completitud y esta medición permanecen locales.
+
+### Actualización 21-10-2026: mejoras de cobertura aplicadas y desplegadas
+
+El usuario autorizó aplicar las mejoras. **Trabajo terminado**: tokenizador de
+Wi-Fi/códigos, aplicabilidad antes de Top-3, pesos RRF y prompt compacto. No
+avanzar automáticamente a generación o reserva como consecuencia de esta tarea.
+
+- `src/rag/lexical.py`: Wi-Fi/WIFI/wi fi → wifi y códigos con guiones completos.
+  Se evita descartar wi/fi por longitud. Sin IDs de casos en las reglas.
+- `src/rag/retrieval.py`: RRF constante 60, semántica=1/léxico=2, filtro existente
+  de enlace no abierto sobre unión antes de seleccionar tres. Permite reemplazos
+  aplicables en vez de filtrar solamente después del corte. Sigue el ajuste
+  opcional de categoría y la defensa adicional del pipeline.
+- Prompt activo **rag_v6** (config/pipeline); rag_v5 conservado. Instrucciones
+  compactadas, sin recorte de pasajes, cambios de contrato ni mayor presupuesto.
+  Base local estimada 631 → 551 tokens, no consumo informado por Groq.
+- `backend/scripts/evaluate_coverage_improvements.py`: reproducción offline de
+  13 casos de desarrollo con Top-10 semánticos reales guardados y corpus de 70;
+  léxico, selección y contexto recalculados, embeddings reales/revisión fijada.
+  No simula rankings ni consulta Supabase para la comparación. La caché existente
+  del contenedor se copió a /tmp/ti-rag-hf; temporal, puede desaparecer.
+- Informes `backend/docs/coverage_improvements_20261021.json`, `.csv`, `.pdf`;
+  cuatro páginas renderizadas/revisadas. Guía `COVERAGE_IMPROVEMENTS.md`.
+  Comando desde backend con caché: `HF_HOME=/tmp/ti-rag-hf HF_HUB_OFFLINE=1
+  OMP_NUM_THREADS=2 ../.venv/bin/python -m scripts.evaluate_coverage_improvements`.
+- Comparación híbrida anterior → mejorada: Precision 52,38 → 66,67%; Recall
+  80,95 → 100%; Hit 85,71 → 100%; MRR 0,8571 → 1; cobertura Top-3 80,36 → 100%;
+  contexto 76,79 → 100%; completas Top-3 5/7 → 7/7 y contexto 4/7 → 7/7.
+  Unidades 26/35 → 35/35. Ninguna pérdida de cobertura en los siete documentales.
+- Ablaciones: solo prompt deja contexto 80,36% y 5/7 completos; solo ranking
+  deja contexto 91,07% y 5/7; combinados 100% y 7/7. Peso léxico elegido con
+  desarrollo: **no es validación ciega ni generalización acreditada**. No se usó
+  categoría esperada/clasificador en esta comparación; seis casos de comportamiento
+  no reciben métricas documentales ni evaluación de sus respuestas.
+- Evaluador principal adaptado a aportes ponderados/exclusiones antes de Top-3.
+  `coverage_improvements_trace_validation.json`: 13/13 selecciones/contextos
+  actuales coinciden con el informe. Campo tiempos sin medir es null/N/E;
+  no comparar tiempos históricos remotos con nuevas operaciones locales.
+- **263 unitarias y 26 API locales correctas**, cuatro pruebas nuevas sobre las
+  259 previas. Recalculo independiente, hashes y 26 filas CSV comprobados.
+- Nueva imagen desplegada y contenedor saludable:
+  `sha256:a414431ee034403f145f1ca2576223bdff9a71febb4b242f98830954343a5d4b`.
+  `coverage_improvements_http_validation.json`: búsquedas reales Supabase vía
+  search E03/E04/E05 devuelven 200 y cobertura completa, sin categoría esperada.
+  No equivalen a generación/query ni revisión de fidelidad del prompt nuevo.
+- Tabla de clase 09 actualizada en `.agents/CLASS09_METRICS_STATUS.md`. Corpus,
+  anotaciones, reserva y reportes históricos intactos. No se abrió reserva ni se
+  llamó a Groq. Sigue pendiente revisar anotaciones, congelar y ejecutar reserva,
+  evaluar respuestas con rag_v6, comparar tokens reales/latencias y entregables.
+- Cambios locales sobre **aea3002**, incluyendo la tarea anterior de cobertura
+  completa aún sin publicar. No se realizó commit/push en esta tarea.
+
+### Actualización 21-10-2026: primera tarea parcial de métricas terminada
+
+El usuario pidió guardar la tabla en .agents e iniciar la primera tarea parcial.
+Tabla vigente: `.agents/CLASS09_METRICS_STATUS.md`. Se interpretó como cobertura
+completa por pregunta, primer parcial de la tabla inmediatamente anterior.
+**Completado; no avanzar automáticamente al siguiente parcial (tokens).**
+
+- Nuevo `backend/src/rag/complete_coverage.py`: todas las unidades necesarias,
+  cualquier evidencia alternativa por unidad, detalle completo/incompleto,
+  unidades presentes y faltantes; errores excluidos y comportamiento N/E.
+- Derivador offline `backend/scripts/summarize_complete_coverage.py`. Desde backend:
+  `../.venv/bin/python -m scripts.summarize_complete_coverage`. Verifica hash de las
+  anotaciones originales y coherencia de IDs/preguntas/fracciones. Rechaza reserva.
+- Informes nuevos `backend/docs/retrieval_metrics_20261021_coverage.json`, `.csv`,
+  `.pdf` (cuatro páginas revisadas). No se alteran matrices originales ni informe
+  de tiempos; conservar el hash de origen del bloque complete_coverage_derivation.
+- Top-3 A/B: **4/7 (57,14%) / 5/7 (71,43%)** completos; 3/2 incompletos.
+  Contexto final A/B: **3/7 (42,86%) / 4/7 (57,14%)**; 4/3 incompletos.
+  E03/E05 incompletos en Top-3 en ambas, B completa E06; E04 pierde una unidad
+  en contexto en ambas. Revisión humana de las anotaciones todavía pendiente.
+- Evaluador de nuevas ejecuciones y exportador PDF existentes adaptados para
+  incluir completitud. CSV conserva N/E vacío, booleanos y IDs de unidades
+  faltantes; JSON mantiene denominadores e IDs completos/incompletos/excluidos.
+- **259 pruebas unitarias locales correctas**, siete nuevas. Recalculo independiente,
+  hash original y 26 filas CSV comprobados. PDF renderizado y cuatro páginas
+  inspeccionadas sin defectos. No repetir búsquedas para generar este informe.
+- Guía y auditoría actualizadas. Pendientes explícitos adicionales de clase 09:
+  cobertura de citas por afirmación, tasas de abstención correcta e innecesaria,
+  revisión de respuestas y tokens A/B equivalentes, reserva y entregables.
+- Cero llamadas a proveedores, sin modelos inicializados, generación ni reserva.
+  Sin cambios de API/corpus/configuración desplegada; sin despliegue, commit o push.
+  Base publicada **aea3002** en codex/backend-infra-ricoh-local; cambios de esta
+  tarea aún locales. La autorización Git anterior no publica esta tarea nueva.
+
 ### Entrega Git solicitada el 21-10-2026
 
 El usuario autorizó crear un commit y actualizar el remoto después del cierre.

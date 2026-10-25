@@ -154,3 +154,56 @@ métricas originales se conservaron sin ejecutar nuevamente Supabase ni Groq.
 JSON, CSV y PDF, sin repetir búsquedas. Ver `TIMING_COMPARISON.md` y
 `docs/retrieval_metrics_20261021_times.pdf`. Separa los 13 casos de tiempos de los
 siete documentales usados para calidad; no confundir sus medianas.
+
+## Cobertura completa por pregunta (derivación posterior)
+
+Además de la fracción media de unidades, ahora se informa si cada pregunta
+recibe **todas** las unidades necesarias en Top-3 y en el contexto final.
+
+| Etapa | A completas | A incompletas | B completas | B incompletas |
+|---|---:|---:|---:|---:|
+| Top-3 | 4/7 (57,14%) | 3 | 5/7 (71,43%) | 2 |
+| Contexto final | 3/7 (42,86%) | 4 | 4/7 (57,14%) | 3 |
+
+Los seis casos de comportamiento no entran al denominador; no hubo errores
+técnicos en el origen. Los errores quedan excluidos y contados si los hay; sin
+casos válidos, la proporción es nula/N/E. No basta un Hit para declarar cobertura
+completa. Las etiquetas requieren todas las unidades, aunque cada una permita
+evidencias alternativas. E03/E05 siguen incompletos en Top-3; B completa E06.
+El contexto pierde una unidad de E04 en ambas variantes.
+
+Desde backend, sin modelos ni proveedores:
+
+```sh
+../.venv/bin/python -m scripts.summarize_complete_coverage
+```
+
+Genera `docs/retrieval_metrics_20261021_coverage.json`, CSV y PDF de cuatro páginas.
+`--input`, `--annotations` y `--output` permiten otras rutas; la entrada y las
+anotaciones no se sobrescriben. Se comprueba la huella de anotación usada en la
+medición y la coherencia entre preguntas, IDs, unidades y fracciones almacenadas.
+No modifica ni vuelve a ejecutar el experimento original; conserva su fecha,
+parámetros, resultados y hashes de código históricos. El bloque
+`complete_coverage_derivation` distingue fecha, código y fuente de esta derivación.
+Los JSON/CSV muestran booleanos por caso, unidades presentes/total y unidades
+faltantes; el PDF añade proporciones y matriz completa/incompleta.
+
+El evaluador de nuevas búsquedas incluye estos campos automáticamente mediante
+`src/rag/complete_coverage.py` y el exportador existente. Los informes antiguos
+siguen admitidos por `--from-json`, sin atribuirles una medición nueva.
+
+Siete pruebas nuevas y 259 unitarias locales correctas; recalculo independiente
+y comprobación de 26 filas CSV. PDF renderizado e inspeccionado en sus cuatro
+páginas. Cero consultas nuevas, generación o apertura de reserva. Las etiquetas
+de relevancia siguen pendientes de revisión humana; no se evalúa calidad de las
+respuestas con esta medida.
+
+## Mejora posterior: recuperación técnica y prompt compacto
+
+Se aplicaron normalización Wi-Fi/códigos con guiones, filtro de aplicabilidad
+antes de Top-3, RRF ponderado (semántica 1, léxico 2) y prompt rag_v6. La
+reproducción del conjunto de desarrollo obtiene 35/35 unidades y 7/7 preguntas
+completas tanto en Top-3 como en contexto; cobertura macro 100%.
+Ver `COVERAGE_IMPROVEMENTS.md` y `coverage_improvements_20261021.json/csv/pdf`.
+No se sustituyen los resultados históricos de este documento. Es ajuste sobre
+desarrollo conocido, no reserva, generación ni prueba independiente.

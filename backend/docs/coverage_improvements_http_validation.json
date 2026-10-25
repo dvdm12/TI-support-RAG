@@ -1,0 +1,44 @@
+{
+  "timestamp_utc": "2026-10-21T08:22:24.926113+00:00",
+  "endpoint": "/api/v1/rag/search/",
+  "groq_calls": 0,
+  "reserve_executed": false,
+  "cases": [
+    {
+      "id": "E03",
+      "http_status": 200,
+      "selected_ids": [
+        "TI-RED-2dec86185172059d432184d2",
+        "TI-RED-90f2e105d0fb7beb36257c4c",
+        "TI-RED-e4b59968415915f94ed33462"
+      ],
+      "complete_coverage": true,
+      "missing_units": [],
+      "request_id": "124271c9-7e84-4a44-9dfa-d5536977f383"
+    },
+    {
+      "id": "E04",
+      "http_status": 200,
+      "selected_ids": [
+        "TI-CTA-ca2db1d57c8f53f73a0c9e8c",
+        "TI-CTA-597213255311f0b4fbea0210",
+        "TI-CTA-49f334091afa0329fa544e08"
+      ],
+      "complete_coverage": true,
+      "missing_units": [],
+      "request_id": "7e269ab0-6528-4be1-8b65-9ad950444db9"
+    },
+    {
+      "id": "E05",
+      "http_status": 200,
+      "selected_ids": [
+        "TI-SEG-bb9b19a0f7619c181cc2ab47",
+        "TI-SEG-eb10a5d4cef4a0cf4dec16a3",
+        "TI-CTA-2e086ef78de075fb2596189b"
+      ],
+      "complete_coverage": true,
+      "missing_units": [],
+      "request_id": "32a1e4ae-c40e-4e31-82c6-c53ecbdaa461"
+    }
+  ]
+}

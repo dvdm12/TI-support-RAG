@@ -11,10 +11,12 @@ from src.rag.config import ROOT, RAGConfig
 from src.rag.index import load_index
 from src.rag.embeddings import SentenceEmbedder
 from src.rag.repository import LocalRepository, SupabaseRepository
-from src.rag.retrieval import Retriever
+from src.rag.retrieval import Retriever, RRF_CONSTANT, SEMANTIC_WEIGHT, LEXICAL_WEIGHT, RETRIEVAL_VERSION
+from src.rag.applicability import applicable_candidates
 from src.rag.lexical import rank, STOP
 from src.rag.context import build_context
 from src.rag.retrieval_metrics import metrics, coverage
+from src.rag.complete_coverage import details, summarize
 from src.groq_client import build_payload
 from src.token_budget import input_budget, encoding
 from schemas.rag_response_v1 import RespuestaRAG
@@ -49,12 +51,12 @@ class CaptureRepository:
         return self.lexical_corpus
 
 
-def aggregate(rows):
+def aggregate(rows, variants=VARIANTS):
     # Paired comparisons never silently use different successful subsets.
     eligible=[r for r in rows if r['retrieval_evaluable']]
     paired=[r for r in eligible if not r['error']]
     result={}
-    for name in VARIANTS:
+    for name in variants:
         samples=[r['variants'][name] for r in paired]
         means={key:statistics.mean(s['metrics_at_3'][key] for s in samples) if samples else None
                for key in ('precision','recall','hit','rr','coverage')}
@@ -62,9 +64,12 @@ def aggregate(rows):
                       'excluded_behavior_cases':sum(not r['retrieval_evaluable'] for r in rows),
                       'metrics_at_3':means,
                       'context_coverage_mean':statistics.mean(s['context_coverage'] for s in samples) if samples else None,
-                      'candidate_coverage_mean':statistics.mean(s['candidate_coverage'] for s in samples) if samples else None,
+                      'candidate_coverage_mean':statistics.mean(s['candidate_coverage'] for s in samples) if samples and all(s['candidate_coverage'] is not None for s in samples) else None,
                       'short_lists':sum(len(s['selected_ids'])<3 for s in samples),
-                      'retrieval_seconds_median':statistics.median(s['retrieval_seconds'] for s in samples) if samples else None}
+                      'retrieval_seconds_median':statistics.median(s['retrieval_seconds'] for s in samples) if samples and all(s['retrieval_seconds'] is not None for s in samples) else None}
+    if all(r.get('id') for r in rows):
+        for name in variants:
+            result[name]['coverage_completeness']=summarize(rows,name)
     return result
 
 
@@ -81,12 +86,16 @@ def evaluate_case(case, retriever, capture, fits):
         lexpos={c.chunk_id:i for i,c in enumerate(lexical,1)}
         fused=[]
         for ident in set(sempos)|set(lexpos):
-            a=1/(60+sempos[ident]) if ident in sempos else 0
-            b=1/(60+lexpos[ident]) if ident in lexpos else 0
+            a=SEMANTIC_WEIGHT/(RRF_CONSTANT+sempos[ident]) if ident in sempos else 0
+            b=LEXICAL_WEIGHT/(RRF_CONSTANT+lexpos[ident]) if ident in lexpos else 0
             fused.append({'chunk_id':ident,'semantic_rank':sempos.get(ident),'bm25_rank':lexpos.get(ident),
                           'semantic_contribution':a,'bm25_contribution':b,'rrf_score':a+b})
         fused.sort(key=lambda r:(-r['rrf_score'],r['chunk_id']))
-        if [r['chunk_id'] for r in fused[:3]]!=[c.chunk_id for c in selected]:
+        traced_pool={c.chunk_id:c for c in capture.semantic+capture.lexical_corpus}
+        applicable, row['applicability_omitted_before_top_k']=applicable_candidates(case['question'],
+            [traced_pool[r['chunk_id']] for r in fused])
+        applicable_ids={c.chunk_id for c in applicable}
+        if [r['chunk_id'] for r in fused if r['chunk_id'] in applicable_ids][:3]!=[c.chunk_id for c in selected]:
             raise ValueError('Traza RRF no coincide con el recuperador ejecutado.')
         row['semantic_ranking']=[{'chunk_id':c.chunk_id,'cosine':c.similitud} for c in capture.semantic]
         row['bm25_ranking']=[c.chunk_id for c in lexical]
@@ -101,6 +110,8 @@ def evaluate_case(case, retriever, capture, fits):
                 'context':context['user_content'],'omitted':context['omitted'],
                 'metrics_at_3':metrics(ids,case['required_information_units']),
                 'context_coverage':coverage(context_ids,case['required_information_units']),
+                'coverage_completeness':{'top_3':details(ids,case['required_information_units']),
+                                         'context':details(context_ids,case['required_information_units'])},
                 'candidate_coverage':coverage(pool,case['required_information_units']),
                 'retrieval_seconds':t['embedding_seconds']+(t['semantic_search_seconds'] if name=='A_semantic' else t['retrieval_seconds'])}
     except Exception as error:
@@ -120,14 +131,17 @@ def write_outputs(report, output):
     output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
     with output.with_suffix('.csv').open('w',newline='',encoding='utf-8') as stream:
-        writer=csv.DictWriter(stream,fieldnames=['case','variant','eligible','technical_error','precision_at_3','recall_at_3','hit_at_3','rr_at_3','coverage_at_3','context_coverage','candidate_coverage','retrieval_seconds'])
+        writer=csv.DictWriter(stream,fieldnames=['case','variant','eligible','technical_error','precision_at_3','recall_at_3','hit_at_3','rr_at_3','coverage_at_3','context_coverage','candidate_coverage','retrieval_seconds',
+            *[stage+'_'+field for stage in ('top_3','context') for field in ('complete','covered_units','total_units','missing_unit_ids')]],lineterminator='\n')
         writer.writeheader()
         for row in report['cases']:
-            for name in VARIANTS:
+            for name in report['aggregate']:
                 v=row['variants'].get(name,{});m=v.get('metrics_at_3',{})
                 writer.writerow({'case':row['id'],'variant':name,'eligible':row['retrieval_evaluable'],
                     'technical_error':bool(row['error']),**{key+'_at_3':m.get(key) for key in ('precision','recall','hit','rr','coverage')},
-                    **{key:v.get(key) for key in ('context_coverage','candidate_coverage','retrieval_seconds')}})
+                    **{key:v.get(key) for key in ('context_coverage','candidate_coverage','retrieval_seconds')},
+                    **{stage+'_'+field:(';'.join(value) if isinstance(value,list) else value)
+                       for stage,detail in v.get('coverage_completeness',{}).items() for field,value in detail.items()}})
     return generate_pdf(report,output)
 
 
@@ -175,9 +189,10 @@ def main():
         'backend':args.backend,'corpus_id':corpus,'records':len(chunks),'index_config':cfg.model_dump(),
         'annotation_validation':validated,'planned_cases':len(data['cases']),'executed_cases':len(rows),
         'technical_errors':sum(bool(r['error']) for r in rows),
-        'protocol':{'k':3,'search_depth_per_branch':10,'rrf_constant':60,'weights':[1,1],
+        'protocol':{'k':3,'search_depth_per_branch':10,'rrf_constant':RRF_CONSTANT,'weights':[SEMANTIC_WEIGHT,LEXICAL_WEIGHT],
+                    'retrieval_version':RETRIEVAL_VERSION,'applicability_before_top_k':True,
                     'category_boost':False,'classifier_run':False,'expected_category_used':False,
-                    'prompt_sha256':hashlib.sha256(prompt.encode()).hexdigest(),
+                    'prompt_version':RAGConfig().prompt.stem,'prompt_sha256':hashlib.sha256(prompt.encode()).hexdigest(),
                     'context_budget_input_tokens':850,'context_chars':6000,'context_classification':None,
                     'applicability_filters_applied':False,
                     'timing':'One shared embedding and semantic search per case. A=embedding+semantic; B=embedding+full hybrid. Shared sequential observations, not independent latency benchmarks. Initialization/authentication and trace reconstruction excluded.',

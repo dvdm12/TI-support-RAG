@@ -914,6 +914,68 @@ class PDFReport:
         doc.build(story,canvasmaker=partial(NumberedCanvas,header_label="TIEMPOS RAG - DESARROLLO"))
         return self.output_path
 
+    def generate_token_comparison(self, report, *, source_json=None):
+        """Actual generation usage, paired populations and incomplete checkpoints."""
+        if report.get('schema_version')!='generation-token-comparison-v1':
+            raise ValueError('No es una comparación de tokens compatible.')
+        from hashlib import sha256
+        styles=self._styles()
+        p=lambda value,small=False:self._paragraph(value,styles['small' if small else 'body'])
+        h=lambda value:self._paragraph(value,styles['section'])
+        table=lambda rows,widths:self._table([[p(c,True) for c in row] for row in rows],[w*mm for w in widths])
+        names={'A_semantic':'A: Semántica','B_hybrid_rrf':'B: Híbrida v2'}
+        variants=list(names);summary=report['summary'];protocol=report['protocol']
+        number=lambda value:'N/E' if value is None else f'{value:,.2f}'.replace(',','_').replace('.',',').replace('_','.')
+        status='MEDICIÓN COMPLETA' if report['status']=='complete' else 'MEDICIÓN INCOMPLETA'
+        story=[self._paragraph('Consumo de tokens',styles['title']),
+            self._paragraph('Generación comparable: semántica frente a híbrida',styles['subtitle']),
+            Spacer(1,4*mm),p(status+' | Desarrollo | Revisión humana pendiente'),Spacer(1,3*mm),
+            table([['Dato','Condición'],['Modelo',protocol['model']],
+                ['Prompt / parámetros',f"{protocol['prompt_version']} / temperatura 0 / reasoning low / salida máxima 800 tokens"],
+                ['Muestra',f"{len(report['cases'])} preguntas documentales; dos variantes; {summary['paired_measured_cases']} pares con usage válido"],
+                ['Alcance','Generación directa únicamente; excluye clasificación, revisión y corrección. Reserva sin ejecutar.']], [37,149]),
+            Spacer(1,4*mm),h('1. Tokens informados por Groq')]
+        rows=[['Medida',names[variants[0]],names[variants[1]],'Diferencia B-A']]
+        for key,label in [('prompt_tokens','Entrada: media'),('completion_tokens','Salida: media'),('total_tokens','Total: media')]:
+            rows.append([label,*[number(summary['variants'][v]['paired_usage'][key]['mean']) for v in variants],number(summary['paired_difference'][key]['mean'])])
+        for key,label in [('prompt_tokens','Entrada: suma emparejada'),('completion_tokens','Salida: suma emparejada'),('total_tokens','Total: suma emparejada')]:
+            rows.append([label,*[number(summary['variants'][v]['paired_usage'][key]['sum']) for v in variants],number(summary['paired_difference'][key]['sum'])])
+        story += [table(rows,[67,40,40,39]),Spacer(1,3*mm),
+            p('Usage real del proveedor; no son estimaciones del tokenizer. Salida puede incluir razonamiento interno. Menos tokens no acredita mayor fidelidad o utilidad. No se calcula costo monetario.',True),
+            Spacer(1,4*mm),h('2. Integridad de la medición')]
+        rows=[['Registro',*[names[v] for v in variants]]]
+        for key,label in [('observations','Observaciones, incluidos reintentos explícitos'),('http_responses','Respuestas HTTP recibidas'),
+                          ('observations_without_valid_usage','Observaciones sin usage válido'),('contract_valid_outputs','Salidas con contrato y citas válidos')]:
+            rows.append([label,*[str(summary['variants'][v][key]) for v in variants]])
+        story += [table(rows,[100,43,43]),Spacer(1,3*mm),
+            p('La comparación utiliza exactamente los mismos casos con usage válido en ambas variantes. Un error o usage ausente no se convierte en cero. El JSON conserva todas las observaciones; su contabilidad global incluye tokens conocidos aunque la salida no cumpla el contrato.',True),
+            PageBreak(),h('3. Registro por pregunta y variante')]
+        rows=[['Caso','Variante','Entrada','Salida','Total','Contrato / estado']]
+        for case in report['cases']:
+            for name in variants:
+                observations=case['variants'][name]['observations']
+                for o in observations or [None]:
+                    usage=(o.get('usage') or {}) if o else {}
+                    rows.append([case['id'],names[name],*[str(usage.get(k)) if usage.get(k) is not None else 'N/E' for k in ('prompt_tokens','completion_tokens','total_tokens')],o['status'] if o else 'not_run'])
+        story += [table(rows,[15,35,24,24,24,64]),Spacer(1,4*mm),
+            p('contract_valid solo comprueba JSON, contrato y coherencia de etiquetas con el catálogo. No prueba respaldo semántico, corrección, conservación de condiciones ni utilidad. Las respuestas y contextos quedan en JSON para la siguiente revisión humana.'),
+            PageBreak(),h('4. Preguntas y protocolo')]
+        story.append(table([['Caso','Pregunta']]+[[c['id'],c['question']] for c in report['cases']],[15,171]))
+        story += [Spacer(1,4*mm),p('Mismo modelo, prompt, esquema, temperatura, límite de salida y presupuesto de contexto para ambas estrategias. A usa los Top-10 semánticos guardados; ambas aplican la política de pertinencia antes de Top-3. B usa la selección híbrida mejorada. No se alimentan categorías esperadas al generador.'),
+            p('Orden alternado A/B y B/A entre preguntas. Una observación por combinación; no acredita estabilidad estadística ni generalización. Son preguntas conocidas de desarrollo, con anotaciones pendientes de revisión humana.'),
+            p('La estimación local de entrada se conserva separada del usage real. Sin clasificación, revisor ni corrección, esta medición no equivale al consumo total de la API query. Los reintentos explícitos permanecen en el historial; uso desconocido permanece desconocido.'),
+            Spacer(1,3*mm),h('Trazabilidad'),p('Creación UTC: '+report['created_at_utc'],True),
+            p('SHA-256 fuente de recuperación: '+report['source_sha256'],True),
+            p('SHA-256 prompt: '+protocol['prompt_sha256'],True)]
+        if source_json:
+            source=Path(source_json)
+            story += [p('JSON: '+source.name,True),p('SHA-256 JSON: '+sha256(source.read_bytes()).hexdigest(),True)]
+        self.output_path.parent.mkdir(parents=True,exist_ok=True)
+        document=SimpleDocTemplate(str(self.output_path),pagesize=A4,leftMargin=12*mm,rightMargin=12*mm,
+            topMargin=20*mm,bottomMargin=17*mm,title='Consumo de tokens: comparación generativa',author='TI-support-RAG')
+        document.build(story,canvasmaker=partial(NumberedCanvas,header_label='TOKENS REALES - DESARROLLO'))
+        return self.output_path
+
     def generate_retrieval_metrics(self, report: dict[str, Any], *, source_json: str | Path | None = None) -> Path:
         """Render the annotated A/B retrieval matrix with the existing PDF engine.
 
@@ -963,8 +1025,9 @@ class PDFReport:
             metric_rows.append([label, *[number(report["aggregate"][v].get(key), percent=percent) for v in variants]])
         widths = [90] + [96 / len(variants)] * len(variants)
         story.append(table(metric_rows, widths))
+        replay = report.get("backend") == "offline_replay"
         story += [Spacer(1, 3 * mm), p("Promedios macro: cada pregunta documental válida tiene el mismo peso. MRR es el promedio del inverso del primer rango relevante; no es una confianza del modelo.", True),
-                  Spacer(1, 2 * mm), p("(*) A mide hasta diez candidatos semánticos; B mide la unión completa, hasta veinte. Los conjuntos candidatos tienen tamaños distintos.", True)]
+                  Spacer(1, 2 * mm), p("(*) Cobertura de candidatos no reevaluada. Antes/después reutiliza rankings semánticos guardados y recalcula léxico/contexto. No mide latencia ni respuestas generadas." if replay else "(*) A mide hasta diez candidatos semánticos; B mide la unión completa, hasta veinte. Los conjuntos candidatos tienen tamaños distintos.", True)]
         if paired:
             unit_count = sum(row.get("units_count", 0) for row in paired)
             if unit_count:
@@ -1005,7 +1068,7 @@ class PDFReport:
                     story.append(p(row["id"] + ": ninguna alternativa seleccionó evidencia pertinente en Top-3.", True))
         story += [Spacer(1, 4 * mm), heading("3. Condiciones y tiempos"),
                   p(f"K={report.get('protocol', {}).get('k', 'N/D')}; profundidad semántica/léxica={report.get('protocol', {}).get('search_depth_per_branch', 'N/D')}; constante RRF={report.get('protocol', {}).get('rrf_constant', 'N/D')}. Ajuste por categoría: {'activado' if report.get('protocol', {}).get('category_boost') else 'desactivado'}."),
-                  p("Los tiempos son observaciones emparejadas de componentes compartidos. Excluyen inicialización y autenticación previas; no son un benchmark de latencia HTTP. Se conserva la duración de fallos, pero no se les asigna calidad cero."),
+                  p("No se comparan latencias: se reutilizan los Top-10 semánticos históricos y se recalculan el ranking léxico y los contextos localmente. Parámetros ajustados con desarrollo conocido; no es una verificación independiente. Tokens de entrada son estimaciones locales, sin generación." if replay else "Los tiempos son observaciones emparejadas de componentes compartidos. Excluyen inicialización y autenticación previas; no son un benchmark de latencia HTTP. Se conserva la duración de fallos, pero no se les asigna calidad cero."),
                   p(f"Contexto: límite de entrada {report.get('protocol', {}).get('context_budget_input_tokens', 'N/D')} tokens; clasificación y filtros según el protocolo del JSON. Groq: {report.get('groq_calls', 'N/D')} llamadas; escrituras Supabase: {report.get('supabase_writes', 'N/D')}.", True),
                   PageBreak(), heading("4. Preguntas y trazabilidad")]
         questions = [["Caso / uso", "Pregunta evaluada"]]
@@ -1020,6 +1083,36 @@ class PDFReport:
             story += [Spacer(1, 2 * mm), p("JSON de origen: " + source.name, True),
                       p("SHA-256: " + sha256(source.read_bytes()).hexdigest(), True)]
         story += [Spacer(1, 2 * mm), p("PDF generado a partir de observaciones guardadas. No recalcula búsquedas ni modifica la matriz; no declara una configuración ganadora ni completa revisión humana pendiente.", True)]
+        if any("coverage_completeness" in value for value in report["aggregate"].values()):
+            story += [PageBreak(), heading("5. Cobertura completa por pregunta"),
+                      p("Completa: todas las unidades necesarias tienen evidencia en la etapa. Incompleta: falta al menos una. N/E: caso de comportamiento o sin medición; ERROR: fallo técnico. No equivale a exactitud de la respuesta generada."), Spacer(1, 3*mm)]
+            summary = [["Variante / etapa", "Completas", "Incompletas", "Evaluadas", "Proporción"]]
+            for name in variants:
+                for stage, label in (("top_3", "Top-3"), ("context", "Contexto")):
+                    value = report["aggregate"][name].get("coverage_completeness", {}).get(stage, {})
+                    summary.append([names.get(name, name)+" / "+label,
+                        value.get("complete_cases", "N/E"), value.get("incomplete_cases", "N/E"),
+                        value.get("evaluated_cases", "N/E"), number(value.get("complete_rate"), percent=True)])
+            story += [table(summary, [70, 29, 29, 29, 29]), Spacer(1, 3*mm),
+                      p("Denominador: casos documentales válidos con medición. Comportamiento y errores quedan fuera; los contadores e IDs excluidos permanecen en el JSON. Las unidades faltantes se detallan por caso en JSON y CSV.", True), Spacer(1, 3*mm)]
+            matrix = [["Caso", *["Top-3 "+label for label in labels], *["Contexto "+label for label in labels]]]
+            for row in case_rows:
+                cells = [row["id"]]
+                for stage in ("top_3", "context"):
+                    for name in variants:
+                        detail = row.get("variants", {}).get(name, {}).get("coverage_completeness", {}).get(stage, {})
+                        value = detail.get("complete")
+                        cell = "ERROR" if row.get("error") else "N/E"
+                        if not row.get("error") and row.get("retrieval_evaluable") and value is not None:
+                            cell = ("Completa" if value else "Incompleta")+f" ({detail['covered_units']}/{detail['total_units']})"
+                        cells.append(cell)
+                matrix.append(cells)
+            story.append(table(matrix, [14, 43, 43, 43, 43]))
+            derivation = report.get("complete_coverage_derivation")
+            if derivation:
+                story += [Spacer(1, 3*mm), p("Derivación local: "+derivation["derived_at_utc"]+
+                    ". Sin búsquedas nuevas ni llamadas a proveedores; conserva fecha y mediciones originales.", True),
+                    p("SHA-256 de la matriz histórica: "+derivation["source_sha256"], True)]
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
         document=SimpleDocTemplate(str(self.output_path),pagesize=A4,leftMargin=12*mm,rightMargin=12*mm,
             topMargin=20*mm,bottomMargin=17*mm,title="Métricas de recuperación RAG",author="TI-support-RAG")

@@ -13,6 +13,7 @@ from schemas.rag_response_v1 import RespuestaRAG
 from .config import RAGConfig
 from .timing import measure
 from .context import build_context
+from .retrieval import RETRIEVAL_VERSION
 from .citations import validate_response
 from .policy import apply_policy
 from .support import review_support
@@ -36,7 +37,7 @@ def run_rag_case(case, retriever, *, image_path=None, ocr_engine='easyocr',
                       'citations_valid': False, 'semantic_support_review': 'PENDIENTE',
                       'contract_version': 'rag_response_v1',
                       'contract_schema': RespuestaRAG.model_json_schema(),
-                      'retrieval_strategy': 'bm25_cosine_rrf_category_soft_boost',
+                      'retrieval_strategy': RETRIEVAL_VERSION,
                       'generation_parameters': {'temperature': 0, 'max_completion_tokens': 800,
                                                 'reasoning_effort':'low',
                                                 'max_retries': 2, 'http_timeout_seconds': [10, 60]},

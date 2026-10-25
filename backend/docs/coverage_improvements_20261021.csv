@@ -1,0 +1,27 @@
+case,variant,eligible,technical_error,precision_at_3,recall_at_3,hit_at_3,rr_at_3,coverage_at_3,context_coverage,candidate_coverage,retrieval_seconds,top_3_complete,top_3_covered_units,top_3_total_units,top_3_missing_unit_ids,context_complete,context_covered_units,context_total_units,context_missing_unit_ids
+E01,Antes: híbrida v1,True,False,0.3333333333333333,1.0,1,1.0,1.0,1.0,,,True,5,5,,True,5,5,
+E01,Después: híbrida v2,True,False,0.3333333333333333,1.0,1,1.0,1.0,1.0,,,True,5,5,,True,5,5,
+E02,Antes: híbrida v1,True,False,0.6666666666666666,1.0,1,1.0,1.0,1.0,,,True,2,2,,True,2,2,
+E02,Después: híbrida v2,True,False,0.6666666666666666,1.0,1,1.0,1.0,1.0,,,True,2,2,,True,2,2,
+E03,Antes: híbrida v1,True,False,0.6666666666666666,0.6666666666666666,1,1.0,0.625,0.625,,,False,5,8,persistent_failure;no_password_ticket;no_unknown_network,False,5,8,persistent_failure;no_password_ticket;no_unknown_network
+E03,Después: híbrida v2,True,False,1.0,1.0,1,1.0,1.0,1.0,,,True,8,8,,True,8,8,
+E04,Antes: híbrida v1,True,False,0.6666666666666666,1.0,1,1.0,1.0,0.75,,,True,4,4,,False,3,4,no_shared_secrets
+E04,Después: híbrida v2,True,False,0.6666666666666666,1.0,1,1.0,1.0,1.0,,,True,4,4,,True,4,4,
+E05,Antes: híbrida v1,True,False,0.0,0.0,0,0.0,0.0,0.0,,,False,0,6,no_opening;no_sensitive_reply;report_evidence;no_forwarding;no_password_ticket;authorized_review,False,0,6,no_opening;no_sensitive_reply;report_evidence;no_forwarding;no_password_ticket;authorized_review
+E05,Después: híbrida v2,True,False,0.6666666666666666,1.0,1,1.0,1.0,1.0,,,True,6,6,,True,6,6,
+E06,Antes: híbrida v1,True,False,0.6666666666666666,1.0,1,1.0,1.0,1.0,,,True,5,5,,True,5,5,
+E06,Después: híbrida v2,True,False,0.6666666666666666,1.0,1,1.0,1.0,1.0,,,True,5,5,,True,5,5,
+E07,Antes: híbrida v1,False,False,,,,,,,,,,,0,,,,0,
+E07,Después: híbrida v2,False,False,,,,,,,,,,,0,,,,0,
+E08,Antes: híbrida v1,False,False,,,,,,,,,,,0,,,,0,
+E08,Después: híbrida v2,False,False,,,,,,,,,,,0,,,,0,
+E09,Antes: híbrida v1,False,False,,,,,,,,,,,0,,,,0,
+E09,Después: híbrida v2,False,False,,,,,,,,,,,0,,,,0,
+E10,Antes: híbrida v1,False,False,,,,,,,,,,,0,,,,0,
+E10,Después: híbrida v2,False,False,,,,,,,,,,,0,,,,0,
+E11,Antes: híbrida v1,False,False,,,,,,,,,,,0,,,,0,
+E11,Después: híbrida v2,False,False,,,,,,,,,,,0,,,,0,
+E12,Antes: híbrida v1,True,False,0.6666666666666666,1.0,1,1.0,1.0,1.0,,,True,5,5,,True,5,5,
+E12,Después: híbrida v2,True,False,0.6666666666666666,1.0,1,1.0,1.0,1.0,,,True,5,5,,True,5,5,
+E13,Antes: híbrida v1,False,False,,,,,,,,,,,0,,,,0,
+E13,Después: híbrida v2,False,False,,,,,,,,,,,0,,,,0,

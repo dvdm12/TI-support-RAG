@@ -1,0 +1,15 @@
+case,variant,observation,status,prompt_tokens,completion_tokens,total_tokens,usage_valid,http_status,contract_valid,local_input_estimate
+E01,A_semantic,1,contract_valid,784,132,916,True,200,True,811
+E01,B_hybrid_rrf,1,contract_valid,785,165,950,True,200,True,812
+E02,A_semantic,1,contract_valid,772,225,997,True,200,True,799
+E02,B_hybrid_rrf,1,contract_valid,770,157,927,True,200,True,797
+E03,A_semantic,1,contract_valid,763,177,940,True,200,True,790
+E03,B_hybrid_rrf,1,contract_valid,760,212,972,True,200,True,787
+E04,A_semantic,1,contract_valid,759,132,891,True,200,True,786
+E04,B_hybrid_rrf,1,contract_valid,764,110,874,True,200,True,791
+E05,A_semantic,1,contract_valid,757,192,949,True,200,True,784
+E05,B_hybrid_rrf,1,contract_valid,781,187,968,True,200,True,808
+E06,A_semantic,1,contract_valid,756,196,952,True,200,True,783
+E06,B_hybrid_rrf,1,contract_valid,757,193,950,True,200,True,784
+E12,A_semantic,1,contract_valid,763,184,947,True,200,True,790
+E12,B_hybrid_rrf,1,contract_valid,771,111,882,True,200,True,798

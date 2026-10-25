@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "case": "E01",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E02",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E03",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E04",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E05",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E06",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E07",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E08",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E09",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E10",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E11",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E12",
+      "trace_matches_report": true
+    },
+    {
+      "case": "E13",
+      "trace_matches_report": true
+    }
+  ],
+  "provider_calls": 0,
+  "reserve_executed": false
+}

@@ -194,3 +194,13 @@ Los tiempos muestran cada etapa opcional y advierten sobre subtotales contenidos
 Las 26 pruebas API pasan, incluida validación de todos los ejemplos de entrada,
 éxito y error contra los modelos Pydantic y coherencia de etiquetas de cita.
 Las pruebas no llaman a proveedores ni ejecutan el conjunto de reserva.
+
+## Mejora de recuperación desplegada
+
+La versión `technical_tokens_applicable_weighted_rrf_v2` conserva términos
+Wi-Fi y códigos con guiones, usa RRF con pesos semántica 1 / léxico 2 y aplica
+el filtro de enlaces no abiertos antes de cortar Top-3. El pipeline conserva
+sus comprobaciones posteriores. El prompt documental vigente es `rag_v6`.
+Rutas, contratos, tokens y límites no cambian. Tres búsquedas HTTP reales
+E03/E04/E05 devolvieron 200 y evidencia completa según la anotación de desarrollo;
+ver `COVERAGE_IMPROVEMENTS.md`. No se ejecutó generación con el nuevo prompt.

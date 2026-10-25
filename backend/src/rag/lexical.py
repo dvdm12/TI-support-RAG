@@ -9,7 +9,9 @@ STOP = set('a al algo ante como con cual cuando de del debe debo el en es esta e
 
 def tokens(text):
     text = ''.join(c for c in unicodedata.normalize('NFKD', text.lower()) if not unicodedata.combining(c))
-    terms = [t for t in re.findall(r'[a-z0-9]+', text) if len(t) > 2 and t not in STOP]
+    # Keep technical identifiers intact: splitting Wi-Fi discarded both tokens.
+    text = re.sub(r'\bwi[\s-]*fi\b', 'wifi', text)
+    terms = [t for t in re.findall(r'[a-z0-9]+(?:-[a-z0-9]+)*', text) if len(t) > 2 and t not in STOP]
     return [t[:-1] if len(t) > 4 and t.endswith('s') else t for t in terms]
 
 

@@ -19,4 +19,4 @@ class RAGConfig:
     context_chars: int = 6000
     corpus_base: str = "ti-manuals-v2"
     manifest: Path = ROOT / "data/corpus/v2/manifest.json"
-    prompt: Path = ROOT / "prompts/rag_v5.md"
+    prompt: Path = ROOT / "prompts/rag_v6.md"

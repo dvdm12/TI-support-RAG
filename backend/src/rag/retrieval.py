@@ -1,6 +1,12 @@
 """Query embedding and retrieval, without a universal similarity threshold."""
 from .lexical import rank
 from .timing import measure
+from .applicability import applicable_candidates
+
+RRF_CONSTANT = 60
+SEMANTIC_WEIGHT = 1
+LEXICAL_WEIGHT = 2
+RETRIEVAL_VERSION = "technical_tokens_applicable_weighted_rrf_v2"
 
 
 class Retriever:
@@ -25,15 +31,18 @@ class Retriever:
             with measure(timings, 'rrf_seconds'):
                 # Includes category boost, deterministic sorting and Top-k.
                 scores, pool = {}, {}
-                for ranked in (semantic, lexical):
+                for ranked, weight in ((semantic, SEMANTIC_WEIGHT), (lexical, LEXICAL_WEIGHT)):
                     for position, candidate in enumerate(ranked, 1):
                         pool.setdefault(candidate.chunk_id, candidate)
-                        scores[candidate.chunk_id] = scores.get(candidate.chunk_id, 0) + 1 / (60 + position)
+                        scores[candidate.chunk_id] = scores.get(candidate.chunk_id, 0) + weight / (RRF_CONSTANT + position)
                 if category:
                     for ident, candidate in pool.items():
                         if candidate.metadata.get('category') == category:
                             scores[ident] += .025
-                selected = sorted(pool, key=lambda ident: (-scores[ident], ident))[:self.k]
+                # Filter the full union before Top-k so applicable alternatives
+                # can fill positions discarded by the existing incident guard.
+                applicable, _ = applicable_candidates(query, list(pool.values()))
+                selected = sorted((c.chunk_id for c in applicable), key=lambda ident: (-scores[ident], ident))[:self.k]
             with measure(timings, 'candidate_scoring_seconds'):
                 candidates = []
                 for ident in selected:
