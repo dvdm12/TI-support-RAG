@@ -276,6 +276,15 @@ docker compose -f ../infra/compose.yaml down
 | Puerto 8000 ocupado | Detener la API anterior; elegir `runserver` o Docker. |
 | HTTP 429 de Groq | Esperar a que se libere la cuota de la cuenta y repetir la consulta. |
 
+## Validación del laboratorio con GitHub Actions
+
+El [workflow de reconstrucción](backend/docs/parcial2/guias/GITHUB_ACTIONS.md)
+instala el entorno desde cero, restaura el corpus, ejecuta pruebas y las 18 celdas,
+construye Docker y comprueba la API. Por defecto los push y PR prueban el modo sin proveedores;
+la ejecución manual permite Groq y Supabase reales con cinco secretos propios.
+Genera artifacts e informa por separado los pendientes académicos: una prueba
+exitosa del software no equivale a una aprobación completa del laboratorio.
+
 ## Colab y documentación
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dvdm12/TI-support-RAG/blob/codex/backend-infra-ricoh-local/backend/notebooks/parcial2.ipynb)

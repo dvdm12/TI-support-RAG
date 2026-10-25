@@ -1,0 +1,159 @@
+name: Reconstrucción y validación del laboratorio
+
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      live_services:
+        description: Probar Groq y Supabase reales (requiere cinco secretos)
+        type: boolean
+        default: true
+      upload_corpus:
+        description: Cargar explícitamente los 70 fragmentos en el usuario Supabase de pruebas
+        type: boolean
+        default: false
+      require_complete_lab:
+        description: Fallar también si falta algún entregable o revisión del laboratorio
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: laboratorio-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  reconstruccion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      LAB_OUTPUT: ${{ github.workspace }}/backend/docs/parcial2/ci
+      LAB_LIVE: ${{ (github.event_name == 'workflow_dispatch' && inputs.live_services || github.event_name == 'push' && github.ref_name == vars.LAB_LIVE_BRANCH && vars.LAB_LIVE_ON_PUSH == 'true') && 'true' || 'false' }}
+      COMPOSE_PROJECT_NAME: ti-lab-${{ github.run_id }}-${{ github.run_attempt }}
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MPLBACKEND: Agg
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Instalar sistema, CPU y dependencias desde cero
+        id: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-spa fonts-dejavu-core
+          python -m pip install torch==2.14.1 torchvision==0.29.1 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r requirements.txt
+          python -m pip check
+          mkdir -p "$LAB_OUTPUT"
+          python -m pip freeze > "$LAB_OUTPUT/dependencies.txt"
+          python - <<'PY'
+          import json, platform, sys, os
+          from pathlib import Path
+          import torch
+          Path(os.environ['LAB_OUTPUT'], 'runtime.json').write_text(json.dumps({
+              'python': sys.version, 'platform': platform.platform(),
+              'torch': torch.__version__, 'cuda_runtime': torch.version.cuda
+          }, indent=2))
+          PY
+      - name: Verificar ZIP y restaurar índice académico
+        run: python -m scripts.validate_lab prepare --output "$LAB_OUTPUT"
+      - name: Pruebas unitarias y registro de omisiones
+        run: python -m scripts.validate_lab unit --output "$LAB_OUTPUT"
+      - name: Comprobar Django
+        id: django
+        run: python manage.py check
+      - name: Contratos API con proveedores simulados
+        id: api_tests
+        run: python manage.py test api
+      - name: Preparar credenciales de esta ejecución
+        env:
+          GROQ_API_KEY: ${{ env.LAB_LIVE == 'true' && secrets.GROQ_API_KEY || '' }}
+          SUPABASE_URL: ${{ env.LAB_LIVE == 'true' && secrets.SUPABASE_URL || '' }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ env.LAB_LIVE == 'true' && secrets.SUPABASE_PUBLISHABLE_KEY || '' }}
+          SUPABASE_EMAIL: ${{ env.LAB_LIVE == 'true' && secrets.SUPABASE_EMAIL || '' }}
+          SUPABASE_PASSWORD: ${{ env.LAB_LIVE == 'true' && secrets.SUPABASE_PASSWORD || '' }}
+        run: |
+          python - <<'PY'
+          import os, secrets
+          from pathlib import Path
+          from dotenv import set_key
+          names = ('GROQ_API_KEY', 'SUPABASE_URL', 'SUPABASE_PUBLISHABLE_KEY', 'SUPABASE_EMAIL', 'SUPABASE_PASSWORD')
+          if os.environ['LAB_LIVE'] == 'true' and any(not os.environ.get(n) for n in names):
+              raise SystemExit('Faltan secretos requeridos: configurar los cinco nombres antes de la prueba real.')
+          path = Path('.env')
+          if path.exists():
+              raise SystemExit('El runner debe empezar sin .env.')
+          path.touch(mode=0o600)
+          values = {n: os.environ.get(n, '') for n in names}
+          values.update(DJANGO_SECRET_KEY=secrets.token_urlsafe(48), DJANGO_API_TOKEN=secrets.token_urlsafe(48))
+          for name, value in values.items():
+              set_key(path, name, value)
+          PY
+      - name: Cargar corpus propio solo si se solicitó
+        if: github.event_name == 'workflow_dispatch' && inputs.live_services && inputs.upload_corpus
+        run: python -m scripts.index_manuals --existing --output data/indexes/sections --upload
+      - name: Verificar Supabase antes de consumir Groq
+        if: env.LAB_LIVE == 'true'
+        run: python -m scripts.verify_supabase --output "$LAB_OUTPUT/supabase.json"
+      - name: Ejecutar las 18 celdas en kernel nuevo
+        run: |
+          args=()
+          if [[ "$LAB_LIVE" == true ]]; then args+=(--live); fi
+          python -m scripts.validate_lab notebook --output "$LAB_OUTPUT" "${args[@]}"
+      - name: Construir imagen Docker desde el checkout
+        id: docker_build
+        run: docker compose -f ../infra/compose.yaml build --no-cache backend
+      - name: Arrancar la API de la imagen construida
+        id: docker_start
+        run: docker compose -f ../infra/compose.yaml up -d --no-build
+      - name: Probar HTTP real contra Docker
+        run: |
+          args=()
+          if [[ "$LAB_LIVE" == true ]]; then args+=(--live); fi
+          python -m scripts.validate_lab http --output "$LAB_OUTPUT" "${args[@]}"
+      - name: Informe técnico y cumplimiento Clase 09
+        if: always()
+        env:
+          LAB_INSTALL_OUTCOME: ${{ steps.install.outcome }}
+          LAB_DJANGO_OUTCOME: ${{ steps.django.outcome }}
+          LAB_API_TESTS_OUTCOME: ${{ steps.api_tests.outcome }}
+          LAB_DOCKER_BUILD_OUTCOME: ${{ steps.docker_build.outcome }}
+          LAB_DOCKER_START_OUTCOME: ${{ steps.docker_start.outcome }}
+          LAB_STRICT: ${{ github.event_name == 'workflow_dispatch' && inputs.require_complete_lab && 'true' || 'false' }}
+        run: |
+          args=()
+          if [[ "$LAB_STRICT" == true ]]; then args+=(--require-complete); fi
+          python -m scripts.validate_lab report --output "$LAB_OUTPUT" "${args[@]}"
+      - name: Revisar evidencias antes de publicarlas
+        id: scan
+        if: always() && steps.install.outcome == 'success'
+        run: python -m scripts.validate_lab scan --output "$LAB_OUTPUT"
+      - name: Conservar informes, JSON, CSV y PDF
+        if: always() && steps.scan.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: laboratorio-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            backend/docs/parcial2/ci/*.json
+            backend/docs/parcial2/ci/*.md
+            backend/docs/parcial2/ci/*.txt
+            backend/docs/parcial2/ci/notebook/exports/**
+          if-no-files-found: error
+          retention-days: 14
+      - name: Detener Docker y eliminar credenciales temporales
+        if: always()
+        run: |
+          if [[ -f .env ]]; then docker compose -f ../infra/compose.yaml down --volumes; fi
+          rm -f .env

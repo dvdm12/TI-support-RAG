@@ -56,3 +56,10 @@ antes de cerrar la sesión, porque su disco no es permanente.
 
 Este directorio contiene la muestra académica compartible. Si se realizan pruebas
 con solicitudes privadas, revisar las nuevas salidas antes de incorporarlas a Git.
+
+## Validación reproducible en un runner
+
+El [workflow de GitHub Actions](guias/GITHUB_ACTIONS.md) reconstruye la aplicación,
+ejecuta el notebook y prueba la API Docker. Distingue comprobaciones técnicas de
+requisitos académicos pendientes. La integración real necesita cinco secretos
+propios de pruebas; los PR no consumen Groq y los push son sin proveedores por defecto.
