@@ -12,6 +12,26 @@ RUN /opt/venv/bin/pip install --only-binary=:all: \
     && /opt/venv/bin/pip install --only-binary=:all: -r requirements-runtime.txt \
     && /opt/venv/bin/pip check \
     && find /opt/venv -type d -name __pycache__ -prune -exec rm -rf '{}' +
+# Drop files never used at runtime (~200 MB): torch C++ test binaries and test
+# fixtures, protoc, C++ headers for building extensions, and the installers.
+# torch/bin/torch_shm_manager must stay: `import torch` checks for it.
+RUN SITE=/opt/venv/lib/python3.12/site-packages \
+    && rm -rf "$SITE/torch/test" "$SITE/torch/include" \
+    && find "$SITE/torch/bin" -maxdepth 1 -type f ! -name torch_shm_manager -delete \
+    && rm -rf "$SITE"/pip "$SITE"/pip-*.dist-info "$SITE"/setuptools "$SITE"/setuptools-*.dist-info \
+              /opt/venv/bin/pip /opt/venv/bin/pip3*
+# Write bytecode only for the modules the API imports (the runtime user cannot
+# write __pycache__, so each start recompiled ~11 s of imports). Compiling all of
+# site-packages would add ~275 MB; importing the real model stack adds ~90 MB.
+# The model weights are not downloaded here: imports only.
+RUN /opt/venv/bin/python -c "\
+import torch, numpy, scipy, sklearn, sympy, tokenizers, safetensors.torch, huggingface_hub; \
+import transformers, sentence_transformers, httpx, supabase, django, tiktoken, gunicorn; \
+import requests, PIL, pytesseract, pydantic, yaml, rich, jinja2, joblib; \
+from sentence_transformers import SentenceTransformer; \
+from sentence_transformers.models import Transformer, Pooling; \
+from transformers import AutoConfig, AutoModel, AutoTokenizer; \
+import transformers.models.bert.modeling_bert, transformers.models.bert.configuration_bert"
 
 FROM ${PYTHON_IMAGE} AS runtime
 ENV PATH="/opt/venv/bin:${PATH}" \
@@ -36,6 +56,12 @@ COPY src/ src/
 COPY schemas/ schemas/
 COPY prompts/ prompts/
 COPY manage.py .
+# Same for the project and the Django stack it loads (PYTHONDONTWRITEBYTECODE
+# is cleared only for this build step; the running container never writes).
+RUN PYTHONDONTWRITEBYTECODE= DJANGO_SETTINGS_MODULE=ti_api.settings python -c "\
+import django; django.setup(); \
+import api.urls, api.controllers, api.documentation, api.services; \
+import src.rag.pipeline, src.rag.repository, src.rag.retrieval, src.groq_client"
 USER app
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \

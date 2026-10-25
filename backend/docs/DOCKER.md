@@ -36,9 +36,24 @@ completo de `requirements.txt` fuera de esta imagen.
 
 PyTorch y Sentence Transformers siguen siendo necesarios para ejecutar el
 modelo actual sin cambiar su representación. Por eso esta imagen pesa más que
-una API Django sin inferencia local. La construcción comprobada en Linux amd64
-el 20-10-2026 pesa 1.282.325.554 bytes (1,28 GB sin comprimir, aproximadamente
-1,19 GiB). El tamaño real puede consultarse con:
+una API Django sin inferencia local. `scipy`, `scikit-learn` y `sympy` también se
+cargan al atender peticiones (los importan transformers y sentence-transformers),
+así que no se eliminan.
+
+Optimizaciones aplicadas el 25-10-2026:
+
+- Se eliminan archivos que nunca se usan en ejecución: binarios y datos de prueba
+  C++ de torch (`torch/test`, binarios de `torch/bin` salvo `torch_shm_manager`,
+  que `import torch` exige), `protoc`, las cabeceras C++ (`torch/include`) y
+  `pip`/`setuptools`. Unos 200 MB.
+- Se genera bytecode solo para los módulos que la API importa (el usuario `app`
+  no puede escribir `__pycache__`, así que antes cada arranque recompilaba).
+  Compilar todo `site-packages` añadiría ~275 MB; el subconjunto real, ~90 MB.
+
+Resultado en Linux amd64: 1.275.389.930 → 1.168.904.646 bytes (1,17 GB, −8 %).
+Carga del modelo en frío más primer embedding: 17,6/14,0 s → 11,1/8,7 s.
+Los embeddings son idénticos byte a byte a los de la imagen anterior. El tamaño
+real puede consultarse con:
 
 ```bash
 docker image inspect ti-support-rag-backend:local --format '{{.Size}}'
