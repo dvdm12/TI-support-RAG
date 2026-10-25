@@ -18,3 +18,7 @@
 **/*.py[cod]
 **/.env
 **/.env.*
+
+# Notas de continuidad del agente: nunca en la imagen, aunque se amplíe la lista blanca.
+**/.agents
+.agents

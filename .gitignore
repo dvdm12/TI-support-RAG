@@ -14,3 +14,6 @@ backend/.cache/tiktoken/
 backend/docs/drive_classes_07_08_upload.json
 backend/docs/drive_upload_verification.json
 backend/scripts/organize_drive_classes.py
+
+# Notas de continuidad del agente: solo locales, nunca en Git ni en imágenes.
+.agents/
