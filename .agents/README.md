@@ -1,6 +1,6 @@
 # Continuidad de TI-support-RAG
 
-Actualizado el 25-10-2026 (America/Bogota). Leer primero el estado vigente al
+Actualizado el 25-10-2026 (America/Bogota), tras publicar a7b3702. Leer primero el estado vigente al
 inicio de [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md); los apartados anteriores
 conservados como historial pueden contener cifras y pendientes superados.
 
@@ -25,20 +25,25 @@ conservados como historial pueden contener cifras y pendientes superados.
 - Observación pendiente: query 403 devuelve OK_PIDE_ACLARACION con datos_faltantes
   vacío. Conservar la respuesta para revisar coherencia; no declarar fallo de conectividad.
 
-## Corrección E06 25-10-2026 (sin commit)
+## Publicación 25-10-2026
+
+Commits 85b8bb2 (paso 8), ec2d1de (validador estricto) y a7b3702 (E06 + .agents)
+publicados en origin/codex/backend-infra-ricoh-local. Verificar con `git status -sb`.
+
+## Corrección E06 25-10-2026 (publicado en a7b3702)
 
 prompt system_v8 + maxLength 240 en el resumen enviado a Groq. 13/13 casos de
 desarrollo HTTP 200 con estado documental esperado; imagen f5118f3a626c.
 Detalle en CLASS09_METRICS_STATUS.md y PROJECT_HANDOFF.md.
 
-## Validador estricto 25-10-2026 (sin commit)
+## Validador estricto 25-10-2026 (publicado en ec2d1de)
 
 confianza StrictFloat y datos_faltantes sin vacíos (decisión del usuario); errores
 de raíz sin ": " inicial. test/test_validator.py: 25 pruebas, 100 % de cobertura
 de validator.py y request_v1.py. Suite: 458 unitarias y 26 API correctas.
 Contenedor reconstruido: imagen 69245ccd8178 healthy; rollback en tag rollback-a414431ee034. Detalle en PROJECT_HANDOFF.md.
 
-## Paso 8 completado el 25-10-2026 (sin commit)
+## Paso 8 completado el 25-10-2026 (publicado en 85b8bb2)
 
 Publicación previa confirmada: HEAD 7be846f sincronizado con origin.
 Paso 8 implementado: unit_verification.py, verify_units_retrieval.py, 76 pruebas

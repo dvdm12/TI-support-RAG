@@ -161,7 +161,7 @@ ignorada en backend/docs/rag_runs/backend_check_20261025/.
 - Latencia HTTP query mediana 5,94 s (2,56–33,63; abstenciones ~30 s por revisión y
   corrección). El endpoint no expone tokens. Revisión humana sigue pendiente.
 
-## Corrección E06 25-10-2026 (sin commit)
+## Corrección E06 25-10-2026 (publicado en a7b3702)
 
 Causa: el clasificador respondía la pregunta dentro de `resumen` (>240 caracteres);
 system_v7 no declaraba el límite y RESPONSE_SCHEMA no tenía maxLength.

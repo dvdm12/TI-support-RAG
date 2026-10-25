@@ -10,7 +10,15 @@ historial, como `src/` o `docs/`, ahora corresponden a `backend/src/` y
 `backend/docs/`, salvo las migraciones, ubicadas en `infra/supabase/`.
 No contiene secretos. No releer ni ejecutar integraciones históricas por defecto.
 
-### Actualización: Corrección E06 25-10-2026 (sin commit)
+### Publicación 25-10-2026
+
+Push a origin/codex/backend-infra-ricoh-local verificado (HEAD = origin):
+85b8bb2 paso 8, ec2d1de validador estricto, a7b3702 corrección E06 + .agents.
+Base previa 7be846f. Evidencias en backend/docs/rag_runs/ y tags Docker de
+rollback siguen solo en local. Contenedor desplegado: imagen f5118f3a626c.
+Pendiente clase 09: revisión humana, reserva congelada/ejecutada, notebook y PDF.
+
+### Actualización: Corrección E06 25-10-2026 (publicado en a7b3702)
 
 Causa: el clasificador respondía la pregunta dentro de `resumen` (>240 caracteres);
 system_v7 no declaraba el límite y RESPONSE_SCHEMA no tenía maxLength.
@@ -27,7 +35,7 @@ system_v7 no declaraba el límite y RESPONSE_SCHEMA no tenía maxLength.
 - E10 queda OK_PIDE_ACLARACION por confianza 0.0 < 0.60 con datos_faltantes vacío
   (regla previa de decision.py; explica también la observación histórica de 403).
 
-### Actualización 25-10-2026: validador de salida estricto (sin commit)
+### Actualización 25-10-2026: validador de salida estricto (publicado en ec2d1de)
 
 Decisión del usuario: `confianza` estricta y `datos_faltantes` sin cadenas vacías.
 - backend/schemas/request_v1.py: confianza StrictFloat (enteros 0/1 válidos;
@@ -41,7 +49,7 @@ Decisión del usuario: `confianza` estricta y `datos_faltantes` sin cadenas vac�
   comprobado dentro del contenedor; health, docs y openapi 200. Imagen previa etiquetada
   ti-support-rag-backend:rollback-a414431ee034. Sin consultas Groq/Supabase en la verificación.
 
-### Actualización 25-10-2026: paso 8 completado (sin commit)
+### Actualización 25-10-2026: paso 8 completado (publicado en 85b8bb2)
 
 Prevalece sobre los pendientes del paso 8. Publicación previa confirmada con Git:
 HEAD 7be846f sincronizado con origin/codex/backend-infra-ricoh-local.
@@ -60,7 +68,7 @@ HEAD 7be846f sincronizado con origin/codex/backend-infra-ricoh-local.
   Seis sin marcadores; HP y LibreOffice numeran el pie junto al título; SEG-BACKUP
   tiene marcadores fuera del rango numerado. Requiere cambio de extractor/perfil,
   no hecho. Evidencia local en category_pdf_discovery/20261024/extraction_probe_20261025/.
-- Cambios sin commit/push. Siguiente según solicitud: paso 9 o soporte de candidatos.
+- Publicado en 85b8bb2. Siguiente según solicitud: paso 9 o soporte de candidatos.
 
 ### Publicación solicitada de la revisión del extractor
 
