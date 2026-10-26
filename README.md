@@ -4,7 +4,8 @@ Mesa de ayuda TI con clasificación, OCR, búsqueda documental en Supabase,
 generación con Groq, API Django y notebook de demostración.
 
 **Para el profesor, empezar por el [notebook de Parcial 2](backend/notebooks/parcial2.ipynb).**
-Presenta el sistema, sus componentes y la evaluación. Se entrega junto al
+Incluye las ejecuciones guardadas para revisar los resultados sin configurar secretos.
+Para consultas nuevas, seguir la preparación indicada en el notebook. Se entrega junto al
 [ZIP de recursos](backend/notebooks/parcial2_recursos.zip).
 También se pueden revisar directamente el
 [PDF de resultados](backend/docs/parcial2/ejecuciones/20261025T183222Z/resultados/comparacion_hibrida_desarrollo.pdf)
@@ -26,11 +27,11 @@ sudo apt-get update
 sudo apt-get install -y tesseract-ocr tesseract-ocr-spa fonts-dejavu-core
 ```
 
-Clonar la rama que contiene la entrega. Si ya tienes el repositorio, omite estos
+Clonar `main`, que contiene la entrega. Si ya tienes el repositorio, omite estos
 comandos y abre una terminal en su raíz:
 
 ```bash
-git clone --branch codex/backend-infra-ricoh-local https://github.com/dvdm12/TI-support-RAG.git
+git clone --branch main https://github.com/dvdm12/TI-support-RAG.git
 cd TI-support-RAG
 ```
 
@@ -287,7 +288,7 @@ exitosa del software no equivale a una aprobación completa del laboratorio.
 
 ## Colab y documentación
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dvdm12/TI-support-RAG/blob/codex/backend-infra-ricoh-local/backend/notebooks/parcial2.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dvdm12/TI-support-RAG/blob/main/backend/notebooks/parcial2.ipynb)
 
 En Colab se usa el mismo notebook, con los cinco secretos Groq/Supabase propios
 en **Secrets**. El ZIP se descarga y verifica automáticamente, con subida manual

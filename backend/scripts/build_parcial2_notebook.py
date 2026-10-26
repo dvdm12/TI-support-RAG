@@ -72,7 +72,15 @@ def build_notebook(raw=None):
     # Parcial 2 · TI-support-RAG
     **Mesa de ayuda TI con clasificación, OCR y respuestas documentadas.**
 
-    Equipo: **pendiente de registrar los nombres de los integrantes**.
+    Equipo: **David Mantilla Aviles** y **Juan Camilo Velez Castaño**.
+
+    **Docente:** Robert Erick Garcia Rey
+
+    **Asignatura:** Inteligencia Artificial Generativa y Sistemas Inteligentes
+
+    **Institución:** Institución Universitaria EAM
+
+    **Periodo académico:** 2026-II
 
     El usuario describe un incidente; el sistema clasifica la solicitud, aplica reglas
     locales, recupera evidencia y responde con citas o reconoce sus límites. Los documentos
@@ -87,7 +95,8 @@ def build_notebook(raw=None):
     **Estado:** reproducción de desarrollo disponible; revisión humana y reserva
     pendientes. Un contrato válido o una métrica alta no demuestra fidelidad.
 
-    **Para el profesor:** usar **Entorno de ejecución → Ejecutar todo**. Los recursos
+    **Para el profesor:** completar primero la preparación de servicios y secretos
+    explicada abajo; después usar **Entorno de ejecución → Ejecutar todo**. Los recursos
     se descargan del repositorio público y se verifican; si no están disponibles,
     se puede subir el ZIP adjunto. Al final aparece **Panel del profesor**, con
     consulta real con Groq y recuperación en Supabase activadas desde el inicio.
@@ -110,12 +119,56 @@ def build_notebook(raw=None):
     desde la raíz, o `../.env` desde `backend/notebooks`, sin copiarlo al ZIP.
     Para otra ubicación, definir `PARCIAL2_ENV_FILE` antes de ejecutar las celdas.
     Las variables ya presentes en el entorno tienen prioridad.
-    **En Colab:** registrar `GROQ_API_KEY`, `SUPABASE_URL`,
-    `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_EMAIL` y `SUPABASE_PASSWORD` en Secrets.
-    El proyecto Supabase necesita usuario Auth, la migración SQL incluida y los
-    70 fragmentos cargados para ese usuario. Si faltan, preparar SQL/usuario y activar
-    `ALLOW_SUPABASE_UPSERT=True` solo para la primera carga del índice académico.
-    La carga está desactivada por defecto; una conexión fallida no cambia a local.
+    ### Primer uso del profesor en Colab
+    El profesor utiliza **sus propias credenciales**. No necesita levantar la API
+    Django ni Docker: este notebook invoca directamente los componentes Python.
+    Configurar los secretos es necesario, pero **un proyecto Supabase nuevo también
+    necesita el esquema, un usuario y la primera carga del corpus**.
+
+    1. **Preparar Supabase.** En un proyecto de práctica propio, ejecutar en SQL Editor
+       `infra/supabase/migrations/20261014_documentary_rag.sql`, disponible en el
+       repositorio y en `parcial2_recursos.zip`. Crear un usuario en **Authentication →
+       Users** y comprobar que puede iniciar sesión con correo y contraseña; si se
+       exige confirmación de correo, completarla antes de ejecutar el notebook.
+    2. **Registrar secretos.** Abrir el panel **Secrets** (icono de llave) de Colab,
+       añadir los cinco nombres exactos de la tabla y habilitar el acceso de este
+       notebook a cada secreto. No pegar sus valores en celdas ni salidas.
+
+       | Nombre del secreto | Valor que configura el profesor |
+       |---|---|
+       | `GROQ_API_KEY` | Clave propia de Groq con cuota disponible |
+       | `SUPABASE_URL` | URL de su proyecto Supabase |
+       | `SUPABASE_PUBLISHABLE_KEY` | Clave publicable de ese proyecto; nunca `service_role` |
+       | `SUPABASE_EMAIL` | Correo del usuario creado en Supabase Auth |
+       | `SUPABASE_PASSWORD` | Contraseña de ese usuario Auth; no la contraseña de la base |
+
+    3. **Habilitar la primera carga si el usuario aún no tiene el corpus.** En la
+       siguiente celda, cambiar `ALLOW_SUPABASE_UPSERT = False` a **`True` antes de
+       ejecutar todo**. El punto 9 cargará los 70 fragmentos académicos para ese
+       usuario. Esta opción no crea el esquema SQL ni el usuario Auth. Si ya tiene
+       el corpus, mantenerla en `False`. Después de una carga correcta, volver a
+       dejarla en `False` para futuras ejecuciones: los datos permanecen en Supabase.
+    4. **Ejecutar todo.** Mantener `MODE='consulta_real'` y `USE_SUPABASE=True`.
+       En Colab se instalan automáticamente las dependencias y Tesseract. Los
+       recursos se descargan y verifican; si se solicita, subir el ZIP adjunto.
+       Conservar la conexión a Internet para descargar el modelo y usar los servicios.
+    5. **Probar una pregunta propia.** Al finalizar, editar `PREGUNTA` en el
+       **Panel del profesor** y volver a ejecutar esa celda. El punto 10 y el panel
+       realizan consultas independientes y ambos consumen cuota Groq. Descargar
+       el ZIP de resultados antes de cerrar la sesión.
+
+    **Acceso al corpus:** RLS restringe las filas al usuario autenticado. Las
+    credenciales propias del profesor no dan acceso a los fragmentos del equipo:
+    la primera carga crea su copia del corpus académico. Una conexión fallida no
+    cambia automáticamente a almacenamiento local.
+
+    **Si una etapa falla:** revisar el secreto indicado y su permiso en Colab,
+    el inicio de sesión Auth, el SQL ejecutado, la carga del corpus y la cuota Groq.
+    Corregir la causa y repetir desde la celda fallida, en orden.
+
+    **Qué está comprobado:** el recorrido se ejecutó en local con Groq y Supabase
+    reales. La ejecución completa en una sesión nueva de Colab sigue pendiente de
+    validación; esa comprobación se distingue de la ejecución local.
 
     Para reproducir sin servicios, elegir explícitamente `MODE='evidencia_guardada'`
     y `USE_SUPABASE=False`; en el panel elegir `Caso guardado` y desactivar
@@ -133,7 +186,7 @@ def build_notebook(raw=None):
     INSTALL_DEPENDENCIES = IN_COLAB
     # Solo para un proyecto de práctica preparado; nunca se carga por defecto.
     ALLOW_SUPABASE_UPSERT = False
-    TEAM = []  # Registrar nombres reales; no inventarlos.
+    TEAM = ['David Mantilla Aviles', 'Juan Camilo Velez Castaño']
     QUESTION = 'El portal de documentos devuelve error 403. ¿Eso demuestra que mi cuenta está suspendida? ¿Qué debe revisar soporte?'
     IMAGE_PATH = None  # Ruta de una imagen propia; la modalidad se muestra en el punto 4.
     # Capturar el .env local antes de cambiar a la carpeta temporal del ZIP.
@@ -143,7 +196,7 @@ def build_notebook(raw=None):
         env_candidates = [Path.cwd() / '.env', Path.cwd() / 'backend/.env', Path.cwd().parent / '.env']
         LOCAL_ENV_FILE = next((p.resolve() for p in env_candidates if p.is_file()), None)
     RESOURCE_ZIP = Path(os.environ.get('PARCIAL2_RESOURCES', 'parcial2_recursos.zip')).resolve()
-    RESOURCE_URL = 'https://raw.githubusercontent.com/dvdm12/TI-support-RAG/refs/heads/codex/backend-infra-ricoh-local/backend/notebooks/parcial2_recursos.zip'
+    RESOURCE_URL = 'https://raw.githubusercontent.com/dvdm12/TI-support-RAG/refs/heads/main/backend/notebooks/parcial2_recursos.zip'
     WORKSPACE = Path(os.environ.get('PARCIAL2_WORKDIR', '/content/parcial2' if IN_COLAB else tempfile.mkdtemp(prefix='parcial2-'))).resolve()
     # Resultados permanentes separados de los recursos extraídos del ZIP.
     def results_root(start, in_colab):
@@ -451,6 +504,53 @@ def build_notebook(raw=None):
     exacta guardada. La copia local incluye `records.json`, `vectors.npy`, `config.json`;
     la huella de construcción comprueba su asociación.
 
+    ### Cómo reproduce el profesor el mismo corpus en su Supabase
+    **El ZIP ya contiene los documentos y sus embeddings calculados.** No hay que
+    buscar los manuales ni vectorizar de nuevo todo el corpus para hacer la primera
+    carga. `parcial2_recursos.zip` incluye:
+
+    | Recurso | Contenido y función |
+    |---|---|
+    | `backend/data/corpus/v2/` | Siete PDF académicos y su manifiesto: hardware, software, redes, cuentas, seguridad, acceso y otros |
+    | `backend/data/indexes/sections/records.json` | 70 fragmentos con texto, categoría y procedencia |
+    | `backend/data/indexes/sections/vectors.npy` | Los 70 embeddings guardados, de 384 dimensiones cada uno |
+    | `backend/data/indexes/sections/config.json` | Identidad del corpus, modelo, revisión exacta, normalización y fragmentación |
+    | `infra/supabase/migrations/20261014_documentary_rag.sql` | Tabla vectorial, permisos por propietario y función de búsqueda |
+
+    **Primera carga, paso a paso:**
+
+    1. Preparar el proyecto propio con el SQL, el usuario Auth y los cinco secretos
+       descritos en la preparación inicial.
+    2. Antes de ejecutar todo, mantener `MODE='consulta_real'`, `USE_SUPABASE=True`
+       y cambiar **`ALLOW_SUPABASE_UPSERT=True`** en la celda de configuración.
+    3. El punto 8 restaura los registros y vectores del ZIP. Carga la revisión fijada
+       de `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, reproduce
+       la fragmentación con su tokenizador y verifica muestras de los vectores.
+       **La carga utiliza los vectores guardados; no recalcula todos los embeddings
+       documentales.** La comprobación por muestras no equivale a recalcularlos todos.
+    4. La siguiente celda copia los 70 fragmentos a `clase08_fragmentos` en el
+       Supabase del profesor: conserva texto, categoría, metadatos, configuración,
+       `chunk_id`, `corpus_id` y vector; asigna **`owner_id` al usuario Auth del profesor**.
+       El upsert usa la clave `(owner_id, corpus_id, chunk_id)`: repetir la misma
+       carga actualiza esas filas sin duplicarlas.
+    5. El notebook comprueba los 70 identificadores visibles, sus textos y una
+       búsqueda RPC. En el panel final comprueba además persistencia desde un
+       segundo cliente del mismo usuario, sin volver a cargar el corpus.
+    6. Tras completar la carga, dejar `ALLOW_SUPABASE_UPSERT=False` para futuras
+       ejecuciones. Las filas permanecen en Supabase. Mantener también
+       `CARGAR_CORPUS_PROPIO=False` en el panel si el corpus ya está disponible.
+
+    **Qué permanece igual:** fuentes, fragmentos, categorías, embeddings y
+    configuración del índice. **Qué cambia:** proyecto de Supabase y propietario.
+    RLS impide que las credenciales propias permitan leer las filas del equipo;
+    el profesor consulta su copia. Esta operación no borra otros corpus ni restaura
+    usuarios Auth: no es un respaldo completo de la base.
+
+    Cada **pregunta nueva** sí genera un embedding con el mismo modelo y revisión
+    para buscar sobre esos vectores. **Groq no genera estos embeddings**: interviene
+    en la clasificación y la respuesta. Aunque el corpus sea idéntico, una nueva
+    generación puede variar; restaurar el índice no garantiza respuestas idénticas.
+
     Supabase usa `clase08_fragmentos` y RPC `clase08_buscar_fragmentos`: los nombres
     internos conservan compatibilidad aunque la entrega sea Parcial 2. RLS delimita
     `owner_id`; autenticación con usuario y clave publicable, nunca `service_role`.
@@ -720,7 +820,11 @@ def build_notebook(raw=None):
     Para el recorrido remoto de Clase 08, `USAR_SUPABASE` ya está habilitado.
     Crear el esquema SQL incluido en un proyecto propio y registrar los cuatro
     secretos Supabase además de Groq. Si ese usuario todavía no tiene el corpus, habilitar
-    `CARGAR_CORPUS_PROPIO` para cargar únicamente su índice académico. Se verifican
+    `CARGAR_CORPUS_PROPIO` para cargar únicamente su índice académico desde este panel.
+    Para la primera ejecución de **todo el notebook**, usar antes
+    `ALLOW_SUPABASE_UPSERT=True` en la celda de configuración: el punto 9 ocurre
+    antes que este panel. Tras cargar, desactivar ambas opciones de carga.
+    Se verifican
     inventario y persistencia desde un segundo cliente **sin segunda carga**.
     No se comparten credenciales ni se concede acceso al corpus del equipo por nombre.
     La carga es una operación explícita sobre el proyecto del profesor.
@@ -786,7 +890,8 @@ def build_notebook(raw=None):
     ### Lista de cierre del Parcial 2
     - [x] Doce puntos integrados; corpus, contratos, OCR, recuperación y trazas disponibles.
     - [x] Reproducción de evidencias separada de consultas nuevas y métricas recalculadas.
-    - [ ] Registrar nombres del equipo y completar revisión humana T2/T3.
+    - [x] Nombres del equipo registrados.
+    - [ ] Completar revisión humana T2/T3.
     - [ ] Aprobar reserva, decidir y congelar antes de una única evaluación T4-T6.
     - [ ] Incorporar resultados finales, decisión, bitácora y presentación PDF T8/T10/T11.
     - [ ] Ejecutar este archivo en una sesión nueva de Colab; verificar conexión autorizada

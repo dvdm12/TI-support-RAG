@@ -1,8 +1,8 @@
 # Parcial 2 - Guía del profesor
 
-[Abrir en Colab](https://colab.research.google.com/github/dvdm12/TI-support-RAG/blob/codex/backend-infra-ricoh-local/backend/notebooks/parcial2.ipynb)
+[Abrir en Colab](https://colab.research.google.com/github/dvdm12/TI-support-RAG/blob/main/backend/notebooks/parcial2.ipynb)
 
-El enlace abre la entrega de `codex/backend-infra-ricoh-local`.
+El enlace abre el notebook de entrega de `main`.
 Alternativa: subir `parcial2.ipynb` a Colab y
 `parcial2_recursos.zip` a su explorador de archivos cuando se solicite.
 
