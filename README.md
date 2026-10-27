@@ -250,7 +250,7 @@ docker compose -f ../infra/compose.yaml ps
 ```
 
 Swagger usa la misma dirección. Ejecutar el notebook en el entorno local del
-paso 5; la imagen Docker contiene la API, no Jupyter ni el ejecutable Tesseract.
+paso 5; la imagen Docker contiene la API y Tesseract con español e inglés, sin Jupyter.
 Usar una sola API en el puerto 8000. Para pasar desde `runserver`, detenerlo con
 **Ctrl+C** antes de iniciar Docker.
 

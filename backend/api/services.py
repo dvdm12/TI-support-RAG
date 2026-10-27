@@ -30,16 +30,68 @@ def retriever(question):
     return Retriever(SupabaseRepository.connect(),embedder,corpus,config)
 
 
-def run_query(question, request_id):
+def query_content(question, ocr_text=None):
+    if ocr_text is None:
+        return question
+    from src.pipeline import prepare_case_input
+    content, _ = prepare_case_input({'input': question}, {
+        'extraction_valid': True, 'extracted_text': ocr_text,
+    })
+    return content
+
+
+def run_query(question, request_id, *, ocr_text=None):
     from src.config import PROMPT_PATH
     from src.groq_client import build_payload
     from src.token_budget import enforce_input_budget
-    enforce_input_budget(build_payload(PROMPT_PATH.read_text(),question))
+    content = query_content(question, ocr_text)
+    enforce_input_budget(build_payload(PROMPT_PATH.read_text(),content))
     if not _work_slot.acquire(blocking=False):
         raise ServiceBusy()
     try:
         from src.rag.pipeline import run_rag_case
-        return run_rag_case({'id':request_id,'tipo':'api','input':question},retriever(question),mode='groq')
+        return run_rag_case({'id':request_id,'tipo':'api','input':content},retriever(content),mode='groq')
+    finally:
+        _work_slot.release()
+
+
+def ocr_budget(question, text):
+    from src.config import PROMPT_PATH
+    from src.groq_client import build_payload
+    from src.token_budget import input_budget, INPUT_TOKEN_LIMIT
+    content = query_content(question, text)
+    budget = input_budget(build_payload(PROMPT_PATH.read_text(), content))
+    result = {'admisible': False, 'tokens_entrada': budget['total_tokens'],
+              'limite_entrada': INPUT_TOKEN_LIMIT, 'tokens_busqueda': None,
+              'limite_busqueda': None, 'motivo': None}
+    if len(text) > 8000 or budget['total_tokens'] > INPUT_TOKEN_LIMIT:
+        result['motivo'] = 'Reduce el texto OCR o recorta la captura antes de consultar.'
+        return result
+    embedder, _, config = resources()
+    result['tokens_busqueda'] = embedder.count_tokens(content)
+    result['limite_busqueda'] = config.max_seq_length
+    result['admisible'] = result['tokens_busqueda'] <= config.max_seq_length
+    if not result['admisible']:
+        result['motivo'] = 'Reduce la pregunta y el texto OCR para el modelo de búsqueda.'
+    return result
+
+
+def extract_ocr(upload, question=''):
+    from .uploads import temporary_ocr_image, UploadError
+    from src.multimodal import prepare_multimodal_input
+    if not _work_slot.acquire(blocking=False):
+        raise ServiceBusy()
+    try:
+        with temporary_ocr_image(upload) as path:
+            multimodal = prepare_multimodal_input(question, path, ocr_engine='tesseract')
+            if not multimodal['extraction_valid']:
+                raise UploadError('ocr_no_text', 'No se encontró texto legible. Prueba con una captura más nítida.', 422)
+            extraction = multimodal['extraction']
+            text = multimodal['extracted_text']
+            return {'texto_ocr': text, 'motor': extraction['engine'],
+                    'idiomas': extraction['language'], 'confianza_ocr': extraction['ocr_confidence'],
+                    'cantidad_palabras': extraction['word_count'],
+                    'presupuesto': ocr_budget(question, text)}
     finally:
         _work_slot.release()
 

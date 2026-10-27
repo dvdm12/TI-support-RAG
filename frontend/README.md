@@ -46,7 +46,9 @@ en Internet. No se modifica ni se abre CORS en Django.
 - Cada envío es una consulta independiente. El backend no recibe el historial
   anterior; incluye el contexto necesario en cada nueva pregunta.
 - El indicador de API solo comprueba el proceso Django, no Groq/Supabase.
-- La API actual admite texto: todavía no hay carga de imágenes ni endpoint OCR.
+- El chat actual admite texto. El backend ofrece `ocr/extract` para imágenes y
+  `texto_ocr` opcional en `rag/query`; el selector de adjuntos queda para la
+  siguiente integración. Ver [contrato OCR](../backend/docs/api/API.md#extracción-ocr-y-revisión-previa).
 
 ## Estructura
 

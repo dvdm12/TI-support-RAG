@@ -1,0 +1,66 @@
+{
+  "schema": "synthetic-ocr-validation-v1",
+  "plan_sha256": "7881729332d02fd94b81be7d0ef38402533e9ba9ae5a322ae0aff53de3b208de",
+  "image": "sha256:b12ee1f25cf67c802648098e4c4f7402606b789fba50cdef608223d15b297f60",
+  "synthetic_files": 35,
+  "checks": 64,
+  "checks_passed": 64,
+  "quality_cases": 20,
+  "quality_passed": 17,
+  "regular_quality_cases": 15,
+  "regular_quality_passed": 15,
+  "challenge_quality_cases": 5,
+  "challenge_quality_passed": 2,
+  "quality_failures": [
+    "I11",
+    "I12",
+    "I13"
+  ],
+  "automated_suites": [
+    {
+      "command": "HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m unittest discover -s test -t . -q",
+      "count": 506,
+      "passed": 506,
+      "seconds": 5.26,
+      "scope": "backend/test",
+      "exit_code": 0
+    },
+    {
+      "command": "../.venv/bin/python manage.py test api --verbosity 1",
+      "count": 54,
+      "passed": 54,
+      "seconds": 1.039,
+      "scope": "backend/api",
+      "exit_code": 0
+    },
+    {
+      "command": "npm test",
+      "count": 6,
+      "passed": 6,
+      "scope": "frontend",
+      "exit_code": 0
+    }
+  ],
+  "provider_queries": 2,
+  "remaining_temporaries": 0,
+  "concurrent_statuses": [
+    503,
+    503,
+    200,
+    503
+  ],
+  "quality_rule": {
+    "cer_max": 0.08,
+    "anchors": "Todos los códigos y términos obligatorios deben aparecer sin alterar.",
+    "challenge": "Los casos difíciles pueden responder 422; eso no acredita lectura correcta."
+  },
+  "limitations": [
+    "Muestra sintética dirigida; no estima exactitud de producción ni sustituye una reserva.",
+    "No incluye escritura a mano, fotos reales, cámaras móviles ni idiomas adicionales.",
+    "Los errores de lectura de giro y EXIF llegan con presupuesto admisible: este mide longitud, no calidad.",
+    "Concurrencia probada con cuatro solicitudes y un contenedor; no es una prueba de carga sostenida.",
+    "Timeout y carga interrumpida se verificaron con simulaciones unitarias, sin agotar procesos reales.",
+    "La interfaz React actual no tiene selector de imagen ni invoca OCR; pruebas de integración por HTTP.",
+    "Una única consulta con instrucciones maliciosas no constituye una evaluación general de seguridad."
+  ]
+}

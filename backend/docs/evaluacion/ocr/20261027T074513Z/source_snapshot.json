@@ -1,0 +1,15 @@
+{
+  "backend/api/controllers.py": "05cb171baa4df827cefcaa88cfb519276de7ac732ceb9b0c570a0944071a0f6b",
+  "backend/api/test_ocr.py": "95659571d5cef6339edccb5514a5a72c2a50b29b06277d6fc7c022ca5e9b6667",
+  "backend/api/tests.py": "c3432ff97dbbf05bc1c5b4872e89e022a096fb901a60c15f6146e213e06e213d",
+  "backend/api/documentation.py": "887e1ae714ba4df4392c75ea2612e0d7f197e784101604aa0026394b210590aa",
+  "backend/api/uploads.py": "5866a206a03d9b794268c515d115a0baa40e0badfe954d95b76ec6dae287bac1",
+  "backend/api/urls.py": "ce69bbf5a02a638e7ffcb91846632c1ab81665d04467ce9b7827aa35f5d3530e",
+  "backend/api/services.py": "d4633cbbef338a15b89b739253c6b6ce1e1cf111dd1013d1212f82124feff75b",
+  "backend/api/contracts.py": "7b25119300f5f925cf3910a54f079d39600d1a548b12396b4c877da22f1d439b",
+  "backend/api/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "backend/api/apps.py": "563d3d01135f92a1fabd21fffdbf600a88f0b8d6db7e3cd5eeb5ad885447702f",
+  "backend/Dockerfile": "372e41921c8ddd71c6dfb1040b6582768283e07f26aa4cebf01586ab1b645668",
+  "backend/src/ocr/tesseract_strategy.py": "5508f083bad7f8089cd729b6d13307587770ec07ddf1d4e9fba4854348f45a65",
+  "backend/ti_api/settings.py": "7407fc27fe5829f729e044f04eb26087207c9acb4795c36d69ddf6975580cb91"
+}

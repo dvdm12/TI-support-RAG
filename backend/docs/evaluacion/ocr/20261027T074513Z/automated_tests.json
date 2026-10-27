@@ -1,0 +1,30 @@
+{
+  "suites": [
+    {
+      "command": "HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 ../.venv/bin/python -m unittest discover -s test -t . -q",
+      "count": 506,
+      "passed": 506,
+      "seconds": 5.26,
+      "scope": "backend/test",
+      "exit_code": 0
+    },
+    {
+      "command": "../.venv/bin/python manage.py test api --verbosity 1",
+      "count": 54,
+      "passed": 54,
+      "seconds": 1.039,
+      "scope": "backend/api",
+      "exit_code": 0
+    },
+    {
+      "command": "npm test",
+      "count": 6,
+      "passed": 6,
+      "scope": "frontend",
+      "exit_code": 0
+    }
+  ],
+  "total": 566,
+  "passed": 566,
+  "notes": "Contadores observados en esta ejecución. Errores/quota en unittest son escenarios simulados, no fallos de la ejecución."
+}

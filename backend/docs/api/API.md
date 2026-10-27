@@ -62,9 +62,10 @@ espera según las llamadas RAG, que pueden esperar por cuota del proveedor.
 | GET | `/api/v1/categories/` | Bearer | Siete categorías de soporte |
 | POST | `/api/v1/rag/search/` | Bearer | Recuperar pasajes en Supabase, sin llamar a Groq |
 | POST | `/api/v1/rag/query/` | Bearer | Clasificación, recuperación, respuesta y validaciones del RAG |
+| POST | `/api/v1/ocr/extract/` | Bearer | Extracción de una imagen y comprobación de presupuesto, sin Groq |
 
 Las rutas llevan barra final. No hay redirecciones automáticas de un POST sin
-barra. Se requiere `Content-Type: application/json` para los POST.
+barra. Los POST RAG requieren `application/json`; OCR usa `multipart/form-data`.
 
 Consulta RAG:
 
@@ -79,8 +80,63 @@ Búsqueda, con categoría opcional como preferencia de ranking:
 ```
 
 No se aceptan campos para cambiar usuario, índice, proveedor o modo mock.
-Esta primera versión recibe texto; el OCR del pipeline sigue disponible por
-CLI, pero todavía no hay un endpoint de carga de imágenes.
+`rag/query` recibe texto y admite `texto_ocr` opcional, revisado por el usuario.
+La carga de imágenes se realiza por separado en `ocr/extract`, con el mismo Bearer.
+El frontend todavía no incorpora un selector de adjuntos.
+
+## Extracción OCR y revisión previa
+
+`POST /api/v1/ocr/extract/` recibe `multipart/form-data` con un único archivo
+`imagen` y el campo `pregunta` opcional. Swagger ofrece un selector de archivo.
+No acepta rutas locales, URL, motores elegidos por el cliente ni campos adicionales.
+
+Se admiten imágenes estáticas PNG, JPEG y WebP: máximo **5 MiB, 4 megapíxeles y
+4096 píxeles por lado**. Se verifican el formato real, MIME, extensión y píxeles
+decodificables. Un upload handler limita los bytes recibidos, incluso si el tamaño
+declarado no coincide. Los campos del formulario conservan el límite de 16 KiB;
+la petición total admite la imagen más ese margen.
+
+El archivo tiene un nombre temporal generado por el servidor y se elimina tanto
+al terminar como ante errores. No se guarda en el corpus ni en Supabase, y no se
+devuelven rutas del servidor. Tesseract usa `spa+eng` y un timeout de 30 segundos
+por llamada al ejecutable (texto y bloques). Comparte el límite de una operación
+en curso por proceso con el RAG; si está ocupado devuelve 503 y `Retry-After: 2`.
+
+La respuesta HTTP 200 contiene `request_id`, `texto_ocr`, `motor`, `idiomas`,
+`confianza_ocr` (0-100), `cantidad_palabras` y `presupuesto`. La confianza describe
+reconocimiento de texto, no certeza del diagnóstico.
+
+El presupuesto incluye `admisible`, `tokens_entrada`, `limite_entrada`,
+`tokens_busqueda`, `limite_busqueda` y `motivo`. Cuenta pregunta, OCR y etiquetas;
+para el clasificador incluye también prompt, esquema y reserva. Se mantienen
+1000 tokens de entrada y el límite activo del embedder (actualmente 128). Si la
+entrada ya supera el presupuesto del generador o 8000 caracteres OCR, no se carga
+el embedder y sus campos quedan en null.
+
+Una extracción demasiado larga se devuelve **sin truncarla**, con
+`presupuesto.admisible: false`, para permitir revisión y reducción. El endpoint
+no llama a Groq; la comprobación usa el índice y el embedder locales, sin RPC de
+Supabase. Tras revisar, enviar a `rag/query`:
+
+```json
+{"pregunta": "¿Qué indica este mensaje?", "texto_ocr": "Error de red"}
+```
+
+La consulta **vuelve a validar pregunta + OCR antes de llamar a proveedores**;
+exceder el presupuesto devuelve 422. `texto_ocr` admite 8000 caracteres y no puede
+ser vacío si se incluye. El JSON total sigue limitado a 16 KiB. Las consultas
+con solo `pregunta` mantienen su comportamiento; `rag/search` rechaza `texto_ocr`
+en vez de ignorarlo silenciosamente.
+
+El OCR revisado es entrada del usuario, no una fuente documental. En este flujo
+de dos pasos, motor y confianza quedan en la respuesta de extracción, separados
+de la traza RAG; un texto editado no conserva automáticamente la confianza original.
+
+Errores: 400 (`invalid_input`, `invalid_image`); 413 (`body_too_large`,
+`image_too_large`); 415 (`unsupported_media_type`, `unsupported_image`);
+422 (`ocr_no_text`, `ocr_failed`); 503 (`ocr_unavailable`, `service_busy`,
+`service_unavailable`). No incluyen excepciones internas, credenciales ni rutas
+temporales. Una imagen sin texto debe dar 422. El estado health no verifica OCR.
 
 ## Cliente de ejemplo
 

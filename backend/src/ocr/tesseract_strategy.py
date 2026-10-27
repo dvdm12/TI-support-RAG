@@ -31,6 +31,7 @@ class TesseractStrategy(OCRStrategy):
         language: str = DEFAULT_LANGUAGE,
         psm: int = DEFAULT_PSM,
         scale: float = DEFAULT_SCALE,
+        timeout: float = 30.0,
     ) -> None:
         if not isinstance(language, str) or not language.strip():
             raise OCRConfigurationError(
@@ -47,9 +48,13 @@ class TesseractStrategy(OCRStrategy):
                 "scale debe ser mayor que 0."
             )
 
+        if not math.isfinite(timeout) or timeout <= 0:
+            raise OCRConfigurationError("timeout debe ser un número finito mayor que 0.")
+
         self.language = language
         self.psm = psm
         self.scale = scale
+        self.timeout = timeout
 
     @staticmethod
     def _get_tesseract_binary() -> str:
@@ -92,8 +97,9 @@ class TesseractStrategy(OCRStrategy):
                 lang=self.language,
                 config=f"--psm {self.psm}",
                 output_type=pytesseract.Output.DICT,
+                timeout=self.timeout,
             )
-        except pytesseract.TesseractError as exc:
+        except (pytesseract.TesseractError, RuntimeError) as exc:
             raise OCRExtractionError(
                 f"Tesseract no pudo extraer los bloques: {exc}"
             ) from exc
@@ -176,6 +182,7 @@ class TesseractStrategy(OCRStrategy):
                     processed,
                     lang=self.language,
                     config=f"--psm {self.psm}",
+                    timeout=self.timeout,
                 )
 
                 blocks = self._extract_blocks(processed)
@@ -184,7 +191,7 @@ class TesseractStrategy(OCRStrategy):
             raise OCRExtractionError(
                 f"No se pudo abrir o procesar la imagen: {exc}"
             ) from exc
-        except pytesseract.TesseractError as exc:
+        except (pytesseract.TesseractError, RuntimeError) as exc:
             raise OCRExtractionError(
                 f"Tesseract no pudo procesar la imagen: {exc}"
             ) from exc

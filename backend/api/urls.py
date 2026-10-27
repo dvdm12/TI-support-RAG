@@ -1,5 +1,5 @@
 from django.urls import path
-from .controllers import HealthController,CategoriesController,SearchController,QueryController
+from .controllers import HealthController,CategoriesController,SearchController,QueryController,OCRExtractController
 from .documentation import schema, swagger, swagger_asset
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('categories/',CategoriesController.as_view(),name='categories'),
     path('rag/search/',SearchController.as_view(),name='rag-search'),
     path('rag/query/',QueryController.as_view(),name='rag-query'),
+    path('ocr/extract/',OCRExtractController.as_view(),name='ocr-extract'),
 ]

@@ -8,7 +8,8 @@ from typing import get_args
 from uuid import uuid4
 from django.conf import settings
 from django.http import JsonResponse
-from django.core.exceptions import RequestDataTooBig
+from django.http.multipartparser import MultiPartParserError
+from django.core.exceptions import RequestDataTooBig, TooManyFieldsSent, TooManyFilesSent
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -16,7 +17,9 @@ from pydantic import ValidationError
 from schemas.request_v1 import Categoria
 from src.token_budget import InputBudgetError
 from . import services
-from .contracts import QueryRequest, SearchRequest
+from .contracts import QueryRequest, SearchRequest, OCRExtractRequest
+from .uploads import BoundedImageUploadHandler, UploadError
+from src.ocr.exceptions import OCRDependencyError, OCRConfigurationError, OCRExtractionError
 
 logger = logging.getLogger('api')
 
@@ -47,6 +50,14 @@ class JsonController(View):
             response = error('service_busy','Hay otra solicitud en proceso. Reintenta después.',503,self.request_id)
             response['Retry-After'] = '2'
             return response
+        except UploadError as exc:
+            return error(exc.code, exc.message, exc.status, self.request_id)
+        except (TooManyFilesSent, TooManyFieldsSent, MultiPartParserError):
+            return error('invalid_input', 'Envía una imagen y únicamente el campo pregunta opcional.', 400, self.request_id)
+        except (OCRDependencyError, OCRConfigurationError):
+            return error('ocr_unavailable', 'El motor OCR no está disponible en el servidor.', 503, self.request_id)
+        except OCRExtractionError:
+            return error('ocr_failed', 'No se pudo leer la imagen. Prueba con una captura más clara.', 422, self.request_id)
         except RequestDataTooBig:
             return error('body_too_large','La petición supera 16 KiB.',413,self.request_id)
         except Exception as exc:
@@ -108,7 +119,8 @@ class QueryController(JsonController):
         data,failure = self.body(request,QueryRequest)
         if failure is not None:
             return failure
-        result = services.run_query(data.pregunta,self.request_id)
+        options = {'ocr_text': data.texto_ocr} if data.texto_ocr is not None else {}
+        result = services.run_query(data.pregunta,self.request_id,**options)
         if result['state'] in {'ERROR_TECNICO','ERROR_FORMATO'}:
             if 'HTTP 429' in (result.get('execution_error') or ''):
                 response = error('provider_rate_limited','Groq no tiene cuota disponible. Reintenta después.',429,self.request_id)
@@ -131,6 +143,37 @@ class QueryController(JsonController):
                              'fuentes':sources,'latencia_segundos':result['latency_seconds'],
                              'tiempos_segundos':result['rag'].get('timings',{})},
                             json_dumps_params={'ensure_ascii':False})
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class OCRExtractController(JsonController):
+    http_method_names = ['post', 'options']
+
+    def post(self, request):
+        if request.content_type != 'multipart/form-data':
+            return error('unsupported_media_type', 'Envía multipart/form-data con una imagen.', 415, self.request_id)
+        try:
+            length = int(request.META.get('CONTENT_LENGTH') or 0)
+            if length < 0:
+                raise ValueError
+        except ValueError:
+            return error('invalid_input', 'Longitud de petición inválida.', 400, self.request_id)
+        if length > settings.OCR_MAX_UPLOAD_BYTES + settings.DATA_UPLOAD_MAX_MEMORY_SIZE:
+            return error('body_too_large', 'La petición de imagen supera el tamaño permitido.', 413, self.request_id)
+        handler = BoundedImageUploadHandler(request)
+        request.upload_handlers = [handler]
+        fields, files = request.POST, request.FILES
+        if handler.error:
+            raise handler.error
+        if (set(fields) - {'pregunta'} or any(len(fields.getlist(key)) != 1 for key in fields)
+                or set(files) != {'imagen'} or len(files.getlist('imagen')) != 1):
+            return error('invalid_input', 'Envía una imagen y únicamente el campo pregunta opcional.', 400, self.request_id)
+        try:
+            data = OCRExtractRequest.model_validate(fields.dict())
+        except ValidationError:
+            return error('invalid_input', 'La pregunta no cumple el contrato.', 400, self.request_id)
+        result = services.extract_ocr(files['imagen'], data.pregunta)
+        return JsonResponse({'request_id': self.request_id, **result}, json_dumps_params={'ensure_ascii': False})
 
 
 def not_found(request,exception):

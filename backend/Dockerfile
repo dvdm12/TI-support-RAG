@@ -34,6 +34,11 @@ from transformers import AutoConfig, AutoModel, AutoTokenizer; \
 import transformers.models.bert.modeling_bert, transformers.models.bert.configuration_bert"
 
 FROM ${PYTHON_IMAGE} AS runtime
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-spa tesseract-ocr-eng \
+    && rm -rf /var/lib/apt/lists/* \
+    && tesseract --list-langs | grep -qx spa \
+    && tesseract --list-langs | grep -qx eng
 ENV PATH="/opt/venv/bin:${PATH}" \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
