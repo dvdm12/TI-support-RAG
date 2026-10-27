@@ -1,0 +1,149 @@
+[
+  {
+    "id": "UI17",
+    "description": "El segundo cliente recibe feedback al intentar una operación concurrente",
+    "checks": {
+      "busyMessage": true,
+      "retryGuidance": true
+    },
+    "notes": "",
+    "finishedAt": "2026-10-27T05:23:03.426Z",
+    "observed": {
+      "badges": "",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "No pudimos completar la consulta\n\nEl asistente está atendiendo otra solicitud. Espera un momento y vuelve a intentarlo.\n\nReintenta después de 2 segundos.\nReferencia: 3487464a-40e3-4080-a93a-39929576ef11\nVolver a intentar",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "",
+      "loading": false,
+      "mainText": "No puedo conectar el Wi-Fi\nTI Support\nNo pudimos completar la consulta\n\nEl asistente está atendiendo otra solicitud. Espera un momento y vuelve a intentarlo.\n\nReintenta después de 2 segundos.\nReferencia: 3487464a-40e3-4080-a93a-39929576ef11\nVolver a intentar\nSoporte TI\nManuales\nTodas las áreas\nRedes\nHardware\nSoftware\nCuentas\nSeguridad\nAcceso\nOtros\nCada consulta es independiente. Incluye el contexto necesario.\nEnter ↵",
+      "messages": 2,
+      "missing": "",
+      "reply": "",
+      "sources": [],
+      "timingLabel": "",
+      "userMessages": [
+        "No puedo conectar el Wi-Fi"
+      ],
+      "viewport": {
+        "height": 720,
+        "width": 1280
+      }
+    },
+    "screenshot": "UI17.png"
+  },
+  {
+    "id": "UI18",
+    "description": "El cliente se recupera del estado ocupado mediante reintento",
+    "checks": {
+      "searchRecovered": true,
+      "noCurrentError": true
+    },
+    "notes": "",
+    "finishedAt": "2026-10-27T05:24:10.958Z",
+    "observed": {
+      "badges": "",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "",
+      "loading": false,
+      "mainText": "No puedo conectar el Wi-Fi\nTI Support\nNo pudimos completar la consulta\n\nEl asistente está atendiendo otra solicitud. Espera un momento y vuelve a intentarlo.\n\nReintenta después de 2 segundos.\nReferencia: 3487464a-40e3-4080-a93a-39929576ef11\nVolver a intentar\nNo puedo conectar el Wi-Fi\nTI Support\n\nEncontré estos pasajes en los manuales de soporte. Abre cada referencia para consultar su contenido.\n\nPASAJES RECUPERADOS\n3\nP1\nConectividad y comunicaciones\nRED-02 | Conexión Wi-Fi\nP2\nConectividad y comunicaciones\nRED-02 | Conexión Wi-Fi\nP3\nConectividad y comunicaciones\nRED-05 | Límites y cierre\nSoporte TI\nManuales\nTodas las áreas\nRedes\nHardware\nSoftware\nCuentas\nSeguridad\nAcceso\nOtros\nCada consulta es independiente. Incluye el contexto necesario.\nEnter ↵",
+      "messages": 4,
+      "missing": "",
+      "reply": "Encontré estos pasajes en los manuales de soporte. Abre cada referencia para consultar su contenido.",
+      "sources": [
+        "P1\nConectividad y comunicaciones\nRED-02 | Conexión Wi-Fi",
+        "P2\nConectividad y comunicaciones\nRED-02 | Conexión Wi-Fi",
+        "P3\nConectividad y comunicaciones\nRED-05 | Límites y cierre"
+      ],
+      "timingLabel": "",
+      "userMessages": [
+        "No puedo conectar el Wi-Fi",
+        "No puedo conectar el Wi-Fi"
+      ],
+      "viewport": {
+        "height": 720,
+        "width": 1280
+      }
+    },
+    "screenshot": "UI18.png"
+  },
+  {
+    "id": "UI19",
+    "description": "La recarga elimina el historial de la pestaña",
+    "checks": {
+      "noMessages": true,
+      "noHistory": true,
+      "oneEditor": true
+    },
+    "notes": "",
+    "finishedAt": "2026-10-27T05:24:11.108Z",
+    "observed": {
+      "badges": "",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "¿Qué necesitas resolver?",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "",
+      "loading": false,
+      "mainText": "¿Qué necesitas resolver?\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.\nEnter ↵\nProblemas de conexión\nMi equipo no responde\nRecuperar mi acceso\nDetectar un mensaje sospechoso",
+      "messages": 0,
+      "missing": "",
+      "reply": "",
+      "sources": [],
+      "timingLabel": "",
+      "userMessages": [],
+      "viewport": {
+        "height": 720,
+        "width": 1280
+      }
+    },
+    "screenshot": "UI19.png"
+  },
+  {
+    "id": "UI20",
+    "description": "Borrado del historial de pruebas desde configuración",
+    "checks": {
+      "noMessages": true,
+      "noHistory": true,
+      "dialogClosed": true
+    },
+    "notes": "Se borró exclusivamente el historial sintético del segundo cliente creado para esta prueba.",
+    "finishedAt": "2026-10-27T05:24:12.414Z",
+    "observed": {
+      "badges": "",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "¿Qué necesitas resolver?",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "",
+      "loading": false,
+      "mainText": "¿Qué necesitas resolver?\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.\nEnter ↵\nProblemas de conexión\nMi equipo no responde\nRecuperar mi acceso\nDetectar un mensaje sospechoso",
+      "messages": 0,
+      "missing": "",
+      "reply": "",
+      "sources": [],
+      "timingLabel": "",
+      "userMessages": [],
+      "viewport": {
+        "height": 720,
+        "width": 1280
+      }
+    },
+    "screenshot": "UI20.png"
+  }
+]

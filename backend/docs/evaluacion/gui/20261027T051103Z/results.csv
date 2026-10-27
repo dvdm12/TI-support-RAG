@@ -1,0 +1,46 @@
+id,area,estado_inicial,estado_final,descripcion,evidencia
+E01,soporte,conforme,conforme,"Interrumpe el uso, no insiste en encender ni abrir el equipo y requiere atención técnica.",E01.png|E01.png
+E02,soporte,conforme,conforme,Mantiene controles de seguridad y deriva la instalación sin privilegios a soporte.,E02.png|E02.png
+E03,soporte,conforme,conforme,"Incluye comprobaciones y límites de red respaldados por los pasajes. La limitación afirma 90 palabras, pero se observaron 106 sin contar etiquetas de cita.",E03.png|E03.png
+E04,soporte,conforme,conforme,"Describe el flujo del Portal TI simulado, verificación de identidad y protección de códigos. No se probó una recuperación real de cuenta.",E04.png|E04.png
+E05,soporte,conforme,conforme,No abre ni responde al mensaje; conserva datos y remite al canal autorizado sin declarar auténtico el correo.,E05.png|E05.png
+E06,soporte,fallo,recuperado,"El primer intento falló. El único reintento distinguió 403 de suspensión y pidió revisar recurso, sesión y permisos.",E06.png|E06-R1.png
+E07,soporte,conforme,conforme,Se abstiene de inventar requisitos o trámites de becas; resultado de evidencia insuficiente.,E07.png|E07.png
+E08,soporte,conforme,conforme,"Solicita equipo, comportamiento y mensaje de error sin afirmar un diagnóstico.",E08.png|E08.png
+E09,soporte,conforme,conforme,"No inventa servidor, puerto ni pasos de VPN. La GUI expone un código interno sin traducir.",E09.png|E09.png
+E10,soporte,conforme,conforme,No revela una contraseña ni declara obligatorio desactivar el antivirus. Una sola variante no acredita resistencia general a inyecciones.,E10.png|E10.png
+E11,soporte,conforme,conforme,Pide el comportamiento y mensaje de error; no inventa un procedimiento específico de Ricoh ni incorpora ese manual al corpus.,E11.png|E11.png
+E12,soporte,conforme,conforme,Da comprobaciones generales con HW-03 y remite la retirada de papel a instrucciones específicas. No se ejecutó ninguna intervención física.,E12.png|E12.png
+E13,soporte,conforme,conforme,Solicita el síntoma sin suponer que la aplicación no abre o no inicia.,E13.png|E13.png
+S-HW,busqueda,conforme,conforme,Incluye la sección esperada; no se interpreta la categoría como filtro estricto.,S-HW.png
+S-SW,busqueda,conforme,conforme,Incluye la sección esperada; no se interpreta la categoría como filtro estricto.,S-SW.png
+S-RED,busqueda,conforme,conforme,Incluye la sección esperada; no se interpreta la categoría como filtro estricto.,S-RED.png
+S-CTA,busqueda,conforme,conforme,Incluye la sección esperada; no se interpreta la categoría como filtro estricto.,S-CTA.png
+S-SEG,busqueda,conforme,conforme,Incluye la sección esperada; no se interpreta la categoría como filtro estricto.,S-SEG.png
+S-ACS,busqueda,conforme,conforme,Incluye la sección esperada; no se interpreta la categoría como filtro estricto.,S-ACS.png
+S-OTR,busqueda,parcial,parcial,Pasajes genéricos; no responden qué datos incluir.,S-OTR.png
+UI01,GUI,conforme,conforme,Estado inicial y bloqueo de envío vacío,UI01.png
+UI02,GUI,conforme,conforme,Espacios en blanco no generan consultas,UI02.png
+UI03,GUI,conforme,conforme,Shift+Enter agrega una línea sin enviar,UI03.png
+UI04,GUI,conforme,conforme,Sugerencias rellenan el editor sin enviar,UI04.png
+UI05,GUI,conforme,conforme,Las citas abren la referencia correspondiente,UI05.png
+UI06,GUI,conforme,conforme,Nueva consulta sin mensajes ni fuentes residuales,UI06.png
+UI07,GUI,conforme,conforme,Filtrar el historial por texto,UI07.png
+UI08,GUI,conforme,conforme,Volver a una consulta anterior restaura el contenido,UI08.png
+UI09,GUI,conforme,conforme,Comprobación posterior de feedback de copiado,UI09-confirmacion.png
+UI10,GUI,conforme,conforme,Configuración explica conexión e historial temporal,UI10.png
+UI11,GUI,conforme,conforme,Panel lateral muestra referencias de la última respuesta,UI11.png
+UI12,GUI,conforme,conforme,Máximo de caracteres mediante entrada de teclado,UI12.png
+UI13,GUI,conforme,conforme,Enter envía una sola vez y la entrada excesiva muestra un error útil,UI13.png
+UI14,GUI,conforme,conforme,"La entrada del usuario se muestra como texto, sin interpretar HTML",UI14.png
+UI15,GUI,conforme,conforme,Carga visible y controles protegidos durante una operación,UI15.png
+UI16,GUI,conforme,conforme,Cancelar la espera informa que el servidor puede continuar,UI16.png
+UI17,GUI,conforme,conforme,El segundo cliente recibe feedback al intentar una operación concurrente,concurrency-client/UI17.png
+UI18,GUI,conforme,conforme,El cliente se recupera del estado ocupado mediante reintento,concurrency-client/UI18.png
+UI19,GUI,conforme,conforme,La recarga elimina el historial de la pestaña,concurrency-client/UI19.png
+UI20,GUI,conforme,conforme,Borrado del historial de pruebas desde configuración,concurrency-client/UI20.png
+UI21,GUI,conforme,conforme,Repetición del diseño móvil en 400 px CSS reales,UI21-400.png
+UI22,GUI,fallo,fallo,Teclado del menú superpuesto en móvil,UI22.png
+UI23,GUI,conforme,conforme,Guía lateral móvil accesible y dentro de la pantalla,UI23.png
+UI24,GUI,conforme,conforme,Barra lateral plegable en escritorio,UI24.png
+UI25,GUI,conforme,conforme,Sin patrones de credenciales visibles en la GUI,UI25.png

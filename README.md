@@ -14,7 +14,9 @@ y el [material para el profesor](backend/docs/parcial2/README.md).
 Para **ejecutar el notebook en local**, seguir los pasos **1–5**. Después, el
 **paso 6** permite levantar la API y probar Swagger. El notebook utiliza los
 componentes Python directamente y funciona sin arrancar Django ni Docker.
-El frontend web todavía no está implementado.
+El frontend React está disponible en `frontend/`: con la API activa, ejecutar
+`npm ci` y `npm run dev` desde esa carpeta y abrir http://127.0.0.1:5173.
+Consultar [la guía del frontend](frontend/README.md) para su configuración y límites.
 
 ## 1. Preparar el equipo y descargar el proyecto
 
@@ -302,6 +304,6 @@ Ver la [guía del profesor](backend/notebooks/GUIA_PROFESOR.md).
 
 ```text
 backend/   API, componentes Python, corpus, notebook, pruebas y documentos
-frontend/  Reservado para una futura aplicación web
+frontend/  Interfaz React de soporte TI, chat y búsqueda documental
 infra/     Docker Compose y migración SQL de Supabase
 ```

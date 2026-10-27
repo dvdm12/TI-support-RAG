@@ -1,0 +1,443 @@
+[
+  {
+    "id": "C01",
+    "mode": "query",
+    "question": "¿Qué es una mesa de ayuda TI? Explícaselo a una persona que empieza a trabajar y no tiene conocimientos técnicos.",
+    "category": "",
+    "startedAt": "2026-10-27T06:34:00.996Z",
+    "finishedAt": "2026-10-27T06:34:09.925Z",
+    "elapsedSeconds": 8.929,
+    "observed": {
+      "badges": "Validación automática superada\nRespuesta documental\notros · prioridad baja",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "Se limita a la descripción general del proceso de mesa de ayuda, sin detallar procedimientos específicos de cada organización.",
+      "loading": false,
+      "mainText": "¿Qué es una mesa de ayuda TI? Explícaselo a una persona que empieza a trabajar y no tiene conocimientos técnicos.\nTI Support\nValidación automática superada\nRespuesta documental\notros · prioridad baja\n\nUna mesa de ayuda TI es el punto de contacto inicial donde los usuarios reportan problemas o solicitan asistencia técnica. El equipo recibe la solicitud, la clasifica y la dirige al área adecuada, manteniendo la información organizada y evitando errores. El proceso incluye registrar la petición, asignar prioridades y dar seguimiento hasta su resolución, garantizando que el usuario reciba una respuesta clara y oportuna. F1\n\nSe limita a la descripción general del proceso de mesa de ayuda, sin detallar procedimientos específicos de cada organización.\n\nFUENTES CITADAS\n1\nF1\nAclaración y derivación de solicitudes\nOTR-05 | Separar límites y errores\n4.7 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "Una mesa de ayuda TI es el punto de contacto inicial donde los usuarios reportan problemas o solicitan asistencia técnica. El equipo recibe la solicitud, la clasifica y la dirige al área adecuada, manteniendo la información organizada y evitando errores. El proceso incluye registrar la petición, asignar prioridades y dar seguimiento hasta su resolución, garantizando que el usuario reciba una respuesta clara y oportuna. F1",
+      "sources": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-05 | Separar límites y errores"
+      ],
+      "timingLabel": "4.7 s · pipeline",
+      "userMessages": [
+        "¿Qué es una mesa de ayuda TI? Explícaselo a una persona que empieza a trabajar y no tiene conocimientos técnicos."
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C01.png"
+  },
+  {
+    "id": "C02",
+    "mode": "query",
+    "question": "¿La mesa de ayuda TI solo sirve para reparar computadores? Explica qué otras funciones cumple dentro de una organización.",
+    "category": "",
+    "startedAt": "2026-10-27T06:34:36.709Z",
+    "finishedAt": "2026-10-27T06:34:47.053Z",
+    "elapsedSeconds": 10.344,
+    "observed": {
+      "badges": "Validación automática superada\nRespuesta documental\notros · prioridad baja",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "Respuesta dentro de 90 palabras.",
+      "loading": false,
+      "mainText": "¿La mesa de ayuda TI solo sirve para reparar computadores? Explica qué otras funciones cumple dentro de una organización.\nTI Support\nValidación automática superada\nRespuesta documental\notros · prioridad baja\n\nLa mesa de ayuda TI no se limita a reparar computadores; también gestiona cuentas y correos de recuperación F1, revisa incidentes y riesgos de seguridad como mensajes sospechosos F2, y clasifica problemas según componentes físicos o software, registrando evidencia antes de asignar causas F3.\n\nRespuesta dentro de 90 palabras.\n\nFUENTES CITADAS\n3\nF1\nAdministración de cuentas\nCTA-04 | Cambio del correo de recuperación\nF2\nIncidentes y riesgos de seguridad\nSEG-02 | Mensaje o enlace sospechoso\nF3\nEquipos y componentes físicos\nHW-01 | Alcance y clasificación\n2.8 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "La mesa de ayuda TI no se limita a reparar computadores; también gestiona cuentas y correos de recuperación F1, revisa incidentes y riesgos de seguridad como mensajes sospechosos F2, y clasifica problemas según componentes físicos o software, registrando evidencia antes de asignar causas F3.",
+      "sources": [
+        "F1\nAdministración de cuentas\nCTA-04 | Cambio del correo de recuperación",
+        "F2\nIncidentes y riesgos de seguridad\nSEG-02 | Mensaje o enlace sospechoso",
+        "F3\nEquipos y componentes físicos\nHW-01 | Alcance y clasificación"
+      ],
+      "timingLabel": "2.8 s · pipeline",
+      "userMessages": [
+        "¿La mesa de ayuda TI solo sirve para reparar computadores? Explica qué otras funciones cumple dentro de una organización."
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C02.png"
+  },
+  {
+    "id": "C03",
+    "mode": "query",
+    "question": "¿Para qué sirve un ticket de soporte y qué se pierde si todas las solicitudes se atienden por mensajes sueltos sin registro?",
+    "category": "",
+    "startedAt": "2026-10-27T06:35:04.170Z",
+    "finishedAt": "2026-10-27T06:35:12.851Z",
+    "elapsedSeconds": 8.681,
+    "observed": {
+      "badges": "Validación automática superada\nRespuesta documental\notros · prioridad media",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "",
+      "loading": false,
+      "mainText": "¿Para qué sirve un ticket de soporte y qué se pierde si todas las solicitudes se atienden por mensajes sueltos sin registro?\nTI Support\nValidación automática superada\nRespuesta documental\notros · prioridad media\n\nUn ticket de soporte sirve para registrar formalmente la solicitud, asignar prioridades, rastrear su evolución y garantizar la trazabilidad de las acciones realizadas F1. Si todas las solicitudes se atienden por mensajes sueltos sin registro, se pierde la trazabilidad, la posibilidad de asignar prioridades y la documentación necesaria para auditorías o mejoras continuas F2. Además, sin ticket se dificulta la identificación de patrones de fallas y la derivación adecuada cuando la solicitud está fuera del alcance TI F3.\n\nFUENTES CITADAS\n3\nF1\nAclaración y derivación de solicitudes\nOTR-04 | Solicitud fuera del alcance TI\nF2\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua\nF3\nAplicaciones e instalación\nSW-02 | Aplicación que falla\n3.0 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "Un ticket de soporte sirve para registrar formalmente la solicitud, asignar prioridades, rastrear su evolución y garantizar la trazabilidad de las acciones realizadas F1. Si todas las solicitudes se atienden por mensajes sueltos sin registro, se pierde la trazabilidad, la posibilidad de asignar prioridades y la documentación necesaria para auditorías o mejoras continuas F2. Además, sin ticket se dificulta la identificación de patrones de fallas y la derivación adecuada cuando la solicitud está fuera del alcance TI F3.",
+      "sources": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-04 | Solicitud fuera del alcance TI",
+        "F2\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua",
+        "F3\nAplicaciones e instalación\nSW-02 | Aplicación que falla"
+      ],
+      "timingLabel": "3.0 s · pipeline",
+      "userMessages": [
+        "¿Para qué sirve un ticket de soporte y qué se pierde si todas las solicitudes se atienden por mensajes sueltos sin registro?"
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C03.png"
+  },
+  {
+    "id": "C04",
+    "mode": "query",
+    "question": "¿En qué se diferencia un incidente de una solicitud de servicio? Da un ejemplo de cada uno que no trate de contraseñas ni de conexión a Internet.",
+    "category": "",
+    "startedAt": "2026-10-27T06:35:24.331Z",
+    "finishedAt": "2026-10-27T06:35:33.709Z",
+    "elapsedSeconds": 9.377,
+    "observed": {
+      "badges": "OK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "loading": false,
+      "mainText": "¿En qué se diferencia un incidente de una solicitud de servicio? Da un ejemplo de cada uno que no trate de contraseñas ni de conexión a Internet.\nTI Support\nOK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja\n\nNo puedo ofrecer un procedimiento verificado con los pasajes recuperados.\n\nLa revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.\n\n4.6 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "sources": [],
+      "timingLabel": "4.6 s · pipeline",
+      "userMessages": [
+        "¿En qué se diferencia un incidente de una solicitud de servicio? Da un ejemplo de cada uno que no trate de contraseñas ni de conexión a Internet."
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C04.png"
+  },
+  {
+    "id": "C05",
+    "mode": "query",
+    "question": "¿Qué etapas suele recorrer un caso desde que llega a la mesa de ayuda TI hasta que se considera cerrado?",
+    "category": "",
+    "startedAt": "2026-10-27T06:35:40.001Z",
+    "finishedAt": "2026-10-27T06:35:47.995Z",
+    "elapsedSeconds": 7.994,
+    "observed": {
+      "badges": "Validación automática superada\nRespuesta documental\notros · prioridad media",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "Respuesta basada únicamente en la evidencia proporcionada. No se incluyen pasos adicionales ni supuestos no respaldados por los datos.",
+      "loading": false,
+      "mainText": "¿Qué etapas suele recorrer un caso desde que llega a la mesa de ayuda TI hasta que se considera cerrado?\nTI Support\nValidación automática superada\nRespuesta documental\notros · prioridad media\n\nUn caso suele pasar por las siguientes etapas: 1) Aclaración y derivación de la solicitud, donde se identifica la naturaleza del problema y se asigna a la categoría adecuada F1. 2) Análisis y resolución mediante la aplicación de soluciones técnicas o la recolección de información adicional F1. 3) Prueba de cierre donde se verifica con el usuario que la función afectada funciona correctamente o se registra la condición que mantiene el caso pendiente F2. 4) Cierre definitivo cuando se confirma la solución o se documenta la razón de permanecer abierto F2.\n\nRespuesta basada únicamente en la evidencia proporcionada. No se incluyen pasos adicionales ni supuestos no respaldados por los datos.\n\nFUENTES CITADAS\n2\nF1\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua\nF2\nEquipos y componentes físicos\nHW-05 | Cierre y evidencia\n3.1 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "Un caso suele pasar por las siguientes etapas: 1) Aclaración y derivación de la solicitud, donde se identifica la naturaleza del problema y se asigna a la categoría adecuada F1. 2) Análisis y resolución mediante la aplicación de soluciones técnicas o la recolección de información adicional F1. 3) Prueba de cierre donde se verifica con el usuario que la función afectada funciona correctamente o se registra la condición que mantiene el caso pendiente F2. 4) Cierre definitivo cuando se confirma la solución o se documenta la razón de permanecer abierto F2.",
+      "sources": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua",
+        "F2\nEquipos y componentes físicos\nHW-05 | Cierre y evidencia"
+      ],
+      "timingLabel": "3.1 s · pipeline",
+      "userMessages": [
+        "¿Qué etapas suele recorrer un caso desde que llega a la mesa de ayuda TI hasta que se considera cerrado?"
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C05.png"
+  },
+  {
+    "id": "C06",
+    "mode": "query",
+    "question": "¿Qué significa escalar un ticket y por qué eso no debería equivaler a dejar al usuario sin responsable ni información?",
+    "category": "",
+    "startedAt": "2026-10-27T06:35:57.652Z",
+    "finishedAt": "2026-10-27T06:36:05.380Z",
+    "elapsedSeconds": 7.728,
+    "observed": {
+      "badges": "Validación automática superada\nRespuesta documental\notros · prioridad baja",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "",
+      "loading": false,
+      "mainText": "¿Qué significa escalar un ticket y por qué eso no debería equivaler a dejar al usuario sin responsable ni información?\nTI Support\nValidación automática superada\nRespuesta documental\notros · prioridad baja\n\nEscalar un ticket significa transferir la solicitud a un nivel superior de soporte para su resolución, manteniendo al usuario informado y asignado a un responsable F1F2F3. No debe dejar al usuario sin responsable ni información, pues el proceso de escalado debe incluir la actualización de la categoría y la notificación del nuevo responsable F1F2F3.\n\nFUENTES CITADAS\n3\nF1\nAclaración y derivación de solicitudes\nOTR-03 | Información suficiente para reclasificar\nF2\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua\nF3\nAclaración y derivación de solicitudes\nOTR-03 | Información suficiente para reclasificar\n3.4 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "Escalar un ticket significa transferir la solicitud a un nivel superior de soporte para su resolución, manteniendo al usuario informado y asignado a un responsable F1F2F3. No debe dejar al usuario sin responsable ni información, pues el proceso de escalado debe incluir la actualización de la categoría y la notificación del nuevo responsable F1F2F3.",
+      "sources": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-03 | Información suficiente para reclasificar",
+        "F2\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua",
+        "F3\nAclaración y derivación de solicitudes\nOTR-03 | Información suficiente para reclasificar"
+      ],
+      "timingLabel": "3.4 s · pipeline",
+      "userMessages": [
+        "¿Qué significa escalar un ticket y por qué eso no debería equivaler a dejar al usuario sin responsable ni información?"
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C06.png"
+  },
+  {
+    "id": "C07",
+    "mode": "query",
+    "question": "Dos solicitudes llegan al mismo tiempo: una detiene un proceso crítico del negocio y la otra causa una molestia menor a una persona. ¿Con qué criterio debería priorizarlas una mesa de ayuda TI?",
+    "category": "",
+    "startedAt": "2026-10-27T06:36:17.299Z",
+    "finishedAt": "2026-10-27T06:36:47.440Z",
+    "elapsedSeconds": 30.141,
+    "observed": {
+      "badges": "Requiere soporte humano\nEvidencia insuficiente\notros · prioridad media",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "loading": false,
+      "mainText": "Dos solicitudes llegan al mismo tiempo: una detiene un proceso crítico del negocio y la otra causa una molestia menor a una persona. ¿Con qué criterio debería priorizarlas una mesa de ayuda TI?\nTI Support\nRequiere soporte humano\nEvidencia insuficiente\notros · prioridad media\n\nNo puedo ofrecer un procedimiento verificado con los pasajes recuperados.\n\nLa revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.\n\n16.9 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "sources": [],
+      "timingLabel": "16.9 s · pipeline",
+      "userMessages": [
+        "Dos solicitudes llegan al mismo tiempo: una detiene un proceso crítico del negocio y la otra causa una molestia menor a una persona. ¿Con qué criterio debería priorizarlas una mesa de ayuda TI?"
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C07.png"
+  },
+  {
+    "id": "C08",
+    "mode": "query",
+    "question": "¿Qué es un SLA en una mesa de ayuda TI? Distingue el tiempo de primera respuesta del tiempo de resolución, sin inventar plazos universales.",
+    "category": "",
+    "startedAt": "2026-10-27T06:36:55.249Z",
+    "finishedAt": "2026-10-27T06:37:02.625Z",
+    "elapsedSeconds": 7.376,
+    "observed": {
+      "badges": "OK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "loading": false,
+      "mainText": "¿Qué es un SLA en una mesa de ayuda TI? Distingue el tiempo de primera respuesta del tiempo de resolución, sin inventar plazos universales.\nTI Support\nOK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja\n\nNo puedo ofrecer un procedimiento verificado con los pasajes recuperados.\n\nLa revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.\n\n3.9 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "sources": [],
+      "timingLabel": "3.9 s · pipeline",
+      "userMessages": [
+        "¿Qué es un SLA en una mesa de ayuda TI? Distingue el tiempo de primera respuesta del tiempo de resolución, sin inventar plazos universales."
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C08.png"
+  },
+  {
+    "id": "C09",
+    "mode": "query",
+    "question": "¿Qué diferencia hay entre el historial de tickets y una base de conocimiento? ¿Cómo ayuda cada uno al trabajo de la mesa de ayuda TI?",
+    "category": "",
+    "startedAt": "2026-10-27T06:37:09.909Z",
+    "finishedAt": "2026-10-27T06:37:18.544Z",
+    "elapsedSeconds": 8.635,
+    "observed": {
+      "badges": "OK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "loading": false,
+      "mainText": "¿Qué diferencia hay entre el historial de tickets y una base de conocimiento? ¿Cómo ayuda cada uno al trabajo de la mesa de ayuda TI?\nTI Support\nOK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja\n\nNo puedo ofrecer un procedimiento verificado con los pasajes recuperados.\n\nLa revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.\n\n5.1 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "sources": [],
+      "timingLabel": "5.1 s · pipeline",
+      "userMessages": [
+        "¿Qué diferencia hay entre el historial de tickets y una base de conocimiento? ¿Cómo ayuda cada uno al trabajo de la mesa de ayuda TI?"
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C09.png"
+  },
+  {
+    "id": "C10",
+    "mode": "query",
+    "question": "Si una misma persona reporta el mismo caso por correo y por chat, ¿cómo debería coordinarlo la mesa de ayuda TI para evitar duplicar el trabajo?",
+    "category": "",
+    "startedAt": "2026-10-27T06:37:24.935Z",
+    "finishedAt": "2026-10-27T06:38:07.248Z",
+    "elapsedSeconds": 42.313,
+    "observed": {
+      "badges": "Requiere soporte humano\nEvidencia insuficiente\notros · prioridad media",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "loading": false,
+      "mainText": "Si una misma persona reporta el mismo caso por correo y por chat, ¿cómo debería coordinarlo la mesa de ayuda TI para evitar duplicar el trabajo?\nTI Support\nRequiere soporte humano\nEvidencia insuficiente\notros · prioridad media\n\nNo puedo ofrecer un procedimiento verificado con los pasajes recuperados.\n\nLa revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.\n\n29.8 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "sources": [],
+      "timingLabel": "29.8 s · pipeline",
+      "userMessages": [
+        "Si una misma persona reporta el mismo caso por correo y por chat, ¿cómo debería coordinarlo la mesa de ayuda TI para evitar duplicar el trabajo?"
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C10.png"
+  },
+  {
+    "id": "C11",
+    "mode": "query",
+    "question": "¿Una mesa de ayuda TI es lo mismo que un chatbot? Explica qué puede automatizarse y qué responsabilidades siguen necesitando personas.",
+    "category": "",
+    "startedAt": "2026-10-27T06:38:12.708Z",
+    "finishedAt": "2026-10-27T06:38:22.352Z",
+    "elapsedSeconds": 9.644,
+    "observed": {
+      "badges": "OK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "loading": false,
+      "mainText": "¿Una mesa de ayuda TI es lo mismo que un chatbot? Explica qué puede automatizarse y qué responsabilidades siguen necesitando personas.\nTI Support\nOK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja\n\nNo puedo ofrecer un procedimiento verificado con los pasajes recuperados.\n\nLa revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.\n\n8.6 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "sources": [],
+      "timingLabel": "8.6 s · pipeline",
+      "userMessages": [
+        "¿Una mesa de ayuda TI es lo mismo que un chatbot? Explica qué puede automatizarse y qué responsabilidades siguen necesitando personas."
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C11.png"
+  },
+  {
+    "id": "C12",
+    "mode": "query",
+    "question": "¿Cómo se puede saber si una mesa de ayuda TI está funcionando bien, además de contar cuántos tickets cierra?",
+    "category": "",
+    "startedAt": "2026-10-27T06:38:30.392Z",
+    "finishedAt": "2026-10-27T06:38:44.231Z",
+    "elapsedSeconds": 13.839,
+    "observed": {
+      "badges": "Validación automática superada\nRespuesta documental\notros · prioridad media",
+      "cancelled": "",
+      "editorValue": "",
+      "editors": 1,
+      "error": "",
+      "heading": "",
+      "health": "API disponible",
+      "horizontalOverflow": false,
+      "limitation": "Se limita a los criterios documentados en el corpus; no se incluyen métricas adicionales ni procesos de mejora continua.",
+      "loading": false,
+      "mainText": "¿Cómo se puede saber si una mesa de ayuda TI está funcionando bien, además de contar cuántos tickets cierra?\nTI Support\nValidación automática superada\nRespuesta documental\notros · prioridad media\n\nPara saber si una mesa de ayuda TI está funcionando bien, no basta con contar cuántos tickets cierra; también se debe verificar que cada cierre se realice tras comprobar la función afectada con el usuario o registrar la condición por la que permanece pendiente F2. Además, es necesario distinguir entre la recepción de un ticket, la confirmación del incidente y su cierre real; la mera recepción no indica resolución F3. Por último, la mesa debe clasificar correctamente las solicitudes, por ejemplo, diferenciando entre software y hardware cuando el caso lo requiera F1.\n\nSe limita a los criterios documentados en el corpus; no se incluyen métricas adicionales ni procesos de mejora continua.\n\nFUENTES CITADAS\n3\nF1\nAclaración y derivación de solicitudes\nOTR-01 | Alcance de la categoría\nF2\nEquipos y componentes físicos\nHW-05 | Cierre y evidencia\nF3\nIncidentes y riesgos de seguridad\nSEG-05 | Seguimiento y límites\n13.0 s · pipeline\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+      "messages": 2,
+      "missing": "",
+      "reply": "Para saber si una mesa de ayuda TI está funcionando bien, no basta con contar cuántos tickets cierra; también se debe verificar que cada cierre se realice tras comprobar la función afectada con el usuario o registrar la condición por la que permanece pendiente F2. Además, es necesario distinguir entre la recepción de un ticket, la confirmación del incidente y su cierre real; la mera recepción no indica resolución F3. Por último, la mesa debe clasificar correctamente las solicitudes, por ejemplo, diferenciando entre software y hardware cuando el caso lo requiera F1.",
+      "sources": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-01 | Alcance de la categoría",
+        "F2\nEquipos y componentes físicos\nHW-05 | Cierre y evidencia",
+        "F3\nIncidentes y riesgos de seguridad\nSEG-05 | Seguimiento y límites"
+      ],
+      "timingLabel": "13.0 s · pipeline",
+      "userMessages": [
+        "¿Cómo se puede saber si una mesa de ayuda TI está funcionando bien, además de contar cuántos tickets cierra?"
+      ],
+      "viewport": {
+        "height": 663,
+        "width": 759
+      }
+    },
+    "screenshot": "C12.png"
+  }
+]
