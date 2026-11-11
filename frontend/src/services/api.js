@@ -1,11 +1,11 @@
 export class ApiError extends Error {
   constructor(
     message,
-    { status = 0, code = "network_error", requestId, retryAfter } = {},
+    { status = 0, code = "network_error", requestId, retryAfter, trace } = {},
   ) {
     super(message);
     this.name = "ApiError";
-    Object.assign(this, { status, code, requestId, retryAfter });
+    Object.assign(this, { status, code, requestId, retryAfter, trace });
   }
 }
 
@@ -60,6 +60,7 @@ export async function request(path, { body, signal, fetcher = fetch } = {}) {
         code,
         requestId: data.request_id,
         retryAfter: response.headers.get("Retry-After"),
+        trace: data.traza,
       },
     );
   }

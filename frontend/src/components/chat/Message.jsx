@@ -21,6 +21,7 @@ export default function Message({ message, onRetry, pending }) {
   const sources = data?.fuentes || data?.pasajes || [];
   const content =
     documentary?.respuesta ||
+    data?.respuesta ||
     (data?.pasajes
       ? data.pasajes.length
         ? "Encontré estos pasajes en los manuales de soporte. Abre cada referencia para consultar su contenido."

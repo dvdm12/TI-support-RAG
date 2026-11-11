@@ -1,0 +1,198 @@
+.router-demo {
+  --paper: #fff;
+  --text: #202020;
+  --muted: #535353;
+  --line: #c7c7c7;
+  --accent: #214a3d;
+  --focus: #e9ba45;
+  --gutter: max(24px, calc((100% - 1000px) / 2));
+  font-family: "IBM Plex Sans", Arial, sans-serif;
+  min-height: 100vh;
+  padding: 0 var(--gutter) 56px;
+  background: var(--paper);
+  color: var(--text);
+}
+.router-demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-inline: calc(-1 * var(--gutter));
+  padding: 14px var(--gutter);
+  background: #232323;
+  color: #fff;
+  font-size: 0.9rem;
+}
+.router-demo-header a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.router-demo-header .service-status {
+  color: inherit;
+}
+.router-demo-header .service-status i {
+  background: currentColor;
+}
+.router-demo-intro {
+  padding: 36px 0 26px;
+  border-bottom: 3px solid var(--text);
+  margin-bottom: 28px;
+}
+.router-demo h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+.router-demo-intro p {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+.router-demo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(24px, 5vw, 56px);
+}
+.router-demo-panel {
+  min-width: 0;
+}
+.router-demo h1, .router-demo h2, .router-demo h3, .router-demo-case strong {
+  font-weight: 600;
+}
+.router-demo h2, .router-demo h3 {
+  margin: 0 0 14px;
+  line-height: 1.2;
+}
+.router-demo h2 {
+  font-size: 1.35rem;
+}
+.router-demo h3 {
+  font-size: 1.15rem;
+}
+.router-demo form {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+.router-demo label {
+  font-weight: 600;
+}
+.router-demo textarea {
+  width: 100%;
+  min-height: 112px;
+  resize: vertical;
+  padding: 12px;
+  background: var(--paper);
+  color: var(--text);
+  border: 2px solid var(--text);
+  border-radius: 0;
+}
+.router-demo-send {
+  margin-top: 4px;
+  padding: 11px 18px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0;
+}
+.router-demo-send:not(:disabled):hover {
+  background: #16372c;
+}
+.router-demo-send:disabled {
+  opacity: 0.65;
+}
+.router-demo :focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.router-demo-routes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.router-demo-routes button {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+.router-demo-routes button:not(:disabled):hover {
+  background: #f2f2f2;
+}
+.router-demo-case {
+  display: grid;
+  gap: 4px;
+}
+.router-demo-case strong {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.router-demo-case small, .router-demo-muted {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.router-demo-selected {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.router-demo-report:not(:empty) {
+  margin-top: 26px;
+  padding-top: 16px;
+  border-top: 2px solid var(--text);
+}
+.router-demo-summary {
+  margin: 0;
+}
+.router-demo-summary > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 8px 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+}
+.router-demo-summary dt {
+  font-weight: 600;
+}
+.router-demo-summary dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.router-demo-summary code {
+  font-size: 0.82rem;
+}
+.router-demo-answer {
+  margin-top: 24px;
+}
+.router-demo-answer p {
+  margin: 8px 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.router-demo .source-card {
+  background: var(--paper);
+  border-color: var(--line);
+  border-radius: 0;
+}
+.router-demo .source-card summary strong,
+.router-demo .source-tag {
+  color: var(--text);
+}
+.router-demo .source-tag {
+  background: #ededed;
+}
+@media (max-width: 700px) {
+  .router-demo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

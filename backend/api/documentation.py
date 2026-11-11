@@ -82,11 +82,20 @@ class SearchResponse(BaseModel):
     tiempos_segundos: dict[str, float] = Field(description=TIMING_HELP)
 
 
+class AttentionTrace(BaseModel):
+    ruta: str
+    operacion: str | None
+    resultado: str
+    motivo_salida: str
+
+
 class QueryResponse(BaseModel):
     request_id: str = Field(description="Identificador de la petición; conservarlo para diagnosticar errores.")
     estado: str = Field(description="Resultado global del pipeline: OK_VALIDADO, OK_RESPUESTA_PARCIAL, OK_PIDE_ACLARACION, OK_EVIDENCIA_INSUFICIENTE u OK_REQUIERE_HUMANO. No equivale al estado documental ni confirma que el incidente real esté resuelto.")
-    clasificacion: SolicitudTI = Field(description="Categoría, prioridad, datos faltantes y necesidad de atención humana de la solicitud.")
-    respuesta_documental: RespuestaRAG = Field(description="Respuesta en español, estado documental, citas y limitación. Leer estado y limitacion incluso con HTTP 200.")
+    clasificacion: SolicitudTI | None = Field(description="Clasificación de la ruta documental.")
+    respuesta_documental: RespuestaRAG | None = Field(description="Respuesta con estado documental, citas y limitación cuando se ejecuta el RAG.")
+    respuesta: str | None = Field(default=None, description="Texto de respuesta de cualquier ruta.")
+    traza: AttentionTrace | None = Field(default=None, description="Ruta, operación intentada y motivo de salida.")
     fuentes: list[CitedSource] = Field(description="Solo las fuentes citadas en la respuesta. id=F1 corresponde a [F1] en respuesta y F1 en citas; puede estar vacío si no hay afirmaciones documentales.")
     latencia_segundos: float = Field(description="Duración global del pipeline en segundos, redondeada a cuatro decimales; puede diferir del tiempo HTTP observado por el cliente.")
     tiempos_segundos: dict[str, float] = Field(description=TIMING_HELP)
@@ -110,6 +119,7 @@ class ErrorDetail(BaseModel):
 class ErrorResponse(BaseModel):
     request_id: str | None
     error: ErrorDetail
+    traza: AttentionTrace | None = None
 
 
 def openapi_document():
@@ -228,8 +238,10 @@ def openapi_document():
             'máximo 1000 tokens de entrada y capacidad del modelo de embeddings (128 tokens con la configuración actual). '
             'Cumplir el límite de caracteres no garantiza cumplir el de tokens. No recibe imágenes ni archivos. '
             'Una lista vacía es un resultado válido; un fallo de consulta devuelve error técnico.\n\n'+AUTH_HELP),
-        'rag/query/': ('RAG', 'Clasificar una solicitud y responder con evidencia',
-            'Clasifica la solicitud, recupera evidencia, construye contexto y genera o limita la respuesta; '
+        'rag/query/': ('RAG', 'Atender una consulta de soporte',
+            'Enruta la pregunta a una respuesta directa, consulta documental, consulta de ticket de demostración, '
+            'aclaración o rechazo. La traza registra la ruta y el motivo de salida. En la ruta documental, '
+            'clasifica la solicitud, recupera evidencia, construye contexto y genera o limita la respuesta; '
             'valida contrato, citas y respaldo. Usa Supabase y puede realizar varias llamadas a Groq '
             '(clasificación, generación, revisión y corrección), con consumo de cuota. Algunas aclaraciones '
             'se construyen localmente. La operación es síncrona y puede tardar por esperas o reintentos.\n\n'

@@ -7,7 +7,7 @@ services:
       - ../backend/.env
     environment:
       DJANGO_DEBUG: "false"
-      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
     ports:
       - "127.0.0.1:8000:8000"
     volumes:
@@ -21,6 +21,23 @@ services:
       - tokenizer-cache:/home/app/.cache/tiktoken
     init: true
     restart: unless-stopped
+
+  gradio:
+    profiles: [gradio]
+    image: ti-support-gradio:local
+    build:
+      context: ../interfaces/gradio
+    environment:
+      DJANGO_API_URL: http://backend:8000
+      DJANGO_API_TOKEN: ${DJANGO_API_TOKEN:-}
+      GRADIO_SERVER_NAME: 0.0.0.0
+      GRADIO_SERVER_PORT: "7860"
+      GRADIO_ANALYTICS_ENABLED: "False"
+    ports:
+      - "127.0.0.1:7860:7860"
+    depends_on:
+      - backend
+    init: true
 
 volumes:
   model-cache:

@@ -24,8 +24,11 @@ from src.ocr.exceptions import OCRDependencyError, OCRConfigurationError, OCRExt
 logger = logging.getLogger('api')
 
 
-def error(code,message,status,request_id=None):
-    return JsonResponse({'request_id':request_id,'error':{'code':code,'message':message}},status=status,json_dumps_params={'ensure_ascii':False})
+def error(code,message,status,request_id=None,*,trace=None):
+    payload = {'request_id':request_id,'error':{'code':code,'message':message}}
+    if trace is not None:
+        payload['traza'] = trace
+    return JsonResponse(payload,status=status,json_dumps_params={'ensure_ascii':False})
 
 
 class JsonController(View):
@@ -120,19 +123,28 @@ class QueryController(JsonController):
         if failure is not None:
             return failure
         options = {'ocr_text': data.texto_ocr} if data.texto_ocr is not None else {}
-        result = services.run_query(data.pregunta,self.request_id,**options)
+        result = services.attend(data.pregunta,self.request_id,**options)
+        trace = result['trace']
+        if trace['ruta'] != 'consulta_documental':
+            if result['state'] == 'ERROR_TECNICO':
+                return error('service_unavailable',result['answer'],503,self.request_id,trace=trace)
+            return JsonResponse({
+                'request_id':self.request_id,'estado':result['state'],'respuesta':result['answer'],
+                'clasificacion':None,'respuesta_documental':None,'fuentes':[],
+                'latencia_segundos':result['latency_seconds'],'tiempos_segundos':{},'traza':trace,
+            },json_dumps_params={'ensure_ascii':False})
         if result['state'] in {'ERROR_TECNICO','ERROR_FORMATO'}:
             if 'HTTP 429' in (result.get('execution_error') or ''):
-                response = error('provider_rate_limited','Groq no tiene cuota disponible. Reintenta después.',429,self.request_id)
+                response = error('provider_rate_limited','Groq no tiene cuota disponible. Reintenta después.',429,self.request_id,trace=trace)
                 wait = re.search(r'espera requerida de (\d+(?:\.\d+)?) s',result['execution_error'])
                 if wait:
                     response['Retry-After'] = str(math.ceil(float(wait.group(1))))
                 return response
             return error('invalid_provider_response' if result['state']=='ERROR_FORMATO' else 'service_unavailable',
-                         'No se obtuvo una respuesta RAG válida.',502 if result['state']=='ERROR_FORMATO' else 503,self.request_id)
+                         'No se obtuvo una respuesta RAG válida.',502 if result['state']=='ERROR_FORMATO' else 503,self.request_id,trace=trace)
         documentary = result.get('documentary_output')
         if not documentary:
-            return error('invalid_provider_response','Respuesta RAG incompleta.',502,self.request_id)
+            return error('invalid_provider_response','Respuesta RAG incompleta.',502,self.request_id,trace=trace)
         sources = []
         for label in documentary['citas']:
             candidate = result['rag']['catalog'][label]
@@ -140,6 +152,7 @@ class QueryController(JsonController):
                             **{k:candidate['metadata'].get(k) for k in ('document_id','title','category','section','source','version','pages')}})
         return JsonResponse({'request_id':self.request_id,'estado':result['state'],
                              'clasificacion':result['classification'],'respuesta_documental':documentary,
+                             'respuesta':documentary['respuesta'],'traza':trace,
                              'fuentes':sources,'latencia_segundos':result['latency_seconds'],
                              'tiempos_segundos':result['rag'].get('timings',{})},
                             json_dumps_params={'ensure_ascii':False})
