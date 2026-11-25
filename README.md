@@ -1,9 +1,28 @@
 # TI-support-RAG
 
 Mesa de ayuda TI con clasificación, OCR, búsqueda documental en Supabase,
-generación con Groq, API Django y notebook de demostración.
+generación con Groq, API Django, interfaz Gradio con historial persistente y MCP.
 
-**Para el profesor, empezar por el [notebook de Parcial 2](backend/notebooks/parcial2.ipynb).**
+## Entrega final — Clase 12 (Corte 3)
+
+La interfaz definitiva del proyecto está en **`app/`**. Incluye autenticación con
+Supabase Auth, historial de conversaciones persistente por usuario, enrutamiento
+con MCP para tickets y consulta RAG al backend Django.
+
+```bash
+# Inicio rápido de la app Gradio (requiere el backend activo)
+cd app
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env   # completar variables
+python app.py          # abre http://127.0.0.1:7860
+```
+
+Ver la sección **[App Gradio — Clase 12](#app-gradio--clase-12)** para los detalles completos.
+
+---
+
+**Para el profesor (Corte 2), empezar por el [notebook de Parcial 2](backend/notebooks/parcial2.ipynb).**
 Incluye las ejecuciones guardadas para revisar los resultados sin configurar secretos.
 Para consultas nuevas, seguir la preparación indicada en el notebook. Se entrega junto al
 [ZIP de recursos](backend/notebooks/parcial2_recursos.zip).
@@ -79,13 +98,15 @@ configuran más adelante, al levantar la API en el paso 6.
 ## 4. Preparar el proyecto Supabase
 
 1. Crear un proyecto propio en [Supabase](https://supabase.com/).
-2. En su editor SQL, ejecutar el contenido de
-   [20261014_documentary_rag.sql](infra/supabase/migrations/20261014_documentary_rag.sql).
-   Crea la tabla, las políticas RLS y la función de búsqueda.
+2. En su editor SQL, ejecutar en orden:
+   - [20261014_documentary_rag.sql](infra/supabase/migrations/20261014_documentary_rag.sql) —
+     tabla `clase08_fragmentos`, RLS y función de búsqueda híbrida (Corte 2).
+   - [20261124_chat_history.sql](infra/supabase/migrations/20261124_chat_history.sql) —
+     tablas `conversaciones` y `mensajes` con RLS por usuario (Corte 3 / Clase 12).
 3. Crear un usuario de correo y contraseña en **Supabase Auth**, con correo
-   confirmado. Usar esos mismos datos en `.env`; no son necesariamente los del
+   confirmado. Usar esos mismos datos en `backend/.env`; no son necesariamente los del
    acceso al panel administrativo de Supabase.
-4. Completar la URL y clave publicable del mismo proyecto en `.env`.
+4. Completar la URL y clave publicable del mismo proyecto en `backend/.env`.
 
 El notebook restaura automáticamente el índice desde su ZIP: **70 fragmentos de
 siete manuales simulados**. Para un proyecto Supabase nuevo, el paso siguiente
@@ -266,6 +287,78 @@ Para detenerlo conservando las cachés:
 docker compose -f ../infra/compose.yaml down
 ```
 
+## App Gradio — Clase 12
+
+La carpeta `app/` contiene la interfaz final del proyecto. Requiere que el backend
+Django esté activo (pasos 4–6) y que las tablas `conversaciones` y `mensajes`
+existan en Supabase (migración `20261124_chat_history.sql` del paso 4).
+
+### Variables de entorno (`app/.env`)
+
+```bash
+cd app
+cp .env.example .env
+```
+
+Editar `app/.env` y completar:
+
+| Variable | Valor |
+|---|---|
+| `SUPABASE_URL` | URL HTTPS del proyecto Supabase |
+| `SUPABASE_PUBLISHABLE_KEY` | Clave anon/publishable (`eyJ...`) |
+| `BACKEND_URL` | URL del backend Django (ej. `http://127.0.0.1:8000`) |
+| `BACKEND_API_TOKEN` | Valor de `DJANGO_API_TOKEN` del `backend/.env` |
+
+### Instalar dependencias y arrancar
+
+```bash
+cd app
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python app.py
+# Interfaz disponible en http://127.0.0.1:7860
+```
+
+### Funcionalidades
+
+- **Login** con Supabase Auth (correo + contraseña).
+- **Selector de conversaciones**: crear, renombrar, eliminar; historial cargado automáticamente.
+- **Chat**: pregunta → enrutamiento → MCP (tickets) o RAG (documentos) → respuesta.
+- **Fuentes documentales** y **traza de enrutamiento** en acordeones colapsables.
+- **Cierre de sesión** limpio.
+
+### Rutas del enrutador (`app/sistema.py`)
+
+| Ruta | Ejemplo de pregunta |
+|---|---|
+| `consulta_ticket` → MCP | `¿Cuál es el estado del ticket TI-1001?` |
+| `consulta_documental` → API | `¿Cómo configuro la VPN corporativa?` |
+| `respuesta_directa` | `Hola, ¿qué puedes hacer?` |
+| `aclaracion` | `¿Cómo va mi ticket?` (sin código) |
+| `operacion_prohibida` | `Cierra el ticket TI-1002` |
+
+### Pruebas unitarias del módulo de almacenamiento
+
+```bash
+cd app
+python3 -m pytest test_almacenamiento.py -v   # 58 pruebas, ~0.09 s
+```
+
+### MCP — servidor de tickets
+
+El servidor MCP (`app/servidor_mcp.py`) se arranca como subproceso cuando la
+pregunta es de tipo `consulta_ticket`. No requiere instalación separada; sólo
+necesita `mcp>=1.0` del `requirements.txt`.
+
+Para arrancarlo manualmente y probarlo:
+
+```bash
+cd app
+python servidor_mcp.py   # escucha por stdio
+```
+
+---
+
 ## Problemas frecuentes
 
 | Problema | Qué hacer |
@@ -303,7 +396,9 @@ Ver la [guía del profesor](backend/notebooks/GUIA_PROFESOR.md).
 [RAG](backend/docs/rag/RAG.md)
 
 ```text
-backend/   API, componentes Python, corpus, notebook, pruebas y documentos
+app/       Interfaz Gradio final (Clase 12): auth, historial, MCP, RAG
+backend/   API Django, componentes Python, corpus, notebook, pruebas y documentos
 frontend/  Interfaz React de soporte TI, chat y búsqueda documental
-infra/     Docker Compose y migración SQL de Supabase
+infra/     Docker Compose y migraciones SQL de Supabase
+BITACORA_PROYECTO.md  Bitácora unificada de los tres cortes
 ```
