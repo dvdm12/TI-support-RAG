@@ -15,7 +15,7 @@ estado: corte-3-implementado-despliegue-pendiente
 **Curso:** Electiva VI · EAM-2026II  
 **Profesor:** Robert Garcia Rey  
 **Repositorio:** `TI-support-RAG`  
-**Rama activa (entrega final):** `feat/clase-12-entrega-final`  
+**Rama de entrega:** `main` (integra `feat/clase-12-entrega-final` desde el 2026-11-25)  
 **Integrantes:** David Mantilla Aviles · Juan Camilo Velez
 
 ---
@@ -255,11 +255,11 @@ Interfaz Gradio 6 con:
 - [x] `README.md` actualizado con `app/` y tablas Supabase
 - [x] `app/presentacion_proyecto.pdf` copiada desde `backend/docs/parcial2/presentacion/`
 - [x] Verificación local (25-11-2026): rutas directa, fuera de alcance, prohibida, MCP (TI-1001, TI-1003, TI-9999) y RAG con fuentes
+- [x] Merge de `feat/clase-12-entrega-final` en `main` (2026-11-25)
 
 #### Pendiente
 
 - [ ] Despliegue en Render con variables de entorno configuradas (y su sección en `README.md`)
-- [ ] Merge de `feat/clase-12-entrega-final` en `main`
 
 ---
 
