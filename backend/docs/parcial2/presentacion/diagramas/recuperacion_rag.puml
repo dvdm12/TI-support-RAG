@@ -1,0 +1,46 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam databaseBackgroundColor white
+skinparam nodesep 40
+skinparam ranksep 40
+
+title Recuperación del RAG · Mesa de Ayuda TI
+
+artifact "Consulta\nCategoría opcional" as consulta
+
+package "Recuperación del RAG" {
+  component "Coordinador de recuperación\nretrieval.py\nRetriever.retrieve()" as retrieval
+  component "Embeddings de consulta\nembeddings.py\nSentenceEmbedder" as embeddings
+  component "Acceso al corpus\nrepository.py\nSupabaseRepository / LocalRepository" as repository
+  component "Ranking léxico\nlexical.py\nBM25" as lexical
+  component "Fusión y selección\nretrieval.py\nselect_ranked_candidates()" as selection
+  component "Filtro de pertinencia\napplicability.py" as applicability
+}
+
+database "Corpus indexado\nSupabase o índice local" as corpus
+artifact "Candidatos Top-3\nTexto, metadatos y similitud" as salida
+
+consulta --> retrieval
+retrieval ..> embeddings : vectorizar consulta
+retrieval ..> repository : consulta vectorial y corpus léxico
+repository ..> corpus : búsqueda y lectura
+retrieval ..> lexical : ordenar fragmentos por BM25
+retrieval ..> selection : combinar rankings
+selection ..> applicability : excluir pasajes no aplicables
+retrieval --> salida : devolver selección
+
+legend bottom
+  Hasta 10 candidatos por vía; RRF con constante 60 y pesos 1 / 2.
+  Categoría opcional: ajuste de puntuación antes de seleccionar Top-3.
+  La selección filtra pertinencia antes del corte; no genera respuestas.
+endlegend
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam nodesep 40
+skinparam ranksep 40
+
+
+
+package "Contexto, respuesta y control" {
+  component "Orquestador\npipeline.py\nrun_rag_case()" as pipeline
+  component "Construcción de contexto\ncontext.py" as context
+  component "Políticas locales\npolicy.py" as policy
+  component "Pertinencia de evidencia\napplicability.py" as applicability
+  component "Validación de respuesta\ncitations.py" as citations
+  component "Revisión de respaldo\nsupport.py" as support
+}
+
+component "Cliente Groq\nsrc/groq_client.py" as groq
+
+pipeline ..> policy
+pipeline ..> applicability
+pipeline ..> context
+pipeline ..> groq
+pipeline ..> citations
+pipeline ..> support
+support ..> groq
+
+@enduml

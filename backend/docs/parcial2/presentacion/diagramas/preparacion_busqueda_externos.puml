@@ -1,0 +1,50 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam nodesep 40
+skinparam ranksep 40
+
+title Preparación y búsqueda de documentos externos
+
+artifact "Extracción validada" as entrada
+
+package "Preparación local" {
+  component "Unidades y fragmentos\nexternal_chunking.py\nfragment_extraction()" as fragmentacion
+  component "Embeddings\nembeddings.py\nSentenceEmbedder" as embeddings
+  component "Persistencia del índice\nexternal_chunking.py\nsave_local_index() / load_local_index()" as persistencia
+}
+
+artifact "Índice local\nUnidades completas\nFragmentos y vectores\nManifiesto" as indice
+
+package "Búsqueda local" {
+  component "Recuperación de unidades\nexternal_retrieval.py\nretrieve_units()" as recuperacion
+  component "Ranking léxico\nlexical.py\nBM25" as lexical
+}
+
+artifact "Consulta y su vector" as consulta
+artifact "Unidades recuperadas\nEvidencia completa" as salida
+
+entrada --> fragmentacion
+fragmentacion --> embeddings : textos para vectorizar
+fragmentacion --> persistencia : unidades y fragmentos
+embeddings --> persistencia : vectores
+persistencia --> indice : guardar
+indice --> recuperacion : cargar mediante load_local_index()
+consulta --> recuperacion
+recuperacion ..> lexical : modos híbridos
+recuperacion --> salida
+
+legend bottom
+  Los fragmentos sirven para buscar; el resultado conserva la unidad completa.
+  El llamador genera el vector de consulta y aplica el presupuesto de contexto.
+  Proceso local, separado del corpus académico activo y de Supabase.
+endlegend
+@enduml

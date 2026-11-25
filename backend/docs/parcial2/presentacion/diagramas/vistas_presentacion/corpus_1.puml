@@ -1,0 +1,21 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam nodesep 35
+skinparam ranksep 30
+artifact "PDF y manifiesto" as pdf
+component "Ingesta\ningestion.py\nload_corpus()" as ingest
+component "Fragmentación\nchunking.py\nfragment_sections()" as chunk
+artifact "Fragmentos con metadatos" as output
+pdf --> ingest : verificar fuentes
+ingest --> chunk : secciones
+chunk --> output
+@enduml

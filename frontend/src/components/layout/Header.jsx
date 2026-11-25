@@ -20,6 +20,9 @@ export default function Header({
         </span>
       </div>
       <div className="header-actions">
+        <a className="header-router-link" href="/?vista=enrutador">
+          Enrutador
+        </a>
         <ServiceStatus status={status} />
         <IconButton
           label={

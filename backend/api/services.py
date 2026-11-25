@@ -82,8 +82,10 @@ def attend(question, request_id, **options):
             reason = "respuesta_documental_incompleta"
     else:
         if route == "respuesta_directa":
-            state, reason = "OK_RESPUESTA_DIRECTA", "alcance_informado"
+            state, reason = "OK_RESPUESTA_DIRECTA", code or "alcance_informado"
             answer = "Puedo consultar manuales de soporte TI y el estado de tickets de demostración."
+            if reason == "fuera_de_alcance":
+                answer = f"Esa pregunta queda fuera del alcance de la mesa de ayuda. {answer}"
         elif route == "aclaracion":
             state = "OK_PIDE_ACLARACION"
             if code == "intencion_mixta":

@@ -199,6 +199,11 @@
   align-items: center;
   gap: 20px;
 }
+.header-router-link {
+  color: var(--text);
+  font-size: 14px;
+  text-underline-offset: 3px;
+}
 .workspace-body {
   display: flex;
   flex: 1;

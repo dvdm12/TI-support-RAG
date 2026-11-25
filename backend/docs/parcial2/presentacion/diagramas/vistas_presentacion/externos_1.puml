@@ -1,0 +1,25 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam nodesep 35
+skinparam ranksep 30
+left to right direction
+artifact "Extracción\nvalidada" as input
+component "Unidades y fragmentos\nexternal_chunking.py\nfragment_extraction()" as chunk
+component "Embeddings\nembeddings.py" as embed
+component "Persistencia\nexternal_chunking.py\nsave_local_index()" as index
+artifact "Índice local" as output
+input --> chunk
+chunk --> embed : textos
+chunk --> index : unidades y fragmentos
+embed --> index : vectores
+index --> output
+@enduml

@@ -22,6 +22,20 @@ services:
     init: true
     restart: unless-stopped
 
+  frontend:
+    image: ti-support-rag-frontend:local
+    build:
+      context: ../frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+      DJANGO_API_TOKEN: ${DJANGO_API_TOKEN:-}
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      - backend
+    init: true
+    restart: unless-stopped
+
   gradio:
     profiles: [gradio]
     image: ti-support-gradio:local

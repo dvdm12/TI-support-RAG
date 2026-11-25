@@ -1,0 +1,47 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam noteBackgroundColor white
+skinparam nodesep 40
+skinparam ranksep 40
+
+title Contratos y validación de extracción · Mesa de Ayuda TI
+
+artifact "Extracción estructurada" as entrada
+
+package "Contratos y validación" {
+  component "Evaluador de extracción\nextraction_validation.py\nevaluate_extraction()" as evaluador
+  component "Contratos de datos\nextraction_contracts.py\nExtractionResult · Paragraph · Table" as contratos
+  component "Reglas de bloques\nextraction_rules.py" as reglas
+  component "Políticas de extracción\nextraction_strategies.py" as estrategias
+  component "Control de regresión\nextraction_baseline.py\nfingerprint() / compare()" as regresion
+}
+
+artifact "Informe de validación\nErrores, revisiones y\nelegibilidad por bloque" as informe
+artifact "Línea base guardada\nHuellas y referencias" as baseline
+artifact "Comparación de regresión\nCambios respecto a la línea base" as comparacion
+
+entrada --> evaluador
+ evaluador ..> contratos : valida estructura
+ evaluador ..> reglas : evalúa bloques
+ evaluador ..> estrategias : verifica políticas
+ evaluador --> informe
+
+entrada --> regresion
+baseline --> regresion
+regresion --> comparacion
+
+legend bottom
+  Flecha discontinua: dependencia de uso.
+  Un contrato válido no sustituye la validación de contenido y estructura.
+  La línea base detecta cambios; no certifica calidad semántica.
+endlegend
+@enduml

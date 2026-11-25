@@ -1,0 +1,94 @@
+@startuml
+!pragma layout smetana
+set namespaceSeparator none
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam classBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam noteBackgroundColor white
+skinparam classAttributeIconSize 0
+skinparam nodesep 40
+skinparam ranksep 45
+hide circle
+hide empty methods
+
+title Diagrama de clases · Configuración y modelos de datos del RAG
+
+package "config.py" {
+  class RAGConfig <<dataclass, frozen=True>> {
+    + model: str = EMBEDDING_MODEL
+    + revision: str | None = None
+    + dimension: int = 384
+    + strategy: str = "sections"
+    + chunk_chars: int = 420
+    + overlap_chars: int = 80
+    + max_tokens: int = 80
+    + k: int = 3
+    + context_chars: int = 6000
+    + corpus_base: str = "ti-manuals-v2"
+    + manifest: Path = ROOT / "data/corpus/v2/manifest.json"
+    + prompt: Path = ROOT / "prompts/rag_v6.md"
+  }
+}
+
+class BaseModel <<Pydantic>>
+
+package "models.py" {
+  class Section {
+    + document_id: str
+    + source: str
+    + title: str
+    + section: str
+    + category: Categoria
+    + version: str
+    + source_hash: str {hexadecimal de 64 caracteres}
+    + pages: list[int]
+    + text: str {longitud >= 1}
+    + simulated: bool = True
+  }
+
+  class Chunk {
+    + chunk_id: str
+    + tokens: int {> 0}
+  }
+
+  class EmbeddingConfig {
+    + modelo: str
+    + revision: str {hexadecimal de 40 caracteres}
+    + dimension: Literal[384] = 384
+    + normalizados: Literal[True] = True
+    + similitud: Literal["coseno"] = "coseno"
+    + max_seq_length: int {> 0}
+    + estrategia: Literal["characters", "overlap", "sections"]
+    + chunk_chars: int {> 0}
+    + overlap_chars: int {>= 0}
+    + max_tokens: int {> 0}
+    + preparation_version: str = "pdf-sections-v1"
+  }
+
+  class Candidate {
+    + chunk_id: str
+    + content: str {longitud 1..10000}
+    + metadata: dict
+    + similitud: float {finita, -1.00001..1.00001}
+  }
+
+  Section <|-- Chunk
+}
+
+BaseModel <|-- Section
+BaseModel <|-- EmbeddingConfig
+BaseModel <|-- Candidate
+
+legend bottom
+  ROOT corresponde al directorio backend.
+  EMBEDDING_MODEL = sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  Categoria es un alias Literal importado de schemas/request_v1.py.
+  Los modelos Pydantic rechazan campos extra; Chunk hereda esa configuración.
+  Se muestran atributos propios; los métodos de BaseModel son heredados.
+  Los valores predeterminados de RAGConfig no sustituyen la configuración guardada del índice.
+endlegend
+@enduml

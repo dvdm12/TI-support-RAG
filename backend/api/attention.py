@@ -23,9 +23,20 @@ PROCEDURE = re.compile(
     r"que pasos|segun el manual|donde )"
 )
 DIRECT = re.compile(
-    r"(?:(?:hola|buenos dias|buenas tardes|buenas noches)[, ]+)?"
+    r"(?:(?:hola|buenos dias|buenas tardes|buenas noches)[, ]+[¿¡]?\s*)?"
     r"(?:hola|buenos dias|buenas tardes|buenas noches|que puedes hacer|"
     r"en que me puedes ayudar|como puedes ayudarme|que haces)[.!? ]*"
+)
+GREETING_PREFIX = re.compile(r"^(?:hola|buenos dias|buenas tardes|buenas noches)[,.! ]+[¿¡]?\s*")
+OUT_OF_SCOPE = re.compile(
+    r"(?:"
+    r"(?:(?:cual|que) es el nombre de|como se llama) mi (?:madre|mama|padre|papa|herman[oa]|pareja|mascota)|"
+    r"cual es (?:mi fecha de nacimiento|la capital de [\w -]+)|"
+    r"quien (?:escribio (?:el quijote|don quijote(?: de la mancha)?)|pinto la mona lisa)|"
+    r"como (?:se (?:hace|prepara) una tortilla de patatas|preparo (?:una tortilla de patatas|arroz con leche))|"
+    r"(?:quien|que seleccion) gano el mundial de futbol(?: de \d{4})?|"
+    r"cuanto es \d+\s*(?:\+|menos|mas|por)\s*\d+"
+    r")[.!? ]*"
 )
 CLAUSE_BREAK = re.compile(r"[.!?;]+\s*|\s+y\s+(?=(?:como|que|cual|donde)\b)")
 
@@ -51,4 +62,6 @@ def select_route(question):
         return "aclaracion", None
     if TICKET_CODE.fullmatch(text.rstrip("?!.")):
         return "aclaracion", None
+    if OUT_OF_SCOPE.fullmatch(GREETING_PREFIX.sub("", text)):
+        return "respuesta_directa", "fuera_de_alcance"
     return "consulta_documental", None

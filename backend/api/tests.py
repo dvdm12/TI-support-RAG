@@ -147,6 +147,8 @@ class ControllerTests(SimpleTestCase):
     def test_attention_routes_without_documentary_provider(self):
         cases = (
             ('¿Qué puedes hacer?', 'respuesta_directa', 'OK_RESPUESTA_DIRECTA', None),
+            ('Hola, ¿en qué me puedes ayudar?', 'respuesta_directa', 'OK_RESPUESTA_DIRECTA', None),
+            ('Hola, ¿cómo va el ticket TI-1001?', 'consulta_ticket', 'OK_TICKET_CONSULTADO', 'consultar_estado_ticket'),
             ('¿Cómo va el ticket TI-1001?', 'consulta_ticket', 'OK_TICKET_CONSULTADO', 'consultar_estado_ticket'),
             ('¿Cómo va mi ticket?', 'aclaracion', 'OK_PIDE_ACLARACION', None),
             ('¿Cómo va mi ticket TI-01?', 'aclaracion', 'OK_PIDE_ACLARACION', None),
@@ -166,6 +168,38 @@ class ControllerTests(SimpleTestCase):
                     self.assertTrue(result['respuesta'])
                     self.assertEqual(result['fuentes'], [])
         rag.assert_not_called()
+
+    def test_out_of_scope_questions_do_not_invoke_documentary_provider(self):
+        questions = (
+            'cual es el nombre de mi madre ?',
+            'Hola, ¿cómo se llama mi mascota?',
+            '¿Cuál es la capital de Francia?',
+            '¿Quién pintó la Mona Lisa?',
+            '¿Cómo preparo arroz con leche?',
+            '¿Qué selección ganó el Mundial de fútbol de 2022?',
+            '¿Cuánto es 17 por 8?',
+        )
+        with patch('api.services.run_query') as rag:
+            for question in questions:
+                with self.subTest(question=question):
+                    response = self.query({'pregunta': question})
+                    self.assertEqual(response.status_code, 200)
+                    result = response.json()
+                    self.assertIn('fuera del alcance', result['respuesta'])
+                    self.assertEqual(result['fuentes'], [])
+                    self.assertEqual(result['traza'], {
+                        'ruta': 'respuesta_directa', 'operacion': None,
+                        'resultado': 'OK_RESPUESTA_DIRECTA', 'motivo_salida': 'fuera_de_alcance',
+                    })
+        rag.assert_not_called()
+
+    def test_support_questions_with_personal_context_still_use_documentary_route(self):
+        question = '¿Cómo restablezco la contraseña de la cuenta de mi madre?'
+        with patch('api.services.run_query', return_value=self.result) as rag:
+            response = self.query({'pregunta': question})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['traza']['ruta'], 'consulta_documental')
+        rag.assert_called_once()
 
     def test_question_about_closing_ticket_uses_documentary_route(self):
         with patch('api.services.run_query', return_value=self.result) as rag:

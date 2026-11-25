@@ -1,0 +1,43 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam databaseBackgroundColor white
+skinparam noteBackgroundColor white
+skinparam ArrowColor black
+skinparam nodesep 40
+skinparam ranksep 35
+
+title Preparación del corpus · Mesa de Ayuda TI
+
+artifact "PDF del corpus\ny manifiesto" as fuentes
+
+package "Preparación del corpus" {
+  component "Ingesta\ningestion.py\nload_corpus()" as ingesta
+  component "Fragmentación\nchunking.py\nfragment_sections()" as fragmentacion
+  component "Embeddings\nembeddings.py\nSentenceEmbedder" as embeddings
+  component "Construcción del índice\nindex.py\nsave_index() / load_index()" as indice
+}
+
+artifact "Índice local\nrecords.json\nvectors.npy\nconfig.json" as salida
+
+fuentes --> ingesta : leer y verificar fuentes
+ ingesta --> fragmentacion : secciones
+fragmentacion --> embeddings : textos de los fragmentos
+embeddings --> indice : vectores
+fragmentacion --> indice : fragmentos y metadatos
+indice --> salida : guardar
+
+legend bottom
+  Coordinación: scripts/index_manuals.py
+  Contratos: models.py (Section, Chunk, EmbeddingConfig)
+  La fragmentación usa el tokenizer del embedder para limitar tokens.
+endlegend
+@enduml

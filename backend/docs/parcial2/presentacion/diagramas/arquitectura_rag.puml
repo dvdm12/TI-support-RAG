@@ -1,0 +1,32 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 15
+skinparam roundcorner 12
+skinparam ArrowColor #173A58
+skinparam rectangleBackgroundColor #F3F7FB
+skinparam rectangleBorderColor #173A58
+skinparam databaseBackgroundColor #E7FAFC
+skinparam databaseBorderColor #11AFC4
+skinparam nodesep 35
+skinparam ranksep 30
+
+title RAG - Mesa de Ayuda TI
+
+rectangle "Solicitud TI\nTexto u OCR de imagen" as entrada
+rectangle "Clasificación\nGroq" as clasificacion
+rectangle "Recuperación híbrida\nSemántica + BM25 + RRF" as recuperacion
+database "Corpus indexado\nSupabase + índice léxico" as corpus
+rectangle "Generación con Groq\nContexto Top-3 + fuentes" as generacion
+rectangle "Validación y decisión\nFormato, citas y respaldo" as validacion
+rectangle "Respuesta al usuario\nRespuesta citada, aclaración\no intervención humana" as salida
+
+entrada --> clasificacion
+clasificacion --> recuperacion
+corpus -left-> recuperacion : fragmentos
+recuperacion --> generacion : contexto con fuentes
+generacion --> validacion
+validacion --> salida
+@enduml
