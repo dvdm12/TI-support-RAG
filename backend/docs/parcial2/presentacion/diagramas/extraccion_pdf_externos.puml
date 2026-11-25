@@ -1,0 +1,49 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam noteBackgroundColor white
+skinparam ArrowColor black
+skinparam nodesep 40
+skinparam ranksep 40
+
+title Extracción de PDF externos · Mesa de Ayuda TI
+
+artifact "PDF externo registrado\nManifiesto + perfil revisado" as fuente
+
+package "Extracción de PDF externos" {
+  component "Coordinador de extracción\nexternal_ingestion.py\nextract_real_document()" as extractor
+  component "Estrategias de extracción\nextraction_strategies.py\nTexto, columnas y tablas" as strategies
+  component "Reglas de extracción\nextraction_rules.py\nTexto y revisión de tablas" as rules
+  component "Adaptadores PDF\npdf_adapters.py\npypdf / pdfplumber" as adapters
+  component "Revisión OCR explícita\npdf_ocr_review.py\nreview_scan_page()" as ocr
+}
+
+artifact "Extracción estructurada\nSecciones, párrafos y tablas\nPáginas y coordenadas" as output
+artifact "Candidato OCR\nPendiente de revisión" as candidate
+
+fuente --> extractor
+extractor ..> strategies : selecciona
+extractor ..> adapters : lee estructura y páginas
+extractor ..> rules : aplica reglas
+strategies ..> adapters : usa
+extractor --> output : tras validar
+
+fuente ..> ocr : operación opcional
+ocr ..> adapters : lee y renderiza
+ocr --> candidate
+
+legend bottom
+  Flecha discontinua: dependencia de uso u operación opcional.
+  OCR no es un fallback automático y su salida se conserva separada.
+  Contratos y validación de extracción se detallan en otro diagrama.
+  Este proceso no genera embeddings ni carga documentos en Supabase.
+endlegend
+@enduml

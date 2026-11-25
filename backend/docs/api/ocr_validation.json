@@ -1,0 +1,103 @@
+{
+  "timestamp_utc": "2026-10-27T07:41:30.370402+00:00",
+  "checks": [
+    {
+      "name": "health",
+      "status": 200,
+      "passed": true,
+      "code": null
+    },
+    {
+      "name": "auth-before-upload",
+      "status": 401,
+      "passed": true,
+      "code": "unauthorized"
+    },
+    {
+      "name": "real-ocr",
+      "status": 200,
+      "passed": true,
+      "code": null
+    },
+    {
+      "name": "corrupt-image",
+      "status": 400,
+      "passed": true,
+      "code": "invalid_image"
+    },
+    {
+      "name": "spoofed-mime",
+      "status": 415,
+      "passed": true,
+      "code": "unsupported_image"
+    },
+    {
+      "name": "side-limit",
+      "status": 413,
+      "passed": true,
+      "code": "image_too_large"
+    },
+    {
+      "name": "upload-byte-limit",
+      "status": 413,
+      "passed": true,
+      "code": "body_too_large"
+    },
+    {
+      "name": "blank-image",
+      "status": 422,
+      "passed": true,
+      "code": "ocr_no_text"
+    },
+    {
+      "name": "review-long-ocr",
+      "status": 200,
+      "passed": true,
+      "code": null
+    },
+    {
+      "name": "combined-generation-budget",
+      "status": 422,
+      "passed": true,
+      "code": "input_too_large"
+    },
+    {
+      "name": "combined-embedding-budget",
+      "status": 422,
+      "passed": true,
+      "code": "input_too_large"
+    },
+    {
+      "name": "openapi",
+      "status": 200,
+      "passed": true,
+      "code": null
+    }
+  ],
+  "real_ocr": {
+    "request_id": "d2ff4a67-84f3-4ace-bd2e-f0b444994b05",
+    "texto_ocr": "Mesa de Ayuda TI\nEl equipo no tiene conexion a la red\nError de red",
+    "motor": "tesseract",
+    "idiomas": "spa+eng",
+    "confianza_ocr": 93.67,
+    "cantidad_palabras": 15,
+    "presupuesto": {
+      "admisible": true,
+      "tokens_entrada": 727,
+      "limite_entrada": 1000,
+      "tokens_busqueda": 44,
+      "limite_busqueda": 128,
+      "motivo": null
+    }
+  },
+  "long_ocr_budget": {
+    "admisible": false,
+    "tokens_entrada": 928,
+    "limite_entrada": 1000,
+    "tokens_busqueda": 246,
+    "limite_busqueda": 128,
+    "motivo": "Reduce la pregunta y el texto OCR para el modelo de búsqueda."
+  },
+  "groq_generation_executed": false,
+  "notes": "HTTP local contra Docker. OCR real y controles de entrada; no se enviaron consultas válidas al generador ni se modificó Supabase."
+}

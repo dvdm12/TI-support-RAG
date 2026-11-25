@@ -1,0 +1,37 @@
+@startuml
+!pragma layout smetana
+set namespaceSeparator none
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam classBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam noteBackgroundColor white
+skinparam classAttributeIconSize 0
+skinparam nodesep 40
+skinparam ranksep 45
+hide circle
+hide empty methods
+
+
+
+package "config.py" {
+  class RAGConfig <<dataclass, frozen=True>> {
+    + model: str = EMBEDDING_MODEL
+    + revision: str | None = None
+    + dimension: int = 384
+    + strategy: str = "sections"
+    + chunk_chars: int = 420
+    + overlap_chars: int = 80
+    + max_tokens: int = 80
+    + k: int = 3
+    + context_chars: int = 6000
+    + corpus_base: str = "ti-manuals-v2"
+    + manifest: Path = ROOT / "data/corpus/v2/manifest.json"
+    + prompt: Path = ROOT / "prompts/rag_v6.md"
+  }
+}
+
+@enduml

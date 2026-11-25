@@ -1,0 +1,48 @@
+@startuml
+!pragma layout smetana
+left to right direction
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam classBackgroundColor white
+skinparam classAttributeIconSize 0
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 19
+skinparam roundcorner 0
+hide circle
+hide methods
+skinparam nodesep 55
+skinparam ranksep 70
+
+entity "auth.users\n(tabla administrada por Supabase)" as usuarios {
+  * id : uuid <<PK>>
+}
+
+entity "public.clase08_fragmentos" as fragmentos {
+  * owner_id : uuid <<PK, FK>>
+  * corpus_id : text <<PK>>
+  * chunk_id : text <<PK>>
+  --
+  * content : text
+  * metadata : jsonb
+  * configuracion : jsonb
+  * embedding : extensions.vector(384)
+}
+
+usuarios ||--o{ fragmentos : "id = owner_id"
+
+note bottom of fragmentos
+  PK compuesta: (owner_id, corpus_id, chunk_id)
+  Todos los campos son NOT NULL
+  owner_id por defecto: auth.uid()
+  corpus_id: 1 a 100 caracteres, tras btrim
+  content: 1 a 10 000 caracteres, tras btrim
+end note
+
+legend bottom
+  RLS: SELECT, INSERT y UPDATE para el propietario
+  RPC: clase08_buscar_fragmentos() con permisos del usuario
+  Filtros: propietario, corpus, modelo y revisión
+  Búsqueda exacta por distancia coseno, hasta 10 resultados
+endlegend
+@enduml

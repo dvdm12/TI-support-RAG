@@ -1,0 +1,23 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam nodesep 35
+skinparam ranksep 30
+artifact "Índice local\nUnidades, fragmentos y vectores" as index
+artifact "Consulta y vector" as input
+component "Recuperación de unidades\nexternal_retrieval.py\nretrieve_units()" as search
+component "Ranking léxico\nlexical.py\nBM25" as lexical
+artifact "Unidades completas\ncon evidencia" as output
+index --> search : load_local_index()
+input --> search
+search ..> lexical : modos híbridos
+search --> output
+@enduml

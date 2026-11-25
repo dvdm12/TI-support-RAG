@@ -1,0 +1,43 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam databaseBackgroundColor white
+skinparam ArrowColor black
+skinparam nodesep 40
+skinparam ranksep 40
+
+title Persistencia del RAG en Supabase · Mesa de Ayuda TI
+
+artifact "Índice local\nrecords.json · vectors.npy\nconfig.json" as indice
+component "Carga del corpus\nscripts/index_manuals.py\nSupabaseRepository.upsert()" as carga
+component "Recuperación\nretrieval.py\nRetriever.retrieve()" as retrieval
+
+package "Supabase · PostgreSQL + pgvector" {
+  component "Autenticación\nAuth · clave publicable\nsign_in_with_password()" as auth
+  database "public.clase08_fragmentos\nPK owner_id · corpus_id · chunk_id\ncontent · metadata · configuracion\nembedding vector(384)" as tabla
+  component "Seguridad por filas (RLS)\nselect · insert · update\nauth.uid() = owner_id" as rls
+  component "Búsqueda vectorial (RPC)\nclase08_buscar_fragmentos()\ndistancia coseno <=> · k ≤ 10" as rpc
+}
+
+indice --> carga : 70 fragmentos y vectores
+carga ..> auth : sesión de usuario
+carga --> tabla : upsert en lotes de 50
+rls ..> tabla : filtra por propietario
+retrieval ..> rpc : vector de consulta (k = 10)
+rpc ..> tabla : búsqueda exacta por corpus,\nmodelo y revisión
+retrieval ..> tabla : lectura paginada para BM25
+
+legend bottom
+  Esquema: infra/supabase/migrations/20261014_documentary_rag.sql
+  Extensión vector en el esquema extensions; sin índice HNSW o IVFFlat: búsqueda exacta.
+  Verificación del 25-10-2026: 70 filas visibles para el usuario; la consulta no hizo upsert.
+endlegend
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam componentBorderColor black
+skinparam packageBackgroundColor white
+skinparam packageBorderColor black
+skinparam databaseBackgroundColor white
+skinparam databaseBorderColor black
+skinparam ArrowColor black
+skinparam nodesep 35
+skinparam ranksep 40
+
+title Componentes del RAG · Mesa de Ayuda TI
+
+component "Notebook / API" as cliente
+
+package "Módulo RAG" {
+  component "Orquestador\npipeline.py" as pipeline
+  component "Recuperación híbrida\nretrieval.py" as retrieval
+  component "Contexto\ncontext.py" as context
+  component "Validación y respaldo\ncitations.py · support.py" as validation
+  component "Embeddings\nembeddings.py" as embeddings
+  component "BM25\nlexical.py" as lexical
+  component "Repositorio\nrepository.py" as repository
+}
+
+component "Cliente Groq\ngroq_client.py" as groq
+component "Corpus\nSupabase / local" as corpus
+
+cliente --> pipeline
+pipeline --> retrieval
+pipeline --> context
+pipeline --> validation
+pipeline --> groq
+retrieval --> embeddings
+retrieval --> lexical
+retrieval --> repository
+repository --> corpus
+validation --> groq
+@enduml

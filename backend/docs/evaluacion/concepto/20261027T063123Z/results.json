@@ -1,0 +1,287 @@
+{
+  "counts": {
+    "satisfactoria": 3,
+    "abstencion": 6,
+    "parcial": 3,
+    "total": 12,
+    "technical_errors": 0
+  },
+  "method": {
+    "reviewer": "Codex, agente; no revisión humana",
+    "question_basis": "Criterios externos y preguntas redactadas antes de observar las respuestas. No se usaron los casos ni manuales existentes para redactarlos.",
+    "execution": "GUI real; una nueva consulta por pregunta. Solo se reutilizó el controlador técnico de interacción.",
+    "retrieval": "El producto conservó su recuperación habitual. Las referencias externas no se incluyeron en prompts ni se incorporaron al corpus.",
+    "plan_sha256": "e4853fa89b1f59c9b62c67a1f9bd6750da2ead4106e9386c2758591ed20c0282",
+    "plan_file_mtime_utc": "2026-10-27T06:33:39.547837+00:00",
+    "first_query_utc": "2026-10-27T06:34:00.996Z",
+    "independence": "Batería exploratoria nueva, separada del desarrollo anterior. No es la reserva formal ni prueba de independencia estadística.",
+    "grounding": "Las etiquetas documentales se transcriben de la GUI; no certifican que cada cita sustente cada afirmación. No se reutilizaron los manuales para formar el criterio conceptual.",
+    "latency": "elapsedSeconds incluye coordinación del controlador. No se usó como benchmark ni se compararon tiempos."
+  },
+  "sources": {
+    "IBM-HD": "https://www.ibm.com/think/topics/help-desk",
+    "IBM-SD": "https://www.ibm.com/think/topics/service-desk",
+    "ATL-INC": "https://www.atlassian.com/incident-management/itsm",
+    "ATL-PRIO": "https://support.atlassian.com/jira-service-management-cloud/docs/how-impact-and-urgency-are-used-to-calculate-priority/",
+    "ATL-SRM": "https://www.atlassian.com/itsm/service-request-management/",
+    "ATL-SLA": "https://www.atlassian.com/itsm/service-request-management/slas"
+  },
+  "cases": [
+    {
+      "id": "C01",
+      "topic": "Definición",
+      "question": "¿Qué es una mesa de ayuda TI? Explícaselo a una persona que empieza a trabajar y no tiene conocimientos técnicos.",
+      "expected": "Define una función de soporte que recibe y coordina ayuda tecnológica para usuarios; no la reduce a un mueble o un chat.",
+      "sources": [
+        "IBM-HD",
+        "IBM-SD"
+      ],
+      "conceptual_assessment": "satisfactoria",
+      "agent_note": "Explica punto de contacto, recepción, clasificación, derivación y seguimiento en lenguaje accesible.",
+      "technical_error": false,
+      "answer": "Una mesa de ayuda TI es el punto de contacto inicial donde los usuarios reportan problemas o solicitan asistencia técnica. El equipo recibe la solicitud, la clasifica y la dirige al área adecuada, manteniendo la información organizada y evitando errores. El proceso incluye registrar la petición, asignar prioridades y dar seguimiento hasta su resolución, garantizando que el usuario reciba una respuesta clara y oportuna. F1",
+      "documentary_state_visible": "Validación automática superada\nRespuesta documental\notros · prioridad baja",
+      "limitation": "Se limita a la descripción general del proceso de mesa de ayuda, sin detallar procedimientos específicos de cada organización.",
+      "sources_visible": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-05 | Separar límites y errores"
+      ],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C01.png",
+      "pipeline_label": "4.7 s · pipeline"
+    },
+    {
+      "id": "C02",
+      "topic": "Alcance",
+      "question": "¿La mesa de ayuda TI solo sirve para reparar computadores? Explica qué otras funciones cumple dentro de una organización.",
+      "expected": "Menciona atención, registro, orientación, seguimiento o derivación; reconoce que el alcance concreto depende de la organización.",
+      "sources": [
+        "IBM-HD",
+        "IBM-SD"
+      ],
+      "conceptual_assessment": "satisfactoria",
+      "agent_note": "Amplía el alcance más allá de reparación: cuentas, seguridad y clasificación. No afirma ejecutar una acción real.",
+      "technical_error": false,
+      "answer": "La mesa de ayuda TI no se limita a reparar computadores; también gestiona cuentas y correos de recuperación F1, revisa incidentes y riesgos de seguridad como mensajes sospechosos F2, y clasifica problemas según componentes físicos o software, registrando evidencia antes de asignar causas F3.",
+      "documentary_state_visible": "Validación automática superada\nRespuesta documental\notros · prioridad baja",
+      "limitation": "Respuesta dentro de 90 palabras.",
+      "sources_visible": [
+        "F1\nAdministración de cuentas\nCTA-04 | Cambio del correo de recuperación",
+        "F2\nIncidentes y riesgos de seguridad\nSEG-02 | Mensaje o enlace sospechoso",
+        "F3\nEquipos y componentes físicos\nHW-01 | Alcance y clasificación"
+      ],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C02.png",
+      "pipeline_label": "2.8 s · pipeline"
+    },
+    {
+      "id": "C03",
+      "topic": "Tickets",
+      "question": "¿Para qué sirve un ticket de soporte y qué se pierde si todas las solicitudes se atienden por mensajes sueltos sin registro?",
+      "expected": "Relaciona el ticket con trazabilidad, responsabilidad, historial y estado; explica el riesgo de solicitudes perdidas o sin seguimiento.",
+      "sources": [
+        "IBM-HD",
+        "ATL-INC"
+      ],
+      "conceptual_assessment": "satisfactoria",
+      "agent_note": "Relaciona el ticket con registro, prioridades y trazabilidad; explica pérdidas del manejo informal.",
+      "technical_error": false,
+      "answer": "Un ticket de soporte sirve para registrar formalmente la solicitud, asignar prioridades, rastrear su evolución y garantizar la trazabilidad de las acciones realizadas F1. Si todas las solicitudes se atienden por mensajes sueltos sin registro, se pierde la trazabilidad, la posibilidad de asignar prioridades y la documentación necesaria para auditorías o mejoras continuas F2. Además, sin ticket se dificulta la identificación de patrones de fallas y la derivación adecuada cuando la solicitud está fuera del alcance TI F3.",
+      "documentary_state_visible": "Validación automática superada\nRespuesta documental\notros · prioridad media",
+      "limitation": "",
+      "sources_visible": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-04 | Solicitud fuera del alcance TI",
+        "F2\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua",
+        "F3\nAplicaciones e instalación\nSW-02 | Aplicación que falla"
+      ],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C03.png",
+      "pipeline_label": "3.0 s · pipeline"
+    },
+    {
+      "id": "C04",
+      "topic": "Incidente y solicitud",
+      "question": "¿En qué se diferencia un incidente de una solicitud de servicio? Da un ejemplo de cada uno que no trate de contraseñas ni de conexión a Internet.",
+      "expected": "Distingue interrupción o degradación de un servicio de una petición normal de información, acceso o provisión; usa ejemplos consistentes.",
+      "sources": [
+        "ATL-SRM"
+      ],
+      "conceptual_assessment": "abstencion",
+      "agent_note": "No distingue los conceptos ni da ejemplos. La abstención evita inventar, pero no satisface la pregunta.",
+      "technical_error": false,
+      "answer": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "documentary_state_visible": "OK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja",
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "sources_visible": [],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C04.png",
+      "pipeline_label": "4.6 s · pipeline"
+    },
+    {
+      "id": "C05",
+      "topic": "Ciclo de atención",
+      "question": "¿Qué etapas suele recorrer un caso desde que llega a la mesa de ayuda TI hasta que se considera cerrado?",
+      "expected": "Describe registro, clasificación, prioridad, atención o derivación, resolución, comprobación y cierre; evita imponer un flujo universal exacto.",
+      "sources": [
+        "ATL-INC"
+      ],
+      "conceptual_assessment": "parcial",
+      "agent_note": "Incluye atención y comprobación con el usuario, pero omite registro/prioridad y mezcla cierre definitivo con documentar por qué sigue abierto.",
+      "technical_error": false,
+      "answer": "Un caso suele pasar por las siguientes etapas: 1) Aclaración y derivación de la solicitud, donde se identifica la naturaleza del problema y se asigna a la categoría adecuada F1. 2) Análisis y resolución mediante la aplicación de soluciones técnicas o la recolección de información adicional F1. 3) Prueba de cierre donde se verifica con el usuario que la función afectada funciona correctamente o se registra la condición que mantiene el caso pendiente F2. 4) Cierre definitivo cuando se confirma la solución o se documenta la razón de permanecer abierto F2.",
+      "documentary_state_visible": "Validación automática superada\nRespuesta documental\notros · prioridad media",
+      "limitation": "Respuesta basada únicamente en la evidencia proporcionada. No se incluyen pasos adicionales ni supuestos no respaldados por los datos.",
+      "sources_visible": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua",
+        "F2\nEquipos y componentes físicos\nHW-05 | Cierre y evidencia"
+      ],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C05.png",
+      "pipeline_label": "3.1 s · pipeline"
+    },
+    {
+      "id": "C06",
+      "topic": "Escalamiento",
+      "question": "¿Qué significa escalar un ticket y por qué eso no debería equivaler a dejar al usuario sin responsable ni información?",
+      "expected": "Explica transferencia a capacidad o autoridad apropiada, con contexto y continuidad del seguimiento.",
+      "sources": [
+        "ATL-INC"
+      ],
+      "conceptual_assessment": "parcial",
+      "agent_note": "Define transferencia y continuidad, pero presenta actualizar la categoría como obligación al escalar y no explica bien la entrega del contexto.",
+      "technical_error": false,
+      "answer": "Escalar un ticket significa transferir la solicitud a un nivel superior de soporte para su resolución, manteniendo al usuario informado y asignado a un responsable F1F2F3. No debe dejar al usuario sin responsable ni información, pues el proceso de escalado debe incluir la actualización de la categoría y la notificación del nuevo responsable F1F2F3.",
+      "documentary_state_visible": "Validación automática superada\nRespuesta documental\notros · prioridad baja",
+      "limitation": "",
+      "sources_visible": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-03 | Información suficiente para reclasificar",
+        "F2\nAclaración y derivación de solicitudes\nOTR-02 | Solicitud ambigua",
+        "F3\nAclaración y derivación de solicitudes\nOTR-03 | Información suficiente para reclasificar"
+      ],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C06.png",
+      "pipeline_label": "3.4 s · pipeline"
+    },
+    {
+      "id": "C07",
+      "topic": "Prioridad",
+      "question": "Dos solicitudes llegan al mismo tiempo: una detiene un proceso crítico del negocio y la otra causa una molestia menor a una persona. ¿Con qué criterio debería priorizarlas una mesa de ayuda TI?",
+      "expected": "Usa impacto y urgencia, y explica por qué ni el orden de llegada ni la insistencia son suficientes por sí solos.",
+      "sources": [
+        "ATL-PRIO"
+      ],
+      "conceptual_assessment": "abstencion",
+      "agent_note": "No explica impacto ni urgencia. Remite a falta de evidencia y soporte humano sin resolver la comparación conceptual.",
+      "technical_error": false,
+      "answer": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "documentary_state_visible": "Requiere soporte humano\nEvidencia insuficiente\notros · prioridad media",
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "sources_visible": [],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C07.png",
+      "pipeline_label": "16.9 s · pipeline"
+    },
+    {
+      "id": "C08",
+      "topic": "SLA",
+      "question": "¿Qué es un SLA en una mesa de ayuda TI? Distingue el tiempo de primera respuesta del tiempo de resolución, sin inventar plazos universales.",
+      "expected": "Explica un acuerdo de nivel de servicio, separa respuesta y resolución y señala que los compromisos dependen del acuerdo.",
+      "sources": [
+        "ATL-SLA"
+      ],
+      "conceptual_assessment": "abstencion",
+      "agent_note": "No define SLA ni distingue primera respuesta de resolución. No inventa plazos.",
+      "technical_error": false,
+      "answer": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "documentary_state_visible": "OK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja",
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "sources_visible": [],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C08.png",
+      "pipeline_label": "3.9 s · pipeline"
+    },
+    {
+      "id": "C09",
+      "topic": "Conocimiento",
+      "question": "¿Qué diferencia hay entre el historial de tickets y una base de conocimiento? ¿Cómo ayuda cada uno al trabajo de la mesa de ayuda TI?",
+      "expected": "Distingue el registro de casos del conocimiento reutilizable y explica la utilidad de ambos sin confundirlos.",
+      "sources": [
+        "IBM-HD",
+        "ATL-INC"
+      ],
+      "conceptual_assessment": "abstencion",
+      "agent_note": "No diferencia el registro de casos de los artículos de conocimiento reutilizables.",
+      "technical_error": false,
+      "answer": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "documentary_state_visible": "OK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja",
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "sources_visible": [],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C09.png",
+      "pipeline_label": "5.1 s · pipeline"
+    },
+    {
+      "id": "C10",
+      "topic": "Canales",
+      "question": "Si una misma persona reporta el mismo caso por correo y por chat, ¿cómo debería coordinarlo la mesa de ayuda TI para evitar duplicar el trabajo?",
+      "expected": "Propone relacionar o centralizar los contactos de un caso y mantener seguimiento coherente, sin afirmar que ya realizó acciones.",
+      "sources": [
+        "IBM-HD"
+      ],
+      "conceptual_assessment": "abstencion",
+      "agent_note": "No explica correlación de contactos ni seguimiento unificado entre canales.",
+      "technical_error": false,
+      "answer": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "documentary_state_visible": "Requiere soporte humano\nEvidencia insuficiente\notros · prioridad media",
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "sources_visible": [],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C10.png",
+      "pipeline_label": "29.8 s · pipeline"
+    },
+    {
+      "id": "C11",
+      "topic": "Automatización",
+      "question": "¿Una mesa de ayuda TI es lo mismo que un chatbot? Explica qué puede automatizarse y qué responsabilidades siguen necesitando personas.",
+      "expected": "La presenta como función con personas y procesos apoyados por herramientas; distingue automatización de responsabilidad y escalamiento.",
+      "sources": [
+        "IBM-HD",
+        "IBM-SD"
+      ],
+      "conceptual_assessment": "abstencion",
+      "agent_note": "No distingue la función de mesa de ayuda de una herramienta chatbot ni sus responsabilidades humanas.",
+      "technical_error": false,
+      "answer": "No puedo ofrecer un procedimiento verificado con los pasajes recuperados.",
+      "documentary_state_visible": "OK_EVIDENCIA_INSUFICIENTE\nEvidencia insuficiente\notros · prioridad baja",
+      "limitation": "La revisión adicional detectó afirmaciones sin respaldo suficiente. Se necesita revisión de soporte.",
+      "sources_visible": [],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C11.png",
+      "pipeline_label": "8.6 s · pipeline"
+    },
+    {
+      "id": "C12",
+      "topic": "Valor del servicio",
+      "question": "¿Cómo se puede saber si una mesa de ayuda TI está funcionando bien, además de contar cuántos tickets cierra?",
+      "expected": "Propone indicadores de oportunidad y calidad o satisfacción; no equipara volumen de cierres con resolución efectiva.",
+      "sources": [
+        "IBM-HD",
+        "IBM-SD",
+        "ATL-SLA"
+      ],
+      "conceptual_assessment": "parcial",
+      "agent_note": "Propone verificar resolución y clasificación, pero no desarrolla indicadores de oportunidad, calidad o satisfacción. Repite la ambigüedad entre cerrar y quedar pendiente.",
+      "technical_error": false,
+      "answer": "Para saber si una mesa de ayuda TI está funcionando bien, no basta con contar cuántos tickets cierra; también se debe verificar que cada cierre se realice tras comprobar la función afectada con el usuario o registrar la condición por la que permanece pendiente F2. Además, es necesario distinguir entre la recepción de un ticket, la confirmación del incidente y su cierre real; la mera recepción no indica resolución F3. Por último, la mesa debe clasificar correctamente las solicitudes, por ejemplo, diferenciando entre software y hardware cuando el caso lo requiera F1.",
+      "documentary_state_visible": "Validación automática superada\nRespuesta documental\notros · prioridad media",
+      "limitation": "Se limita a los criterios documentados en el corpus; no se incluyen métricas adicionales ni procesos de mejora continua.",
+      "sources_visible": [
+        "F1\nAclaración y derivación de solicitudes\nOTR-01 | Alcance de la categoría",
+        "F2\nEquipos y componentes físicos\nHW-05 | Cierre y evidencia",
+        "F3\nIncidentes y riesgos de seguridad\nSEG-05 | Seguimiento y límites"
+      ],
+      "grounding_assessment": "no_verificada",
+      "screenshot": "C12.png",
+      "pipeline_label": "13.0 s · pipeline"
+    }
+  ]
+}

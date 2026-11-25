@@ -1,0 +1,37 @@
+{
+  "scope": "Recalculated from saved known development selections; no new retrieval measurements",
+  "rows": [
+    {
+      "variante": "Semántica A histórica",
+      "preguntas_documentales": 7,
+      "precision": 0.47619047619047616,
+      "recall": 0.738095238095238,
+      "hit": 0.8571428571428571,
+      "rr": 0.8571428571428571,
+      "coverage": 0.7821428571428571,
+      "cobertura_contexto": 0.6928571428571428
+    },
+    {
+      "variante": "Híbrida v1 histórica",
+      "preguntas_documentales": 7,
+      "precision": 0.5238095238095237,
+      "recall": 0.8095238095238094,
+      "hit": 0.8571428571428571,
+      "rr": 0.8571428571428571,
+      "coverage": 0.8035714285714286,
+      "cobertura_contexto": 0.7678571428571429
+    },
+    {
+      "variante": "Híbrida v2",
+      "preguntas_documentales": 7,
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "hit": 1.0,
+      "rr": 1.0,
+      "coverage": 1.0,
+      "cobertura_contexto": 1.0
+    }
+  ],
+  "human_review_status": "pending_human_review",
+  "reserve_executed": false
+}

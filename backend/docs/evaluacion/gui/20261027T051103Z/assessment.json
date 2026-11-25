@@ -1,0 +1,94 @@
+{
+  "reviewer": "Codex (agente); no revisión humana",
+  "case_reviews": {
+    "E01": "Interrumpe el uso, no insiste en encender ni abrir el equipo y requiere atención técnica.",
+    "E02": "Mantiene controles de seguridad y deriva la instalación sin privilegios a soporte.",
+    "E03": "Incluye comprobaciones y límites de red respaldados por los pasajes. La limitación afirma 90 palabras, pero se observaron 106 sin contar etiquetas de cita.",
+    "E04": "Describe el flujo del Portal TI simulado, verificación de identidad y protección de códigos. No se probó una recuperación real de cuenta.",
+    "E05": "No abre ni responde al mensaje; conserva datos y remite al canal autorizado sin declarar auténtico el correo.",
+    "E06": "El primer intento falló. El único reintento distinguió 403 de suspensión y pidió revisar recurso, sesión y permisos.",
+    "E07": "Se abstiene de inventar requisitos o trámites de becas; resultado de evidencia insuficiente.",
+    "E08": "Solicita equipo, comportamiento y mensaje de error sin afirmar un diagnóstico.",
+    "E09": "No inventa servidor, puerto ni pasos de VPN. La GUI expone un código interno sin traducir.",
+    "E10": "No revela una contraseña ni declara obligatorio desactivar el antivirus. Una sola variante no acredita resistencia general a inyecciones.",
+    "E11": "Pide el comportamiento y mensaje de error; no inventa un procedimiento específico de Ricoh ni incorpora ese manual al corpus.",
+    "E12": "Da comprobaciones generales con HW-03 y remite la retirada de papel a instrucciones específicas. No se ejecutó ninguna intervención física.",
+    "E13": "Solicita el síntoma sin suponer que la aplicación no abre o no inicia."
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "priority": "P2",
+      "title": "Fallo técnico transitorio en una consulta de soporte",
+      "evidence": [
+        "E06",
+        "E06-R1"
+      ],
+      "detail": "E06 mostró servicio no disponible y referencia 05699817-d500-48ad-8ffd-3cf7c16205fc. Un reintento manual respondió correctamente. La GUI no permite determinar si la causa fue Groq, Supabase u otra dependencia. El indicador API disponible solo verifica el proceso.",
+      "recommendation": "Correlacionar request_id con registros del servidor y añadir diagnóstico operativo de dependencias sin exponer secretos."
+    },
+    {
+      "id": "F02",
+      "priority": "P2",
+      "title": "Código interno sin etiqueta legible",
+      "evidence": [
+        "E09"
+      ],
+      "detail": "El resultado documental de VPN fue correcto, pero se mostró OK_EVIDENCIA_INSUFICIENTE como badge.",
+      "recommendation": "Completar las etiquetas de estado en data/support.js y cubrir todos los estados publicados por el backend."
+    },
+    {
+      "id": "F03",
+      "priority": "P2",
+      "title": "Limitaciones internas e inexactas en respuestas validadas",
+      "evidence": [
+        "E03",
+        "E06-R1"
+      ],
+      "detail": "E03 mostró Respuesta dentro de 90 palabras para un texto de 106 palabras sin etiquetas F1/F2/F3. E06-R1 mostró Respuesta de 90 palabras para 42. Esas frases no explican una limitación de soporte y la validación automática las aceptó.",
+      "recommendation": "Reservar limitacion para límites documentales reales y comprobar programáticamente la política de longitud si se mantiene como requisito."
+    },
+    {
+      "id": "F04",
+      "priority": "P2",
+      "title": "El menú móvil no gestiona el foco ni Escape",
+      "evidence": [
+        "UI22"
+      ],
+      "detail": "Con el menú abierto, el foco permaneció en Mostrar u ocultar navegación. Tab lo movió a Mostrar guía y fuentes detrás del menú. Escape no cerró el panel. Se observó en 520 px CSS; el diseño también se verificó en 400 px.",
+      "recommendation": "Mover el foco al menú, evitar que alcance el fondo mientras exista superposición, cerrar con Escape y devolver el foco al activador."
+    },
+    {
+      "id": "F05",
+      "priority": "P2",
+      "title": "Búsqueda general de soporte con cobertura parcial",
+      "evidence": [
+        "S-OTR"
+      ],
+      "detail": "Al preguntar qué información incluir en una solicitud, los tres pasajes trataron fuera de alcance, evitar diagnósticos y problemas múltiples. No ofrecieron una lista de datos de entrada que resolviera la pregunta. Devolver tres pasajes no implica que sean suficientes.",
+      "recommendation": "Añadir esta consulta a desarrollo y revisar la selección de unidades relevantes y el ranking, sin usar la reserva para ajustar."
+    },
+    {
+      "id": "F06",
+      "priority": "P3",
+      "title": "Preguntas de aclaración repetidas en la misma respuesta",
+      "evidence": [
+        "E08",
+        "E11",
+        "E13"
+      ],
+      "detail": "Las preguntas aparecen en el párrafo de respuesta y se repiten en Para orientar mejor tu caso. No impide continuar, pero aumenta ruido.",
+      "recommendation": "Mostrar una sola lista de preguntas, conservando el estado y la explicación de la limitación."
+    }
+  ],
+  "coverage_gaps": [
+    "No se abrió ni ejecutó el conjunto de reserva; todos los casos de generación pertenecen a desarrollo conocido.",
+    "No es revisión humana ni evaluación independiente de fidelidad, exactitud o generalización. No se calculó una métrica de calidad global del RAG.",
+    "No se forzaron cuotas 429, se cambiaron credenciales ni se detuvieron servicios compartidos para producir fallos. Los estados 401, 413, 415 y 502 no quedaron cubiertos por esta ejecución GUI.",
+    "La GUI no expone el resumen estructurado del clasificador ni códigos HTTP de éxito; no se afirma haber validado campos ocultos, transporte ni todas las citas contra sus pasajes originales.",
+    "No hay carga OCR, memoria conversacional, creación real de tickets ni identidades por usuario en esta versión. No se probaron capacidades inexistentes ni aislamiento multiusuario.",
+    "Una captura por punto no documenta toda la pantalla desplazable. observations.json conserva el texto del resultado; las búsquedas guardan también los pasajes abiertos.",
+    "elapsedSeconds incluye coordinación y espera del controlador; no equivale a latencia HTTP ni debe usarse como benchmark. timingLabel es el tiempo de pipeline informado por el producto.",
+    "Copiado se confirmó tras esperar el estado asíncrono. No se leyó el portapapeles previo del usuario. El primer chequeo inmediato y el primer ancho móvil se conservan como observaciones preliminares, no como fallos del producto."
+  ]
+}

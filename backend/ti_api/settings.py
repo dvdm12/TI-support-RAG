@@ -27,6 +27,12 @@ TIME_ZONE = 'America/Bogota'
 USE_TZ = True
 APPEND_SLASH = False
 DATA_UPLOAD_MAX_MEMORY_SIZE = 16 * 1024
+# OCR has its own bounded upload handler; JSON routes keep the 16 KiB limit.
+OCR_MAX_UPLOAD_BYTES = 5 * 1024 * 1024
+OCR_MAX_IMAGE_PIXELS = 4_000_000
+OCR_MAX_IMAGE_SIDE = 4096
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10
+DATA_UPLOAD_MAX_NUMBER_FILES = 1
 RAG_API_TOKEN = os.getenv('DJANGO_API_TOKEN','')
 RAG_INDEX_PATH = BASE_DIR / 'data/indexes/sections'
 # Keep request bodies and Authorization out of application logs.

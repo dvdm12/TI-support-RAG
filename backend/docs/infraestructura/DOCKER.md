@@ -29,10 +29,12 @@ dependencias de `requirements-runtime.txt`, PyTorch CPU y el código necesario
 para la API. No contiene CUDA, torchvision, EasyOCR, Jupyter, herramientas de
 compilación, corpus PDF, reportes ni notebooks. Los imports actuales de la capa
 OCR requieren Pillow y pytesseract incluso para consultas de texto; se conservan
-esas dos dependencias pequeñas. El ejecutable Tesseract no está instalado y esta
-imagen está destinada a los endpoints HTTP de texto, que no admiten imágenes.
-Las funciones académicas de OCR, ingestión y reportes siguen usando el entorno
-completo de `requirements.txt` fuera de esta imagen.
+esas dos dependencias pequeñas. El runtime también instala `tesseract-ocr`,
+`tesseract-ocr-spa` y `tesseract-ocr-eng`; la construcción comprueba ambos idiomas.
+El endpoint autenticado `/api/v1/ocr/extract/` admite capturas para extraer y
+revisar texto antes de consultar el RAG. Los temporales se eliminan al terminar,
+sin persistir imágenes en la tabla documental. EasyOCR, la ingestión y los
+reportes académicos siguen usando el entorno completo de `requirements.txt`.
 
 PyTorch y Sentence Transformers siguen siendo necesarios para ejecutar el
 modelo actual sin cambiar su representación. Por eso esta imagen pesa más que

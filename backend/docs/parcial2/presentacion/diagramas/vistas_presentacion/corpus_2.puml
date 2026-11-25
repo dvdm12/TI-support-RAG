@@ -1,0 +1,22 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam nodesep 35
+skinparam ranksep 30
+artifact "Fragmentos con metadatos" as input
+component "Embeddings\nembeddings.py\nSentenceEmbedder" as embed
+component "Construcción del índice\nindex.py\nsave_index() / load_index()" as index
+artifact "Índice local\nrecords.json\nvectors.npy\nconfig.json" as output
+input --> embed : textos
+input --> index : fragmentos y metadatos
+embed --> index : vectores
+index --> output
+@enduml

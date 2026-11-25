@@ -1,0 +1,47 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam componentBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam artifactBackgroundColor white
+skinparam nodesep 40
+skinparam ranksep 40
+
+title Contexto, respuesta y control · Mesa de Ayuda TI
+
+artifact "Solicitud y clasificación\nFragmentos recuperados" as entrada
+
+package "Contexto, respuesta y control" {
+  component "Orquestador\npipeline.py\nrun_rag_case()" as pipeline
+  component "Construcción de contexto\ncontext.py\nPasajes, catálogo y presupuesto" as context
+  component "Políticas locales\npolicy.py\nAclaración y riesgo" as policy
+  component "Pertinencia de evidencia\napplicability.py" as applicability
+  component "Validación de respuesta\ncitations.py\nFormato y citas" as citations
+  component "Revisión de respaldo\nsupport.py\nAfirmaciones frente a evidencia" as support
+}
+
+component "Cliente Groq\nsrc/groq_client.py" as groq
+artifact "Respuesta y estado\nFuentes y trazabilidad" as salida
+
+entrada --> pipeline
+pipeline ..> policy : aplicar reglas
+pipeline ..> applicability : filtrar evidencia
+pipeline ..> context : construir contexto
+pipeline ..> groq : generar / corregir
+pipeline ..> citations : validar respuesta
+pipeline ..> support : revisar respaldo
+support ..> groq : revisión semántica
+pipeline --> salida : decidir estado localmente
+
+legend bottom
+  El catálogo del contexto vincula las citas con los pasajes incluidos.
+  Si el respaldo falla, se intenta corregir dentro del presupuesto.
+  Si vuelve a fallar, se devuelve una salida segura de evidencia insuficiente.
+  Las políticas locales conservan la aclaración o intervención humana.
+endlegend
+@enduml

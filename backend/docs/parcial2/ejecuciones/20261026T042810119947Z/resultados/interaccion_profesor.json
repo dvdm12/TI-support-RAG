@@ -1,0 +1,171 @@
+{
+  "mode": "live_query",
+  "backend": "supabase",
+  "question": "¿Qué debo comprobar si no puedo conectarme al Wi-Fi?",
+  "state": "OK_VALIDADO",
+  "classification": {
+    "categoria": "redes",
+    "prioridad": "media",
+    "resumen": "Verificar la configuración de red, la señal Wi‑Fi, el estado del router y las credenciales de acceso.",
+    "datos_faltantes": [],
+    "requiere_humano": false,
+    "confianza": 0.95
+  },
+  "response": {
+    "estado": "respondida",
+    "respuesta": "Para comprobar la conexión Wi‑Fi, primero verifica que el Wi‑Fi esté habilitado y el modo avión desactivado. Selecciona la red autorizada y observa si aparece un mensaje de error [F1]. Si la red no aparece o sigue fallando, solicita revisión a soporte; no publiques la clave en el ticket ni utilices una red desconocida como solución [F2].",
+    "citas": [
+      "F1",
+      "F2"
+    ],
+    "limitacion": "Se limita a los pasos de verificación y solicitud de soporte, sin detallar configuraciones de infraestructura ni tiempos de reparación."
+  },
+  "failure_stage": null,
+  "candidates": [
+    {
+      "chunk_id": "TI-RED-2dec86185172059d432184d2",
+      "content": "Conectividad y comunicaciones / RED-02 | Conexión Wi-Fi\nEl usuario comprueba que el Wi-Fi esté habilitado y el modo avión desactivado. Selecciona únicamente la red autorizada para su equipo y registra si aparece un mensaje de error.",
+      "metadata": {
+        "pages": [
+          1
+        ],
+        "title": "Conectividad y comunicaciones",
+        "source": "redes/manual_redes.pdf",
+        "tokens": 62,
+        "section": "RED-02 | Conexión Wi-Fi",
+        "version": "2.0",
+        "category": "redes",
+        "simulated": true,
+        "document_id": "TI-RED",
+        "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c"
+      },
+      "similitud": 0.704663557092165
+    },
+    {
+      "chunk_id": "TI-RED-e4b59968415915f94ed33462",
+      "content": "Conectividad y comunicaciones / RED-02 | Conexión Wi-Fi\nSi la red no aparece o sigue fallando, se solicita revisión a soporte. No se publica la clave en el ticket ni se utiliza una red desconocida como solución. Estar conectado al Wi-Fi no garantiza acceso a Internet.",
+      "metadata": {
+        "pages": [
+          1
+        ],
+        "title": "Conectividad y comunicaciones",
+        "source": "redes/manual_redes.pdf",
+        "tokens": 68,
+        "section": "RED-02 | Conexión Wi-Fi",
+        "version": "2.0",
+        "category": "redes",
+        "simulated": true,
+        "document_id": "TI-RED",
+        "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c"
+      },
+      "similitud": 0.714893341064453
+    },
+    {
+      "chunk_id": "TI-RED-0558a70dc0abee52d8b02307",
+      "content": "Conectividad y comunicaciones / RED-05 | Límites y cierre\nSe verifica el servicio afectado antes del cierre o se registra por qué queda pendiente. El manual no contiene claves de Wi-Fi, configuración real de infraestructura ni tiempos de reparación.",
+      "metadata": {
+        "pages": [
+          2
+        ],
+        "title": "Conectividad y comunicaciones",
+        "source": "redes/manual_redes.pdf",
+        "tokens": 56,
+        "section": "RED-05 | Límites y cierre",
+        "version": "2.0",
+        "category": "redes",
+        "simulated": true,
+        "document_id": "TI-RED",
+        "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c"
+      },
+      "similitud": 0.585483908653259
+    }
+  ],
+  "sources": {
+    "F1": {
+      "chunk_id": "TI-RED-2dec86185172059d432184d2",
+      "content": "Conectividad y comunicaciones / RED-02 | Conexión Wi-Fi\nEl usuario comprueba que el Wi-Fi esté habilitado y el modo avión desactivado. Selecciona únicamente la red autorizada para su equipo y registra si aparece un mensaje de error.",
+      "metadata": {
+        "pages": [
+          1
+        ],
+        "title": "Conectividad y comunicaciones",
+        "source": "redes/manual_redes.pdf",
+        "tokens": 62,
+        "section": "RED-02 | Conexión Wi-Fi",
+        "version": "2.0",
+        "category": "redes",
+        "simulated": true,
+        "document_id": "TI-RED",
+        "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c"
+      },
+      "similitud": 0.704663557092165
+    },
+    "F2": {
+      "chunk_id": "TI-RED-e4b59968415915f94ed33462",
+      "content": "Conectividad y comunicaciones / RED-02 | Conexión Wi-Fi\nSi la red no aparece o sigue fallando, se solicita revisión a soporte. No se publica la clave en el ticket ni se utiliza una red desconocida como solución. Estar conectado al Wi-Fi no garantiza acceso a Internet.",
+      "metadata": {
+        "pages": [
+          1
+        ],
+        "title": "Conectividad y comunicaciones",
+        "source": "redes/manual_redes.pdf",
+        "tokens": 68,
+        "section": "RED-02 | Conexión Wi-Fi",
+        "version": "2.0",
+        "category": "redes",
+        "simulated": true,
+        "document_id": "TI-RED",
+        "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c"
+      },
+      "similitud": 0.714893341064453
+    },
+    "F3": {
+      "chunk_id": "TI-RED-0558a70dc0abee52d8b02307",
+      "content": "Conectividad y comunicaciones / RED-05 | Límites y cierre\nSe verifica el servicio afectado antes del cierre o se registra por qué queda pendiente. El manual no contiene claves de Wi-Fi, configuración real de infraestructura ni tiempos de reparación.",
+      "metadata": {
+        "pages": [
+          2
+        ],
+        "title": "Conectividad y comunicaciones",
+        "source": "redes/manual_redes.pdf",
+        "tokens": 56,
+        "section": "RED-05 | Límites y cierre",
+        "version": "2.0",
+        "category": "redes",
+        "simulated": true,
+        "document_id": "TI-RED",
+        "source_hash": "51cbe717cb18e7a0b5b409e4e4d99361d691f949fdf1b1dbbb82c5156674f93c"
+      },
+      "similitud": 0.585483908653259
+    }
+  },
+  "context": "{\"pregunta\":\"¿Qué debo comprobar si no puedo conectarme al Wi-Fi?\",\"clasificacion\":{\"categoria\":\"redes\",\"datos_faltantes\":[]},\"corpus_simulado\":true,\"evidencia\":[{\"etiqueta\":\"F1\",\"texto\":\"Conectividad y comunicaciones / RED-02 | Conexión Wi-Fi\\nEl usuario comprueba que el Wi-Fi esté habilitado y el modo avión desactivado. Selecciona únicamente la red autorizada para su equipo y registra si aparece un mensaje de error.\"},{\"etiqueta\":\"F2\",\"texto\":\"Conectividad y comunicaciones / RED-02 | Conexión Wi-Fi\\nSi la red no aparece o sigue fallando, se solicita revisión a soporte. No se publica la clave en el ticket ni se utiliza una red desconocida como solución. Estar conectado al Wi-Fi no garantiza acceso a Internet.\"},{\"etiqueta\":\"F3\",\"texto\":\"Conectividad y comunicaciones / RED-05 | Límites y cierre\\nSe verifica el servicio afectado antes del cierre o se registra por qué queda pendiente. El manual no contiene claves de Wi-Fi, configuración real de infraestructura ni tiempos de reparación.\"}]}",
+  "timings": {
+    "ocr_seconds": 5.640991730615497e-06,
+    "classification_seconds": 0.6157127260084962,
+    "embedding_seconds": 0.038343270993209444,
+    "semantic_search_seconds": 0.26434020198939834,
+    "lexical_fetch_seconds": 0.13227411700063385,
+    "bm25_seconds": 0.006216592999408022,
+    "rrf_seconds": 0.0007950549916131422,
+    "candidate_scoring_seconds": 5.250010872259736e-06,
+    "retrieval_seconds": 0.4036872230062727,
+    "context_seconds": 0.0027182129997527227,
+    "generation_seconds": 0.7353165509994142,
+    "validation_seconds": 0.0006788659957237542,
+    "support_review_seconds": 0.3770497899968177,
+    "total_seconds": 2.1751380900095683
+  },
+  "generation_usage": {
+    "prompt_tokens": 766,
+    "completion_tokens": 171,
+    "total_tokens": 937
+  },
+  "supabase_check": {
+    "rows_verified": 70,
+    "upsert_performed": false,
+    "persistence_new_client": true,
+    "second_client_upsert": false,
+    "owner_isolation": "No probado: ambos clientes usan el mismo usuario."
+  }
+}

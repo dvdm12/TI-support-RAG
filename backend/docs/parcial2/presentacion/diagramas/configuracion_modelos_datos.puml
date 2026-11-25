@@ -1,0 +1,65 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 16
+skinparam classBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam noteBackgroundColor white
+skinparam classAttributeIconSize 0
+set namespaceSeparator none
+hide circle
+hide empty methods
+skinparam nodesep 40
+skinparam ranksep 40
+
+title Configuración y modelos de datos · Mesa de Ayuda TI
+
+package "config.py" {
+  class RAGConfig <<dataclass inmutable>> {
+    model / revision / dimension
+    strategy / chunk_chars / overlap_chars
+    max_tokens / k / context_chars
+    corpus_base / manifest / prompt
+  }
+}
+
+package "models.py · Contratos Pydantic" {
+  class Section {
+    document_id / source / title
+    section / category / version
+    source_hash / pages / text
+    simulated
+  }
+  class Chunk {
+    chunk_id
+    tokens
+  }
+  class EmbeddingConfig {
+    modelo / revision / dimension
+    normalizados / similitud / max_seq_length
+    estrategia / chunk_chars / overlap_chars
+    max_tokens / preparation_version
+  }
+  class Candidate {
+    chunk_id
+    content
+    metadata
+    similitud
+  }
+  Section <|-- Chunk
+}
+
+RAGConfig -[hidden]down-> EmbeddingConfig
+Chunk -[hidden]right-> Candidate
+
+legend bottom
+  RAGConfig agrupa opciones y rutas; no contiene credenciales.
+  EmbeddingConfig valida la representación y la fragmentación del índice.
+  Section describe una sección; Chunk hereda sus datos y añade identidad y tokens.
+  Candidate contiene un pasaje recuperado, metadatos y similitud.
+  La flecha representa herencia; los contratos rechazan campos extra.
+endlegend
+@enduml

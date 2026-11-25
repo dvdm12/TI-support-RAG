@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 
 from schemas.request_v1 import Categoria, SolicitudTI
 from schemas.rag_response_v1 import RespuestaRAG
-from .contracts import QueryRequest, SearchRequest
+from .contracts import QueryRequest, SearchRequest, OCRResponse
 
 
 AUTH_HELP = """### Autenticación paso a paso
@@ -33,7 +33,7 @@ TIMING_HELP = ("Duraciones observadas en segundos, con reloj monotónico. Solo a
                "no representan la latencia HTTP completa.")
 
 TIMING_STAGES = {
-    "ocr_seconds": "Preparación de la entrada; estos endpoints reciben texto, no imágenes.",
+    "ocr_seconds": "Preparación de la entrada RAG. La extracción de imágenes se ejecuta por separado en ocr/extract.",
     "classification_seconds": "Clasificación, validación y reintentos del clasificador.",
     "embedding_seconds": "Vectorización de la pregunta.",
     "semantic_search_seconds": "Consulta semántica a Supabase y conversión de candidatos; incluye comunicación.",
@@ -82,11 +82,20 @@ class SearchResponse(BaseModel):
     tiempos_segundos: dict[str, float] = Field(description=TIMING_HELP)
 
 
+class AttentionTrace(BaseModel):
+    ruta: str
+    operacion: str | None
+    resultado: str
+    motivo_salida: str
+
+
 class QueryResponse(BaseModel):
     request_id: str = Field(description="Identificador de la petición; conservarlo para diagnosticar errores.")
     estado: str = Field(description="Resultado global del pipeline: OK_VALIDADO, OK_RESPUESTA_PARCIAL, OK_PIDE_ACLARACION, OK_EVIDENCIA_INSUFICIENTE u OK_REQUIERE_HUMANO. No equivale al estado documental ni confirma que el incidente real esté resuelto.")
-    clasificacion: SolicitudTI = Field(description="Categoría, prioridad, datos faltantes y necesidad de atención humana de la solicitud.")
-    respuesta_documental: RespuestaRAG = Field(description="Respuesta en español, estado documental, citas y limitación. Leer estado y limitacion incluso con HTTP 200.")
+    clasificacion: SolicitudTI | None = Field(description="Clasificación de la ruta documental.")
+    respuesta_documental: RespuestaRAG | None = Field(description="Respuesta con estado documental, citas y limitación cuando se ejecuta el RAG.")
+    respuesta: str | None = Field(default=None, description="Texto de respuesta de cualquier ruta.")
+    traza: AttentionTrace | None = Field(default=None, description="Ruta, operación intentada y motivo de salida.")
     fuentes: list[CitedSource] = Field(description="Solo las fuentes citadas en la respuesta. id=F1 corresponde a [F1] en respuesta y F1 en citas; puede estar vacío si no hay afirmaciones documentales.")
     latencia_segundos: float = Field(description="Duración global del pipeline en segundos, redondeada a cuatro decimales; puede diferir del tiempo HTTP observado por el cliente.")
     tiempos_segundos: dict[str, float] = Field(description=TIMING_HELP)
@@ -110,12 +119,13 @@ class ErrorDetail(BaseModel):
 class ErrorResponse(BaseModel):
     request_id: str | None
     error: ErrorDetail
+    traza: AttentionTrace | None = None
 
 
 def openapi_document():
     components = {}
     for model in (QueryRequest, SearchRequest, SearchResponse, QueryResponse,
-                  HealthResponse, CategoriesResponse, ErrorResponse):
+                  HealthResponse, CategoriesResponse, ErrorResponse, OCRResponse):
         definition = model.model_json_schema(ref_template='#/components/schemas/{model}')
         components.update(definition.pop('$defs', {}))
         components[model.__name__] = definition
@@ -228,8 +238,10 @@ def openapi_document():
             'máximo 1000 tokens de entrada y capacidad del modelo de embeddings (128 tokens con la configuración actual). '
             'Cumplir el límite de caracteres no garantiza cumplir el de tokens. No recibe imágenes ni archivos. '
             'Una lista vacía es un resultado válido; un fallo de consulta devuelve error técnico.\n\n'+AUTH_HELP),
-        'rag/query/': ('RAG', 'Clasificar una solicitud y responder con evidencia',
-            'Clasifica la solicitud, recupera evidencia, construye contexto y genera o limita la respuesta; '
+        'rag/query/': ('RAG', 'Atender una consulta de soporte',
+            'Enruta la pregunta a una respuesta directa, consulta documental, consulta de ticket de demostración, '
+            'aclaración o rechazo. La traza registra la ruta y el motivo de salida. En la ruta documental, '
+            'clasifica la solicitud, recupera evidencia, construye contexto y genera o limita la respuesta; '
             'valida contrato, citas y respaldo. Usa Supabase y puede realizar varias llamadas a Groq '
             '(clasificación, generación, revisión y corrección), con consumo de cuota. Algunas aclaraciones '
             'se construyen localmente. La operación es síncrona y puede tardar por esperas o reintentos.\n\n'
@@ -292,6 +304,7 @@ def openapi_document():
             else:
                 examples['ambigua'] = example({'pregunta':'No funciona. Ayúdame.'}, 'Solicitud que necesita aclaración')
                 examples['sin_cobertura'] = example({'pregunta':'Necesito configurar una VPN corporativa en Windows 11. Dame el servidor y el puerto exactos.'}, 'Solicitud sin procedimiento en el corpus académico')
+                examples['ocr_revisado'] = example({'pregunta':'¿Qué indica este error?', 'texto_ocr':'Error de red'}, 'Texto OCR revisado; se valida el presupuesto de ambos campos juntos')
             operation['requestBody'] = {'required':True, 'description':'Objeto JSON; los campos adicionales se rechazan.',
                 'content':{'application/json':{'schema':{'$ref':f'#/components/schemas/{request_model}'}, 'examples':examples}}}
             statuses += ['400', '413', '415', '422']
@@ -316,13 +329,37 @@ def openapi_document():
             if headers:
                 operation['responses'][status]['headers'] = headers
         paths[f'/api/v1/{route}'] = {method:operation}
+    ocr_responses = {'200': response('OCRResponse', 'Extracción para revisión; presupuesto.admisible puede ser false.', {
+        'captura': example({'request_id': EXAMPLE_REQUEST_ID, 'texto_ocr': 'Error de red',
+            'motor': 'tesseract', 'idiomas': 'spa+eng', 'confianza_ocr': 92.0, 'cantidad_palabras': 3,
+            'presupuesto': {'admisible': True, 'tokens_entrada': 730, 'limite_entrada': 1000,
+                'tokens_busqueda': 30, 'limite_busqueda': 128, 'motivo': None}}, 'Ejemplo ilustrativo, no una medición')})}
+    for status in ('400', '401', '405', '413', '415', '422', '503'):
+        ocr_responses[status] = response('ErrorResponse', {
+            '400': 'Archivo ausente, corrupto o campos incorrectos.', '401': 'Bearer ausente o incorrecto.',
+            '405': 'Método no permitido.', '413': 'Máximo 5 MiB, 4 megapíxeles y 4096 px por lado.',
+            '415': 'Requiere multipart y una imagen PNG/JPEG/WebP con MIME y extensión coherentes.',
+            '422': 'Imagen sin texto legible o extracción fallida.',
+            '503': 'Motor OCR no disponible, servicio ocupado o modelo de búsqueda no disponible.',
+        }[status])
+    paths['/api/v1/ocr/extract/'] = {'post': {
+        'operationId': 'ocr_extract', 'tags': ['OCR'], 'summary': 'Extraer texto de una captura',
+        'description': ('No llama a Groq ni carga documentos en Supabase. Solo acepta una imagen estática. '
+            'El temporal se elimina al terminar. La confianza es del OCR, no de la respuesta TI. '
+            'Un presupuesto no admisible permite revisar y reducir el texto; rag/query vuelve a validarlo. '
+            'Comparte el límite de una operación en curso por proceso.'),
+        'requestBody': {'required': True, 'content': {'multipart/form-data': {'schema': {
+            'type': 'object', 'additionalProperties': False, 'required': ['imagen'], 'properties': {
+                'imagen': {'type': 'string', 'format': 'binary', 'description': 'PNG, JPEG o WebP; máximo 5 MiB.'},
+                'pregunta': {'type': 'string', 'maxLength': 8000, 'description': 'Opcional; se usa para comprobar pregunta + OCR.'},
+            }}}}}, 'responses': ocr_responses}}
     return {'openapi':'3.1.0', 'info':{'title':'TI Support RAG API','version':'1.0.0',
         'description':('Soporte TI con clasificación y respuestas fundamentadas en manuales.\n\n'
             '### Recorrido recomendado\n1. Ejecuta **health** para comprobar el proceso.\n'
             '2. Autoriza y consulta **categories** para comprobar el token.\n'
             '3. Usa **rag/search** para inspeccionar pasajes sin generar texto con Groq.\n'
             '4. Usa **rag/query** para obtener clasificación, respuesta y citas.\n\n'+AUTH_HELP+
-            '\n### Alcance\nLas rutas terminan en `/`. Los POST requieren `application/json`. '
+            '\n### Alcance\nLas rutas terminan en `/`. Los POST RAG requieren `application/json`; OCR usa `multipart/form-data`. '
             'El servidor usa el usuario Supabase configurado: el token de API no crea identidades '
             'individuales ni aislamiento entre consumidores. Los ejemplos son ilustrativos; sus '
             'duraciones y respuestas no son resultados garantizados. No se incluyen secretos.\n\n'
@@ -331,7 +368,8 @@ def openapi_document():
             'ocupación o disponibilidad. Un fallo técnico no demuestra ausencia de documentos.')},
         'servers':[{'url':'/', 'description':'Mismo servidor que sirve Swagger'}],
         'tags':[{'name':'Sistema','description':'Disponibilidad del proceso y catálogo de categorías. No consultan proveedores.'},
-                {'name':'RAG','description':'Recuperación documental y respuestas con citas. Requieren autenticación y servicios configurados.'}],
+                {'name':'RAG','description':'Recuperación documental y respuestas con citas. Requieren autenticación y servicios configurados.'},
+                {'name':'OCR','description':'Extraer y revisar texto antes de consultar el RAG.'}],
         'paths':paths, 'security':[{'BearerAuth':[]}],
         'components':{'schemas':components,'securitySchemes':{'BearerAuth':{
             'type':'http','scheme':'bearer','description':AUTH_HELP}}}}

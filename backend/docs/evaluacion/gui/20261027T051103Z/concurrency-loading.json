@@ -1,0 +1,32 @@
+{
+  "inFlight": {
+    "badges": "",
+    "cancelled": "",
+    "editorValue": "",
+    "editors": 1,
+    "error": "",
+    "heading": "",
+    "health": "API disponible",
+    "horizontalOverflow": false,
+    "limitation": "",
+    "loading": true,
+    "mainText": "No puedo conectarme al Wi-Fi corporativo. ¿Qué comprobaciones iniciales indica el manual?\nTI Support\nAnalizando tu consulta y buscando respaldo documental…\nLa consulta puede tardar mientras el proveedor está ocupado.\nSoporte TI\nManuales\nCada consulta es independiente. Incluye el contexto necesario.",
+    "messages": 2,
+    "missing": "",
+    "reply": "",
+    "sources": [],
+    "timingLabel": "",
+    "userMessages": [
+      "No puedo conectarme al Wi-Fi corporativo. ¿Qué comprobaciones iniciales indica el manual?"
+    ],
+    "viewport": {
+      "height": 663,
+      "width": 759
+    }
+  },
+  "disabledControls": {
+    "modesDisabled": true,
+    "newDisabled": true,
+    "sendButtons": 0
+  }
+}

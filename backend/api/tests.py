@@ -139,9 +139,86 @@ class ControllerTests(SimpleTestCase):
         self.assertEqual(data['estado'],'OK_PIDE_ACLARACION')
         self.assertEqual(data['tiempos_segundos'],self.result['rag']['timings'])
         self.assertEqual(data['fuentes'][0]['id'],'F1')
+        self.assertEqual(data['traza']['ruta'], 'consulta_documental')
         self.assertNotIn('private',response.content.decode())
         self.assertNotIn('raw_output',data)
         self.assertEqual(service.call_args.args[0],'¿Qué reviso en mi red?')
+
+    def test_attention_routes_without_documentary_provider(self):
+        cases = (
+            ('¿Qué puedes hacer?', 'respuesta_directa', 'OK_RESPUESTA_DIRECTA', None),
+            ('Hola, ¿en qué me puedes ayudar?', 'respuesta_directa', 'OK_RESPUESTA_DIRECTA', None),
+            ('Hola, ¿cómo va el ticket TI-1001?', 'consulta_ticket', 'OK_TICKET_CONSULTADO', 'consultar_estado_ticket'),
+            ('¿Cómo va el ticket TI-1001?', 'consulta_ticket', 'OK_TICKET_CONSULTADO', 'consultar_estado_ticket'),
+            ('¿Cómo va mi ticket?', 'aclaracion', 'OK_PIDE_ACLARACION', None),
+            ('¿Cómo va mi ticket TI-01?', 'aclaracion', 'OK_PIDE_ACLARACION', None),
+            ('¿Cómo va el ticket TI-1001 y cómo instalo una aplicación?', 'aclaracion', 'OK_PIDE_ACLARACION', None),
+            ('Cierra el ticket TI-1001', 'operacion_prohibida', 'OPERACION_NO_PERMITIDA', None),
+            ('¿Cuál es el estado del ticket TI-9999?', 'consulta_ticket', 'TICKET_NO_ENCONTRADO', 'consultar_estado_ticket'),
+        )
+        with patch('api.services.run_query') as rag:
+            for question, route, status, operation in cases:
+                with self.subTest(question=question):
+                    response = self.query({'pregunta': question})
+                    self.assertEqual(response.status_code, 200)
+                    result = response.json()
+                    self.assertEqual(result['estado'], status)
+                    self.assertEqual(result['traza']['ruta'], route)
+                    self.assertEqual(result['traza']['operacion'], operation)
+                    self.assertTrue(result['respuesta'])
+                    self.assertEqual(result['fuentes'], [])
+        rag.assert_not_called()
+
+    def test_out_of_scope_questions_do_not_invoke_documentary_provider(self):
+        questions = (
+            'cual es el nombre de mi madre ?',
+            'Hola, ¿cómo se llama mi mascota?',
+            '¿Cuál es la capital de Francia?',
+            '¿Quién pintó la Mona Lisa?',
+            '¿Cómo preparo arroz con leche?',
+            '¿Qué selección ganó el Mundial de fútbol de 2022?',
+            '¿Cuánto es 17 por 8?',
+        )
+        with patch('api.services.run_query') as rag:
+            for question in questions:
+                with self.subTest(question=question):
+                    response = self.query({'pregunta': question})
+                    self.assertEqual(response.status_code, 200)
+                    result = response.json()
+                    self.assertIn('fuera del alcance', result['respuesta'])
+                    self.assertEqual(result['fuentes'], [])
+                    self.assertEqual(result['traza'], {
+                        'ruta': 'respuesta_directa', 'operacion': None,
+                        'resultado': 'OK_RESPUESTA_DIRECTA', 'motivo_salida': 'fuera_de_alcance',
+                    })
+        rag.assert_not_called()
+
+    def test_support_questions_with_personal_context_still_use_documentary_route(self):
+        question = '¿Cómo restablezco la contraseña de la cuenta de mi madre?'
+        with patch('api.services.run_query', return_value=self.result) as rag:
+            response = self.query({'pregunta': question})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['traza']['ruta'], 'consulta_documental')
+        rag.assert_called_once()
+
+    def test_question_about_closing_ticket_uses_documentary_route(self):
+        with patch('api.services.run_query', return_value=self.result) as rag:
+            response = self.query({'pregunta': '¿Cómo se cierra un ticket?'})
+        self.assertEqual(response.json()['traza']['ruta'], 'consulta_documental')
+        rag.assert_called_once()
+
+    def test_missing_ticket_catalog_keeps_route_and_reports_technical_error(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+
+        with TemporaryDirectory() as folder:
+            with patch('api.tickets.TICKET_CATALOG', Path(folder) / 'missing.json'):
+                response = self.query({'pregunta': '¿Cómo va el ticket TI-1001?'})
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()['traza'], {
+            'ruta': 'consulta_ticket', 'operacion': 'consultar_estado_ticket',
+            'resultado': 'ERROR_TECNICO', 'motivo_salida': 'catalogo_indisponible',
+        })
 
     def test_missing_empty_wrong_type_or_extra_fields_are_rejected(self):
         with patch('api.services.run_query') as service:
