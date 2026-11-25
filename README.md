@@ -308,6 +308,8 @@ Editar `app/.env` y completar:
 | `SUPABASE_PUBLISHABLE_KEY` | Clave anon/publishable (`eyJ...`) |
 | `BACKEND_URL` | URL del backend Django (ej. `http://127.0.0.1:8000`) |
 | `BACKEND_API_TOKEN` | Valor de `DJANGO_API_TOKEN` del `backend/.env` |
+| `GRADIO_SERVER_PORT` | Puerto local (opcional, `7860` por defecto) |
+| `PORT` | No se define en local: lo inyecta Render y tiene prioridad sobre `GRADIO_SERVER_PORT` |
 
 ### Instalar dependencias y arrancar
 
@@ -358,6 +360,32 @@ python servidor_mcp.py   # escucha por stdio
 ```
 
 ---
+
+## Despliegue en Render
+
+El archivo [`render.yaml`](render.yaml) crea dos Web Services:
+
+| Servicio | Tipo | Root Directory | Arranque |
+|---|---|---|---|
+| `ti-support-rag-backend` | Docker | `backend` | `backend/Dockerfile` (gunicorn en `PORT=8000`, health `/api/v1/health/`) |
+| `ti-support-rag-app` | Python 3.12 | `app` | `pip install -r requirements.txt` · `python app.py` |
+
+1. En Render: **New → Blueprint**, elegir este repositorio y la rama `main`.
+2. Completar las variables que pide el panel (no se guardan en Git):
+   - Backend: `GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` y
+     `SUPABASE_EMAIL`/`SUPABASE_PASSWORD` de la cuenta dueña del corpus.
+     `DJANGO_SECRET_KEY` y `DJANGO_API_TOKEN` se generan solos.
+   - App: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` y
+     `BACKEND_URL=https://<backend>.onrender.com` (sin barra final). `BACKEND_API_TOKEN`
+     se copia del backend automáticamente. La app **no** lleva credenciales de usuario:
+     cada persona inicia sesión con su cuenta de Supabase Auth.
+3. Comprobar `https://<backend>.onrender.com/api/v1/health/` y abrir la URL de la app.
+
+El índice RAG (`backend/data/indexes/sections`) va dentro de la imagen; corpus e
+historiales están en Supabase, así que no se necesita disco persistente. La app lee
+el puerto de `PORT` (Render) o, en local, de `GRADIO_SERVER_PORT`. En el plan gratuito
+los servicios se suspenden sin tráfico (la primera visita tarda) y la memoria es
+limitada: si el backend se reinicia al cargar el modelo, subir de plan.
 
 ## Problemas frecuentes
 

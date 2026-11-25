@@ -1,0 +1,17 @@
+{
+  "corpus_id": "ti-manuals-v2-d479e96962b17496eaa3",
+  "base": "ti-manuals-v2",
+  "config": {
+    "modelo": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "dimension": 384,
+    "normalizados": true,
+    "similitud": "coseno",
+    "max_seq_length": 128,
+    "estrategia": "sections",
+    "chunk_chars": 420,
+    "overlap_chars": 0,
+    "max_tokens": 80,
+    "preparation_version": "pdf-sections-v1"
+  }
+}

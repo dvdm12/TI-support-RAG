@@ -14,6 +14,10 @@
 !schemas/**
 !prompts/
 !prompts/**
+!data/
+!data/indexes/
+!data/indexes/sections/
+!data/indexes/sections/**
 **/__pycache__/
 **/*.py[cod]
 **/.env

@@ -1,0 +1,57 @@
+# Blueprint de Render: crea el backend Django (Docker) y la app Gradio.
+# En Render: New → Blueprint → este repositorio. Los valores con `sync: false`
+# se piden en el panel al crear el Blueprint; nunca se guardan en Git.
+services:
+  - type: web
+    name: ti-support-rag-backend
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/v1/health/
+    envVars:
+      - key: PORT                    # gunicorn escucha en 8000 (Dockerfile)
+        value: "8000"
+      - key: DJANGO_ALLOWED_HOSTS    # el punto inicial acepta *.onrender.com
+        value: .onrender.com
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_API_TOKEN        # la app lo recibe abajo con fromService
+        generateValue: true
+      - key: GROQ_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: SUPABASE_EMAIL          # cuenta dueña del corpus clase08_fragmentos
+        sync: false
+      - key: SUPABASE_PASSWORD
+        sync: false
+
+  - type: web
+    name: ti-support-rag-app
+    runtime: python
+    rootDir: app
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: GRADIO_SERVER_NAME
+        value: 0.0.0.0
+      - key: GRADIO_ANALYTICS_ENABLED
+        value: "False"
+      - key: BACKEND_URL             # https://ti-support-rag-backend.onrender.com (sin barra final)
+        sync: false
+      - key: BACKEND_API_TOKEN
+        fromService:
+          type: web
+          name: ti-support-rag-backend
+          envVarKey: DJANGO_API_TOKEN
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false

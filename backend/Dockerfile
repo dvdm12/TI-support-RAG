@@ -61,6 +61,9 @@ COPY src/ src/
 COPY schemas/ schemas/
 COPY prompts/ prompts/
 COPY manage.py .
+# Índice RAG académico (público, también incluido en el ZIP del Parcial 2).
+# En local, compose lo monta encima en solo lectura.
+COPY data/indexes/sections/ data/indexes/sections/
 # Same for the project and the Django stack it loads (PYTHONDONTWRITEBYTECODE
 # is cleared only for this build step; the running container never writes).
 RUN PYTHONDONTWRITEBYTECODE= DJANGO_SETTINGS_MODULE=ti_api.settings python -c "\

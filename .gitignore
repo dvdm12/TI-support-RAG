@@ -7,7 +7,8 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
-backend/data/indexes/
+backend/data/indexes/*
+!backend/data/indexes/sections/
 backend/data/extracted/
 backend/docs/rag_runs/
 backend/.cache/tiktoken/

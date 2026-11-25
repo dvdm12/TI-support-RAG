@@ -331,9 +331,16 @@ def crear_interfaz() -> gr.Blocks:
     return app
 
 
+def _puerto() -> int:
+    """Render (y otros alojamientos) asignan el puerto en PORT; en local se usa
+    GRADIO_SERVER_PORT o 7860."""
+    valor = os.environ.get("PORT") or os.environ.get("GRADIO_SERVER_PORT") or "7860"
+    return int(valor)
+
+
 if __name__ == "__main__":
     crear_interfaz().launch(
         server_name=os.environ.get("GRADIO_SERVER_NAME", "0.0.0.0"),
-        server_port=int(os.environ.get("GRADIO_SERVER_PORT", "7860")),
+        server_port=_puerto(),
         share=False,
     )
