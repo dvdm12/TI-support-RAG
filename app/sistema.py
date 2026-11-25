@@ -42,7 +42,11 @@ _TICKET_CODE       = re.compile(r"\bti-[0-9]{4}\b(?!-)")
 _TICKET_WORD       = re.compile(r"\b(?:tickets?|ti-[\w-]+)\b")
 _TICKET_STATUS     = re.compile(
     r"\b(?:estado|estatus|seguimiento|consulta(?:r)? (?:el |mi |un )?ticket|"
-    r"como (?:va|sigue|esta)|(?:esta|fue) (?:abierto|cerrado|resuelto|asignado|en revision))\b"
+    r"como (?:va|sigue|esta)|(?:esta|fue) (?:abierto|cerrado|resuelto|asignado|en revision)|"
+    # Quejas de avance: preguntan por el estado aunque no usen la palabra.
+    r"no (?:ha )?avanza(?:do)?|no (?:me )?(?:han )?(?:respondido|contestado|resuelto|atendido)|"
+    r"sigue (?:abierto|pendiente|igual|sin (?:respuesta|resolver|avanzar))|"
+    r"(?:esta )?(?:atascado|estancado|parado|detenido))\b"
 )
 _TICKET_MUTATION   = re.compile(
     r"(?:^|[.!?;]|\by\b)\s*(?:por favor[, ]+)?"
@@ -155,7 +159,7 @@ async def _consultar_ticket_mcp(codigo: str) -> Resultado:
         from mcp import ClientSession, StdioServerParameters
         from mcp.client.stdio import stdio_client
     except ImportError:
-        raise SistemaError("La librería MCP no está instalada. Ejecuta: pip install 'mcp>=1.0,<3'")
+        raise SistemaError("La librería MCP no está instalada. Ejecuta: pip install 'mcp>=1.0,<2'")
 
     params = StdioServerParameters(
         command=sys.executable,

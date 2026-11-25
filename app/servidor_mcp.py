@@ -13,7 +13,7 @@ from pathlib import Path
 try:
     from mcp.server.fastmcp import FastMCP
 except ImportError as exc:
-    raise ImportError("Instala mcp>=1.0: pip install 'mcp>=1.0,<3'") from exc
+    raise ImportError("Instala mcp>=1.0: pip install 'mcp>=1.0,<2'") from exc
 
 CATALOG_PATH = Path(__file__).parent.parent / "backend" / "api" / "tickets_demo.json"
 TICKET_CODE_PATTERN = re.compile(r"^TI-[0-9]{4}$")

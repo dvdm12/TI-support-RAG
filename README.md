@@ -348,7 +348,7 @@ python3 -m pytest test_almacenamiento.py -v   # 58 pruebas, ~0.09 s
 
 El servidor MCP (`app/servidor_mcp.py`) se arranca como subproceso cuando la
 pregunta es de tipo `consulta_ticket`. No requiere instalación separada; sólo
-necesita `mcp>=1.0` del `requirements.txt`.
+necesita `mcp>=1.0,<2` del `requirements.txt`.
 
 Para arrancarlo manualmente y probarlo:
 

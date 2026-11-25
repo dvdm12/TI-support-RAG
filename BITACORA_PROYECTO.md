@@ -6,8 +6,8 @@ proyecto: Mesa de Ayuda TI Inteligente (TI-support-RAG)
 integrantes:
   - David Mantilla Aviles
   - Juan Camilo Velez
-fecha_actualizacion: 2026-11-24
-estado: corte-3-en-progreso
+fecha_actualizacion: 2026-11-25
+estado: corte-3-implementado-despliegue-pendiente
 ---
 
 # Bitácora del Proyecto — Mesa de Ayuda TI Inteligente
@@ -25,7 +25,7 @@ estado: corte-3-en-progreso
 |---|---|---|
 | 1 | Clasificación estructurada + OCR multimodal | Cerrado y documentado |
 | 2 | RAG híbrido (semántico + BM25) + Supabase vectorial | Cerrado y documentado |
-| 3 | Auth Supabase · historial persistente · MCP · interfaz Gradio | En progreso |
+| 3 | Auth Supabase · historial persistente · MCP · interfaz Gradio | Implementado; despliegue en Render pendiente |
 
 Principio de diseño sostenido en los tres cortes:
 
@@ -193,7 +193,7 @@ Interfaz Gradio 6 con:
 | Variable | Propósito |
 |---|---|
 | `SUPABASE_URL` | URL del proyecto Supabase |
-| `SUPABASE_PUBLISHABLE_KEY` | Clave anon/publishable (empieza con `eyJ...`) |
+| `SUPABASE_PUBLISHABLE_KEY` | Clave publishable (`sb_publishable_...`) o anon heredada (`eyJ...`); nunca `service_role` |
 | `BACKEND_URL` | URL base del backend Django (ej. `http://127.0.0.1:8000`) |
 | `BACKEND_API_TOKEN` | Bearer token del backend |
 | `GRADIO_SERVER_NAME` | Interfaz de red (opcional, por defecto `0.0.0.0`) |
@@ -210,6 +210,11 @@ Interfaz Gradio 6 con:
 | Variables de entorno no se expandían en heredoc `<< 'EOF'` | Script movido a archivo temporal con `os.environ` |
 | DNS `download.pytorch.org` no resolvía en Docker build | Se usaron imágenes ya construidas; no se reconstruyeron |
 | `SUPABASE_API_TOKEN` inválido al aplicar migración | Token regenerado en `supabase.com/dashboard/account/tokens` |
+| `.env.ejemplo` quedaba bloqueado por `.gitignore` | Renombrado a `app/.env.example` (excepción ya prevista en `.gitignore`) |
+| `mcp` 2.x renombró `mcp.server.fastmcp`; `servidor_mcp.py` fallaba al importar (el rango `<3` instalaba 2.3.0) | Dependencia fijada a `mcp>=1.0,<2`; verificado con 1.30.0 |
+| «mi ticket no avanza» iba al RAG y terminaba en HTTP 502 (`ERROR_FORMATO`) | El enrutador reconoce quejas de avance como consulta de estado: sin código pide aclaración, con código consulta MCP |
+| Tras suspender el equipo, el host no alcanzaba el puerto 8000 aunque el contenedor estaba *healthy* | NetworkManager retiró la IP de los bridges de Docker; se resolvió reiniciando Docker |
+| RAG respondía 503 `RepositoryError` | La contraseña del usuario de Supabase en `backend/.env` estaba desactualizada; se corrigió y se recreó el contenedor |
 
 ### Decisiones técnicas del corte 3
 
@@ -221,6 +226,7 @@ Interfaz Gradio 6 con:
 | Enrutador local en `sistema.py` | Permite mostrar la ruta tomada en la traza sin depender del backend para la decisión |
 | Formato Messages en el chatbot | Requerimiento de Gradio 6.32; el estado interno conserva tuplas para compatibilidad con `almacenamiento.py` |
 | Historial de los últimos 3 turnos para RAG | Limita el tamaño del contexto enviado al backend sin perder continuidad |
+| `mcp>=1.0,<2` | El servidor usa la API FastMCP de la versión 1; la 2.x la renombró |
 
 ### Estado al cierre del corte 3
 
@@ -229,17 +235,19 @@ Interfaz Gradio 6 con:
 - [x] Migración SQL `conversaciones` + `mensajes` + RLS aplicada en Supabase
 - [x] `app/almacenamiento.py` con 58 pruebas unitarias (100 % pasan)
 - [x] `app/servidor_mcp.py` — servidor FastMCP de tickets
-- [x] `app/sistema.py` — enrutador + MCP + RAG (9/9 casos de ruta correctos)
+- [x] `app/sistema.py` — enrutador + MCP + RAG; `test_sistema.py` con 16 casos de ruta (100 % pasan)
 - [x] `app/app.py` — interfaz Gradio completa con auth y conversaciones
-- [x] `app/requirements.txt` y `app/.env.ejemplo`
+- [x] `app/requirements.txt` y `app/.env.example`
 - [x] Credencial de Supabase Auth configurada para pruebas
+- [x] `BITACORA_PROYECTO.md` unificada en la raíz (este archivo)
+- [x] `README.md` actualizado con `app/` y tablas Supabase
+- [x] `app/presentacion_proyecto.pdf` copiada desde `backend/docs/parcial2/presentacion/`
+- [x] Verificación local (25-11-2026): rutas directa, fuera de alcance, prohibida, MCP (TI-1001, TI-1003, TI-9999) y RAG con fuentes
 
 #### Pendiente
 
-- [ ] `BITACORA_PROYECTO.md` completa en la raíz (este archivo, en curso)
-- [ ] `README.md` actualizado con `app/`, tablas Supabase y despliegue en Render
-- [ ] `app/presentacion_proyecto.pdf` copiada desde `backend/docs/parcial2/presentacion/`
-- [ ] Despliegue en Render con variables de entorno configuradas
+- [ ] Despliegue en Render con variables de entorno configuradas (y su sección en `README.md`)
+- [ ] Merge de `feat/clase-12-entrega-final` en `main`
 
 ---
 
@@ -264,8 +272,10 @@ TI-support-RAG/
 │   ├── sistema.py             # Enrutador + MCP + RAG
 │   ├── servidor_mcp.py        # FastMCP stdio: consultar_estado_ticket
 │   ├── test_almacenamiento.py # 58 pruebas unitarias
+│   ├── test_sistema.py        # Pruebas del enrutador
+│   ├── presentacion_proyecto.pdf
 │   ├── requirements.txt
-│   └── .env.ejemplo
+│   └── .env.example
 │
 ├── frontend/                  # React — Chat institucional
 ├── infra/
@@ -295,7 +305,7 @@ Todas las tablas tienen RLS activada. Las tablas del corte 3 usan `auth.uid()` c
 
 ```bash
 cd backend
-cp .env.ejemplo .env   # completar variables
+cp .env.example .env   # completar variables
 docker compose -f ../infra/compose.yaml up --build
 # API disponible en http://127.0.0.1:8000
 ```
@@ -306,18 +316,18 @@ docker compose -f ../infra/compose.yaml up --build
 cd app
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.ejemplo .env   # completar variables
+cp .env.example .env   # completar variables
 python app.py
 # UI disponible en http://127.0.0.1:7860
 ```
 
-### Pruebas unitarias de almacenamiento
+### Pruebas unitarias (almacenamiento y enrutador)
 
 ```bash
 cd app
-python3 -m pytest test_almacenamiento.py -v   # 58 pruebas, ~0.09 s
+python3 -m unittest test_almacenamiento test_sistema -v   # 59 pruebas, < 0.1 s
 ```
 
 ---
 
-*Última actualización: 2026-11-24 — Corte 3 en progreso.*
+*Última actualización: 2026-11-25 — Corte 3 implementado y verificado en local; despliegue en Render pendiente.*
