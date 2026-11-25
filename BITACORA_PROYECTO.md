@@ -227,6 +227,7 @@ Interfaz Gradio 6 con:
 | «mi ticket no avanza» iba al RAG y terminaba en HTTP 502 (`ERROR_FORMATO`) | El enrutador reconoce quejas de avance como consulta de estado: sin código pide aclaración, con código consulta MCP |
 | Tras suspender el equipo, el host no alcanzaba el puerto 8000 aunque el contenedor estaba *healthy* | NetworkManager retiró la IP de los bridges de Docker; se resolvió reiniciando Docker |
 | RAG respondía 503 `RepositoryError` | La contraseña del usuario de Supabase en `backend/.env` estaba desactualizada; se corrigió y se recreó el contenedor |
+| En Render, tras «hola», preguntas sin relación respondían con el ticket TI-1001 | `sistema.py` pegaba los últimos 3 turnos (incluidas respuestas del asistente) a la pregunta y el enrutador del backend tomaba el código del ejemplo. Se envía solo la pregunta; prueba de regresión en `test_sistema.py` |
 
 ### Decisiones técnicas del corte 3
 
@@ -237,7 +238,7 @@ Interfaz Gradio 6 con:
 | MCP vía stdio (subprocess) | Reutiliza el mismo patrón del notebook de clase 11; no requiere servidor HTTP separado |
 | Enrutador local en `sistema.py` | Permite mostrar la ruta tomada en la traza sin depender del backend para la decisión |
 | Formato Messages en el chatbot | Requerimiento de Gradio 6.32; el estado interno conserva tuplas para compatibilidad con `almacenamiento.py` |
-| Historial de los últimos 3 turnos para RAG | Limita el tamaño del contexto enviado al backend sin perder continuidad |
+| Al RAG se envía solo la pregunta actual | El backend reenruta el texto recibido; con el historial pegado, ejemplos del asistente («TI-1001») disparaban consultas de ticket. El historial completo sigue en Supabase y en la interfaz |
 | `mcp>=1.0,<2` | El servidor usa la API FastMCP de la versión 1; la 2.x la renombró |
 
 ### Estado al cierre del corte 3
@@ -247,7 +248,7 @@ Interfaz Gradio 6 con:
 - [x] Migración SQL `conversaciones` + `mensajes` + RLS aplicada en Supabase
 - [x] `app/almacenamiento.py` con 58 pruebas unitarias (100 % pasan)
 - [x] `app/servidor_mcp.py` — servidor FastMCP de tickets
-- [x] `app/sistema.py` — enrutador + MCP + RAG; `test_sistema.py` con 16 casos de ruta (100 % pasan)
+- [x] `app/sistema.py` — enrutador + MCP + RAG; `test_sistema.py` con 16 casos de ruta y 1 de regresión del RAG (100 % pasan)
 - [x] `app/app.py` — interfaz Gradio completa con auth y conversaciones
 - [x] `app/requirements.txt` y `app/.env.example`
 - [x] Credencial de Supabase Auth configurada para pruebas
@@ -337,7 +338,7 @@ python app.py
 
 ```bash
 cd app
-python3 -m unittest test_almacenamiento test_sistema -v   # 59 pruebas, < 0.1 s
+python3 -m unittest test_almacenamiento test_sistema -v   # 60 pruebas, < 0.1 s
 ```
 
 ---

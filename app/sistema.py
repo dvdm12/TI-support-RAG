@@ -222,17 +222,20 @@ async def _consultar_rag(
     api_url: str,
     api_token: str,
 ) -> Resultado:
-    """Llama al backend RAG y devuelve un Resultado."""
-    contexto = pregunta
-    if historial:
-        turnos = "\n".join(f"Usuario: {p}\nAsistente: {r}" for p, r in historial[-3:])
-        contexto = f"{turnos}\nUsuario: {pregunta}"
+    """Llama al backend RAG y devuelve un Resultado.
+
+    Solo se envía la pregunta actual. El backend aplica su propio enrutador al
+    texto recibido: si se le pegaba el historial, las respuestas anteriores del
+    asistente («…por ejemplo TI-1001») lo desviaban a consultas de ticket. El
+    historial sigue persistido en Supabase y visible en la interfaz.
+    """
+    del historial  # la API /rag/query/ solo acepta el campo `pregunta`
 
     try:
         async with httpx.AsyncClient(timeout=httpx.Timeout(120, connect=5)) as client:
             response = await client.post(
                 f"{api_url.rstrip('/')}/api/v1/rag/query/",
-                json={"pregunta": contexto},
+                json={"pregunta": pregunta},
                 headers={"Authorization": f"Bearer {api_token}"},
             )
     except httpx.TimeoutException:

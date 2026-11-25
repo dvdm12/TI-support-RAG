@@ -1,7 +1,9 @@
 """Pruebas del enrutador de sistema.py (sin red, sin MCP, sin backend)."""
+import asyncio
 import unittest
+from unittest.mock import AsyncMock, MagicMock, patch
 
-from sistema import _enrutar
+from sistema import _enrutar, procesar
 
 
 class TestEnrutamiento(unittest.TestCase):
@@ -32,6 +34,30 @@ class TestEnrutamiento(unittest.TestCase):
         for pregunta, ruta, codigo in self.CASOS:
             with self.subTest(pregunta=pregunta):
                 self.assertEqual(_enrutar(pregunta), (ruta, codigo))
+
+
+class TestConsultaDocumental(unittest.TestCase):
+    """Regresión 25-11-2026 (Render): el historial pegado a la pregunta hacía que
+    el enrutador del backend consultara el TI-1001 del ejemplo del asistente."""
+
+    def _enviar(self, pregunta, historial):
+        respuesta = MagicMock(is_error=False, status_code=200)
+        respuesta.json.return_value = {"respuesta": "ok", "fuentes": [], "estado": "OK_EVIDENCIA_INSUFICIENTE"}
+        cliente = MagicMock()
+        cliente.post = AsyncMock(return_value=respuesta)
+        contexto = MagicMock()
+        contexto.__aenter__ = AsyncMock(return_value=cliente)
+        contexto.__aexit__ = AsyncMock(return_value=False)
+        with patch("sistema.httpx.AsyncClient", return_value=contexto):
+            asyncio.run(procesar(pregunta, historial, "http://backend", "token"))
+        return cliente.post.await_args.kwargs["json"]
+
+    def test_solo_envia_la_pregunta_actual(self):
+        historial = [
+            ("hola", "Puedo consultar manuales de soporte TI y el estado de tickets de demostración."),
+            ("mi mama no me quiere", "Indica un único código de ticket válido, por ejemplo TI-1001."),
+        ]
+        self.assertEqual(self._enviar("no entiendo", historial), {"pregunta": "no entiendo"})
 
 
 if __name__ == "__main__":
