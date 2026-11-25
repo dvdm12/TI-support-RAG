@@ -14,6 +14,26 @@ export default defineConfig(({ mode }) => {
     process.env.DJANGO_API_TOKEN ||
     local.DJANGO_API_TOKEN ||
     backend.DJANGO_API_TOKEN;
+  // Supabase Auth en el navegador: solo la URL y la clave publishable (públicas;
+  // RLS protege los datos). Nunca SUPABASE_EMAIL ni SUPABASE_PASSWORD.
+  const supabaseEnv = loadEnv(
+    mode,
+    fileURLToPath(new URL("../backend", import.meta.url)),
+    "SUPABASE_",
+  );
+  const pick = (name) =>
+    process.env[`VITE_${name}`] ||
+    local[`VITE_${name}`] ||
+    process.env[name] ||
+    local[name] ||
+    supabaseEnv[name] ||
+    "";
+  const publicSupabase = {
+    "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(pick("SUPABASE_URL")),
+    "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
+      pick("SUPABASE_PUBLISHABLE_KEY"),
+    ),
+  };
   const proxy = {
     "/api/v1": {
       target:
@@ -31,6 +51,7 @@ export default defineConfig(({ mode }) => {
   };
   return {
     plugins: [react()],
+    define: publicSupabase,
     server: {
       host: "127.0.0.1",
       port: 5173,

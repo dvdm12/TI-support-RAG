@@ -26,6 +26,10 @@ services:
     image: ti-support-rag-frontend:local
     build:
       context: ../frontend
+      # docker compose --env-file ../backend/.env up -d --build frontend
+      args:
+        VITE_SUPABASE_URL: ${SUPABASE_URL:-}
+        VITE_SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:-}
     environment:
       BACKEND_URL: http://backend:8000
       DJANGO_API_TOKEN: ${DJANGO_API_TOKEN:-}

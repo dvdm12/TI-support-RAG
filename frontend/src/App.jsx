@@ -7,11 +7,15 @@ import Welcome from "./components/chat/Welcome.jsx";
 import StarterPrompts from "./components/chat/StarterPrompts.jsx";
 import Composer from "./components/chat/Composer.jsx";
 import MessageList from "./components/chat/MessageList.jsx";
+import Login from "./components/auth/Login.jsx";
 import { useChat } from "./hooks/useChat.js";
+import { useAuth } from "./hooks/useAuth.js";
+import { supabase } from "./services/supabase.js";
 import { useHealth } from "./hooks/useHealth.js";
 
 export default function App() {
-  const chat = useChat();
+  const auth = useAuth();
+  const chat = useChat(supabase, auth.user?.id);
   const health = useHealth();
   const [mode, setMode] = useState("query");
   const [draft, setDraft] = useState("");
@@ -34,6 +38,9 @@ export default function App() {
       setMenuOpen(false);
     }
   }
+  if (auth.loading) return <main className="login-shell" aria-busy="true" />;
+  if (!auth.session)
+    return <Login onSignIn={auth.signIn} configured={auth.configured} />;
   return (
     <div
       className={`app-shell ${sidebarCollapsed ? "app-shell--collapsed" : ""}`}
@@ -60,6 +67,9 @@ export default function App() {
         onSettings={() => setSettingsOpen(true)}
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
+        user={auth.user}
+        loadingHistory={chat.loadingHistory}
+        historyError={chat.historyError}
       />
       <div className="workspace">
         <Header
@@ -122,7 +132,8 @@ export default function App() {
         <SettingsDialog
           health={health}
           pending={chat.pending}
-          onClear={chat.clear}
+          user={auth.user}
+          onSignOut={auth.signOut}
           onClose={() => setSettingsOpen(false)}
         />
       )}

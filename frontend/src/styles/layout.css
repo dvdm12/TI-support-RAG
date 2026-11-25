@@ -483,3 +483,89 @@
     width: min(310px, 100vw);
   }
 }
+
+/* ── Inicio de sesión (Supabase Auth) ─────────────────────────────────────── */
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  background: var(--bg);
+}
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px 28px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+}
+.login-card h1 {
+  margin: 8px 0 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+.login-lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.login-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.login-card input {
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 16px;
+}
+.login-card input:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+.login-error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: #3a1f1f;
+  border: 1px solid #6b2f2f;
+  color: #ffb4b4;
+  font-size: 14px;
+}
+.login-submit {
+  margin-top: 4px;
+  padding: 11px 14px;
+  border-radius: 9px;
+  border: 0;
+  background: var(--blue);
+  color: #0b1a26;
+  font-weight: 600;
+  cursor: pointer;
+}
+.login-submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.history-error {
+  color: #ffb4b4;
+  font-size: 13px;
+  padding: 0 8px;
+  margin: 0 0 10px;
+}
+.session-email {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

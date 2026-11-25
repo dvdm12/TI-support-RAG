@@ -21,14 +21,16 @@ export default function Sidebar({
   onSettings,
   open,
   onClose,
+  user,
+  loadingHistory,
+  historyError,
 }) {
   const [filter, setFilter] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const searchInput = useRef(null);
-  const recent = chats.filter(
-    (chat) =>
-      chat.messages.length &&
-      chat.title.toLowerCase().includes(filter.toLowerCase()),
+  const saved = chats.filter((chat) => chat.convId || chat.messages.length);
+  const recent = saved.filter((chat) =>
+    chat.title.toLowerCase().includes(filter.toLowerCase()),
   );
   function toggleSearch() {
     setSearchOpen((value) => !value);
@@ -93,7 +95,7 @@ export default function Sidebar({
         <div className="history-heading">
           <span>Consultas</span>
           <span>
-            {chats.filter((chat) => chat.messages.length).length || ""}
+            {saved.length || ""}
           </span>
         </div>
         {searchOpen && (
@@ -107,6 +109,11 @@ export default function Sidebar({
               aria-label="Buscar consulta reciente"
             />
           </label>
+        )}
+        {historyError && (
+          <p className="history-error" role="alert">
+            {historyError}
+          </p>
         )}
         <div className="history-list">
           {recent.length ? (
@@ -122,21 +129,27 @@ export default function Sidebar({
             ))
           ) : (
             <p className="empty-history">
-              {filter
-                ? "No hay coincidencias."
-                : "Tus consultas aparecerán aquí."}
+              {loadingHistory
+                ? "Cargando tus conversaciones…"
+                : filter
+                  ? "No hay coincidencias."
+                  : "Tus consultas aparecerán aquí."}
             </p>
           )}
         </div>
         <div className="sidebar-bottom">
           <p className="session-hint">
-            Solo en esta pestaña.
+            Historial guardado en Supabase.
             <br />
-            El historial se borra al recargar.
+            Solo tú puedes verlo.
           </p>
           <button className="session-button" onClick={onSettings}>
-            <span className="avatar">tú</span>
-            <span>Sesión local</span>
+            <span className="avatar">
+              {(user?.email || "tú").slice(0, 2).toLowerCase()}
+            </span>
+            <span className="session-email" title={user?.email}>
+              {user?.email || "Sesión"}
+            </span>
             <Settings2 size={16} />
           </button>
         </div>

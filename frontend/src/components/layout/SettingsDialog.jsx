@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import { ExternalLink, RefreshCw, Trash2, X } from "../ui/Icons.jsx";
+import { ExternalLink, RefreshCw, X } from "../ui/Icons.jsx";
 import IconButton from "../ui/IconButton.jsx";
 import ServiceStatus from "../ui/ServiceStatus.jsx";
 
-export default function SettingsDialog({ onClose, health, onClear, pending }) {
+export default function SettingsDialog({ onClose, health, onSignOut, user, pending }) {
   const dialog = useRef(null);
   useEffect(() => {
     const node = dialog.current;
@@ -49,21 +49,20 @@ export default function SettingsDialog({ onClose, health, onClear, pending }) {
           <ExternalLink size={14} />
         </a>
         <div className="settings-history">
-          <strong>Historial de esta pestaña</strong>
+          <strong>Sesión e historial</strong>
           <p>
-            Las consultas se mantienen en memoria. Al recargar o cerrar esta
-            pestaña, el historial se elimina.
+            Conectado como {user?.email}. Tus conversaciones se guardan en
+            Supabase y solo tú puedes verlas; al volver a entrar se recuperan.
           </p>
           <button
             className="danger-button"
             disabled={pending}
             onClick={() => {
-              onClear();
               onClose();
+              onSignOut();
             }}
           >
-            <Trash2 size={15} />
-            Borrar consultas
+            Cerrar sesión
           </button>
         </div>
       </div>
