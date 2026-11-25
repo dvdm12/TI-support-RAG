@@ -8,8 +8,10 @@ services:
     rootDir: backend
     dockerfilePath: ./Dockerfile
     dockerContext: .
+    # Necesita ≈1,1 GB de RAM (torch + modelo de embeddings): el plan free no alcanza.
+    # Elegir en el panel un plan con al menos 2 GB.
     plan: free
-    healthCheckPath: /api/v1/health/
+    # Sin healthCheckPath: Django rechaza (400) un Host distinto de *.onrender.com.
     envVars:
       - key: PORT                    # gunicorn escucha en 8000 (Dockerfile)
         value: "8000"

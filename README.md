@@ -367,7 +367,7 @@ El archivo [`render.yaml`](render.yaml) crea dos Web Services:
 
 | Servicio | Tipo | Root Directory | Arranque |
 |---|---|---|---|
-| `ti-support-rag-backend` | Docker | `backend` | `backend/Dockerfile` (gunicorn en `PORT=8000`, health `/api/v1/health/`) |
+| `ti-support-rag-backend` | Docker | `backend` | `backend/Dockerfile` (gunicorn en `PORT=8000`) |
 | `ti-support-rag-app` | Python 3.12 | `app` | `pip install -r requirements.txt` · `python app.py` |
 
 1. En Render: **New → Blueprint**, elegir este repositorio y la rama `main`.
@@ -384,8 +384,9 @@ El archivo [`render.yaml`](render.yaml) crea dos Web Services:
 El índice RAG (`backend/data/indexes/sections`) va dentro de la imagen; corpus e
 historiales están en Supabase, así que no se necesita disco persistente. La app lee
 el puerto de `PORT` (Render) o, en local, de `GRADIO_SERVER_PORT`. En el plan gratuito
-los servicios se suspenden sin tráfico (la primera visita tarda) y la memoria es
-limitada: si el backend se reinicia al cargar el modelo, subir de plan.
+los servicios se suspenden sin tráfico (la primera visita tarda). El backend usa
+≈1,1 GB de RAM tras la primera consulta (medido el 2026-11-25): necesita un plan con
+al menos 2 GB; la app Gradio funciona en el plan gratuito.
 
 ## Problemas frecuentes
 
