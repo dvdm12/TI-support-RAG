@@ -59,10 +59,14 @@ con solicitudes privadas, revisar las nuevas salidas antes de incorporarlas a Gi
 
 ## Validación reproducible en un runner
 
-El [workflow de GitHub Actions](guias/GITHUB_ACTIONS.md) reconstruye la aplicación,
-ejecuta el notebook y prueba la API Docker. Distingue comprobaciones técnicas de
-requisitos académicos pendientes. La integración real necesita cinco secretos
-propios de pruebas; los PR no consumen Groq y los push son sin proveedores por defecto.
+> **Retirado el 2026-11-25.** El workflow `.github/workflows/laboratorio.yml` y su
+> guía se eliminaron del repositorio por no ser necesarios para la entrega final.
+> Esta sección se conserva como registro de la validación del Parcial 2.
+
+El workflow de GitHub Actions reconstruía la aplicación,
+ejecutaba el notebook y probaba la API Docker. Distinguía comprobaciones técnicas de
+requisitos académicos pendientes. La integración real necesitaba cinco secretos
+propios de pruebas; los PR no consumían Groq y los push eran sin proveedores por defecto.
 
 ### Primera ejecución real en GitHub · 25-10-2026
 
