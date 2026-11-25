@@ -15,7 +15,19 @@ estado: corte-3-implementado-despliegue-pendiente
 **Curso:** Electiva VI · EAM-2026II  
 **Profesor:** Robert Garcia Rey  
 **Repositorio:** `TI-support-RAG`  
-**Rama activa (entrega final):** `feat/clase-12-entrega-final`
+**Rama activa (entrega final):** `feat/clase-12-entrega-final`  
+**Integrantes:** David Mantilla Aviles · Juan Camilo Velez
+
+---
+
+## Integrantes y responsabilidades
+
+| Integrante | Responsabilidad en el proyecto | Conexión con el sistema |
+|---|---|---|
+| David Mantilla Aviles | Implementación, integración con Groq, ejecución del notebook, validación, pruebas, métricas, multimodalidad y consolidación de evidencias | Desarrollo y ejecución del flujo técnico completo, desde la integración del modelo hasta la trazabilidad de resultados |
+| Juan Camilo Velez | Participación en la adaptación del experimento al dominio de Mesa de Ayuda TI y revisión de resultados | Aporte al dominio del problema y revisión de los resultados obtenidos por el sistema |
+
+> Responsabilidades tomadas de la [bitácora del Parcial 1](backend/docs/parcial1/bitacora_parcial.md#2-integrantes-y-responsabilidades), que la [bitácora del Parcial 2](backend/docs/parcial2/bitacora_corte2.md#2-integrantes-y-continuidad-del-primer-corte) mantiene.
 
 ---
 
