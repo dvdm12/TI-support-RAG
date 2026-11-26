@@ -4,6 +4,7 @@ import ServiceStatus from "../ui/ServiceStatus.jsx";
 
 export default function Header({
   mode,
+  view,
   status,
   onMenu,
   onToggleSources,
@@ -16,7 +17,11 @@ export default function Header({
           <PanelRight size={17} />
         </IconButton>
         <span>
-          {mode === "search" ? "Manuales de soporte" : "Asistente de soporte"}
+          {view === "tickets"
+            ? "Panel de soporte"
+            : mode === "search"
+              ? "Manuales de soporte"
+              : "Asistente de soporte"}
         </span>
       </div>
       <div className="header-actions">

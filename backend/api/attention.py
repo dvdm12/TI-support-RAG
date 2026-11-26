@@ -12,11 +12,28 @@ TICKET_STATUS = re.compile(
 )
 TICKET_MUTATION = re.compile(
     r"(?:^|[.!?;]|\by\b)\s*(?:por favor[, ]+)?"
-    r"(?:(?:puedes|podrias|quiero|necesito)\s+(?:que\s+)?(?:me\s+)?)?"
-    r"(?:cerrar|cierra|cierres|reabrir|reabre|cancelar|cancela|"
-    r"eliminar|elimina|borrar|borra|actualizar|actualiza|modificar|modifica|"
-    r"crear|crea|abrir|abre|asignar|asigna|escalar|escala)\b"
+    r"(?:me\s+)?(?:(?:puedes|podrias|quiero|quisiera|necesito)\s+(?:que\s+)?(?:me\s+)?)?"
+    # Infinitivo, imperativo y subjuntivo ("necesito que me crees un ticket").
+    r"(?:cerrar|cierra|cierres|reabrir|reabre|reabras|cancelar|cancela|canceles|"
+    r"eliminar|elimina|elimines|borrar|borra|borres|actualizar|actualiza|actualices|"
+    r"modificar|modifica|modifiques|crear|crea|crees|abrir|abre|abras|"
+    r"asignar|asigna|asignes|escalar|escala|escales|registrar|registra|registres|"
+    r"generar|genera|generes|levantar|levanta|levantes)\b"
     r"[^.!?;]*\b(?:tickets?|ti-[\w-]+)\b"
+)
+# Pedir la lista de tickets (sin código concreto).
+TICKET_LIST = re.compile(
+    r"\b(?:(?:que|cuales) tickets|tickets (?:hay|existen|disponibles|abiertos|registrados)|"
+    r"(?:lista|listar|listado|muestrame|mostrar|ver|dame|ensename)\s+(?:de\s+|los\s+|todos\s+los\s+|mis\s+)*tickets|"
+    r"mis tickets|todos los tickets)\b"
+)
+# Pedir atención de una persona: el asistente no puede transferir, pero orienta.
+HUMAN_REQUEST = re.compile(
+    r"\b(?:(?:escalar|escala|escalame|escalalo|escalarlo|pasar|pasame|transferir|transfiereme|"
+    r"comunicar|comunicame|conectar|conectame)\s+(?:esto\s+|el caso\s+)?(?:a|con)\s+"
+    r"(?:un |una |el |la )?(?:humano|persona|agente|tecnico|especialista|operador)|"
+    r"hablar con (?:un |una |el |la )?(?:humano|persona|agente|tecnico|especialista|operador)|"
+    r"(?:agente|soporte|atencion|asistencia|operador) human[oa]|persona real)\b"
 )
 PROCEDURE = re.compile(
     r"^(?:como (?!va\b|sigue\b|esta\b)|cual es el procedimiento|"
@@ -48,6 +65,10 @@ def select_route(question):
         return "operacion_prohibida", None
     if DIRECT.fullmatch(text):
         return "respuesta_directa", None
+    if HUMAN_REQUEST.search(text):
+        return "solicitud_humano", None
+    if TICKET_LIST.search(text) and not TICKET_CODE.search(text):
+        return "listar_tickets", None
     clauses = [part.strip(" ¿¡") for part in CLAUSE_BREAK.split(text) if part.strip(" ¿¡")]
     ticket_clauses = [
         part for part in clauses

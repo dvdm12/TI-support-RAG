@@ -218,6 +218,8 @@
   color: #babcb0;
 }
 .response-badges .response-state--OK_REQUIERE_HUMANO,
+.response-badges .response-state--OK_SOLICITUD_HUMANO,
+.response-badges .response-state--OK_EVIDENCIA_INSUFICIENTE,
 .response-badges .response-state--OK_PIDE_ACLARACION {
   color: #cfb88a;
   border-color: #554a33;

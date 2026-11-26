@@ -239,8 +239,8 @@ def openapi_document():
             'Cumplir el límite de caracteres no garantiza cumplir el de tokens. No recibe imágenes ni archivos. '
             'Una lista vacía es un resultado válido; un fallo de consulta devuelve error técnico.\n\n'+AUTH_HELP),
         'rag/query/': ('RAG', 'Atender una consulta de soporte',
-            'Enruta la pregunta a una respuesta directa, consulta documental, consulta de ticket de demostración, '
-            'aclaración o rechazo. La traza registra la ruta y el motivo de salida. En la ruta documental, '
+            'Enruta la pregunta a una respuesta directa, consulta documental, consulta o listado de tickets de '
+            'demostración, orientación para atención humana, aclaración o rechazo. La traza registra la ruta y el motivo de salida. En la ruta documental, '
             'clasifica la solicitud, recupera evidencia, construye contexto y genera o limita la respuesta; '
             'valida contrato, citas y respaldo. Usa Supabase y puede realizar varias llamadas a Groq '
             '(clasificación, generación, revisión y corrección), con consumo de cuota. Algunas aclaraciones '

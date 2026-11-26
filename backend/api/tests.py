@@ -95,6 +95,11 @@ class ControllerTests(SimpleTestCase):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=True)
         self.headers = {'HTTP_AUTHORIZATION':'Bearer '+TOKEN}
+        # Los tickets viven en Supabase; las pruebas no salen a la red.
+        catalogo = {'TI-1001': {'estado': 'En revisión', 'detalle': 'Soporte revisa la conexión.'}}
+        tickets = patch('api.tickets._leer', side_effect=catalogo.get)
+        tickets.start()
+        self.addCleanup(tickets.stop)
         self.result = {'state':'OK_PIDE_ACLARACION','classification':{'categoria':'redes'},
             'documentary_output':{'estado':'respondida','respuesta':'Regla documentada. [F1]','citas':['F1'],'limitacion':''},
             'latency_seconds':1.2,'rag':{'timings':{'semantic_search_seconds':.15,'bm25_seconds':.01,'total_seconds':1.2},'catalog':{'F1':{'chunk_id':'chunk','metadata':{
@@ -155,8 +160,19 @@ class ControllerTests(SimpleTestCase):
             ('¿Cómo va el ticket TI-1001 y cómo instalo una aplicación?', 'aclaracion', 'OK_PIDE_ACLARACION', None),
             ('Cierra el ticket TI-1001', 'operacion_prohibida', 'OPERACION_NO_PERMITIDA', None),
             ('¿Cuál es el estado del ticket TI-9999?', 'consulta_ticket', 'TICKET_NO_ENCONTRADO', 'consultar_estado_ticket'),
+            ('Necesito que me crees un ticket', 'operacion_prohibida', 'OPERACION_NO_PERMITIDA', None),
+            ('¿Me puedes registrar un ticket por la impresora?', 'operacion_prohibida', 'OPERACION_NO_PERMITIDA', None),
+            ('Quiero que elimines el ticket TI-1003', 'operacion_prohibida', 'OPERACION_NO_PERMITIDA', None),
+            ('Escala el ticket TI-1001 a un humano', 'operacion_prohibida', 'OPERACION_NO_PERMITIDA', None),
+            ('¿Puedes escalar a un humano?', 'solicitud_humano', 'OK_SOLICITUD_HUMANO', None),
+            ('Quiero hablar con una persona', 'solicitud_humano', 'OK_SOLICITUD_HUMANO', None),
+            ('Necesito soporte humano', 'solicitud_humano', 'OK_SOLICITUD_HUMANO', None),
+            ('¿Qué tickets hay disponibles?', 'listar_tickets', 'OK_TICKETS_LISTADOS', 'listar_tickets'),
+            ('Muéstrame todos los tickets', 'listar_tickets', 'OK_TICKETS_LISTADOS', 'listar_tickets'),
         )
-        with patch('api.services.run_query') as rag:
+        listado = [{'codigo': 'TI-1001', 'estado': 'En revisión'}]
+        with patch('api.services.run_query') as rag, \
+             patch('api.services.listar_tickets', return_value=listado):
             for question, route, status, operation in cases:
                 with self.subTest(question=question):
                     response = self.query({'pregunta': question})
@@ -201,6 +217,28 @@ class ControllerTests(SimpleTestCase):
         self.assertEqual(response.json()['traza']['ruta'], 'consulta_documental')
         rag.assert_called_once()
 
+    def test_procedural_questions_about_escalation_stay_documentary(self):
+        for question in ('¿Cuándo debo escalar un problema de red?', '¿Cómo se cierra un ticket?'):
+            with self.subTest(question=question), \
+                 patch('api.services.run_query', return_value=self.result) as rag:
+                response = self.query({'pregunta': question})
+                self.assertEqual(response.json()['traza']['ruta'], 'consulta_documental')
+                rag.assert_called_once()
+
+    def test_ticket_list_shows_codes_and_states(self):
+        listado = [{'codigo': 'TI-1001', 'estado': 'En revisión'}, {'codigo': 'TI-1004', 'estado': 'Resuelto'}]
+        with patch('api.services.listar_tickets', return_value=listado):
+            data = self.query({'pregunta': '¿Qué tickets hay?'}).json()
+        self.assertIn('**TI-1001** — En revisión', data['respuesta'])
+        self.assertIn('**TI-1004** — Resuelto', data['respuesta'])
+
+    def test_ticket_list_failure_is_technical_error(self):
+        from .tickets import TicketCatalogError
+        with patch('api.services.listar_tickets', side_effect=TicketCatalogError('x')):
+            response = self.query({'pregunta': '¿Qué tickets hay?'})
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()['traza']['motivo_salida'], 'catalogo_indisponible')
+
     def test_question_about_closing_ticket_uses_documentary_route(self):
         with patch('api.services.run_query', return_value=self.result) as rag:
             response = self.query({'pregunta': '¿Cómo se cierra un ticket?'})
@@ -208,12 +246,10 @@ class ControllerTests(SimpleTestCase):
         rag.assert_called_once()
 
     def test_missing_ticket_catalog_keeps_route_and_reports_technical_error(self):
-        from pathlib import Path
-        from tempfile import TemporaryDirectory
+        import requests
 
-        with TemporaryDirectory() as folder:
-            with patch('api.tickets.TICKET_CATALOG', Path(folder) / 'missing.json'):
-                response = self.query({'pregunta': '¿Cómo va el ticket TI-1001?'})
+        with patch('api.tickets._leer', side_effect=requests.ConnectionError('sin red')):
+            response = self.query({'pregunta': '¿Cómo va el ticket TI-1001?'})
         self.assertEqual(response.status_code, 503)
         self.assertEqual(response.json()['traza'], {
             'ruta': 'consulta_ticket', 'operacion': 'consultar_estado_ticket',
@@ -324,3 +360,90 @@ class ServiceTests(SimpleTestCase):
             with self.assertRaises(RuntimeError):run_query('No puedo entrar.','id')
         self.assertTrue(_work_slot.acquire(blocking=False))
         _work_slot.release()
+
+
+class TicketCatalogTests(SimpleTestCase):
+    """api.tickets lee de Supabase con la clave publishable y solo lectura."""
+
+    def respuesta(self, filas, status=200):
+        from unittest.mock import Mock
+        import requests
+        response = Mock(status_code=status)
+        response.json.return_value = filas
+        response.raise_for_status.side_effect = (
+            None if status < 400 else requests.HTTPError(str(status)))
+        return response
+
+    def secretos(self, name):
+        return {'SUPABASE_URL': 'https://demo.supabase.co/',
+                'SUPABASE_PUBLISHABLE_KEY': 'sb_publishable_demo'}[name]
+
+    def test_lee_un_ticket_solo_con_get_y_la_clave_publishable(self):
+        from . import tickets
+        fila = {'estado': 'Abierto', 'detalle': 'Impresora del segundo piso.'}
+        with patch('api.tickets.get_secret', side_effect=self.secretos), \
+             patch('api.tickets.requests.get', return_value=self.respuesta([fila])) as get:
+            self.assertEqual(tickets.consultar_estado_ticket(' ti-1004 '), fila)
+        url = get.call_args.args[0]
+        kwargs = get.call_args.kwargs
+        self.assertEqual(url, 'https://demo.supabase.co/rest/v1/tickets')
+        self.assertEqual(kwargs['params'], {'codigo': 'eq.TI-1004', 'select': 'estado,detalle'})
+        self.assertEqual(kwargs['headers']['apikey'], 'sb_publishable_demo')
+        self.assertNotIn('Authorization', kwargs['headers'])
+        self.assertTrue(kwargs['timeout'])
+
+    def test_ticket_inexistente_devuelve_none(self):
+        from . import tickets
+        with patch('api.tickets.get_secret', side_effect=self.secretos), \
+             patch('api.tickets.requests.get', return_value=self.respuesta([])):
+            self.assertIsNone(tickets.consultar_estado_ticket('TI-9999'))
+
+    def test_fallos_de_supabase_o_configuracion_son_error_de_catalogo(self):
+        from . import tickets
+        casos = (
+            {'get_secret': RuntimeError('Configura SUPABASE_URL')},
+            {'respuesta': self.respuesta({'message': 'relation does not exist'}, 404)},
+            {'respuesta': self.respuesta([{'estado': '', 'detalle': 'x'}])},
+            {'respuesta': self.respuesta('no-es-lista')},
+        )
+        for caso in casos:
+            with self.subTest(caso=caso):
+                secreto = patch('api.tickets.get_secret',
+                                side_effect=caso.get('get_secret') or self.secretos)
+                get = patch('api.tickets.requests.get', return_value=caso.get('respuesta'))
+                with secreto, get, self.assertRaises(tickets.TicketCatalogError):
+                    tickets.consultar_estado_ticket('TI-1001')
+
+    def test_codigo_mal_formado_no_consulta_supabase(self):
+        from . import tickets
+        with patch('api.tickets.requests.get') as get, self.assertRaises(ValueError):
+            tickets.consultar_estado_ticket('TI-01')
+        get.assert_not_called()
+
+
+class TicketListTests(SimpleTestCase):
+    def secretos(self, name):
+        return {'SUPABASE_URL': 'https://demo.supabase.co', 'SUPABASE_PUBLISHABLE_KEY': 'sb_publishable_demo'}[name]
+
+    def test_lista_ordenada_solo_codigo_y_estado(self):
+        from unittest.mock import Mock
+        from . import tickets
+        response = Mock()
+        response.json.return_value = [{'codigo': 'TI-1001', 'estado': 'Abierto', 'detalle': 'no se expone'}]
+        with patch('api.tickets.get_secret', side_effect=self.secretos), \
+             patch('api.tickets.requests.get', return_value=response) as get:
+            self.assertEqual(tickets.listar_tickets(), [{'codigo': 'TI-1001', 'estado': 'Abierto'}])
+        self.assertEqual(get.call_args.kwargs['params']['select'], 'codigo,estado')
+        self.assertEqual(get.call_args.kwargs['params']['order'], 'codigo')
+
+    def test_filas_invalidas_son_error_de_catalogo(self):
+        from unittest.mock import Mock
+        from . import tickets
+        for filas in ([{'codigo': 'X', 'estado': 'Abierto'}], {'no': 'lista'}, [{'codigo': 'TI-1001', 'estado': ''}]):
+            response = Mock()
+            response.json.return_value = filas
+            with self.subTest(filas=filas), \
+                 patch('api.tickets.get_secret', side_effect=self.secretos), \
+                 patch('api.tickets.requests.get', return_value=response), \
+                 self.assertRaises(tickets.TicketCatalogError):
+                tickets.listar_tickets()

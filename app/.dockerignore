@@ -1,0 +1,8 @@
+# Lista blanca: .env, entornos locales, PDF y pruebas no entran en la imagen.
+**
+!Dockerfile
+!requirements.txt
+!app.py
+!sistema.py
+!almacenamiento.py
+!servidor_mcp.py

@@ -34,6 +34,14 @@ export const suggestions = [
   },
 ];
 
+// Texto legible para un estado sin etiqueta: nunca se muestra el código interno.
+export function stateLabel(state) {
+  if (!state) return "";
+  if (stateLabels[state]) return stateLabels[state];
+  const text = state.replace(/^OK_/, "").replaceAll("_", " ").toLowerCase();
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 export const stateLabels = {
   OK_VALIDADO: "Validación automática superada",
   OK_PIDE_ACLARACION: "Necesito más información",
@@ -42,6 +50,12 @@ export const stateLabels = {
   OK_TICKET_CONSULTADO: "Ticket consultado",
   TICKET_NO_ENCONTRADO: "Ticket no encontrado",
   OPERACION_NO_PERMITIDA: "Operación no permitida",
+  OK_TICKETS_LISTADOS: "Tickets listados",
+  OK_SOLICITUD_HUMANO: "Derivación a soporte humano",
+  OK_RESPUESTA_PARCIAL: "Respuesta parcial",
+  OK_EVIDENCIA_INSUFICIENTE: "Evidencia insuficiente",
+  ERROR_TECNICO: "Error técnico",
+  ERROR_FORMATO: "Respuesta no válida",
   respondida: "Respuesta documental",
   parcial: "Respuesta parcial",
   aclaracion: "Por aclarar",

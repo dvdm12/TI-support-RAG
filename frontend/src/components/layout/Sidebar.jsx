@@ -4,6 +4,7 @@ import {
   MessageSquare,
   Search,
   Settings2,
+  ShieldCheck,
   X,
 } from "../ui/Icons.jsx";
 import Brand from "../ui/Brand.jsx";
@@ -18,6 +19,8 @@ export default function Sidebar({
   onSelect,
   mode,
   onMode,
+  view,
+  onTickets,
   onSettings,
   open,
   onClose,
@@ -76,7 +79,7 @@ export default function Sidebar({
         </button>
         <nav className="main-nav" aria-label="Herramientas">
           <button
-            className={mode === "query" ? "active" : ""}
+            className={view !== "tickets" && mode === "query" ? "active" : ""}
             onClick={() => onMode("query")}
             disabled={pending}
           >
@@ -84,12 +87,20 @@ export default function Sidebar({
             Chat de soporte
           </button>
           <button
-            className={mode === "search" ? "active" : ""}
+            className={view !== "tickets" && mode === "search" ? "active" : ""}
             onClick={() => onMode("search")}
             disabled={pending}
           >
             <BookOpen size={16} />
             Manuales
+          </button>
+          <button
+            className={view === "tickets" ? "active" : ""}
+            onClick={onTickets}
+            disabled={pending}
+          >
+            <ShieldCheck size={16} />
+            Tickets
           </button>
         </nav>
         <div className="history-heading">

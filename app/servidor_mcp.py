@@ -1,34 +1,57 @@
 """Servidor MCP de solo lectura para el catálogo de tickets de demostración.
 
-Expone una única herramienta: consultar_estado_ticket.
+Expone dos herramientas de solo lectura: consultar_estado_ticket y listar_tickets.
 Transporte: stdio (arranca como subproceso desde sistema.py).
 
 Uso directo:
     python servidor_mcp.py
 """
-import json
+import os
 import re
-from pathlib import Path
 
 try:
     from mcp.server.fastmcp import FastMCP
 except ImportError as exc:
     raise ImportError("Instala mcp>=1.0: pip install 'mcp>=1.0,<2'") from exc
 
-CATALOG_PATH = Path(__file__).parent.parent / "backend" / "api" / "tickets_demo.json"
 TICKET_CODE_PATTERN = re.compile(r"^TI-[0-9]{4}$")
+# Los tickets viven en la tabla public.tickets de Supabase (lectura pública por RLS;
+# solo soporte los modifica). Este servidor solo lee, con la clave publishable.
+FUENTE = "supabase:public.tickets"
 
 mcp = FastMCP("Tickets TI-support-RAG")
 
 
-def _cargar_catalogo() -> dict:
+def _consultar(params: dict) -> list:
+    """GET a public.tickets con la clave publishable; devuelve la lista de filas."""
+    import httpx
+
+    url = os.environ.get("SUPABASE_URL", "").strip().rstrip("/")
+    key = os.environ.get("SUPABASE_PUBLISHABLE_KEY", "").strip()
+    if not url or not key:
+        raise RuntimeError("Catálogo de tickets indisponible: falta configurar Supabase.")
     try:
-        data = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
-        if not isinstance(data, dict):
-            raise ValueError("Formato inesperado en el catálogo.")
-        return data
-    except (OSError, ValueError) as exc:
+        respuesta = httpx.get(
+            f"{url}/rest/v1/tickets",
+            params=params,
+            headers={"apikey": key, "Accept": "application/json"},
+            timeout=5,
+        )
+        respuesta.raise_for_status()
+        filas = respuesta.json()
+    except (httpx.HTTPError, ValueError) as exc:
         raise RuntimeError("Catálogo de tickets indisponible.") from exc
+    if not isinstance(filas, list):
+        raise RuntimeError("Catálogo de tickets indisponible.")
+    return filas
+
+
+def _leer_ticket(codigo: str) -> dict | None:
+    """Devuelve la fila {estado, detalle} del ticket, o None si no existe."""
+    filas = _consultar({"codigo": f"eq.{codigo}", "select": "estado,detalle"})
+    if len(filas) > 1:
+        raise RuntimeError("Catálogo de tickets indisponible.")
+    return filas[0] if filas else None
 
 
 @mcp.tool()
@@ -48,11 +71,10 @@ def consultar_estado_ticket(codigo_ticket: str) -> dict:
             "encontrada": False,
             "estado": "",
             "detalle": "El código debe tener el formato TI-NNNN (por ejemplo TI-1001).",
-            "fuente": str(CATALOG_PATH),
+            "fuente": FUENTE,
         }
 
-    catalogo = _cargar_catalogo()
-    registro = catalogo.get(codigo)
+    registro = _leer_ticket(codigo)
 
     if registro is None:
         return {
@@ -60,7 +82,7 @@ def consultar_estado_ticket(codigo_ticket: str) -> dict:
             "encontrada": False,
             "estado": "",
             "detalle": f"El ticket {codigo} no aparece en el catálogo de demostración.",
-            "fuente": str(CATALOG_PATH),
+            "fuente": FUENTE,
         }
 
     return {
@@ -68,8 +90,25 @@ def consultar_estado_ticket(codigo_ticket: str) -> dict:
         "encontrada": True,
         "estado": registro.get("estado", ""),
         "detalle": registro.get("detalle", ""),
-        "fuente": str(CATALOG_PATH),
+        "fuente": FUENTE,
     }
+
+
+@mcp.tool()
+def listar_tickets() -> dict:
+    """Lista los tickets de demostración con su estado (solo lectura).
+
+    Returns:
+        Diccionario con campos: tickets (lista de {codigo, estado}) y fuente.
+    """
+    filas = _consultar({"select": "codigo,estado", "order": "codigo", "limit": "50"})
+    tickets = [
+        {"codigo": f["codigo"], "estado": f["estado"]}
+        for f in filas
+        if isinstance(f, dict) and TICKET_CODE_PATTERN.fullmatch(str(f.get("codigo", "")))
+        and isinstance(f.get("estado"), str)
+    ]
+    return {"tickets": tickets, "fuente": FUENTE}
 
 
 if __name__ == "__main__":

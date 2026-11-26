@@ -10,12 +10,9 @@ Supabase Auth, historial de conversaciones persistente por usuario, enrutamiento
 con MCP para tickets y consulta RAG al backend Django.
 
 ```bash
-# Inicio rápido de la app Gradio (requiere el backend activo)
-cd app
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env   # completar variables
-python app.py          # abre http://127.0.0.1:7860
+# Inicio rápido: backend, frontend React y Gradio en Docker
+docker compose --env-file backend/.env -f infra/compose.yaml up -d --build
+# Django http://127.0.0.1:8000 · React http://127.0.0.1:5173 · Gradio http://127.0.0.1:7860
 ```
 
 Ver la sección **[App Gradio — Clase 12](#app-gradio--clase-12)** para los detalles completos.
@@ -311,7 +308,18 @@ Editar `app/.env` y completar:
 | `GRADIO_SERVER_PORT` | Puerto local (opcional, `7860` por defecto) |
 | `PORT` | No se define en local: lo inyecta Render y tiene prioridad sobre `GRADIO_SERVER_PORT` |
 
-### Instalar dependencias y arrancar
+### Arrancar con Docker (recomendado)
+
+```bash
+docker compose --env-file backend/.env -f infra/compose.yaml up -d --build gradio
+```
+
+Compose toma `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` y `DJANGO_API_TOKEN` de
+`backend/.env` y conecta Gradio al backend por la red interna. El servidor MCP lee
+los tickets de la tabla `tickets` de Supabase con la clave publishable. La imagen no
+incluye `.env`, PDF ni pruebas.
+
+### Arrancar sin Docker
 
 ```bash
 cd app

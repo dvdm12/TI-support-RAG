@@ -13,6 +13,7 @@ Rutas disponibles:
 from __future__ import annotations
 
 import asyncio
+import os
 import re
 import sys
 from dataclasses import dataclass, field
@@ -50,11 +51,26 @@ _TICKET_STATUS     = re.compile(
 )
 _TICKET_MUTATION   = re.compile(
     r"(?:^|[.!?;]|\by\b)\s*(?:por favor[, ]+)?"
-    r"(?:(?:puedes|podrias|quiero|necesito)\s+(?:que\s+)?(?:me\s+)?)?"
-    r"(?:cerrar|cierra|cierres|reabrir|reabre|cancelar|cancela|"
-    r"eliminar|elimina|borrar|borra|actualizar|actualiza|modificar|modifica|"
-    r"crear|crea|abrir|abre|asignar|asigna|escalar|escala)\b"
+    r"(?:me\s+)?(?:(?:puedes|podrias|quiero|quisiera|necesito)\s+(?:que\s+)?(?:me\s+)?)?"
+    # Infinitivo, imperativo y subjuntivo ("necesito que me crees un ticket").
+    r"(?:cerrar|cierra|cierres|reabrir|reabre|reabras|cancelar|cancela|canceles|"
+    r"eliminar|elimina|elimines|borrar|borra|borres|actualizar|actualiza|actualices|"
+    r"modificar|modifica|modifiques|crear|crea|crees|abrir|abre|abras|"
+    r"asignar|asigna|asignes|escalar|escala|escales|registrar|registra|registres|"
+    r"generar|genera|generes|levantar|levanta|levantes)\b"
     r"[^.!?;]*\b(?:tickets?|ti-[\w-]+)\b"
+)
+_TICKET_LIST       = re.compile(
+    r"\b(?:(?:que|cuales) tickets|tickets (?:hay|existen|disponibles|abiertos|registrados)|"
+    r"(?:lista|listar|listado|muestrame|mostrar|ver|dame|ensename)\s+(?:de\s+|los\s+|todos\s+los\s+|mis\s+)*tickets|"
+    r"mis tickets|todos los tickets)\b"
+)
+_HUMAN_REQUEST     = re.compile(
+    r"\b(?:(?:escalar|escala|escalame|escalalo|escalarlo|pasar|pasame|transferir|transfiereme|"
+    r"comunicar|comunicame|conectar|conectame)\s+(?:esto\s+|el caso\s+)?(?:a|con)\s+"
+    r"(?:un |una |el |la )?(?:humano|persona|agente|tecnico|especialista|operador)|"
+    r"hablar con (?:un |una |el |la )?(?:humano|persona|agente|tecnico|especialista|operador)|"
+    r"(?:agente|soporte|atencion|asistencia|operador) human[oa]|persona real)\b"
 )
 _PROCEDURE         = re.compile(
     r"^(?:como (?!va\b|sigue\b|esta\b)|cual es el procedimiento|"
@@ -90,6 +106,10 @@ def _enrutar(pregunta: str) -> tuple[str, str | None]:
         return "operacion_prohibida", None
     if _DIRECT.fullmatch(texto):
         return "respuesta_directa", None
+    if _HUMAN_REQUEST.search(texto):
+        return "solicitud_humano", None
+    if _TICKET_LIST.search(texto) and not _TICKET_CODE.search(texto):
+        return "listar_tickets", None
     clausulas = [p.strip(" ¿¡") for p in _CLAUSE_BREAK.split(texto) if p.strip(" ¿¡")]
     clausulas_ticket = [
         p for p in clausulas
@@ -140,6 +160,22 @@ def _aclaracion(codigo: str | None) -> Resultado:
     )
 
 
+_RESPUESTA_HUMANO = (
+    "No puedo transferirte a una persona desde este chat. Para atención humana, "
+    "contacta a la mesa de ayuda por el canal de soporte autorizado e indica qué ocurre, "
+    "en qué equipo o servicio y el mensaje de error, si aparece. Si ya tienes un ticket, "
+    "puedo consultar su estado con el código (por ejemplo, TI-1001)."
+)
+
+
+def _solicitud_humano() -> Resultado:
+    return Resultado(
+        respuesta=_RESPUESTA_HUMANO,
+        estado="OK_SOLICITUD_HUMANO",
+        traza={"ruta": "solicitud_humano", "motivo": "derivacion_humana"},
+    )
+
+
 def _operacion_prohibida() -> Resultado:
     return Resultado(
         respuesta="Solo puedo consultar el estado de los tickets. Solicita el cambio a soporte TI.",
@@ -153,32 +189,31 @@ def _operacion_prohibida() -> Resultado:
 _SERVIDOR_MCP = Path(__file__).parent / "servidor_mcp.py"
 
 
-async def _consultar_ticket_mcp(codigo: str) -> Resultado:
-    """Consulta el ticket usando MCP vía stdio. Lanza SistemaError si falla."""
+async def _llamar_mcp(herramienta: str, argumentos: dict, traza: dict[str, Any]) -> Any:
+    """Arranca el servidor MCP por stdio, llama a una herramienta y devuelve su JSON."""
     try:
         from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
+        from mcp.client.stdio import get_default_environment, stdio_client
     except ImportError:
         raise SistemaError("La librería MCP no está instalada. Ejecuta: pip install 'mcp>=1.0,<2'")
 
+    # El cliente stdio arranca el servidor con un entorno mínimo; solo se le pasan
+    # la URL y la clave publishable de Supabase (públicas), nunca tokens.
+    entorno = get_default_environment()
+    for nombre in ("SUPABASE_URL", "SUPABASE_PUBLISHABLE_KEY"):
+        if os.environ.get(nombre):
+            entorno[nombre] = os.environ[nombre]
     params = StdioServerParameters(
         command=sys.executable,
         args=[str(_SERVIDOR_MCP)],
+        env=entorno,
     )
-    traza: dict[str, Any] = {
-        "ruta": "consulta_ticket",
-        "herramienta": "consultar_estado_ticket",
-        "codigo_solicitado": codigo,
-        "servidor": str(_SERVIDOR_MCP),
-    }
+    traza.update({"herramienta": herramienta, "servidor": str(_SERVIDOR_MCP)})
     try:
         async with stdio_client(params) as (read, write):
             async with ClientSession(read, write) as session:
                 await session.initialize()
-                result = await session.call_tool(
-                    "consultar_estado_ticket",
-                    {"codigo_ticket": codigo},
-                )
+                result = await session.call_tool(herramienta, argumentos)
     except Exception as exc:
         traza["error"] = type(exc).__name__
         raise SistemaError(f"El servidor MCP no pudo completar la consulta: {type(exc).__name__}") from None
@@ -190,26 +225,47 @@ async def _consultar_ticket_mcp(codigo: str) -> Resultado:
     datos = result.content[0].text if result.content else ""
     try:
         import json
-        datos = json.loads(datos) if isinstance(datos, str) else datos
+        return json.loads(datos) if isinstance(datos, str) else datos
     except Exception:
         raise SistemaError("El servidor MCP devolvió una respuesta con formato inesperado.")
 
-    traza["resultado_mcp"] = datos
-    encontrada = datos.get("encontrada", False)
 
-    if not encontrada:
+async def _consultar_ticket_mcp(codigo: str) -> Resultado:
+    """Consulta el ticket usando MCP vía stdio. Lanza SistemaError si falla."""
+    traza: dict[str, Any] = {"ruta": "consulta_ticket", "codigo_solicitado": codigo}
+    datos = await _llamar_mcp("consultar_estado_ticket", {"codigo_ticket": codigo}, traza)
+    traza["resultado_mcp"] = datos
+
+    if not datos.get("encontrada", False):
         return Resultado(
             respuesta=datos.get("detalle", f"El ticket {codigo} no fue encontrado."),
             estado="TICKET_NO_ENCONTRADO",
             traza=traza,
         )
-
-    respuesta = (
-        f"Ticket {datos['codigo_ticket']} — {datos['estado']}. {datos['detalle']}"
-    )
     return Resultado(
-        respuesta=respuesta,
+        respuesta=f"Ticket {datos['codigo_ticket']} — {datos['estado']}. {datos['detalle']}",
         estado="OK_TICKET_CONSULTADO",
+        traza=traza,
+    )
+
+
+async def _listar_tickets_mcp() -> Resultado:
+    """Lista los tickets de demostración usando MCP vía stdio."""
+    traza: dict[str, Any] = {"ruta": "listar_tickets"}
+    datos = await _llamar_mcp("listar_tickets", {}, traza)
+    tickets = datos.get("tickets") if isinstance(datos, dict) else None
+    if not isinstance(tickets, list):
+        raise SistemaError("El servidor MCP devolvió una respuesta con formato inesperado.")
+    traza["total"] = len(tickets)
+    if not tickets:
+        return Resultado(respuesta="No hay tickets de demostración registrados.",
+                         estado="OK_TICKETS_LISTADOS", traza=traza)
+    lineas = "\n".join(f"- **{t['codigo']}** — {t['estado']}" for t in tickets)
+    return Resultado(
+        respuesta=(f"Tickets de demostración disponibles:\n\n{lineas}\n\n"
+                   "Pregunta por un código para ver su detalle, por ejemplo: "
+                   "«¿Cuál es el estado del ticket TI-1001?»."),
+        estado="OK_TICKETS_LISTADOS",
         traza=traza,
     )
 
@@ -294,6 +350,10 @@ async def procesar(
         return _aclaracion(codigo)
     if ruta == "operacion_prohibida":
         return _operacion_prohibida()
+    if ruta == "solicitud_humano":
+        return _solicitud_humano()
+    if ruta == "listar_tickets":
+        return await _listar_tickets_mcp()
     if ruta == "consulta_ticket":
         return await _consultar_ticket_mcp(codigo)
 

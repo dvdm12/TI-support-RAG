@@ -149,7 +149,8 @@ async def _enviar_pregunta(
     """Enruta la pregunta, persiste el turno y devuelve el historial actualizado."""
     pregunta = pregunta.strip()
     if not pregunta or client is None or not conv_id:
-        return historial, historial, [], {}, ""
+        # El chat espera mensajes {role, content}, no las tuplas del estado interno.
+        return _a_mensajes(historial), historial, [], {}, ""
 
     try:
         resultado: Resultado = await procesar(

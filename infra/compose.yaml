@@ -26,7 +26,7 @@ services:
     image: ti-support-rag-frontend:local
     build:
       context: ../frontend
-      # docker compose --env-file ../backend/.env up -d --build frontend
+      # docker compose --env-file ../backend/.env up -d --build
       args:
         VITE_SUPABASE_URL: ${SUPABASE_URL:-}
         VITE_SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:-}
@@ -41,21 +41,20 @@ services:
     restart: unless-stopped
 
   gradio:
-    profiles: [gradio]
-    image: ti-support-gradio:local
+    image: ti-support-rag-gradio:local
     build:
-      context: ../interfaces/gradio
+      context: ../app
     environment:
-      DJANGO_API_URL: http://backend:8000
-      DJANGO_API_TOKEN: ${DJANGO_API_TOKEN:-}
-      GRADIO_SERVER_NAME: 0.0.0.0
-      GRADIO_SERVER_PORT: "7860"
-      GRADIO_ANALYTICS_ENABLED: "False"
+      BACKEND_URL: http://backend:8000
+      BACKEND_API_TOKEN: ${DJANGO_API_TOKEN:-}
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:-}
     ports:
       - "127.0.0.1:7860:7860"
     depends_on:
       - backend
     init: true
+    restart: unless-stopped
 
 volumes:
   model-cache:

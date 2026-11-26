@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./components/layout/Sidebar.jsx";
 import Header from "./components/layout/Header.jsx";
 import ContextPanel from "./components/layout/ContextPanel.jsx";
@@ -8,6 +8,7 @@ import StarterPrompts from "./components/chat/StarterPrompts.jsx";
 import Composer from "./components/chat/Composer.jsx";
 import MessageList from "./components/chat/MessageList.jsx";
 import Login from "./components/auth/Login.jsx";
+import SupportTickets from "./components/support/SupportTickets.jsx";
 import { useChat } from "./hooks/useChat.js";
 import { useAuth } from "./hooks/useAuth.js";
 import { supabase } from "./services/supabase.js";
@@ -17,6 +18,7 @@ export default function App() {
   const auth = useAuth();
   const chat = useChat(supabase, auth.user?.id);
   const health = useHealth();
+  const [view, setView] = useState("chat");
   const [mode, setMode] = useState("query");
   const [draft, setDraft] = useState("");
   const [category, setCategory] = useState("");
@@ -24,6 +26,11 @@ export default function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  // Al cambiar de usuario se vuelve siempre al chat.
+  useEffect(() => {
+    setView("chat");
+  }, [auth.user?.id]);
+  const showTickets = view === "tickets";
   const latest = [...chat.active.messages]
     .reverse()
     .find((message) => message.status === "done");
@@ -35,6 +42,7 @@ export default function App() {
   function chooseMode(value) {
     if (!chat.pending) {
       setMode(value);
+      setView("chat");
       setMenuOpen(false);
     }
   }
@@ -54,12 +62,21 @@ export default function App() {
         pending={chat.pending}
         mode={mode}
         onMode={chooseMode}
+        view={showTickets ? "tickets" : "chat"}
+        onTickets={() => {
+          if (!chat.pending) {
+            setView("tickets");
+            setMenuOpen(false);
+          }
+        }}
         onNew={() => {
+          setView("chat");
           chat.newChat();
           setDraft("");
           setMenuOpen(false);
         }}
         onSelect={(id) => {
+          setView("chat");
           chat.selectChat(id);
           setDraft("");
           setMenuOpen(false);
@@ -74,6 +91,7 @@ export default function App() {
       <div className="workspace">
         <Header
           mode={mode}
+          view={showTickets ? "tickets" : "chat"}
           status={health.status}
           onMenu={() => {
             if (window.innerWidth <= 760) setMenuOpen((value) => !value);
@@ -83,6 +101,9 @@ export default function App() {
           onToggleSources={() => setSourcesOpen((value) => !value)}
         />
         <div className="workspace-body">
+          {showTickets ? (
+            <SupportTickets client={supabase} />
+          ) : (
           <main
             id="main"
             className={`chat-main ${chat.active.messages.length ? "chat-main--started" : ""}`}
@@ -119,7 +140,8 @@ export default function App() {
               />
             )}
           </main>
-          {sourcesOpen && (
+          )}
+          {sourcesOpen && !showTickets && (
             <ContextPanel
               onClose={() => setSourcesOpen(false)}
               latest={latest}

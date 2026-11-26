@@ -93,7 +93,7 @@ La diferencia entre versiones: `system_v4` añadió una regla para que `datos_fa
 - Prompt generador `rag_v6`; clasificador `system_v8`.
 - Validación de estructura, citas y respaldo en la respuesta generada.
 - API Django (`/api/v1/rag/query/`) exponiendo el pipeline completo.
-- Interfaz Gradio básica (`interfaces/gradio/app.py`) sobre la API.
+- Interfaz Gradio básica (`interfaces/gradio/app.py`) sobre la API. Retirada el 2026-11-25: la sustituye `app/`, dockerizada.
 
 ### Resultados de recuperación (desarrollo)
 

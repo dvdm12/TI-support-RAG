@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import Brand from "../ui/Brand.jsx";
 import IconButton from "../ui/IconButton.jsx";
 import Sources from "./Sources.jsx";
-import { stateLabels } from "../../data/support.js";
+import { stateLabel } from "../../data/support.js";
 
 export default function Message({ message, onRetry, pending }) {
   const [copied, setCopied] = useState(false);
@@ -96,10 +96,14 @@ export default function Message({ message, onRetry, pending }) {
                   className={`response-state response-state--${data.estado}`}
                 >
                   <Check size={12} />
-                  {stateLabels[data.estado] || data.estado}
+                  {stateLabel(data.estado)}
                 </span>
               )}
-              {documentary && <span>{stateLabels[documentary.estado]}</span>}
+              {/* La etiqueta documental solo si aporta algo distinto al estado. */}
+              {documentary &&
+                stateLabel(documentary.estado) !== stateLabel(data.estado) && (
+                  <span>{stateLabel(documentary.estado)}</span>
+                )}
               {data.clasificacion && (
                 <span>
                   {data.clasificacion.categoria} · prioridad{" "}

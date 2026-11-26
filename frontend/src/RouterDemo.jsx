@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Sources from "./components/chat/Sources.jsx";
 import ServiceStatus from "./components/ui/ServiceStatus.jsx";
-import { stateLabels } from "./data/support.js";
+import { stateLabel } from "./data/support.js";
 import { useHealth } from "./hooks/useHealth.js";
 import { querySupport } from "./services/api.js";
 import "./styles/router-demo.css";
@@ -12,6 +12,8 @@ const routes = [
   ["consulta_ticket", "Consulta de ticket", "¿Cómo va el ticket TI-1001?"],
   ["aclaracion", "Aclaración", "¿Cómo va mi ticket?"],
   ["operacion_prohibida", "Operación prohibida", "Cierra el ticket TI-1001"],
+  ["listar_tickets", "Listar tickets", "¿Qué tickets hay disponibles?"],
+  ["solicitud_humano", "Atención humana", "¿Puedes escalar a un humano?"],
 ];
 
 export default function RouterDemo() {
@@ -39,7 +41,7 @@ export default function RouterDemo() {
   const trace = result?.trace;
   const data = result?.data;
   const answer = data?.respuesta ?? data?.respuesta_documental?.respuesta;
-  const statusLabel = stateLabels[data?.estado] ?? data?.estado;
+  const statusLabel = stateLabel(data?.estado);
   const selectedRoute = routes.find(([route]) => route === trace?.ruta)?.[1];
 
   return (

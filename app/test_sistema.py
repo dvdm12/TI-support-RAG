@@ -28,6 +28,19 @@ class TestEnrutamiento(unittest.TestCase):
         # Sin la palabra ticket sigue siendo documental.
         ("mi wifi sigue sin conectar", "consulta_documental", None),
         ("la impresora está atascada", "consulta_documental", None),
+        # Crear o modificar tickets en subjuntivo también se bloquea.
+        ("Necesito que me crees un ticket", "operacion_prohibida", None),
+        ("¿Me puedes registrar un ticket por la impresora?", "operacion_prohibida", None),
+        ("Quiero que elimines el ticket TI-1003", "operacion_prohibida", None),
+        ("Escala el ticket TI-1001 a un humano", "operacion_prohibida", None),
+        # Pedir una persona: orientación fija, sin RAG.
+        ("¿Puedes escalar a un humano?", "solicitud_humano", None),
+        ("Quiero hablar con una persona", "solicitud_humano", None),
+        ("Necesito soporte humano", "solicitud_humano", None),
+        ("¿Cuándo debo escalar un problema de red?", "consulta_documental", None),
+        # Listar tickets (sin código).
+        ("¿Qué tickets hay disponibles?", "listar_tickets", None),
+        ("Muéstrame todos los tickets", "listar_tickets", None),
     ]
 
     def test_casos(self):
@@ -62,3 +75,20 @@ class TestConsultaDocumental(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestRutasLocales(unittest.TestCase):
+    def test_solicitud_humano_no_llama_al_backend(self):
+        with patch("sistema._consultar_rag", new=AsyncMock()) as rag:
+            r = asyncio.run(procesar("Quiero hablar con una persona", [], "http://x", "t"))
+        rag.assert_not_called()
+        self.assertEqual(r.estado, "OK_SOLICITUD_HUMANO")
+        self.assertIn("canal de soporte autorizado", r.respuesta)
+
+    def test_listar_tickets_usa_la_herramienta_mcp(self):
+        datos = {"tickets": [{"codigo": "TI-1001", "estado": "Abierto"}], "fuente": "supabase"}
+        with patch("sistema._llamar_mcp", new=AsyncMock(return_value=datos)) as mcp:
+            r = asyncio.run(procesar("¿Qué tickets hay?", [], "http://x", "t"))
+        self.assertEqual(mcp.call_args.args[:2], ("listar_tickets", {}))
+        self.assertEqual(r.estado, "OK_TICKETS_LISTADOS")
+        self.assertIn("**TI-1001** — Abierto", r.respuesta)

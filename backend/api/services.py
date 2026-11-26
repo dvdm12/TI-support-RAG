@@ -6,9 +6,15 @@ from time import perf_counter
 from django.conf import settings
 from src.token_budget import InputBudgetError
 from .attention import select_route
-from .tickets import TicketCatalogError, consultar_estado_ticket
+from .tickets import TicketCatalogError, consultar_estado_ticket, listar_tickets
 
 _work_slot = BoundedSemaphore(1)
+HUMAN_ANSWER = (
+    "No puedo transferirte a una persona desde este chat. Para atención humana, "
+    "contacta a la mesa de ayuda por el canal de soporte autorizado e indica qué ocurre, "
+    "en qué equipo o servicio y el mensaje de error, si aparece. Si ya tienes un ticket, "
+    "puedo consultar su estado con el código (por ejemplo, TI-1001)."
+)
 logger = logging.getLogger("api")
 
 
@@ -97,6 +103,24 @@ def attend(question, request_id, **options):
         elif route == "operacion_prohibida":
             state, reason = "OPERACION_NO_PERMITIDA", "herramienta_solo_lectura"
             answer = "Solo puedo consultar el estado de los tickets. Solicita el cambio a soporte TI."
+        elif route == "solicitud_humano":
+            state, reason, answer = "OK_SOLICITUD_HUMANO", "derivacion_humana", HUMAN_ANSWER
+        elif route == "listar_tickets":
+            operation = "listar_tickets"
+            try:
+                tickets = listar_tickets()
+            except TicketCatalogError:
+                state, reason = "ERROR_TECNICO", "catalogo_indisponible"
+                answer = "El catálogo de tickets de demostración está indisponible. Inténtalo más tarde."
+            else:
+                state, reason = "OK_TICKETS_LISTADOS", "tickets_listados"
+                if tickets:
+                    lines = "\n".join(f"- **{t['codigo']}** — {t['estado']}" for t in tickets)
+                    answer = (f"Tickets de demostración disponibles:\n\n{lines}\n\n"
+                              "Pregunta por un código para ver su detalle, por ejemplo: "
+                              "«¿Cuál es el estado del ticket TI-1001?».")
+                else:
+                    answer = "No hay tickets de demostración registrados."
         else:
             operation = "consultar_estado_ticket"
             try:
